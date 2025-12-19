@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Scissors, ArrowRight } from 'lucide-react';
-import { GALLERY_IMAGES } from '../constants';
+import { ArrowRight } from 'lucide-react';
+import { GALLERY_IMAGES, STORE_NAME } from '../constants';
+import Header from './Header';
 
 const GalleryPage: React.FC = () => {
   const [filter, setFilter] = useState('All');
@@ -10,20 +11,7 @@ const GalleryPage: React.FC = () => {
 
   return (
     <div className="bg-[#FDFCFB] min-h-screen selection:bg-black selection:text-white">
-      {/* Navigation */}
-      <nav className="flex justify-between items-center px-8 py-6 border-b border-black/5">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-xl font-serif font-bold tracking-widest uppercase">LUXENAIL</span>
-        </Link>
-        <div className="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
-          <Link to="/gallery" className="text-black border-b border-black">Collections</Link>
-          <Link to="/about" className="hover:opacity-60 transition-opacity">The Atelier</Link>
-          <Link to="/book" className="hover:opacity-60 transition-opacity">Services</Link>
-        </div>
-        <Link to="/book" className="px-6 py-2 border border-black text-[10px] uppercase font-bold tracking-widest hover:bg-black hover:text-white transition-all">
-          Reserve
-        </Link>
-      </nav>
+      <Header />
 
       {/* Header */}
       <header className="max-w-7xl mx-auto px-8 pt-32 pb-16">
@@ -55,7 +43,7 @@ const GalleryPage: React.FC = () => {
                 <img 
                   src={img.url} 
                   alt={img.title} 
-                  className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s]"
+                  className="w-full h-full object-cover brightness-90 group-hover:scale-105 editorial-img"
                 />
               </div>
               <div className="flex justify-between items-end">
@@ -84,7 +72,7 @@ const GalleryPage: React.FC = () => {
       </section>
 
       <footer className="py-20 text-center border-t border-black/5 text-[10px] font-bold tracking-[0.3em] text-gray-300">
-        © 2024 LUXENAIL ATELIER
+        © 2024 {STORE_NAME.toUpperCase()} ATELIER
       </footer>
     </div>
   );

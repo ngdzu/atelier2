@@ -1,35 +1,23 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Scissors, ArrowRight, Minus } from 'lucide-react';
+import { Scissors, Minus } from 'lucide-react';
+import Header from './Header';
 
 const LandingPage: React.FC = () => {
   return (
     <div className="bg-[#FDFCFB] min-h-screen selection:bg-black selection:text-white">
-      {/* Immersive Header */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-6 mix-blend-difference text-white">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="text-xl font-serif font-bold tracking-widest uppercase">LUXENAIL</span>
-        </Link>
-        <div className="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
-          <Link to="/gallery" className="hover:opacity-60 transition-opacity">Collections</Link>
-          <Link to="/about" className="hover:opacity-60 transition-opacity">The Atelier</Link>
-          <Link to="/book" className="hover:opacity-60 transition-opacity">Services</Link>
-        </div>
-        <Link to="/book" className="px-6 py-2 border border-white/30 text-[10px] uppercase font-bold tracking-widest hover:bg-white hover:text-black transition-all">
-          Reserve
-        </Link>
-      </nav>
+      <Header variant="fixed" />
 
       {/* Hero: Split Screen Editorial */}
       <section className="relative h-screen w-full flex flex-col lg:flex-row overflow-hidden">
-        <div className="flex-1 relative h-1/2 lg:h-full group overflow-hidden border-b lg:border-b-0 lg:border-r border-black/5">
+        <div className="flex-1 relative h-1/2 lg:h-full overflow-hidden border-b lg:border-b-0 lg:border-r border-black/5">
           <img 
             src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=1200" 
             alt="The Look" 
-            className="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-[2s]"
+            className="w-full h-full object-cover brightness-90 grayscale"
           />
-          <div className="absolute inset-0 bg-black/10"></div>
+          <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
           <div className="absolute bottom-12 left-12">
             <p className="text-white text-[10px] font-bold uppercase tracking-[0.4em] mb-4">SS 2024 Collection</p>
             <h2 className="text-white text-5xl md:text-7xl font-serif font-bold italic">The Ritual.</h2>
@@ -60,9 +48,9 @@ const LandingPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
-          <div className="reveal space-y-8">
+          <div className="reveal space-y-8 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1604654894610-df490651e61c?q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-[1.5s]" alt="" />
+              <img src="https://images.unsplash.com/photo-1604654894610-df490651e61c?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 01</p>
@@ -70,9 +58,9 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="reveal space-y-8 md:translate-y-24">
+          <div className="reveal space-y-8 md:translate-y-24 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-[1.5s]" alt="" />
+              <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 02</p>
@@ -80,9 +68,9 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="reveal space-y-8">
+          <div className="reveal space-y-8 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-[1.5s]" alt="" />
+              <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 03</p>
@@ -118,10 +106,10 @@ const LandingPage: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="reveal">
+          <div className="reveal group">
             <img 
               src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=1200" 
-              className="rounded-t-[10rem] grayscale shadow-2xl" 
+              className="rounded-t-[10rem] shadow-2xl editorial-img" 
               alt="Atelier Interior" 
             />
           </div>

@@ -4,19 +4,17 @@ import { Link } from 'react-router-dom';
 import { SERVICES, EMPLOYEES } from '../constants';
 import { Service, Employee, Appointment } from '../types';
 import { 
-  Clock, 
   CheckCircle2, 
-  Scissors, 
   Calendar as CalendarIcon,
   ArrowRight,
-  ChevronLeft,
   Check,
-  Lock,
-  Plus,
   Trash2,
   ShoppingBag,
-  X
+  X,
+  User,
+  Clock
 } from 'lucide-react';
+import Header from './Header';
 
 interface BookingFlowProps {
   onComplete: (appt: Partial<Appointment>) => void;
@@ -38,28 +36,24 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
 
-  const steps: { key: Step; label: string }[] = [
-    { key: 'SERVICE', label: 'Service' },
-    { key: 'EMPLOYEE', label: 'Professional' },
-    { key: 'TIME', label: 'Schedule' },
-    { key: 'DETAILS', label: 'Details' },
+  const steps: { key: Step; label: string; nextLabel: string }[] = [
+    { key: 'SERVICE', label: 'Service', nextLabel: 'Choose Professional' },
+    { key: 'EMPLOYEE', label: 'Professional', nextLabel: 'Schedule Time' },
+    { key: 'TIME', label: 'Schedule', nextLabel: 'Your Details' },
+    { key: 'DETAILS', label: 'Details', nextLabel: 'Complete Reservation' },
   ];
 
   const currentStepIdx = steps.findIndex(s => s.key === step);
+  const currentStep = steps[currentStepIdx];
 
   const totalPrice = useMemo(() => {
-    const mainTotal = Object.values(selectedMainServices).reduce((sum, s) => sum + s.price, 0);
+    // Explicitly cast Object.values to Service[] to prevent 'unknown' property access errors
+    const mainTotal = (Object.values(selectedMainServices) as Service[]).reduce((sum, s) => sum + s.price, 0);
     const addonsTotal = selectedAddons.reduce((sum, s) => sum + s.price, 0);
     return mainTotal + addonsTotal;
   }, [selectedMainServices, selectedAddons]);
 
-  const totalDuration = useMemo(() => {
-    const mainTotal = Object.values(selectedMainServices).reduce((sum, s) => sum + s.duration, 0);
-    const addonsTotal = selectedAddons.reduce((sum, s) => sum + s.duration, 0);
-    return mainTotal + addonsTotal;
-  }, [selectedMainServices, selectedAddons]);
-
-  const servicesByCategory = useMemo(() => {
+  const servicesByCategory = useMemo<Record<string, { main: Service[], addon: Service[] }>>(() => {
     const categories: Record<string, { main: Service[], addon: Service[] }> = {};
     SERVICES.forEach(s => {
       if (!categories[s.category]) {
@@ -79,6 +73,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       if (prev[service.category]?.id === service.id) {
         const next = { ...prev };
         delete next[service.category];
+        // Clean up addons for this category
         setSelectedAddons(current => current.filter(a => a.category !== service.category));
         return next;
       }
@@ -119,12 +114,23 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     if (step === 'SERVICE') setStep('EMPLOYEE');
     else if (step === 'EMPLOYEE') setStep('TIME');
     else if (step === 'TIME') setStep('DETAILS');
-    else if (step === 'DETAILS') setStep('CONFIRM');
+    else if (step === 'DETAILS') {
+      onComplete({
+        customerId: 'new', // placeholder
+        employeeId: selectedEmployee?.id || '',
+        // Fix: Explicitly cast to Service[] to access .id property and resolve 'unknown' type error
+        serviceId: (Object.values(selectedMainServices) as Service[])[0]?.id || '',
+        startTime: `${selectedDate}T${selectedTime}:00`,
+        status: 'SCHEDULED'
+      });
+      setStep('CONFIRM');
+    }
     setIsSummaryOpen(false);
   };
 
   const goToStep = (targetStep: Step, targetIdx: number) => {
-    const canNavigate = targetIdx <= currentStepIdx || steps.slice(0, targetIdx).every(s => isStepValid(s.key));
+    // Annotate the type of 's' in every callback to avoid 'unknown' inference
+    const canNavigate = targetIdx <= currentStepIdx || steps.slice(0, targetIdx).every((s: { key: Step }) => isStepValid(s.key));
     if (canNavigate && step !== 'CONFIRM') {
       setStep(targetStep);
       setIsSummaryOpen(false);
@@ -136,7 +142,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsSummaryOpen(false)} />
       <div className={`absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl transition-transform duration-500 transform ${isSummaryOpen ? 'translate-x-0' : 'translate-x-full'} flex flex-col`}>
         <div className="p-12 border-b border-black/5 flex items-center justify-between">
-          <h3 className="text-3xl font-serif font-bold tracking-tight">Your Session</h3>
+          <h3 className="text-3xl font-serif font-bold tracking-tight text-black">Your Session</h3>
           <button onClick={() => setIsSummaryOpen(false)} className="p-2 hover:bg-gray-50 rounded-full transition-colors">
             <X size={24} className="text-black" />
           </button>
@@ -145,34 +151,36 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         <div className="flex-1 overflow-y-auto p-12 space-y-12">
           {Object.keys(selectedMainServices).length > 0 ? (
             <div className="space-y-12">
-              {Object.values(selectedMainServices).map(service => (
+              {/* Cast Object.values to Service[] to prevent 'unknown' property access errors */}
+              {(Object.values(selectedMainServices) as Service[]).map((service: Service) => (
                 <div key={service.id} className="space-y-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#C4A484]">{service.category}</p>
-                      <button onClick={() => selectMainService(service)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
+                      <button onClick={() => selectMainService(service)} className="text-red-600 hover:text-red-800"><Trash2 size={12} /></button>
                     </div>
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <p className="font-bold text-black text-lg tracking-tight">{service.name}</p>
-                        <p className="text-[10px] text-gray-400 mt-2 uppercase font-bold tracking-widest">{service.duration} MIN</p>
+                        <p className="text-[10px] text-gray-500 mt-2 uppercase font-bold tracking-widest">{service.duration} MIN</p>
                       </div>
                       <span className="font-bold text-black text-lg">${service.price}</span>
                     </div>
                   </div>
-                  {selectedAddons.filter(a => a.category === service.category).map(addon => (
-                    <div key={addon.id} className="flex justify-between items-center text-[11px] pl-6 border-l border-black/10">
-                      <p className="text-gray-500 font-medium">{addon.name}</p>
-                      <span className="font-bold text-gray-400">${addon.price}</span>
+                  {/* Explicitly type 'a' as Service in filter to resolve 'unknown' category property access */}
+                  {selectedAddons.filter((a: Service) => a.category === service.category).map((addon: Service) => (
+                    <div key={addon.id} className="flex justify-between items-center text-[11px] pl-6 border-l border-black/20">
+                      <p className="text-gray-700 font-medium">{addon.name}</p>
+                      <span className="font-bold text-gray-500">${addon.price}</span>
                     </div>
                   ))}
                 </div>
               ))}
             </div>
           ) : (
-            <div className="py-20 text-center space-y-4 opacity-20">
-              <ShoppingBag size={48} className="mx-auto" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em]">Cart Empty</p>
+            <div className="py-20 text-center space-y-4 opacity-30">
+              <ShoppingBag size={48} className="mx-auto text-black" />
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-black">Atelier Bag Empty</p>
             </div>
           )}
 
@@ -180,9 +188,11 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
             <div className="pt-12 border-t border-black/5 space-y-8">
               {selectedEmployee && (
                 <div className="flex items-center gap-6">
-                  <img src={`https://picsum.photos/seed/${selectedEmployee.id}/100/100`} className="w-16 h-16 rounded-full grayscale border border-black/5" alt="" />
+                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-black border border-black/10 overflow-hidden">
+                    <User size={32} strokeWidth={1} />
+                  </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Specialist</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500">Specialist</p>
                     <p className="text-sm font-bold text-black mt-1">{selectedEmployee.name}</p>
                   </div>
                 </div>
@@ -191,7 +201,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center text-white"><CalendarIcon size={24} /></div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Schedule</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500">Schedule</p>
                     <p className="text-sm font-bold text-black mt-1 uppercase">{selectedDate} — {selectedTime}</p>
                   </div>
                 </div>
@@ -200,91 +210,107 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
         </div>
 
-        <div className="p-12 border-t border-black/5 bg-gray-50/30 space-y-8">
+        <div className="p-12 border-t border-black/5 bg-gray-50/50 space-y-8">
           <div className="flex justify-between items-center">
-            <span className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.4em]">Subtotal</span>
+            <span className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.4em]">Subtotal</span>
             <span className="text-4xl font-serif font-bold text-black">${totalPrice}</span>
           </div>
-          <button
-            onClick={handleNext}
-            disabled={!isStepValid(step)}
-            className="w-full flex items-center justify-center gap-4 py-6 bg-black text-white text-[10px] uppercase font-bold tracking-[0.4em] hover:opacity-80 transition-all disabled:opacity-20"
-          >
-            <span>{step === 'DETAILS' ? 'Complete Reservation' : 'Confirm'}</span>
-            <ArrowRight size={18} />
-          </button>
+          {step !== 'CONFIRM' && (
+            <button
+              onClick={handleNext}
+              disabled={!isStepValid(step)}
+              className="w-full flex items-center justify-center gap-4 py-6 bg-black text-white text-[10px] uppercase font-bold tracking-[0.4em] hover:bg-gray-900 transition-all disabled:opacity-20"
+            >
+              <span>{currentStep?.nextLabel || 'Continue'}</span>
+              <ArrowRight size={18} />
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="bg-[#FDFCFB] min-h-screen pb-32 font-sans relative">
-      <nav className="flex justify-between items-center px-8 py-6 border-b border-black/5">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-xl font-serif font-bold tracking-widest uppercase">LUXENAIL</span>
-        </Link>
-        <Link to="/" className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 hover:text-black transition-all">Exit Atelier</Link>
-      </nav>
+    <div className="bg-[#FDFCFB] min-h-screen pb-32 selection:bg-black selection:text-white">
+      <Header />
 
       <div className="max-w-4xl mx-auto py-24 px-6">
-        <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
-          {steps.map((s, idx) => {
-            const isClickable = (idx <= currentStepIdx || steps.slice(0, idx).every(step => isStepValid(step.key))) && step !== 'CONFIRM';
-            return (
-              <React.Fragment key={s.key}>
-                <button 
-                  onClick={() => goToStep(s.key, idx)}
-                  disabled={!isClickable}
-                  className={`flex flex-col items-center gap-4 group transition-all ${isClickable ? 'cursor-pointer' : 'cursor-default opacity-30'}`}
-                >
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${currentStepIdx >= idx ? 'bg-black border-black text-white' : 'border-black/5 text-gray-200'}`}>
-                    {currentStepIdx > idx ? <CheckCircle2 size={20} /> : (idx + 1)}
-                  </div>
-                  <span className={`text-[9px] font-bold uppercase tracking-[0.3em] transition-colors ${currentStepIdx >= idx ? 'text-black' : 'text-gray-300'}`}>
-                    {s.label}
-                  </span>
-                </button>
-                {idx < steps.length - 1 && <div className={`flex-1 h-px mx-6 mb-12 ${currentStepIdx > idx ? 'bg-black' : 'bg-black/5'}`} />}
-              </React.Fragment>
-            );
-          })}
-        </div>
+        {/* Step Indicator */}
+        {step !== 'CONFIRM' && (
+          <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
+            {steps.map((s, idx) => {
+              const isClickable = (idx <= currentStepIdx || steps.slice(0, idx).every(step => isStepValid(step.key)));
+              return (
+                <React.Fragment key={s.key}>
+                  <button 
+                    onClick={() => goToStep(s.key, idx)}
+                    disabled={!isClickable}
+                    className={`flex flex-col items-center gap-4 group transition-all ${isClickable ? 'cursor-pointer' : 'cursor-default opacity-30'}`}
+                  >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${currentStepIdx >= idx ? 'bg-black border-black text-white' : 'border-black/10 text-gray-300'}`}>
+                      {currentStepIdx > idx ? <Check size={20} /> : (idx + 1)}
+                    </div>
+                    <span className={`text-[9px] font-bold uppercase tracking-[0.3em] transition-colors ${currentStepIdx >= idx ? 'text-black' : 'text-gray-400'}`}>
+                      {s.label}
+                    </span>
+                  </button>
+                  {idx < steps.length - 1 && <div className={`flex-1 h-px mx-6 mb-12 ${currentStepIdx > idx ? 'bg-black' : 'bg-black/10'}`} />}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
 
         <div className="min-h-[600px] reveal">
           {step === 'SERVICE' && (
             <div className="space-y-32">
-              {Object.entries(servicesByCategory).map(([category, { main, addon }]) => (
+              <div className="text-center max-w-xl mx-auto">
+                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Curate your session from our artisanal offerings.</p>
+              </div>
+              {/* Cast Object.entries to explicit tuple type to resolve property 'main' and 'addon' errors on type '{}' */}
+              {(Object.entries(servicesByCategory) as [string, { main: Service[], addon: Service[] }][]).map(([category, { main, addon }]) => (
                 <div key={category} className="space-y-16">
                   <div className="flex items-center gap-12">
-                    <h3 className="text-4xl font-serif font-bold tracking-tight">{category}</h3>
-                    <div className="h-px bg-black/5 flex-1" />
+                    <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
+                    <div className="h-px bg-black/10 flex-1" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {main.map(s => (
-                      <div key={s.id} onClick={() => selectMainService(s)} className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${selectedMainServices[category]?.id === s.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}>
+                      <div 
+                        key={s.id} 
+                        onClick={() => selectMainService(s)} 
+                        className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${selectedMainServices[category]?.id === s.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}
+                      >
                         <div className="flex justify-between items-start mb-6">
                           <div className="flex-1 pr-6">
-                            <h4 className="font-bold text-2xl tracking-tight">{s.name}</h4>
+                            <h4 className="font-bold text-2xl tracking-tight text-black">{s.name}</h4>
                             <div className="flex items-center gap-4 mt-3">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{s.duration} MIN</span>
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
                               <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
                             </div>
                           </div>
-                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${selectedMainServices[category]?.id === s.id ? 'bg-black border-black text-white' : 'border-black/10 group-hover:border-black/30'}`}>
+                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${selectedMainServices[category]?.id === s.id ? 'bg-black border-black text-white' : 'border-black/20 group-hover:border-black/40'}`}>
                             {selectedMainServices[category]?.id === s.id && <Check size={18} />}
                           </div>
                         </div>
-                        <p className="text-xs text-gray-400 leading-relaxed font-light tracking-wide">{s.description}</p>
+                        <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
                       </div>
                     ))}
                   </div>
                   {addon.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
                       {addon.map(s => (
-                        <div key={s.id} onClick={() => toggleAddon(s)} className={`p-6 border-2 transition-all cursor-pointer ${!selectedMainServices[category] ? 'opacity-20 pointer-events-none' : ''} ${selectedAddons.some(a => a.id === s.id) ? 'border-black bg-white' : 'border-black/5 hover:border-black/20'}`}>
-                          <h4 className="font-bold text-sm tracking-tight">{s.name}</h4>
-                          <p className="text-[#C4A484] font-bold text-[10px] uppercase tracking-widest mt-2">${s.price} • {s.duration}m</p>
+                        <div 
+                          key={s.id} 
+                          onClick={() => toggleAddon(s)} 
+                          className={`p-6 border-2 transition-all cursor-pointer ${!selectedMainServices[category] ? 'opacity-10 pointer-events-none' : ''} ${selectedAddons.some(a => a.id === s.id) ? 'border-black bg-white shadow-lg' : 'border-black/5 hover:border-black/20'}`}
+                        >
+                          <h4 className="font-bold text-sm tracking-tight text-black">{s.name}</h4>
+                          <div className="flex justify-between items-center mt-2">
+                             <p className="text-[#C4A484] font-bold text-[10px] uppercase tracking-widest">${s.price} • {s.duration}m</p>
+                             {selectedAddons.some(a => a.id === s.id) && <Check size={14} className="text-black" />}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -295,14 +321,27 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'EMPLOYEE' && (
-            <div className="space-y-16 animate-in fade-in slide-in-from-bottom-4">
-              <div className="text-center max-w-xl mx-auto"><h2 className="text-5xl font-serif font-bold text-black mb-6">The Specialists.</h2><p className="text-gray-400 text-sm font-light tracking-wide">Select an artisan to curate your session.</p></div>
+            <div className="space-y-16">
+              <div className="text-center max-w-xl mx-auto">
+                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Specialists.</h2>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Select an artisan to curate your session.</p>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
                 {EMPLOYEES.map(e => (
-                  <button key={e.id} onClick={() => setSelectedEmployee(e)} className={`p-16 border-2 text-center transition-all duration-700 relative ${selectedEmployee?.id === e.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 hover:border-black/20'}`}>
-                    <div className="w-32 h-32 rounded-full border border-black/5 overflow-hidden mx-auto mb-8 grayscale group-hover:grayscale-0"><img src={`https://picsum.photos/seed/${e.id}/200/200`} alt="" className="w-full h-full object-cover" /></div>
-                    <h4 className="font-bold text-2xl tracking-tight">{e.name}</h4>
-                    <p className="text-[10px] text-[#C4A484] uppercase tracking-[0.3em] font-bold mt-4">{e.specialties[0]}</p>
+                  <button 
+                    key={e.id} 
+                    onClick={() => setSelectedEmployee(e)} 
+                    className={`p-16 border-2 text-center transition-all duration-700 relative group ${selectedEmployee?.id === e.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 hover:border-black/20'}`}
+                  >
+                    <div className="w-32 h-32 rounded-full border border-black/10 overflow-hidden mx-auto mb-8 grayscale group-hover:grayscale-0 transition-all flex items-center justify-center bg-gray-50">
+                       <User size={64} strokeWidth={0.5} className="text-gray-300" />
+                    </div>
+                    <h4 className="font-bold text-2xl tracking-tight text-black">{e.name}</h4>
+                    <div className="flex flex-wrap justify-center gap-2 mt-4">
+                      {e.specialties.map(spec => (
+                        <span key={spec} className="text-[9px] text-[#C4A484] uppercase tracking-[0.2em] font-bold px-3 py-1 border border-[#C4A484]/20 rounded-full">{spec}</span>
+                      ))}
+                    </div>
                     {selectedEmployee?.id === e.id && <div className="absolute top-8 right-8 text-black"><CheckCircle2 size={32} /></div>}
                   </button>
                 ))}
@@ -311,13 +350,30 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'TIME' && (
-            <div className="space-y-16 animate-in fade-in slide-in-from-bottom-4">
-              <div className="text-center max-w-xl mx-auto"><h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2><p className="text-gray-400 text-sm font-light tracking-wide">Pick a moment of sanctuary.</p></div>
+            <div className="space-y-16">
+              <div className="text-center max-w-xl mx-auto">
+                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Pick a moment of sanctuary.</p>
+              </div>
               <div className="max-w-md mx-auto space-y-12">
-                <input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} className="w-full p-8 border-b-2 border-black/5 text-center text-2xl font-serif outline-none bg-transparent focus:border-black transition-all" />
+                <div className="relative group">
+                  <CalendarIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={24} />
+                  <input 
+                    type="date" 
+                    value={selectedDate} 
+                    onChange={e => setSelectedDate(e.target.value)} 
+                    className="w-full pl-20 pr-8 py-8 border-b-2 border-black/10 text-center text-2xl font-serif outline-none bg-transparent focus:border-black transition-all text-black" 
+                  />
+                </div>
                 <div className="grid grid-cols-3 gap-4">
                   {availableSlots.map(time => (
-                    <button key={time} onClick={() => setSelectedTime(time)} className={`py-6 border-2 text-[10px] font-bold uppercase tracking-widest transition-all ${selectedTime === time ? 'bg-black text-white border-black' : 'bg-transparent text-gray-400 border-black/5 hover:border-black/20'}`}>{time}</button>
+                    <button 
+                      key={time} 
+                      onClick={() => setSelectedTime(time)} 
+                      className={`py-6 border-2 text-[10px] font-bold uppercase tracking-widest transition-all ${selectedTime === time ? 'bg-black text-white border-black shadow-xl' : 'bg-transparent text-gray-500 border-black/5 hover:border-black/20'}`}
+                    >
+                      {time}
+                    </button>
                   ))}
                 </div>
               </div>
@@ -325,49 +381,94 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'DETAILS' && (
-            <div className="space-y-16 max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4">
-              <div className="text-center"><h2 className="text-5xl font-serif font-bold text-black mb-6">The Ritual Details.</h2><p className="text-gray-400 text-sm font-light tracking-wide">Enter your identification.</p></div>
+            <div className="space-y-16 max-w-md mx-auto">
+              <div className="text-center">
+                <h2 className="text-5xl font-serif font-bold text-black mb-6">Final Details.</h2>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Enter your identification to finalize the reservation.</p>
+              </div>
               <div className="space-y-12">
-                <input type="text" placeholder="FULL NAME" value={customerInfo.name} onChange={e => setCustomerInfo({ ...customerInfo, name: e.target.value })} className="w-full p-8 border-b border-black/10 outline-none bg-transparent text-center font-bold tracking-[0.2em] placeholder:text-gray-300 uppercase focus:border-black transition-all" />
-                <input type="email" placeholder="EMAIL ADDRESS" value={customerInfo.email} onChange={e => setCustomerInfo({ ...customerInfo, email: e.target.value })} className="w-full p-8 border-b border-black/10 outline-none bg-transparent text-center font-bold tracking-[0.2em] placeholder:text-gray-300 uppercase focus:border-black transition-all" />
-                <input type="tel" placeholder="PHONE NUMBER" value={customerInfo.phone} onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} className="w-full p-8 border-b border-black/10 outline-none bg-transparent text-center font-bold tracking-[0.2em] placeholder:text-gray-300 uppercase focus:border-black transition-all" />
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Full Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="E.G. JULIA ROBERTS" 
+                    value={customerInfo.name} 
+                    onChange={e => setCustomerInfo({ ...customerInfo, name: e.target.value })} 
+                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
+                  />
+                </div>
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Email Address</label>
+                  <input 
+                    type="email" 
+                    placeholder="NAME@ATELIER.COM" 
+                    value={customerInfo.email} 
+                    onChange={e => setCustomerInfo({ ...customerInfo, email: e.target.value })} 
+                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
+                  />
+                </div>
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    placeholder="+1 (555) 000-0000" 
+                    value={customerInfo.phone} 
+                    onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} 
+                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
+                  />
+                </div>
               </div>
             </div>
           )}
 
           {step === 'CONFIRM' && (
             <div className="flex flex-col items-center justify-center text-center py-24 space-y-12 reveal">
-              <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center animate-pulse"><CheckCircle2 size={80} /></div>
+              <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center shadow-2xl"><CheckCircle2 size={80} /></div>
               <h2 className="text-7xl font-serif font-bold text-black">Confirmed.</h2>
-              <p className="text-gray-400 max-w-sm text-lg italic tracking-wide">The sanctuary awaits your arrival, {customerInfo.name}.</p>
-              <Link to="/" className="px-16 py-6 bg-black text-white text-[10px] uppercase font-bold tracking-[0.5em] hover:opacity-80 transition-all shadow-2xl">Return to Home</Link>
+              <div className="space-y-4 max-w-sm">
+                <p className="text-gray-600 text-lg italic tracking-wide">The sanctuary awaits your arrival, {customerInfo.name}.</p>
+                <div className="p-6 bg-black/5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] space-y-2">
+                  <div className="flex justify-between"><span>Date</span><span>{selectedDate}</span></div>
+                  <div className="flex justify-between"><span>Time</span><span>{selectedTime}</span></div>
+                  <div className="flex justify-between"><span>Professional</span><span>{selectedEmployee?.name}</span></div>
+                </div>
+              </div>
+              <Link to="/" className="px-16 py-6 bg-black text-white text-[10px] uppercase font-bold tracking-[0.5em] hover:bg-gray-900 transition-all shadow-2xl">Return to Home</Link>
             </div>
           )}
 
           {step !== 'CONFIRM' && (
-            <div className="mt-32 flex justify-center pt-12 border-t border-black/5">
+            <div className="mt-32 flex justify-center pt-12 border-t border-black/10">
               <button
-                onClick={() => setIsSummaryOpen(true)}
-                className="flex items-center gap-6 px-16 py-6 border border-black text-[10px] uppercase font-bold tracking-[0.4em] hover:bg-black hover:text-white transition-all shadow-lg"
+                onClick={handleNext}
+                disabled={!isStepValid(step)}
+                className="flex items-center gap-8 px-20 py-8 bg-black text-white text-[10px] uppercase font-bold tracking-[0.4em] hover:scale-105 transition-all shadow-2xl disabled:opacity-20 disabled:scale-100"
               >
-                <span>Review & Continue</span>
-                <ArrowRight size={18} />
+                <span>{currentStep?.nextLabel || 'Continue'}</span>
+                <ArrowRight size={20} />
               </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* Floating Summary Trigger: Minimalist */}
+      {/* Floating Summary Trigger */}
       {step !== 'CONFIRM' && (
         <button
           onClick={() => setIsSummaryOpen(true)}
-          className={`fixed bottom-12 right-12 z-50 flex items-center gap-6 p-6 bg-black text-white shadow-2xl hover:scale-105 transition-all group border border-white/10`}
+          className={`fixed bottom-12 right-12 z-50 flex items-center gap-6 p-6 bg-white text-black shadow-2xl hover:scale-110 transition-all group border border-black/5 rounded-full`}
         >
-          <ShoppingBag size={24} />
-          <div className="pr-6 border-l border-white/20 pl-6 text-left">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Session Total</p>
-            <p className="text-2xl font-serif font-bold">${totalPrice}</p>
+          <div className="relative">
+            <ShoppingBag size={24} />
+            {Object.keys(selectedMainServices).length > 0 && (
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#C4A484] text-white text-[8px] flex items-center justify-center rounded-full font-bold">
+                {Object.keys(selectedMainServices).length}
+              </span>
+            )}
+          </div>
+          <div className="pr-6 border-l border-black/10 pl-6 text-left hidden md:block">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Atelier Bag</p>
+            <p className="text-xl font-serif font-bold text-black">${totalPrice}</p>
           </div>
         </button>
       )}

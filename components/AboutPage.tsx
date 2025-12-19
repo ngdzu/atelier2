@@ -1,25 +1,13 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Scissors, ArrowRight, Minus } from 'lucide-react';
+import Header from './Header';
+import { STORE_NAME } from '../constants';
 
 const AboutPage: React.FC = () => {
   return (
     <div className="bg-[#FDFCFB] min-h-screen selection:bg-black selection:text-white">
-      {/* Editorial Header */}
-      <nav className="flex justify-between items-center px-8 py-6 border-b border-black/5">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-xl font-serif font-bold tracking-widest uppercase">LUXENAIL</span>
-        </Link>
-        <div className="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
-          <Link to="/gallery" className="hover:opacity-60 transition-opacity">Collections</Link>
-          <Link to="/about" className="text-black border-b border-black">The Atelier</Link>
-          <Link to="/book" className="hover:opacity-60 transition-opacity">Services</Link>
-        </div>
-        <Link to="/book" className="px-6 py-2 border border-black text-[10px] uppercase font-bold tracking-widest hover:bg-black hover:text-white transition-all">
-          Reserve
-        </Link>
-      </nav>
+      <Header />
 
       {/* Hero Section: Editorial Focus */}
       <section className="pt-32 pb-64 px-8 max-w-7xl mx-auto">
@@ -30,16 +18,16 @@ const AboutPage: React.FC = () => {
               Beyond the <br/><span className="italic font-normal text-gray-400">Surface.</span>
             </h1>
             <p className="text-gray-500 text-lg font-light leading-relaxed mb-12 max-w-lg">
-              LuxeNail is a collective of artisans dedicated to the architecture of the hand. Founded in 2018, we have redefined nail care from a commodity into a curative ritual of self-appreciation.
+              {STORE_NAME} is a collective of artisans dedicated to the architecture of the hand. Founded in 2018, we have redefined nail care from a commodity into a curative ritual of self-appreciation.
             </p>
             <div className="h-px w-24 bg-black/10"></div>
           </div>
-          <div className="reveal mt-20 lg:mt-40">
+          <div className="reveal mt-20 lg:mt-40 group">
             <div className="relative aspect-[3/4] overflow-hidden">
                <img 
                 src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200" 
                 alt="The Sanctuary" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[2s]"
+                className="w-full h-full object-cover editorial-img"
               />
             </div>
             <p className="mt-8 text-[9px] font-bold uppercase tracking-[0.3em] text-gray-300 italic text-right">Look 05 — Atelier Nude</p>
@@ -74,12 +62,12 @@ const AboutPage: React.FC = () => {
       {/* Contact Section: Immersive */}
       <section className="py-64 px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-24 items-end">
-          <div className="lg:col-span-2 reveal">
+          <div className="lg:col-span-2 reveal group">
             <div className="aspect-[16/9] overflow-hidden border border-black/5 bg-gray-50 mb-12">
               <img 
                 src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=1600" 
                 alt="Studio Interior" 
-                className="w-full h-full object-cover grayscale brightness-75 hover:scale-105 transition-all duration-[2s]"
+                className="w-full h-full object-cover brightness-75 group-hover:scale-105 editorial-img"
               />
             </div>
             <h2 className="text-5xl md:text-7xl font-serif font-bold">The Sanctuary.</h2>
@@ -94,7 +82,7 @@ const AboutPage: React.FC = () => {
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#C4A484] mb-4">Connect</p>
               <p className="text-sm font-bold text-black uppercase tracking-widest leading-relaxed">
-                (555) 012-3456<br/>concierge@luxenail.com
+                (555) 012-3456<br/>concierge@{STORE_NAME.toLowerCase()}.com
               </p>
             </div>
             <Link to="/book" className="inline-flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.4em] group">
@@ -107,7 +95,7 @@ const AboutPage: React.FC = () => {
 
       {/* Editorial Footer */}
       <footer className="py-20 text-center border-t border-black/5 text-[10px] font-bold tracking-[0.3em] text-gray-300">
-        © 2024 LUXENAIL ATELIER — LOS ANGELES
+        © 2024 {STORE_NAME.toUpperCase()} ATELIER — LOS ANGELES
       </footer>
     </div>
   );

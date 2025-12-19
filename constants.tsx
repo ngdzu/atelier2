@@ -1,6 +1,8 @@
 
 import { Customer, Employee, Service, Appointment } from './types';
 
+export const STORE_NAME = 'LuxeNail';
+
 export const COLORS = {
   primary: '#000000',
   secondary: '#C4A484',
@@ -10,50 +12,176 @@ export const COLORS = {
 };
 
 export const SERVICES: Service[] = [
+  // MANICURES
   { 
     id: 'm1', 
-    name: 'The Signature Ritual', 
-    duration: 60, 
-    price: 85,
+    name: 'Classic Manicure', 
+    duration: 30, 
+    price: 25,
     category: 'Manicures',
     type: 'MAIN',
-    description: 'A deep restorative ceremony for the hands. Cold-pressed oils, botanical scrubs, and architectural nail shaping.'
+    description: 'Includes nail shaping, cuticle grooming, a relaxing hand massage, and regular polish application.'
   },
   { 
     id: 'm2', 
-    name: 'Mineral Gel Polish', 
+    name: 'Gel Manicure', 
     duration: 45, 
-    price: 65,
+    price: 40,
     category: 'Manicures',
     type: 'MAIN',
-    description: 'High-pigment mineral gels cured for longevity and unparalleled gloss. A contemporary classic.'
+    description: 'A classic manicure finished with high-quality gel polish for long-lasting shine and durability (up to 2 weeks).'
   },
   { 
     id: 'm3', 
-    name: 'Architectural Sculpt', 
-    duration: 120, 
-    price: 150,
+    name: 'Dazzle Dry Manicure', 
+    duration: 35, 
+    price: 35,
     category: 'Manicures',
     type: 'MAIN',
-    description: 'Hand-sculpted extensions designed to elongate and enhance the natural silhouette of the hand.'
+    description: 'Non-toxic, vegan polish that air-dries in 5 minutes with the longevity of gel but without the UV light.'
   },
   { 
-    id: 'ma1', 
-    name: 'Artisan Detail', 
-    duration: 30, 
+    id: 'm4', 
+    name: `${STORE_NAME} Signature Spa Manicure`, 
+    duration: 50, 
     price: 45,
     category: 'Manicures',
-    type: 'ADDON',
-    description: 'Hand-painted minimalist accents or seasonal textures.'
+    type: 'MAIN',
+    description: 'Our premier hand ritual including sugar scrub exfoliation, hydrating mask, hot towel wrap, and luxury massage.'
   },
+
+  // PEDICURES
   { 
     id: 'p1', 
-    name: 'The Luxe Pedicure', 
-    duration: 75, 
-    price: 110,
+    name: 'Classic Pedicure', 
+    duration: 35, 
+    price: 35,
     category: 'Pedicures',
     type: 'MAIN',
-    description: 'A curated journey for the feet. Sea salt minerals, thermal stones, and precision grooming.'
+    description: 'Includes foot soak, nail shaping, cuticle grooming, callus buffing, foot massage, and regular polish.'
+  },
+  { 
+    id: 'p2', 
+    name: 'Luxury Spa Pedicure', 
+    duration: 50, 
+    price: 50,
+    category: 'Pedicures',
+    type: 'MAIN',
+    description: 'Enhanced classic pedicure with sea salt soak, sugar scrub, mud mask, and extra massage time.'
+  },
+  { 
+    id: 'p3', 
+    name: 'Milk & Honey Pedicure', 
+    duration: 60, 
+    price: 65,
+    category: 'Pedicures',
+    type: 'MAIN',
+    description: 'A nourishing treatment using real milk and honey to soften skin, followed by a paraffin wax treatment.'
+  },
+  { 
+    id: 'p4', 
+    name: 'Jelly Pedicure', 
+    duration: 65, 
+    price: 75,
+    category: 'Pedicures',
+    type: 'MAIN',
+    description: 'Transform your foot soak into a gelatinous spa experience that retains heat 3x longer and deeply hydrates.'
+  },
+  { 
+    id: 'p5', 
+    name: `${STORE_NAME} Ultimate CBD Pedicure`, 
+    duration: 75, 
+    price: 95,
+    category: 'Pedicures',
+    type: 'MAIN',
+    description: 'The pinnacle of relaxation. Uses premium CBD products to reduce inflammation, pain, and stress.'
+  },
+
+  // DIPPING POWDER
+  { 
+    id: 'd1', 
+    name: 'Dip Powder (Natural Nail)', 
+    duration: 45, 
+    price: 50,
+    category: 'Dipping Powder',
+    type: 'MAIN',
+    description: 'A durable, odor-free alternative to acrylics that strengthens the natural nail with infused vitamins.'
+  },
+  { 
+    id: 'd2', 
+    name: 'Dip Powder with Extensions', 
+    duration: 60, 
+    price: 60,
+    category: 'Dipping Powder',
+    type: 'MAIN',
+    description: 'Adds length using tip extensions before applying dipping powder for a lightweight, strong finish.'
+  },
+
+  // ENHANCEMENTS
+  { 
+    id: 'e1', 
+    name: 'Acrylic Full Set', 
+    duration: 60, 
+    price: 55,
+    category: 'Enhancements',
+    type: 'MAIN',
+    description: 'Classic nail extensions for added length and strength. Includes regular polish.'
+  },
+  { 
+    id: 'e2', 
+    name: 'Gel-X Extensions', 
+    duration: 75, 
+    price: 75,
+    category: 'Enhancements',
+    type: 'MAIN',
+    description: 'The world\'s first soak-off soft gel nail extension system. No dust, no odor, and no damage to natural nails.'
+  },
+  { 
+    id: 'e3', 
+    name: 'Liquid Gel Full Set', 
+    duration: 75, 
+    price: 70,
+    category: 'Enhancements',
+    type: 'MAIN',
+    description: 'A clearer, more natural-looking extension option compared to acrylics, offering high flexibility and gloss.'
+  },
+
+  // ADD-ONS
+  { 
+    id: 'a1', 
+    name: 'Artisan Nail Art (2 nails)', 
+    duration: 15, 
+    price: 15,
+    category: 'Manicures',
+    type: 'ADDON',
+    description: 'Custom hand-painted designs, stickers, or basic patterns.'
+  },
+  { 
+    id: 'a2', 
+    name: 'Chrome / Holographic Finish', 
+    duration: 15, 
+    price: 15,
+    category: 'Manicures',
+    type: 'ADDON',
+    description: 'Apply a metallic or prismatic mirror-like powder over your gel color.'
+  },
+  { 
+    id: 'a3', 
+    name: 'French Tip Polish', 
+    duration: 15, 
+    price: 10,
+    category: 'Manicures',
+    type: 'ADDON',
+    description: 'Classic white or colored tips for a timeless, clean look.'
+  },
+  { 
+    id: 'a4', 
+    name: 'Paraffin Wax Treatment', 
+    duration: 10, 
+    price: 15,
+    category: 'Manicures',
+    type: 'ADDON',
+    description: 'Deep moisturizing heat therapy for dry, cracked skin.'
   },
 ];
 
@@ -67,8 +195,8 @@ export const GALLERY_IMAGES = [
 ];
 
 export const EMPLOYEES: Employee[] = [
-  { id: 'e1', name: 'Elena Vance', email: 'elena@luxenail.com', phone: '555-0101', role: 'EMPLOYEE', specialties: ['Artisan Detail', 'Sculpt'], color: '#F7F7F7' },
-  { id: 'e2', name: 'Marcus Chen', email: 'marcus@luxenail.com', phone: '555-0102', role: 'EMPLOYEE', specialties: ['Ritual', 'Manicure'], color: '#F7F7F7' },
+  { id: 'e1', name: 'Elena Vance', email: `elena@${STORE_NAME.toLowerCase()}.com`, phone: '555-0101', role: 'EMPLOYEE', specialties: ['Dipping Powder', 'Gel-X Extensions'], color: '#F7F7F7' },
+  { id: 'e2', name: 'Marcus Chen', email: `marcus@${STORE_NAME.toLowerCase()}.com`, phone: '555-0102', role: 'EMPLOYEE', specialties: ['Spa Pedicure', 'Nail Art'], color: '#F7F7F7' },
 ];
 
 export const MOCK_CUSTOMERS: Customer[] = [

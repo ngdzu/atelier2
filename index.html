@@ -39,19 +39,24 @@
         /* Reveal animations */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease-out;
+            transform: translateY(20px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+            will-change: opacity, transform;
         }
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
-        /* Immersive image container */
-        .parallax-img {
-            transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+        
+        /* Reusable Editorial Image Hover Effect */
+        .editorial-img {
+            filter: grayscale(100%);
+            transition: filter 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: filter, transform;
         }
-        .parallax-img:hover {
-            transform: scale(1.03);
+        .editorial-img:hover {
+            filter: grayscale(0%);
         }
     </style>
 <script type="importmap">
@@ -71,17 +76,49 @@
 <body>
     <div id="root"></div>
     <script>
-        // Intersection Observer for scroll reveals
-        const observer = new IntersectionObserver((entries) => {
+        /**
+         * Optimized Reveal Logic
+         * Uses IntersectionObserver for efficient viewport detection
+         * Uses MutationObserver to handle React route changes dynamically
+         */
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    // Once revealed, we don't need to observe it anymore
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { 
+            threshold: 0.05, // Trigger as soon as 5% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Slightly offset the bottom trigger
+        });
 
-        window.addEventListener('scroll', () => {
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const observeElements = () => {
+            const elements = document.querySelectorAll('.reveal:not(.active)');
+            elements.forEach(el => revealObserver.observe(el));
+        };
+
+        // Initial observation
+        observeElements();
+
+        // MutationObserver to catch elements rendered by React after navigation
+        const domObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    observeElements();
+                }
+            });
+        });
+
+        domObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Fallback for route changes that might not trigger standard mutations
+        window.addEventListener('popstate', () => {
+            setTimeout(observeElements, 100);
         });
     </script>
 </body>
