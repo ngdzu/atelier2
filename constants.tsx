@@ -2,6 +2,10 @@
 import { Customer, Employee, Service, Appointment } from './types';
 
 export const STORE_NAME = 'LuxeNail';
+export const PHONE_NUMBER = '(555) 012-3456';
+export const CONTACT_EMAIL = `concierge@${STORE_NAME.toLowerCase()}.com`;
+export const ADDRESS_STREET = '123 Design Blvd, Suite 400';
+export const ADDRESS_CITY = 'Los Angeles, CA 90210';
 
 export const COLORS = {
   primary: '#000000',

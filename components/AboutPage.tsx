@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
-import { STORE_NAME } from '../constants';
+import { STORE_NAME, PHONE_NUMBER, CONTACT_EMAIL, ADDRESS_STREET, ADDRESS_CITY } from '../constants';
 
 const AboutPage: React.FC = () => {
   return (
@@ -76,13 +76,13 @@ const AboutPage: React.FC = () => {
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#C4A484] mb-4">Location</p>
               <p className="text-sm font-bold text-black uppercase tracking-widest leading-relaxed">
-                123 Design Blvd, Suite 400<br/>Los Angeles, CA 90210
+                {ADDRESS_STREET}<br/>{ADDRESS_CITY}
               </p>
             </div>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#C4A484] mb-4">Connect</p>
               <p className="text-sm font-bold text-black uppercase tracking-widest leading-relaxed">
-                (555) 012-3456<br/>concierge@{STORE_NAME.toLowerCase()}.com
+                {PHONE_NUMBER}<br/>{CONTACT_EMAIL}
               </p>
             </div>
             <Link to="/book" className="inline-flex items-center gap-6 text-[10px] font-bold uppercase tracking-[0.4em] group">
