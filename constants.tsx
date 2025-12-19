@@ -12,176 +12,269 @@ export const COLORS = {
 };
 
 export const SERVICES: Service[] = [
-  // MANICURES
+  // MANICURE
   { 
     id: 'm1', 
-    name: 'Classic Manicure', 
+    name: 'Regular Manicure', 
     duration: 30, 
-    price: 25,
-    category: 'Manicures',
+    price: 27,
+    pointsEarned: 27,
+    pointsPrice: 945,
+    category: 'Manicure',
     type: 'MAIN',
-    description: 'Includes nail shaping, cuticle grooming, a relaxing hand massage, and regular polish application.'
+    description: 'Cut, file, shape, buffer, cuticle treatment, hand massage, hot towel & regular polish application.'
   },
   { 
     id: 'm2', 
     name: 'Gel Manicure', 
     duration: 45, 
     price: 40,
-    category: 'Manicures',
+    pointsEarned: 40,
+    pointsPrice: 1400,
+    category: 'Manicure',
     type: 'MAIN',
-    description: 'A classic manicure finished with high-quality gel polish for long-lasting shine and durability (up to 2 weeks).'
+    description: 'Cut, file, shape, buffer, cuticle treatment, hand massage, hot towel and gel polish application.'
   },
   { 
     id: 'm3', 
-    name: 'Dazzle Dry Manicure', 
-    duration: 35, 
-    price: 35,
-    category: 'Manicures',
+    name: 'Express Manicure', 
+    duration: 20, 
+    price: 22,
+    pointsEarned: 22,
+    pointsPrice: 770,
+    category: 'Manicure',
     type: 'MAIN',
-    description: 'Non-toxic, vegan polish that air-dries in 5 minutes with the longevity of gel but without the UV light.'
+    description: 'Cut, file, shape, buffer, hot towel & regular polish application.'
   },
   { 
     id: 'm4', 
-    name: `${STORE_NAME} Signature Spa Manicure`, 
-    duration: 50, 
-    price: 45,
-    category: 'Manicures',
+    name: 'Acrylic Fullset', 
+    duration: 60, 
+    price: 65,
+    pointsEarned: 65,
+    pointsPrice: 2275,
+    category: 'Manicure',
     type: 'MAIN',
-    description: 'Our premier hand ritual including sugar scrub exfoliation, hydrating mask, hot towel wrap, and luxury massage.'
+    description: 'Professional acrylic nail extensions.'
+  },
+  { 
+    id: 'm5', 
+    name: 'Dip Manicure', 
+    duration: 45, 
+    price: 50,
+    pointsEarned: 50,
+    pointsPrice: 1750,
+    category: 'Manicure',
+    type: 'MAIN',
+    description: 'Healthy alternative to acrylic using dipping powder technique.'
+  },
+  { 
+    id: 'm6', 
+    name: 'Gel X Full set', 
+    duration: 60, 
+    price: 75,
+    pointsEarned: 75,
+    pointsPrice: 2625,
+    category: 'Manicure',
+    type: 'MAIN',
+    description: 'Aprés Gel-X architectural extensions.'
+  },
+  { 
+    id: 'm7', 
+    name: 'Gel Builder Fullset', 
+    duration: 60, 
+    price: 70,
+    pointsEarned: 70,
+    pointsPrice: 2450,
+    category: 'Manicure',
+    type: 'MAIN',
+    description: 'Structural reinforcement using high-viscosity builder gel.'
+  },
+  { 
+    id: 'm8', 
+    name: 'T.A.P Gel Fullset', 
+    duration: 60, 
+    price: 70,
+    pointsEarned: 70,
+    pointsPrice: 2450,
+    category: 'Manicure',
+    type: 'MAIN',
+    description: 'The latest technique in hybrid gel application.'
   },
 
-  // PEDICURES
+  // PEDICURE
   { 
     id: 'p1', 
-    name: 'Classic Pedicure', 
+    name: 'Regular Pedicure', 
     duration: 35, 
-    price: 35,
-    category: 'Pedicures',
+    price: 42,
+    pointsEarned: 42,
+    pointsPrice: 1470,
+    category: 'Pedicure',
     type: 'MAIN',
-    description: 'Includes foot soak, nail shaping, cuticle grooming, callus buffing, foot massage, and regular polish.'
+    description: 'A classic care including a warm soak, cutting, gentle cuticle care, scrub, hot towel, and stone massage.'
   },
   { 
     id: 'p2', 
-    name: 'Luxury Spa Pedicure', 
-    duration: 50, 
-    price: 50,
-    category: 'Pedicures',
+    name: 'Express Pedicure', 
+    duration: 25, 
+    price: 30,
+    pointsEarned: 30,
+    pointsPrice: 1050,
+    category: 'Pedicure',
     type: 'MAIN',
-    description: 'Enhanced classic pedicure with sea salt soak, sugar scrub, mud mask, and extra massage time.'
+    description: 'Quick refresh including nail shaping and regular polish.'
   },
   { 
     id: 'p3', 
-    name: 'Milk & Honey Pedicure', 
-    duration: 60, 
+    name: 'Deluxe Spa Pedicure', 
+    duration: 50, 
     price: 65,
-    category: 'Pedicures',
+    pointsEarned: 65,
+    pointsPrice: 2275,
+    category: 'Pedicure',
     type: 'MAIN',
-    description: 'A nourishing treatment using real milk and honey to soften skin, followed by a paraffin wax treatment.'
+    description: 'Upgrade your pampering with deluxe spa products and 10’ hot stone massage.'
   },
   { 
     id: 'p4', 
-    name: 'Jelly Pedicure', 
-    duration: 65, 
-    price: 75,
-    category: 'Pedicures',
-    type: 'MAIN',
-    description: 'Transform your foot soak into a gelatinous spa experience that retains heat 3x longer and deeply hydrates.'
-  },
-  { 
-    id: 'p5', 
-    name: `${STORE_NAME} Ultimate CBD Pedicure`, 
+    name: `${STORE_NAME} Signature Spa Pedicure`, 
     duration: 75, 
-    price: 95,
-    category: 'Pedicures',
+    price: 93,
+    pointsEarned: 93,
+    pointsPrice: 3430,
+    category: 'Pedicure',
     type: 'MAIN',
-    description: 'The pinnacle of relaxation. Uses premium CBD products to reduce inflammation, pain, and stress.'
+    description: 'Indulge in luxury with Steamer Machine & Spa Candle therapy combined with collagen socks.'
   },
 
-  // DIPPING POWDER
-  { 
-    id: 'd1', 
-    name: 'Dip Powder (Natural Nail)', 
-    duration: 45, 
-    price: 50,
-    category: 'Dipping Powder',
-    type: 'MAIN',
-    description: 'A durable, odor-free alternative to acrylics that strengthens the natural nail with infused vitamins.'
-  },
-  { 
-    id: 'd2', 
-    name: 'Dip Powder with Extensions', 
-    duration: 60, 
-    price: 60,
-    category: 'Dipping Powder',
-    type: 'MAIN',
-    description: 'Adds length using tip extensions before applying dipping powder for a lightweight, strong finish.'
-  },
-
-  // ENHANCEMENTS
+  // EYELASH
   { 
     id: 'e1', 
-    name: 'Acrylic Full Set', 
-    duration: 60, 
-    price: 55,
-    category: 'Enhancements',
+    name: 'Cluster Eyelash Extension', 
+    duration: 45, 
+    price: 80,
+    pointsEarned: 80,
+    pointsPrice: 2800,
+    category: 'Eyelash',
     type: 'MAIN',
-    description: 'Classic nail extensions for added length and strength. Includes regular polish.'
+    description: 'Instant volume with cluster lash clusters.'
   },
   { 
     id: 'e2', 
-    name: 'Gel-X Extensions', 
-    duration: 75, 
-    price: 75,
-    category: 'Enhancements',
+    name: 'Classic Full Set', 
+    duration: 90, 
+    price: 125,
+    pointsEarned: 125,
+    pointsPrice: 4370,
+    category: 'Eyelash',
     type: 'MAIN',
-    description: 'The world\'s first soak-off soft gel nail extension system. No dust, no odor, and no damage to natural nails.'
+    description: 'One-to-one individual lash application for a natural look.'
   },
   { 
     id: 'e3', 
-    name: 'Liquid Gel Full Set', 
-    duration: 75, 
-    price: 70,
-    category: 'Enhancements',
+    name: 'Volume Set Full', 
+    duration: 120, 
+    price: 165,
+    pointsEarned: 165,
+    pointsPrice: 5775,
+    category: 'Eyelash',
     type: 'MAIN',
-    description: 'A clearer, more natural-looking extension option compared to acrylics, offering high flexibility and gloss.'
+    description: 'Multiple lightweight extensions per natural lash for maximum drama.'
   },
 
-  // ADD-ONS
+  // FACIAL
+  { 
+    id: 'f1', 
+    name: 'Classic Facial', 
+    duration: 60, 
+    price: 75,
+    pointsEarned: 75,
+    pointsPrice: 2625,
+    category: 'Facial',
+    type: 'MAIN',
+    description: 'Cleansing, exfoliation, extractions, and hydration for refreshed skin.'
+  },
+  { 
+    id: 'f2', 
+    name: 'Anti-Aging Facial', 
+    duration: 75, 
+    price: 145,
+    pointsEarned: 145,
+    pointsPrice: 5070,
+    category: 'Facial',
+    type: 'MAIN',
+    description: 'Collagen boost and specialized serums for youthful radiance.'
+  },
+
+  // KIDS
+  { 
+    id: 'k1', 
+    name: 'Kid Regular Manicure', 
+    duration: 20, 
+    price: 17,
+    pointsEarned: 17,
+    pointsPrice: 595,
+    category: "Kid's Services (Under 11)",
+    type: 'MAIN',
+    description: 'Gentle hand makeover including trimming, shaping, and colorful polish.'
+  },
+  { 
+    id: 'k2', 
+    name: 'Kid Regular Mani/Pedi Combo', 
+    duration: 45, 
+    price: 40,
+    pointsEarned: 40,
+    pointsPrice: 1400,
+    category: "Kid's Services (Under 11)",
+    type: 'MAIN',
+    description: 'The ultimate treat for your little one.'
+  },
+
+  // OTHERS / ADDONS
   { 
     id: 'a1', 
-    name: 'Artisan Nail Art (2 nails)', 
+    name: 'Color Change (Mani)', 
     duration: 15, 
     price: 15,
-    category: 'Manicures',
+    pointsEarned: 15,
+    pointsPrice: 525,
+    category: 'Others',
     type: 'ADDON',
-    description: 'Custom hand-painted designs, stickers, or basic patterns.'
+    description: 'Polish refresh for the hands.'
   },
   { 
     id: 'a2', 
-    name: 'Chrome / Holographic Finish', 
+    name: 'Gel Removal', 
     duration: 15, 
-    price: 15,
-    category: 'Manicures',
+    price: 10,
+    pointsEarned: 10,
+    pointsPrice: 350,
+    category: 'Others',
     type: 'ADDON',
-    description: 'Apply a metallic or prismatic mirror-like powder over your gel color.'
+    description: 'Safe and gentle soak-off for gel polish.'
   },
   { 
     id: 'a3', 
-    name: 'French Tip Polish', 
-    duration: 15, 
-    price: 10,
-    category: 'Manicures',
+    name: 'Nail Repair', 
+    duration: 10, 
+    price: 7,
+    pointsEarned: 7,
+    pointsPrice: 245,
+    category: 'Others',
     type: 'ADDON',
-    description: 'Classic white or colored tips for a timeless, clean look.'
+    description: 'Professional fix for a broken or chipped nail.'
   },
   { 
     id: 'a4', 
-    name: 'Paraffin Wax Treatment', 
-    duration: 10, 
-    price: 15,
-    category: 'Manicures',
-    type: 'ADDON',
-    description: 'Deep moisturizing heat therapy for dry, cracked skin.'
+    name: 'Eyebrow Shaping', 
+    duration: 15, 
+    price: 20,
+    pointsEarned: 20,
+    pointsPrice: 700,
+    category: 'Waxing',
+    type: 'MAIN',
+    description: 'Precise grooming to enhance your natural brow line.'
   },
 ];
 

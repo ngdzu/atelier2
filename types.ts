@@ -28,6 +28,8 @@ export interface Service {
   name: string;
   duration: number; // in minutes
   price: number;
+  pointsEarned?: number;
+  pointsPrice?: number;
   description?: string;
   category: string;
   type: ServiceType;

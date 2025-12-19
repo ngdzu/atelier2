@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { SERVICES, EMPLOYEES } from '../constants';
+import { SERVICES, EMPLOYEES, COLORS } from '../constants';
 import { Service, Employee, Appointment } from '../types';
 import { 
   CheckCircle2, 
@@ -12,7 +12,8 @@ import {
   ShoppingBag,
   X,
   User,
-  Clock
+  Clock,
+  Sparkles
 } from 'lucide-react';
 import Header from './Header';
 
@@ -47,9 +48,14 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const currentStep = steps[currentStepIdx];
 
   const totalPrice = useMemo(() => {
-    // Explicitly cast Object.values to Service[] to prevent 'unknown' property access errors
     const mainTotal = (Object.values(selectedMainServices) as Service[]).reduce((sum, s) => sum + s.price, 0);
     const addonsTotal = selectedAddons.reduce((sum, s) => sum + s.price, 0);
+    return mainTotal + addonsTotal;
+  }, [selectedMainServices, selectedAddons]);
+
+  const totalPoints = useMemo(() => {
+    const mainTotal = (Object.values(selectedMainServices) as Service[]).reduce((sum, s) => sum + (s.pointsEarned || 0), 0);
+    const addonsTotal = selectedAddons.reduce((sum, s) => sum + (s.pointsEarned || 0), 0);
     return mainTotal + addonsTotal;
   }, [selectedMainServices, selectedAddons]);
 
@@ -73,7 +79,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       if (prev[service.category]?.id === service.id) {
         const next = { ...prev };
         delete next[service.category];
-        // Clean up addons for this category
         setSelectedAddons(current => current.filter(a => a.category !== service.category));
         return next;
       }
@@ -116,9 +121,8 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     else if (step === 'TIME') setStep('DETAILS');
     else if (step === 'DETAILS') {
       onComplete({
-        customerId: 'new', // placeholder
+        customerId: 'new',
         employeeId: selectedEmployee?.id || '',
-        // Fix: Explicitly cast to Service[] to access .id property and resolve 'unknown' type error
         serviceId: (Object.values(selectedMainServices) as Service[])[0]?.id || '',
         startTime: `${selectedDate}T${selectedTime}:00`,
         status: 'SCHEDULED'
@@ -129,7 +133,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   };
 
   const goToStep = (targetStep: Step, targetIdx: number) => {
-    // Annotate the type of 's' in every callback to avoid 'unknown' inference
     const canNavigate = targetIdx <= currentStepIdx || steps.slice(0, targetIdx).every((s: { key: Step }) => isStepValid(s.key));
     if (canNavigate && step !== 'CONFIRM') {
       setStep(targetStep);
@@ -151,7 +154,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         <div className="flex-1 overflow-y-auto p-12 space-y-12">
           {Object.keys(selectedMainServices).length > 0 ? (
             <div className="space-y-12">
-              {/* Cast Object.values to Service[] to prevent 'unknown' property access errors */}
               {(Object.values(selectedMainServices) as Service[]).map((service: Service) => (
                 <div key={service.id} className="space-y-6">
                   <div className="space-y-4">
@@ -164,10 +166,12 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                         <p className="font-bold text-black text-lg tracking-tight">{service.name}</p>
                         <p className="text-[10px] text-gray-500 mt-2 uppercase font-bold tracking-widest">{service.duration} MIN</p>
                       </div>
-                      <span className="font-bold text-black text-lg">${service.price}</span>
+                      <div className="text-right">
+                         <p className="font-bold text-black text-lg">${service.price}</p>
+                         {service.pointsPrice && <p className="text-[10px] text-[#C4A484] font-bold uppercase mt-1">{service.pointsPrice} PTS</p>}
+                      </div>
                     </div>
                   </div>
-                  {/* Explicitly type 'a' as Service in filter to resolve 'unknown' category property access */}
                   {selectedAddons.filter((a: Service) => a.category === service.category).map((addon: Service) => (
                     <div key={addon.id} className="flex justify-between items-center text-[11px] pl-6 border-l border-black/20">
                       <p className="text-gray-700 font-medium">{addon.name}</p>
@@ -211,9 +215,15 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         </div>
 
         <div className="p-12 border-t border-black/5 bg-gray-50/50 space-y-8">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.4em]">Subtotal</span>
-            <span className="text-4xl font-serif font-bold text-black">${totalPrice}</span>
+          <div className="space-y-1">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.4em]">Subtotal</span>
+              <span className="text-4xl font-serif font-bold text-black">${totalPrice}</span>
+            </div>
+            <div className="flex justify-between items-center text-[#C4A484]">
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em]">Estimated Loyalty Earn</span>
+              <span className="text-sm font-bold">+{totalPoints} Points</span>
+            </div>
           </div>
           {step !== 'CONFIRM' && (
             <button
@@ -235,7 +245,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       <Header />
 
       <div className="max-w-4xl mx-auto py-24 px-6">
-        {/* Step Indicator */}
         {step !== 'CONFIRM' && (
           <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
             {steps.map((s, idx) => {
@@ -268,7 +277,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Curate your session from our artisanal offerings.</p>
               </div>
-              {/* Cast Object.entries to explicit tuple type to resolve property 'main' and 'addon' errors on type '{}' */}
               {(Object.entries(servicesByCategory) as [string, { main: Service[], addon: Service[] }][]).map(([category, { main, addon }]) => (
                 <div key={category} className="space-y-16">
                   <div className="flex items-center gap-12">
@@ -289,12 +297,22 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                               <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
                               <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
                             </div>
+                            {s.pointsPrice && (
+                              <div className="flex items-center gap-2 mt-2 text-[#C4A484]">
+                                <Sparkles size={10} />
+                                <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{s.pointsPrice} Reward Points</span>
+                              </div>
+                            )}
                           </div>
                           <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${selectedMainServices[category]?.id === s.id ? 'bg-black border-black text-white' : 'border-black/20 group-hover:border-black/40'}`}>
                             {selectedMainServices[category]?.id === s.id && <Check size={18} />}
                           </div>
                         </div>
                         <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
+                        <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+                            <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">Earn with session:</span>
+                            <span className="text-[10px] font-bold text-black">+{s.pointsEarned || 0} PTS</span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -311,6 +329,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                              <p className="text-[#C4A484] font-bold text-[10px] uppercase tracking-widest">${s.price} • {s.duration}m</p>
                              {selectedAddons.some(a => a.id === s.id) && <Check size={14} className="text-black" />}
                           </div>
+                          {s.pointsPrice && <p className="text-[8px] font-bold uppercase text-gray-400 mt-1">{s.pointsPrice} PTS</p>}
                         </div>
                       ))}
                     </div>
@@ -452,7 +471,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         </div>
       </div>
 
-      {/* Floating Summary Trigger */}
       {step !== 'CONFIRM' && (
         <button
           onClick={() => setIsSummaryOpen(true)}
