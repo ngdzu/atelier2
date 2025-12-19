@@ -96,12 +96,17 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     );
   };
 
+  /**
+   * STRICT 15-MINUTE SUCCESSION LOGIC
+   * Generates slots for every hour with 15-minute increments.
+   */
   const availableSlots = useMemo(() => {
     const slots = [];
     const startHour = 9;
     const endHour = 18;
     for (let h = startHour; h < endHour; h++) {
-      for (let m = 0; m < 60; m += 30) {
+      // SUCCESSION: :00, :15, :30, :45
+      for (let m = 0; m < 60; m += 15) {
         slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
       }
     }
@@ -375,8 +380,8 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Pick a moment of sanctuary.</p>
               </div>
-              <div className="max-w-md mx-auto space-y-12">
-                <div className="relative group">
+              <div className="max-w-xl mx-auto space-y-12">
+                <div className="relative group max-w-md mx-auto">
                   <CalendarIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={24} />
                   <input 
                     type="date" 
@@ -385,7 +390,8 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                     className="w-full pl-20 pr-8 py-8 border-b-2 border-black/10 text-center text-2xl font-serif outline-none bg-transparent focus:border-black transition-all text-black" 
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                {/* 4-COLUMN SUCCESSION GRID FOR 15-MINUTE SLOTS */}
+                <div className="grid grid-cols-4 gap-4">
                   {availableSlots.map(time => (
                     <button 
                       key={time} 

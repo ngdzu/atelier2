@@ -654,7 +654,7 @@ export const SERVICES: Service[] = [
     description: 'Cleansing, exfoliation, & hydration for preventing breakouts'
   },
 
-  // OTHERS / ADDONS
+  // OTHERS / ADDONS (Converted to MAIN to show full cards)
   { 
     id: 'a_trim', 
     name: 'Nail Trim', 
@@ -663,7 +663,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 10,
     pointsPrice: 350,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Professional trimming and shaping of natural nails.'
   },
   { 
@@ -673,7 +673,7 @@ export const SERVICES: Service[] = [
     price: 5,
     pointsEarned: 5,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Custom artistic accents for your manicure.'
   },
   { 
@@ -684,7 +684,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 5,
     pointsPrice: 175,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Hydrating treatment to nourish and protect nail beds.'
   },
   { 
@@ -695,7 +695,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 15,
     pointsPrice: 525,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Available scents: Jasmine, Acacia, Tropical Citrus, Peach.'
   },
   { 
@@ -706,7 +706,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 20,
     pointsPrice: 700,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Safe and professional removal of advanced nail systems.'
   },
   { 
@@ -717,7 +717,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 7,
     pointsPrice: 245,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Expert fix for a broken or chipped nail.'
   },
   { 
@@ -728,7 +728,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 10,
     pointsPrice: 350,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Safely removing gel polish without causing damage, leaving nails healthy.'
   },
   { 
@@ -739,7 +739,7 @@ export const SERVICES: Service[] = [
     pointsEarned: 15,
     pointsPrice: 525,
     category: 'Others',
-    type: 'ADDON',
+    type: 'MAIN',
     description: 'Damage-free elimination of gel or acrylic nail enhancements.'
   }
 ];
