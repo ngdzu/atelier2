@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { SERVICES, EMPLOYEES, COLORS } from '../constants';
+import { SERVICES, EMPLOYEES } from '../constants';
 import { Service, Employee, Appointment } from '../types';
 import { 
   CheckCircle2, 
@@ -11,8 +11,8 @@ import {
   ShoppingBag,
   X,
   User,
-  Clock,
-  Sparkles,
+  Plus,
+  Minus,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -84,11 +84,18 @@ interface BookingFlowProps {
 
 type Step = 'SERVICE' | 'EMPLOYEE' | 'TIME' | 'DETAILS' | 'CONFIRM';
 
+interface SelectedServiceItem {
+  service: Service;
+  quantity: number;
+}
+
 const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [step, setStep] = useState<Step>('SERVICE');
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
-  const [selectedMainServices, setSelectedMainServices] = useState<Record<string, Service>>({});
-  const [selectedAddons, setSelectedAddons] = useState<Service[]>([]);
+  
+  // Cart-based selection for quantities
+  const [selectedServices, setSelectedServices] = useState<SelectedServiceItem[]>([]);
+  
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -110,51 +117,44 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const currentStep = steps[currentStepIdx];
 
   const totalPrice = useMemo(() => {
-    const mainTotal = (Object.values(selectedMainServices) as Service[]).reduce((sum, s) => sum + s.price, 0);
-    const addonsTotal = selectedAddons.reduce((sum, s) => sum + s.price, 0);
-    return mainTotal + addonsTotal;
-  }, [selectedMainServices, selectedAddons]);
+    return selectedServices.reduce((sum, item) => sum + (item.service.price * item.quantity), 0);
+  }, [selectedServices]);
 
   const totalPoints = useMemo(() => {
-    const mainTotal = (Object.values(selectedMainServices) as Service[]).reduce((sum, s) => sum + (s.pointsEarned || 0), 0);
-    const addonsTotal = selectedAddons.reduce((sum, s) => sum + (s.pointsEarned || 0), 0);
-    return mainTotal + addonsTotal;
-  }, [selectedMainServices, selectedAddons]);
+    return selectedServices.reduce((sum, item) => sum + ((item.service.pointsEarned || 0) * item.quantity), 0);
+  }, [selectedServices]);
 
-  const servicesByCategory = useMemo<Record<string, { main: Service[], addon: Service[] }>>(() => {
-    const categories: Record<string, { main: Service[], addon: Service[] }> = {};
+  const totalItemsCount = useMemo(() => {
+    return selectedServices.reduce((sum, item) => sum + item.quantity, 0);
+  }, [selectedServices]);
+
+  const servicesByCategory = useMemo<Record<string, Service[]>>(() => {
+    const categories: Record<string, Service[]> = {};
     SERVICES.forEach(s => {
-      if (!categories[s.category]) {
-        categories[s.category] = { main: [], addon: [] };
-      }
-      if (s.type === 'MAIN') {
-        categories[s.category].main.push(s);
-      } else {
-        categories[s.category].addon.push(s);
-      }
+      if (!categories[s.category]) categories[s.category] = [];
+      categories[s.category].push(s);
     });
     return categories;
   }, []);
 
-  const selectMainService = (service: Service) => {
-    setSelectedMainServices(prev => {
-      if (prev[service.category]?.id === service.id) {
-        const next = { ...prev };
-        delete next[service.category];
-        setSelectedAddons(current => current.filter(a => a.category !== service.category));
-        return next;
+  const updateQuantity = (service: Service, delta: number) => {
+    setSelectedServices(prev => {
+      const existing = prev.find(item => item.service.id === service.id);
+      if (existing) {
+        const newQty = existing.quantity + delta;
+        if (newQty <= 0) {
+          return prev.filter(item => item.service.id !== service.id);
+        }
+        return prev.map(item => item.service.id === service.id ? { ...item, quantity: newQty } : item);
+      } else if (delta > 0) {
+        return [...prev, { service, quantity: 1 }];
       }
-      return { ...prev, [service.category]: service };
+      return prev;
     });
   };
 
-  const toggleAddon = (service: Service) => {
-    if (!selectedMainServices[service.category]) return;
-    setSelectedAddons(prev => 
-      prev.find(s => s.id === service.id)
-        ? prev.filter(s => s.id !== service.id)
-        : [...prev, service]
-    );
+  const getQuantity = (serviceId: string) => {
+    return selectedServices.find(item => item.service.id === serviceId)?.quantity || 0;
   };
 
   /**
@@ -175,7 +175,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   }, []);
 
   const isStepValid = (checkStep: Step) => {
-    if (checkStep === 'SERVICE') return Object.keys(selectedMainServices).length > 0;
+    if (checkStep === 'SERVICE') return selectedServices.length > 0;
     if (checkStep === 'EMPLOYEE') return !!selectedEmployee;
     if (checkStep === 'TIME') return !!selectedTime;
     if (checkStep === 'DETAILS') return customerInfo.name.trim() !== '' && customerInfo.email.trim() !== '' && customerInfo.phone.trim() !== '';
@@ -190,7 +190,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       onComplete({
         customerId: 'new',
         employeeId: selectedEmployee?.id || '',
-        serviceId: (Object.values(selectedMainServices) as Service[])[0]?.id || '',
+        serviceId: selectedServices[0]?.service.id || '', // simplified for mock
         startTime: `${selectedDate}T${selectedTime}:00`,
         status: 'SCHEDULED'
       });
@@ -219,32 +219,49 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         </div>
         
         <div className="flex-1 overflow-y-auto p-12 space-y-12">
-          {Object.keys(selectedMainServices).length > 0 ? (
+          {selectedServices.length > 0 ? (
             <div className="space-y-12">
-              {(Object.values(selectedMainServices) as Service[]).map((service: Service) => (
-                <div key={service.id} className="space-y-6">
+              {selectedServices.map((item) => (
+                <div key={item.service.id} className="space-y-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#C4A484]">{service.category}</p>
-                      <button onClick={() => selectMainService(service)} className="text-red-600 hover:text-red-800"><Trash2 size={12} /></button>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#C4A484]">{item.service.category}</p>
+                      <button onClick={() => updateQuantity(item.service, -item.quantity)} className="text-gray-300 hover:text-red-600 transition-colors">
+                        <Trash2 size={12} />
+                      </button>
                     </div>
                     <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <p className="font-bold text-black text-lg tracking-tight">{service.name}</p>
-                        <p className="text-[10px] text-gray-500 mt-2 uppercase font-bold tracking-widest">{service.duration} MIN</p>
+                      <div className="flex-1 pr-4">
+                        <p className="font-bold text-black text-lg tracking-tight leading-tight">
+                          {item.service.name}
+                        </p>
+                        
+                        {/* Interactive Quantity Control in Drawer */}
+                        <div className="flex items-center gap-4 mt-4">
+                           <div className="flex items-center gap-4 border border-black/5 bg-gray-50 px-3 py-1.5 rounded-full">
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, -1); }}
+                                className="p-0.5 hover:text-[#C4A484] transition-colors"
+                              >
+                                <Minus size={12} />
+                              </button>
+                              <span className="text-xs font-black w-4 text-center tabular-nums">{item.quantity}</span>
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, 1); }}
+                                className="p-0.5 hover:text-[#C4A484] transition-colors"
+                              >
+                                <Plus size={12} />
+                              </button>
+                           </div>
+                           <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">{item.service.duration * item.quantity} MIN TOTAL</p>
+                        </div>
                       </div>
                       <div className="text-right">
-                         <p className="font-bold text-black text-lg">${service.price}</p>
-                         {service.pointsPrice && <p className="text-[10px] text-[#C4A484] font-bold uppercase mt-1">{service.pointsPrice} PTS</p>}
+                         <p className="font-bold text-black text-lg">${item.service.price * item.quantity}</p>
+                         <p className="text-[9px] text-gray-400 mt-1 font-bold italic tracking-tight">${item.service.price} ea.</p>
                       </div>
                     </div>
                   </div>
-                  {selectedAddons.filter((a: Service) => a.category === service.category).map((addon: Service) => (
-                    <div key={addon.id} className="flex justify-between items-center text-[11px] pl-6 border-l border-black/20">
-                      <p className="text-gray-700 font-medium">{addon.name}</p>
-                      <span className="font-bold text-gray-500">${addon.price}</span>
-                    </div>
-                  ))}
                 </div>
               ))}
             </div>
@@ -285,7 +302,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           <div className="space-y-1">
             <div className="flex justify-between items-center">
               <span className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.4em]">Subtotal</span>
-              <span className="text-4xl font-serif font-bold text-black">${totalPrice}</span>
+              <span className="text-4xl font-serif font-bold text-black tabular-nums">${totalPrice}</span>
             </div>
             <div className="flex justify-between items-center text-[#C4A484]">
               <span className="text-[9px] font-bold uppercase tracking-[0.3em]">Estimated Loyalty Earn</span>
@@ -342,36 +359,68 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
             <div className="space-y-32">
               <div className="text-center max-w-xl mx-auto">
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
-                <p className="text-gray-600 text-sm font-light tracking-wide">Curate your session from our artisanal offerings.</p>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Select artisanal treatments for yourself and your collective.</p>
               </div>
-              {(Object.entries(servicesByCategory) as [string, { main: Service[], addon: Service[] }][]).map(([category, { main, addon }]) => (
+              {(Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
                 <div key={category} className="space-y-16">
                   <div className="flex items-center gap-12">
                     <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
                     <div className="h-px bg-black/10 flex-1" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {main.map(s => (
-                      <div 
-                        key={s.id} 
-                        onClick={() => selectMainService(s)} 
-                        className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${selectedMainServices[category]?.id === s.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}
-                      >
-                        <div className="flex justify-between items-start mb-6">
-                          <div className="flex-1 pr-6">
-                            <h4 className="font-bold text-2xl tracking-tight text-black">{s.name}</h4>
-                            <div className="flex items-center gap-4 mt-3">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
-                              <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
+                    {services.map(s => {
+                      const qty = getQuantity(s.id);
+                      const isSelected = qty > 0;
+                      return (
+                        <div 
+                          key={s.id} 
+                          onClick={() => !isSelected && updateQuantity(s, 1)} 
+                          className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${isSelected ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}
+                        >
+                          <div className="flex justify-between items-start mb-6">
+                            <div className="flex-1 pr-6">
+                              <h4 className="font-bold text-2xl tracking-tight text-black">{s.name}</h4>
+                              <div className="flex items-center gap-4 mt-3">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
+                                <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
+                              </div>
+                            </div>
+                            
+                            {/* Quantity Selector or Checkbox */}
+                            <div className="flex items-center gap-3">
+                              {isSelected ? (
+                                <div className="flex items-center gap-4 bg-black text-white p-2 rounded-full animate-in zoom-in-50 duration-300">
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, -1); }}
+                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                                  >
+                                    <Minus size={14} />
+                                  </button>
+                                  <span className="text-xs font-black min-w-[1ch] text-center">{qty}</span>
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, 1); }}
+                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                                  >
+                                    <Plus size={14} />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="w-10 h-10 rounded-full border-2 border-black/10 flex items-center justify-center transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
+                                  <Plus size={18} />
+                                </div>
+                              )}
                             </div>
                           </div>
-                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${selectedMainServices[category]?.id === s.id ? 'bg-black border-black text-white' : 'border-black/20 group-hover:border-black/40'}`}>
-                            {selectedMainServices[category]?.id === s.id && <Check size={18} />}
-                          </div>
+                          <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
+                          {isSelected && (
+                             <div className="mt-6 pt-4 border-t border-black/5 flex justify-between items-center animate-in slide-in-from-top-2">
+                                <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Friend Multiplier</span>
+                                <span className="text-[10px] font-black text-black">Line Total: ${s.price * qty}</span>
+                             </div>
+                          )}
                         </div>
-                        <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -470,6 +519,16 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                     className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
                   />
                 </div>
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    placeholder="+1 (555) 000-0000" 
+                    value={customerInfo.phone} 
+                    onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} 
+                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -484,6 +543,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                   <div className="flex justify-between"><span>Date</span><span>{selectedDate}</span></div>
                   <div className="flex justify-between"><span>Time</span><span>{selectedTime}</span></div>
                   <div className="flex justify-between"><span>Professional</span><span>{selectedEmployee?.name}</span></div>
+                  <div className="flex justify-between border-t border-black/5 pt-2"><span>Total Items</span><span>{totalItemsCount} Sessions</span></div>
                 </div>
               </div>
               <Link to="/" className="px-16 py-6 bg-black text-white text-[10px] uppercase font-bold tracking-[0.5em] hover:bg-gray-900 transition-all shadow-2xl">Return to Home</Link>
@@ -512,15 +572,15 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         >
           <div className="relative">
             <ShoppingBag size={24} />
-            {Object.keys(selectedMainServices).length > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#C4A484] text-white text-[8px] flex items-center justify-center rounded-full font-bold">
-                {Object.keys(selectedMainServices).length}
+            {totalItemsCount > 0 && (
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#C4A484] text-white text-[8px] flex items-center justify-center rounded-full font-bold animate-in zoom-in">
+                {totalItemsCount}
               </span>
             )}
           </div>
           <div className="pr-6 border-l border-black/10 pl-6 text-left hidden md:block">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Atelier Bag</p>
-            <p className="text-xl font-serif font-bold text-black">${totalPrice}</p>
+            <p className="text-xl font-serif font-bold text-black tabular-nums">${totalPrice}</p>
           </div>
         </button>
       )}
