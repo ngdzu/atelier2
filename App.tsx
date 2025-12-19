@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
@@ -9,6 +8,7 @@ import AppointmentCalendar from './components/AppointmentCalendar';
 import PerformanceDashboard from './components/PerformanceDashboard';
 import MarketingCenter from './components/MarketingCenter';
 import BookingFlow from './components/BookingFlow';
+import ScrollToTop from './components/ScrollToTop';
 import { MOCK_APPOINTMENTS } from './constants';
 import { Appointment } from './types';
 
@@ -61,6 +61,7 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public Pages */}
         <Route path="/" element={<LandingPage />} />

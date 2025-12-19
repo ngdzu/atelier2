@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICES, EMPLOYEES, COLORS } from '../constants';
@@ -34,7 +33,9 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [customerInfo, setCustomerInfo] = useState({ name: '', email: '', phone: '' });
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // When sub-steps change, reset the local scroll and trigger reveals
+    window.scrollTo(0, 0);
+    if ((window as any).refreshReveals) (window as any).refreshReveals();
   }, [step]);
 
   const steps: { key: Step; label: string; nextLabel: string }[] = [

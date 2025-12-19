@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,25 +77,36 @@
     <script>
         /**
          * Optimized Reveal Logic
-         * Uses IntersectionObserver for efficient viewport detection
-         * Uses MutationObserver to handle React route changes dynamically
          */
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    // Once revealed, we don't need to observe it anymore
                     revealObserver.unobserve(entry.target);
                 }
             });
         }, { 
-            threshold: 0.05, // Trigger as soon as 5% of the element is visible
-            rootMargin: '0px 0px -50px 0px' // Slightly offset the bottom trigger
+            threshold: 0.05,
+            rootMargin: '0px 0px -50px 0px'
         });
 
         const observeElements = () => {
             const elements = document.querySelectorAll('.reveal:not(.active)');
             elements.forEach(el => revealObserver.observe(el));
+        };
+
+        // Global helper to refresh reveals manually (e.g., after route changes)
+        window.refreshReveals = () => {
+            const elements = document.querySelectorAll('.reveal:not(.active)');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                // Check if element is in viewport
+                if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                    el.classList.add('active');
+                } else {
+                    revealObserver.observe(el);
+                }
+            });
         };
 
         // Initial observation
@@ -116,9 +126,8 @@
             subtree: true
         });
 
-        // Fallback for route changes that might not trigger standard mutations
         window.addEventListener('popstate', () => {
-            setTimeout(observeElements, 100);
+            setTimeout(window.refreshReveals, 100);
         });
     </script>
 </body>
