@@ -1,0 +1,8 @@
+{
+  "name": "Basic",
+  "description": "A high-end nail salon management platform featuring appointment scheduling, customer CRM, staff management, and AI-powered marketing tools.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
