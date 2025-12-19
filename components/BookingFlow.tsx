@@ -14,7 +14,8 @@ import {
   Plus,
   Minus,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import Header from './Header';
 
@@ -359,8 +360,17 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
             <div className="space-y-32">
               <div className="text-center max-w-xl mx-auto">
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
-                <p className="text-gray-600 text-sm font-light tracking-wide">Select artisanal treatments for yourself and your collective.</p>
+                <p className="text-gray-600 text-sm font-light tracking-wide mb-12">Select artisanal treatments for yourself and your collective.</p>
+                
+                {/* Advisory Note for Best Experience */}
+                <div className="bg-[#C4A484]/5 border border-[#C4A484]/10 rounded-2xl p-6 flex items-center justify-center gap-4 reveal animate-in fade-in slide-in-from-top-4 duration-1000">
+                  <Sparkles size={16} className="text-[#C4A484]" />
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4A484]">
+                    Atelier Note: For the best experience, please book separately for each customer.
+                  </p>
+                </div>
               </div>
+              
               {(Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
                 <div key={category} className="space-y-16">
                   <div className="flex items-center gap-12">
