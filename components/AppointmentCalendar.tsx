@@ -15,50 +15,26 @@ const START_HOUR = 9;
 const END_HOUR = 19;
 const MINUTE_INCREMENTS = [0, 15, 30, 45];
 
-interface Props {
-  appointments: Appointment[];
-  onUpdateAppointment: (appt: Appointment) => void;
-}
-
-const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointment }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [activeSpecialistId, setActiveSpecialistId] = useState<string>(EMPLOYEES[0].id);
-
-  // Helper: Find customer/service info
-  const getCustomer = (id: string) => MOCK_CUSTOMERS.find(c => c.id === id);
-  const getService = (id: string) => SERVICES.find(s => s.id === id);
-
-  // Calendar Logic
-  const currentMonth = selectedDate.getMonth();
-  const currentYear = selectedDate.getFullYear();
-  const monthName = selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+/**
+ * Shared Mini Calendar Widget
+ */
+const MiniCalendar = ({ selectedDate, onSelectDate }: { selectedDate: Date, onSelectDate: (d: Date) => void }) => {
+  const [viewDate, setViewDate] = useState(new Date(selectedDate));
+  
+  const currentMonth = viewDate.getMonth();
+  const currentYear = viewDate.getFullYear();
+  const monthName = viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   const handleMonthChange = (offset: number) => {
-    const newDate = new Date(selectedDate);
+    const newDate = new Date(viewDate);
     newDate.setMonth(newDate.getMonth() + offset);
-    setSelectedDate(newDate);
+    setViewDate(newDate);
   };
 
-  const getAppointmentsForSlot = (empId: string, hour: number, minute: number) => {
-    return appointments.find(appt => {
-      const start = new Date(appt.startTime);
-      const isSameDate = start.toDateString() === selectedDate.toDateString();
-      return appt.employeeId === empId && 
-             isSameDate && 
-             start.getHours() === hour && 
-             start.getMinutes() === minute;
-    });
-  };
-
-  const activeSpecialist = EMPLOYEES.find(e => e.id === activeSpecialistId) || EMPLOYEES[0];
-
-  /**
-   * Sub-component: Mini Calendar Widget for Sidebar
-   */
-  const MiniCalendarWidget = () => (
+  return (
     <div className="bg-white rounded-[2rem] border border-gray-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <span className="text-[10px] font-black text-black uppercase tracking-widest">{monthName}</span>
@@ -81,7 +57,7 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
           return (
             <button
               key={d}
-              onClick={() => setSelectedDate(dateObj)}
+              onClick={() => onSelectDate(dateObj)}
               className={`text-[10px] py-2.5 rounded-xl transition-all relative ${
                 isSelected 
                   ? 'bg-black text-white font-black shadow-md scale-105 z-10' 
@@ -96,15 +72,39 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
       </div>
     </div>
   );
+};
 
-  /**
-   * Main Component Return
-   */
+interface Props {
+  appointments: Appointment[];
+  onUpdateAppointment: (appt: Appointment) => void;
+}
+
+const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointment }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [activeSpecialistId, setActiveSpecialistId] = useState<string>(EMPLOYEES[0].id);
+
+  // Helper: Find customer/service info
+  const getCustomer = (id: string) => MOCK_CUSTOMERS.find(c => c.id === id);
+  const getService = (id: string) => SERVICES.find(s => s.id === id);
+
+  const getAppointmentsForSlot = (empId: string, hour: number, minute: number) => {
+    return appointments.find(appt => {
+      const start = new Date(appt.startTime);
+      const isSameDate = start.toDateString() === selectedDate.toDateString();
+      return appt.employeeId === empId && 
+             isSameDate && 
+             start.getHours() === hour && 
+             start.getMinutes() === minute;
+    });
+  };
+
+  const activeSpecialist = EMPLOYEES.find(e => e.id === activeSpecialistId) || EMPLOYEES[0];
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 min-h-[700px]">
       {/* LEFT SIDEBAR */}
       <aside className="w-full lg:w-72 flex flex-col gap-6">
-        <MiniCalendarWidget />
+        <MiniCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         
         <div className="bg-black rounded-[2rem] p-6 text-white shadow-xl">
           <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#C4A484] mb-2">Session Load</p>
@@ -155,7 +155,6 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
 
         {/* 15-Minute Succession Grid */}
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-          {/* Header Row for Time Labels */}
           <div className="flex items-center mb-6 pl-20">
             <div className="flex-1 grid grid-cols-4 gap-4 text-center">
               <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest">:00</span>
@@ -172,7 +171,6 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
               
               return (
                 <div key={hour} className="flex items-center group/row">
-                  {/* Hour Marker */}
                   <div className="w-20 shrink-0">
                     <p className="text-xs font-black text-black tabular-nums">
                       {displayHour.toString().padStart(2, '0')}
@@ -180,7 +178,6 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
                     </p>
                   </div>
 
-                  {/* Succession Grid (The 4 boxes per row) */}
                   <div className="flex-1 grid grid-cols-4 gap-4">
                     {MINUTE_INCREMENTS.map(min => {
                       const appt = getAppointmentsForSlot(activeSpecialist.id, hour, min);

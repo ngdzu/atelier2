@@ -12,9 +12,71 @@ import {
   X,
   User,
   Clock,
-  Sparkles
+  Sparkles,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import Header from './Header';
+
+/**
+ * Custom Mini Calendar for Booking Flow
+ */
+const CustomCalendar = ({ selectedDate, onSelectDate }: { selectedDate: string, onSelectDate: (d: string) => void }) => {
+  const currentSelected = new Date(selectedDate);
+  const [viewDate, setViewDate] = useState(new Date(currentSelected));
+
+  const currentMonth = viewDate.getMonth();
+  const currentYear = viewDate.getFullYear();
+  const monthName = viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  const handleMonthChange = (offset: number) => {
+    const next = new Date(viewDate);
+    next.setMonth(next.getMonth() + offset);
+    setViewDate(next);
+  };
+
+  return (
+    <div className="max-w-md mx-auto bg-white rounded-[3rem] p-10 border border-black/5 shadow-2xl">
+      <div className="flex items-center justify-between mb-8">
+        <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-black">{monthName}</h4>
+        <div className="flex gap-2">
+          <button onClick={() => handleMonthChange(-1)} className="p-2 hover:bg-gray-50 rounded-full transition-colors"><ChevronLeft size={16} /></button>
+          <button onClick={() => handleMonthChange(1)} className="p-2 hover:bg-gray-50 rounded-full transition-colors"><ChevronRight size={16} /></button>
+        </div>
+      </div>
+      <div className="grid grid-cols-7 gap-2 text-center">
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+          <span key={d} className="text-[9px] font-black text-gray-300 py-2">{d}</span>
+        ))}
+        {Array(firstDayOfMonth).fill(null).map((_, i) => <div key={`empty-${i}`} />)}
+        {days.map(d => {
+          const dateObj = new Date(currentYear, currentMonth, d);
+          const dateStr = dateObj.toISOString().split('T')[0];
+          const isSelected = selectedDate === dateStr;
+          const isToday = new Date().toDateString() === dateObj.toDateString();
+          
+          return (
+            <button
+              key={d}
+              onClick={() => onSelectDate(dateStr)}
+              className={`text-xs py-4 rounded-2xl transition-all relative font-bold ${
+                isSelected 
+                  ? 'bg-black text-white shadow-xl scale-110 z-10' 
+                  : 'hover:bg-gray-50 text-gray-600'
+              }`}
+            >
+              {d}
+              {isToday && !isSelected && <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-black rounded-full" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 interface BookingFlowProps {
   onComplete: (appt: Partial<Appointment>) => void;
@@ -33,7 +95,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [customerInfo, setCustomerInfo] = useState({ name: '', email: '', phone: '' });
 
   useEffect(() => {
-    // When sub-steps change, reset the local scroll and trigger reveals
     window.scrollTo(0, 0);
     if ((window as any).refreshReveals) (window as any).refreshReveals();
   }, [step]);
@@ -97,20 +158,20 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   };
 
   /**
-   * STRICT 15-MINUTE SUCCESSION LOGIC
-   * Generates slots for every hour with 15-minute increments.
+   * STRICT 15-MINUTE SUCCESSION GRID GENERATOR
    */
-  const availableSlots = useMemo(() => {
-    const slots = [];
+  const availableSlotsByHour = useMemo(() => {
+    const hours = [];
     const startHour = 9;
     const endHour = 18;
-    for (let h = startHour; h < endHour; h++) {
-      // SUCCESSION: :00, :15, :30, :45
+    for (let h = startHour; h <= endHour; h++) {
+      const hourSlots = [];
       for (let m = 0; m < 60; m += 15) {
-        slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+        hourSlots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
       }
+      hours.push({ label: h, slots: hourSlots });
     }
-    return slots;
+    return hours;
   }, []);
 
   const isStepValid = (checkStep: Step) => {
@@ -250,7 +311,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     <div className="bg-[#FDFCFB] min-h-screen pb-32 selection:bg-black selection:text-white">
       <Header />
 
-      <div className="max-w-4xl mx-auto py-24 px-6">
+      <div className="max-w-6xl mx-auto py-24 px-6">
         {step !== 'CONFIRM' && (
           <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
             {steps.map((s, idx) => {
@@ -303,43 +364,15 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                               <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
                               <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
                             </div>
-                            {s.pointsPrice && (
-                              <div className="flex items-center gap-2 mt-2 text-[#C4A484]">
-                                <Sparkles size={10} />
-                                <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{s.pointsPrice} Reward Points</span>
-                              </div>
-                            )}
                           </div>
                           <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${selectedMainServices[category]?.id === s.id ? 'bg-black border-black text-white' : 'border-black/20 group-hover:border-black/40'}`}>
                             {selectedMainServices[category]?.id === s.id && <Check size={18} />}
                           </div>
                         </div>
                         <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
-                        <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">Earn with session:</span>
-                            <span className="text-[10px] font-bold text-black">+{s.pointsEarned || 0} PTS</span>
-                        </div>
                       </div>
                     ))}
                   </div>
-                  {addon.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
-                      {addon.map(s => (
-                        <div 
-                          key={s.id} 
-                          onClick={() => toggleAddon(s)} 
-                          className={`p-6 border-2 transition-all cursor-pointer ${!selectedMainServices[category] ? 'opacity-10 pointer-events-none' : ''} ${selectedAddons.some(a => a.id === s.id) ? 'border-black bg-white shadow-lg' : 'border-black/5 hover:border-black/20'}`}
-                        >
-                          <h4 className="font-bold text-sm tracking-tight text-black">{s.name}</h4>
-                          <div className="flex justify-between items-center mt-2">
-                             <p className="text-[#C4A484] font-bold text-[10px] uppercase tracking-widest">${s.price} • {s.duration}m</p>
-                             {selectedAddons.some(a => a.id === s.id) && <Check size={14} className="text-black" />}
-                          </div>
-                          {s.pointsPrice && <p className="text-[8px] font-bold uppercase text-gray-400 mt-1">{s.pointsPrice} PTS</p>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -362,11 +395,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                        <User size={64} strokeWidth={0.5} className="text-gray-300" />
                     </div>
                     <h4 className="font-bold text-2xl tracking-tight text-black">{e.name}</h4>
-                    <div className="flex flex-wrap justify-center gap-2 mt-4">
-                      {e.specialties.map(spec => (
-                        <span key={spec} className="text-[9px] text-[#C4A484] uppercase tracking-[0.2em] font-bold px-3 py-1 border border-[#C4A484]/20 rounded-full">{spec}</span>
-                      ))}
-                    </div>
                     {selectedEmployee?.id === e.id && <div className="absolute top-8 right-8 text-black"><CheckCircle2 size={32} /></div>}
                   </button>
                 ))}
@@ -375,32 +403,41 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'TIME' && (
-            <div className="space-y-16">
+            <div className="space-y-24">
               <div className="text-center max-w-xl mx-auto">
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2>
-                <p className="text-gray-600 text-sm font-light tracking-wide">Pick a moment of sanctuary.</p>
+                <p className="text-gray-600 text-sm font-light tracking-wide">Select your date and a 15-minute sanctuary moment.</p>
               </div>
-              <div className="max-w-xl mx-auto space-y-12">
-                <div className="relative group max-w-md mx-auto">
-                  <CalendarIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={24} />
-                  <input 
-                    type="date" 
-                    value={selectedDate} 
-                    onChange={e => setSelectedDate(e.target.value)} 
-                    className="w-full pl-20 pr-8 py-8 border-b-2 border-black/10 text-center text-2xl font-serif outline-none bg-transparent focus:border-black transition-all text-black" 
-                  />
-                </div>
-                {/* 4-COLUMN SUCCESSION GRID FOR 15-MINUTE SLOTS */}
-                <div className="grid grid-cols-4 gap-4">
-                  {availableSlots.map(time => (
-                    <button 
-                      key={time} 
-                      onClick={() => setSelectedTime(time)} 
-                      className={`py-6 border-2 text-[10px] font-bold uppercase tracking-widest transition-all ${selectedTime === time ? 'bg-black text-white border-black shadow-xl' : 'bg-transparent text-gray-500 border-black/5 hover:border-black/20'}`}
-                    >
-                      {time}
-                    </button>
-                  ))}
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                {/* Custom Date Picker */}
+                <CustomCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+
+                {/* 15-Minute Succession Grid */}
+                <div className="space-y-10">
+                   <div className="grid grid-cols-4 gap-4 px-4">
+                     {[':00', ':15', ':30', ':45'].map(m => (
+                       <span key={m} className="text-[9px] font-black text-gray-300 uppercase tracking-widest text-center">{m}</span>
+                     ))}
+                   </div>
+                   <div className="space-y-4 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                     {availableSlotsByHour.map(hour => (
+                       <div key={hour.label} className="flex items-center gap-6">
+                         <span className="w-12 text-xs font-black text-black tabular-nums">{hour.label > 12 ? hour.label - 12 : hour.label} <span className="text-[8px] opacity-20">{hour.label >= 12 ? 'PM' : 'AM'}</span></span>
+                         <div className="flex-1 grid grid-cols-4 gap-3">
+                           {hour.slots.map(time => (
+                             <button 
+                               key={time} 
+                               onClick={() => setSelectedTime(time)} 
+                               className={`py-4 border-2 rounded-xl text-[9px] font-bold uppercase transition-all ${selectedTime === time ? 'bg-black text-white border-black shadow-lg scale-105 z-10' : 'bg-transparent text-gray-400 border-black/5 hover:border-black/20'}`}
+                             >
+                               {time.split(':')[1]}
+                             </button>
+                           ))}
+                         </div>
+                       </div>
+                     ))}
+                   </div>
                 </div>
               </div>
             </div>
@@ -430,16 +467,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                     placeholder="NAME@ATELIER.COM" 
                     value={customerInfo.email} 
                     onChange={e => setCustomerInfo({ ...customerInfo, email: e.target.value })} 
-                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
-                  />
-                </div>
-                <div className="space-y-4">
-                  <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    placeholder="+1 (555) 000-0000" 
-                    value={customerInfo.phone} 
-                    onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} 
                     className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
                   />
                 </div>
