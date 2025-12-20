@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Scissors, Minus } from 'lucide-react';
@@ -51,7 +50,7 @@ const LandingPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
           <div className="reveal space-y-8 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1604654894610-df490651e61c?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
+              <img src="https://images.unsplash.com/photo-1604654894610-df490c817265?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="The Gilded Edge" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 01</p>
@@ -61,7 +60,7 @@ const LandingPage: React.FC = () => {
 
           <div className="reveal space-y-8 md:translate-y-24 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
+              <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="Noir Luminescence" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 02</p>
@@ -71,7 +70,7 @@ const LandingPage: React.FC = () => {
 
           <div className="reveal space-y-8 group">
             <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-              <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="" />
+              <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800" className="w-full h-full object-cover group-hover:scale-110 editorial-img" alt="Atelier Nude" />
             </div>
             <div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Look 03</p>
@@ -133,7 +132,7 @@ const LandingPage: React.FC = () => {
               <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8">Menu</h4>
               <ul className="space-y-4 text-xs font-medium text-gray-400">
                 <li><Link to="/gallery">Lookbook</Link></li>
-                <li><Link to="/about">Atelier</Link></li>
+                <li><Link to="/about">The Atelier</Link></li>
                 <li><Link to="/book">Services</Link></li>
               </ul>
             </div>

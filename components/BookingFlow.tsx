@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICES, EMPLOYEES } from '../constants';
@@ -113,7 +112,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     if ((window as any).refreshReveals) (window as any).refreshReveals();
   }, [step]);
 
-  // Scroll spy logic to update activeCategory based on page scroll
+  // Scroll spy logic
   useEffect(() => {
     if (step !== 'SERVICE') return;
 
@@ -138,7 +137,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     return () => observer.disconnect();
   }, [step]);
 
-  // Effect to automatically scroll the index bar horizontally when activeCategory changes
   useEffect(() => {
     if (activeCategory && indexScrollRef.current) {
       const activeButton = indexScrollRef.current.querySelector(`[data-category="${activeCategory}"]`);
@@ -152,7 +150,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     }
   }, [activeCategory]);
 
-  // Hover-to-scroll logic for manual horizontal exploration
   const startScrolling = (direction: 'left' | 'right') => {
     if (scrollIntervalRef.current) return;
     scrollIntervalRef.current = window.setInterval(() => {
@@ -224,15 +221,12 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const scrollToCategory = (category: string) => {
     const el = categoryRefs.current[category];
     if (el) {
-      const yOffset = -120; // Account for sticky nav
+      const yOffset = -120;
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
-  /**
-   * STRICT 15-MINUTE SUCCESSION GRID GENERATOR
-   */
   const availableSlotsByHour = useMemo(() => {
     const hours = [];
     const startHour = 9;
@@ -263,7 +257,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       onComplete({
         customerId: 'new',
         employeeId: selectedEmployee?.id || '',
-        serviceId: selectedServices[0]?.service.id || '', // simplified for mock
+        serviceId: selectedServices[0]?.service.id || '',
         startTime: `${selectedDate}T${selectedTime}:00`,
         status: 'SCHEDULED'
       });
@@ -298,7 +292,12 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <div key={item.service.id} className="space-y-6">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#C4A484]">{item.service.category}</p>
+                      <div className="flex items-center gap-4">
+                        <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#C4A484]">{item.service.category}</p>
+                        {item.service.pointsEarned && (
+                          <span className="text-[7px] font-black bg-[#C4A484]/10 text-[#C4A484] px-1.5 py-0.5 rounded-sm tracking-widest">+{item.service.pointsEarned * item.quantity} PTS</span>
+                        )}
+                      </div>
                       <button onClick={() => updateQuantity(item.service, -item.quantity)} className="text-gray-300 hover:text-red-600 transition-colors">
                         <Trash2 size={12} />
                       </button>
@@ -308,23 +307,11 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                         <p className="font-bold text-black text-lg tracking-tight leading-tight">
                           {item.service.name}
                         </p>
-                        
-                        {/* Interactive Quantity Control in Drawer */}
                         <div className="flex items-center gap-4 mt-4">
                            <div className="flex items-center gap-4 border border-black/5 bg-gray-50 px-3 py-1.5 rounded-full">
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, -1); }}
-                                className="p-0.5 hover:text-[#C4A484] transition-colors"
-                              >
-                                <Minus size={12} />
-                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, -1); }} className="p-0.5 hover:text-[#C4A484] transition-colors"><Minus size={12} /></button>
                               <span className="text-xs font-black w-4 text-center tabular-nums">{item.quantity}</span>
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, 1); }}
-                                className="p-0.5 hover:text-[#C4A484] transition-colors"
-                              >
-                                <Plus size={12} />
-                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); updateQuantity(item.service, 1); }} className="p-0.5 hover:text-[#C4A484] transition-colors"><Plus size={12} /></button>
                            </div>
                            <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">{item.service.duration * item.quantity} MIN TOTAL</p>
                         </div>
@@ -445,8 +432,6 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
               <div className="text-center max-w-xl mx-auto">
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
                 <p className="text-gray-600 text-sm font-light tracking-wide mb-12">Select artisanal treatments for yourself and your collective.</p>
-                
-                {/* Advisory Note for Best Experience */}
                 <div className="bg-[#C4A484]/5 border border-[#C4A484]/10 rounded-2xl p-6 flex items-center justify-center gap-4 reveal animate-in fade-in slide-in-from-top-4 duration-1000">
                   <Sparkles size={16} className="text-[#C4A484]" />
                   <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4A484]">
@@ -455,35 +440,19 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 </div>
               </div>
 
-              {/* FLOATING ATELIER INDEX - Clean, minimalist version */}
+              {/* STICKY NAV INDEX */}
               <div className="sticky top-4 z-40 px-4 -mx-4 md:px-0 md:-mx-0 group/index">
                 <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-2xl border border-black/5 rounded-full p-1 shadow-2xl shadow-black/5 flex items-center relative overflow-hidden">
-                  
-                  {/* Hover Scroll Areas */}
-                  <div 
-                    onMouseEnter={() => startScrolling('left')} 
-                    onMouseLeave={stopScrolling}
-                    className="absolute left-0 top-0 bottom-0 w-20 z-10 cursor-w-resize" 
-                  />
-                  <div 
-                    onMouseEnter={() => startScrolling('right')} 
-                    onMouseLeave={stopScrolling}
-                    className="absolute right-0 top-0 bottom-0 w-20 z-10 cursor-e-resize" 
-                  />
-
-                  <div 
-                    ref={indexScrollRef}
-                    className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth atelier-index-container px-6"
-                  >
+                  <div onMouseEnter={() => startScrolling('left')} onMouseLeave={stopScrolling} className="absolute left-0 top-0 bottom-0 w-20 z-10 cursor-w-resize" />
+                  <div onMouseEnter={() => startScrolling('right')} onMouseLeave={stopScrolling} className="absolute right-0 top-0 bottom-0 w-20 z-10 cursor-e-resize" />
+                  <div ref={indexScrollRef} className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth atelier-index-container px-6">
                     {(Object.keys(servicesByCategory)).map(cat => (
                       <button
                         key={cat}
                         onClick={() => scrollToCategory(cat)}
                         data-category={cat}
                         className={`px-8 py-4 rounded-full text-[8px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap ${
-                          activeCategory === cat 
-                            ? 'bg-black text-white shadow-xl' 
-                            : 'text-gray-400 hover:text-black hover:bg-gray-50'
+                          activeCategory === cat ? 'bg-black text-white shadow-xl' : 'text-gray-400 hover:text-black hover:bg-gray-50'
                         }`}
                       >
                         {cat}
@@ -494,13 +463,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
               </div>
               
               {(Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
-                <div 
-                  key={category} 
-                  id={category} 
-                  // Fixed: Wrapped assignment in braces to ensure the ref callback returns void.
-                  ref={(el) => { categoryRefs.current[category] = el; }}
-                  className="space-y-16 pt-8"
-                >
+                <div key={category} id={category} ref={(el) => { categoryRefs.current[category] = el; }} className="space-y-16 pt-8">
                   <div className="flex items-center gap-12">
                     <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
                     <div className="h-px bg-black/10 flex-1" />
@@ -522,40 +485,51 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
                                 <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
                               </div>
-                            </div>
-                            
-                            {/* Quantity Selector or Checkbox */}
-                            <div className="flex items-center gap-3">
-                              {isSelected ? (
-                                <div className="flex items-center gap-4 bg-black text-white p-2 rounded-full animate-in zoom-in-50 duration-300">
-                                  <button 
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, -1); }}
-                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
-                                  >
-                                    <Minus size={14} />
-                                  </button>
-                                  <span className="text-xs font-black min-w-[1ch] text-center">{qty}</span>
-                                  <button 
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, 1); }}
-                                    className="p-1 hover:bg-white/20 rounded-full transition-colors"
-                                  >
-                                    <Plus size={14} />
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="w-10 h-10 rounded-full border-2 border-black/10 flex items-center justify-center transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
-                                  <Plus size={18} />
+                              {s.pointsPrice && (
+                                <div className="flex items-center gap-2 mt-2 text-[#C4A484]">
+                                  <Sparkles size={10} />
+                                  <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{s.pointsPrice} Reward Points Required</span>
                                 </div>
                               )}
                             </div>
+                            
+                            {/* Refined Selection Control: Expanding Pill */}
+                            <div 
+                              className={`h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                                isSelected 
+                                  ? 'bg-black border-black text-white px-4 min-w-[100px] shadow-lg' 
+                                  : 'w-10 border-black/10 group-hover:border-black/40 text-black hover:bg-black hover:text-white'
+                              }`}
+                            >
+                              {isSelected ? (
+                                <div className="flex items-center justify-between w-full animate-in zoom-in-95 duration-200">
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, -1); }} 
+                                    className="p-1 hover:text-[#C4A484] transition-colors"
+                                  >
+                                    <Minus size={14} strokeWidth={3} />
+                                  </button>
+                                  <span className="text-xs font-black tabular-nums">{qty}</span>
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, 1); }} 
+                                    className="p-1 hover:text-[#C4A484] transition-colors"
+                                  >
+                                    <Plus size={14} strokeWidth={3} />
+                                  </button>
+                                </div>
+                              ) : (
+                                <Plus size={20} />
+                              )}
+                            </div>
                           </div>
+                          
                           <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
-                          {isSelected && (
-                             <div className="mt-6 pt-4 border-t border-black/5 flex justify-between items-center animate-in slide-in-from-top-2">
-                                <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Friend Multiplier</span>
-                                <span className="text-[10px] font-black text-black">Line Total: ${s.price * qty}</span>
-                             </div>
-                          )}
+                          
+                          {/* Historical Points Earning Footer */}
+                          <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+                              <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">Earn with session:</span>
+                              <span className="text-[10px] font-bold text-black">+{s.pointsEarned || 0} PTS</span>
+                          </div>
                         </div>
                       );
                     })}
@@ -573,11 +547,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
                 {EMPLOYEES.map(e => (
-                  <button 
-                    key={e.id} 
-                    onClick={() => setSelectedEmployee(e)} 
-                    className={`p-16 border-2 text-center transition-all duration-700 relative group ${selectedEmployee?.id === e.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 hover:border-black/20'}`}
-                  >
+                  <button key={e.id} onClick={() => setSelectedEmployee(e)} className={`p-16 border-2 text-center transition-all duration-700 relative group ${selectedEmployee?.id === e.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 hover:border-black/20'}`}>
                     <div className="w-32 h-32 rounded-full border border-black/10 overflow-hidden mx-auto mb-8 grayscale group-hover:grayscale-0 transition-all flex items-center justify-center bg-gray-50">
                        <User size={64} strokeWidth={0.5} className="text-gray-300" />
                     </div>
@@ -595,12 +565,8 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Select your date and a 15-minute sanctuary moment.</p>
               </div>
-              
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                {/* Custom Date Picker */}
                 <CustomCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
-
-                {/* 15-Minute Succession Grid */}
                 <div className="space-y-10">
                    <div className="grid grid-cols-4 gap-4 px-4">
                      {[':00', ':15', ':30', ':45'].map(m => (
@@ -613,11 +579,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                          <span className="w-12 text-xs font-black text-black tabular-nums">{hour.label > 12 ? hour.label - 12 : hour.label} <span className="text-[8px] opacity-20">{hour.label >= 12 ? 'PM' : 'AM'}</span></span>
                          <div className="flex-1 grid grid-cols-4 gap-3">
                            {hour.slots.map(time => (
-                             <button 
-                               key={time} 
-                               onClick={() => setSelectedTime(time)} 
-                               className={`py-4 border-2 rounded-xl text-[9px] font-bold uppercase transition-all ${selectedTime === time ? 'bg-black text-white border-black shadow-lg scale-105 z-10' : 'bg-transparent text-gray-400 border-black/5 hover:border-black/20'}`}
-                             >
+                             <button key={time} onClick={() => setSelectedTime(time)} className={`py-4 border-2 rounded-xl text-[9px] font-bold uppercase transition-all ${selectedTime === time ? 'bg-black text-white border-black shadow-lg scale-105 z-10' : 'bg-transparent text-gray-400 border-black/5 hover:border-black/20'}`}>
                                {time.split(':')[1]}
                              </button>
                            ))}
@@ -639,33 +601,15 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
               <div className="space-y-12">
                 <div className="space-y-4">
                   <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Full Name</label>
-                  <input 
-                    type="text" 
-                    placeholder="E.G. JULIA ROBERTS" 
-                    value={customerInfo.name} 
-                    onChange={e => setCustomerInfo({ ...customerInfo, name: e.target.value })} 
-                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
-                  />
+                  <input type="text" placeholder="E.G. JULIA ROBERTS" value={customerInfo.name} onChange={e => setCustomerInfo({ ...customerInfo, name: e.target.value })} className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" />
                 </div>
                 <div className="space-y-4">
                   <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Email Address</label>
-                  <input 
-                    type="email" 
-                    placeholder="NAME@ATELIER.COM" 
-                    value={customerInfo.email} 
-                    onChange={e => setCustomerInfo({ ...customerInfo, email: e.target.value })} 
-                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
-                  />
+                  <input type="email" placeholder="NAME@ATELIER.COM" value={customerInfo.email} onChange={e => setCustomerInfo({ ...customerInfo, email: e.target.value })} className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" />
                 </div>
                 <div className="space-y-4">
                   <label className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    placeholder="+1 (555) 000-0000" 
-                    value={customerInfo.phone} 
-                    onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} 
-                    className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" 
-                  />
+                  <input type="tel" placeholder="+1 (555) 000-0000" value={customerInfo.phone} onChange={e => setCustomerInfo({ ...customerInfo, phone: e.target.value })} className="w-full p-6 border-b border-black/10 outline-none bg-transparent font-bold tracking-[0.2em] placeholder:text-gray-200 uppercase text-black focus:border-black transition-all" />
                 </div>
               </div>
             </div>
@@ -675,7 +619,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
             <div className="flex flex-col items-center justify-center text-center py-24 space-y-12 reveal">
               <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center shadow-2xl"><CheckCircle2 size={80} /></div>
               <h2 className="text-7xl font-serif font-bold text-black">Confirmed.</h2>
-              <div className="space-y-4 max-sm">
+              <div className="space-y-4 max-w-sm">
                 <p className="text-gray-600 text-lg italic tracking-wide">The sanctuary awaits your arrival, {customerInfo.name}.</p>
                 <div className="p-6 bg-black/5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] space-y-2">
                   <div className="flex justify-between"><span>Date</span><span>{selectedDate}</span></div>
@@ -690,11 +634,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
 
           {step !== 'CONFIRM' && (
             <div className="mt-32 flex justify-center pt-12 border-t border-black/10">
-              <button
-                onClick={handleNext}
-                disabled={!isStepValid(step)}
-                className="flex items-center gap-8 px-20 py-8 bg-black text-white text-[10px] uppercase font-bold tracking-[0.4em] hover:scale-105 transition-all shadow-2xl disabled:opacity-20 disabled:scale-100"
-              >
+              <button onClick={handleNext} disabled={!isStepValid(step)} className="flex items-center gap-8 px-20 py-8 bg-black text-white text-[10px] uppercase font-bold tracking-[0.4em] hover:scale-105 transition-all shadow-2xl disabled:opacity-20 disabled:scale-100">
                 <span>{currentStep?.nextLabel || 'Continue'}</span>
                 <ArrowRight size={20} />
               </button>
@@ -703,13 +643,9 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         </div>
       </div>
 
-      {/* FLOATING ACTION OVERLAYS */}
       {step === 'SERVICE' && selectedServices.length > 0 && (
         <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
-          <button
-            onClick={handleNext}
-            className="flex items-center gap-6 px-12 py-6 bg-black text-white rounded-full shadow-2xl shadow-black/20 hover:scale-105 transition-all active:scale-95 group"
-          >
+          <button onClick={handleNext} className="flex items-center gap-6 px-12 py-6 bg-black text-white rounded-full shadow-2xl shadow-black/20 hover:scale-105 transition-all active:scale-95 group">
             <span className="text-[10px] font-bold uppercase tracking-[0.4em]">Continue to Professional</span>
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
@@ -717,10 +653,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
       )}
 
       {step !== 'CONFIRM' && (
-        <button
-          onClick={() => setIsSummaryOpen(true)}
-          className={`fixed bottom-12 right-12 z-50 flex items-center gap-6 p-6 bg-white text-black shadow-2xl hover:scale-110 transition-all group border border-black/5 rounded-full`}
-        >
+        <button onClick={() => setIsSummaryOpen(true)} className={`fixed bottom-12 right-12 z-50 flex items-center gap-6 p-6 bg-white text-black shadow-2xl hover:scale-110 transition-all group border border-black/5 rounded-full`}>
           <div className="relative">
             <ShoppingBag size={24} />
             {totalItemsCount > 0 && (

@@ -745,7 +745,7 @@ export const SERVICES: Service[] = [
 ];
 
 export const GALLERY_IMAGES = [
-  { id: 'g1', url: 'https://images.unsplash.com/photo-1604654894610-df490651e61c?q=80&w=1200', category: 'Look 01', title: 'The Gilded Edge' },
+  { id: 'g1', url: 'https://images.unsplash.com/photo-1604654894610-df490c817265?q=80&w=1200', category: 'Look 01', title: 'The Gilded Edge' },
   { id: 'g2', url: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=1200', category: 'Look 02', title: 'Rouge Precision' },
   { id: 'g3', url: 'https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1200', category: 'Look 03', title: 'Noir Marble' },
   { id: 'g4', url: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=1200', category: 'Look 04', title: 'Pearl Luminescence' },
