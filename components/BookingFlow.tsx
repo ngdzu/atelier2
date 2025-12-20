@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICES, EMPLOYEES } from '../constants';
@@ -112,13 +113,13 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     if ((window as any).refreshReveals) (window as any).refreshReveals();
   }, [step]);
 
-  // Scroll spy logic
+  // Scroll spy logic to update activeCategory based on page scroll
   useEffect(() => {
     if (step !== 'SERVICE') return;
 
     const options = {
       root: null,
-      rootMargin: '-100px 0px -60% 0px',
+      rootMargin: '-150px 0px -60% 0px',
       threshold: 0
     };
 
@@ -137,7 +138,21 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     return () => observer.disconnect();
   }, [step]);
 
-  // Hover-to-scroll logic
+  // Effect to automatically scroll the index bar horizontally when activeCategory changes
+  useEffect(() => {
+    if (activeCategory && indexScrollRef.current) {
+      const activeButton = indexScrollRef.current.querySelector(`[data-category="${activeCategory}"]`);
+      if (activeButton) {
+        activeButton.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [activeCategory]);
+
+  // Hover-to-scroll logic for manual horizontal exploration
   const startScrolling = (direction: 'left' | 'right') => {
     if (scrollIntervalRef.current) return;
     scrollIntervalRef.current = window.setInterval(() => {
@@ -464,6 +479,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                       <button
                         key={cat}
                         onClick={() => scrollToCategory(cat)}
+                        data-category={cat}
                         className={`px-8 py-4 rounded-full text-[8px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap ${
                           activeCategory === cat 
                             ? 'bg-black text-white shadow-xl' 
@@ -481,7 +497,8 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <div 
                   key={category} 
                   id={category} 
-                  ref={(el) => (categoryRefs.current[category] = el)}
+                  // Fixed: Wrapped assignment in braces to ensure the ref callback returns void.
+                  ref={(el) => { categoryRefs.current[category] = el; }}
                   className="space-y-16 pt-8"
                 >
                   <div className="flex items-center gap-12">
@@ -658,7 +675,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
             <div className="flex flex-col items-center justify-center text-center py-24 space-y-12 reveal">
               <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center shadow-2xl"><CheckCircle2 size={80} /></div>
               <h2 className="text-7xl font-serif font-bold text-black">Confirmed.</h2>
-              <div className="space-y-4 max-w-sm">
+              <div className="space-y-4 max-sm">
                 <p className="text-gray-600 text-lg italic tracking-wide">The sanctuary awaits your arrival, {customerInfo.name}.</p>
                 <div className="p-6 bg-black/5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] space-y-2">
                   <div className="flex justify-between"><span>Date</span><span>{selectedDate}</span></div>
