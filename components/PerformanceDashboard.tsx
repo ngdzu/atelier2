@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   AreaChart, 
@@ -7,30 +6,22 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { TrendingUp, Users, Calendar, DollarSign, BrainCircuit } from 'lucide-react';
 import { gemini } from '../services/geminiService';
-
-const data = [
-  { name: 'Mon', revenue: 1200, appts: 12 },
-  { name: 'Tue', revenue: 1500, appts: 15 },
-  { name: 'Wed', revenue: 1800, appts: 18 },
-  { name: 'Thu', revenue: 1400, appts: 14 },
-  { name: 'Fri', revenue: 2500, appts: 22 },
-  { name: 'Sat', revenue: 3200, appts: 28 },
-  { name: 'Sun', revenue: 2100, appts: 18 },
-];
+import { dataService } from '../services/dataService';
 
 const PerformanceDashboard: React.FC = () => {
   const [insights, setInsights] = useState<string>('');
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchInsights = async () => {
+    const fetchData = async () => {
+      const data = await dataService.getDailyStats();
+      setChartData(data);
+      
       setLoadingInsights(true);
       try {
         const text = await gemini.analyzeBusinessPerformance(data);
@@ -41,7 +32,7 @@ const PerformanceDashboard: React.FC = () => {
         setLoadingInsights(false);
       }
     };
-    fetchInsights();
+    fetchData();
   }, []);
 
   const stats = [
@@ -75,7 +66,7 @@ const PerformanceDashboard: React.FC = () => {
           <h3 className="text-xl font-serif font-bold text-gray-900 mb-6">Revenue Overview</h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data}>
+              <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#C4A484" stopOpacity={0.1}/>

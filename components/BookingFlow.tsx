@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { SERVICES, EMPLOYEES } from '../constants';
+import { dataService } from '../services/dataService';
 import { Service, Employee, Appointment } from '../types';
 import { 
   CheckCircle2, 
@@ -95,9 +95,13 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('');
   
-  // Cart-based selection for quantities
+  // Dynamic Data States
+  const [services, setServices] = useState<Service[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Selection States
   const [selectedServices, setSelectedServices] = useState<SelectedServiceItem[]>([]);
-  
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -107,6 +111,20 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const indexScrollRef = useRef<HTMLDivElement>(null);
   const scrollIntervalRef = useRef<number | null>(null);
 
+  // Initial Data Fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      const [svcData, empData] = await Promise.all([
+        dataService.getServices(),
+        dataService.getEmployees()
+      ]);
+      setServices(svcData);
+      setEmployees(empData);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if ((window as any).refreshReveals) (window as any).refreshReveals();
@@ -114,7 +132,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
 
   // Scroll spy logic
   useEffect(() => {
-    if (step !== 'SERVICE') return;
+    if (step !== 'SERVICE' || loading) return;
 
     const options = {
       root: null,
@@ -135,7 +153,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     });
 
     return () => observer.disconnect();
-  }, [step]);
+  }, [step, loading]);
 
   useEffect(() => {
     if (activeCategory && indexScrollRef.current) {
@@ -191,12 +209,12 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
 
   const servicesByCategory = useMemo<Record<string, Service[]>>(() => {
     const categories: Record<string, Service[]> = {};
-    SERVICES.forEach(s => {
+    services.forEach(s => {
       if (!categories[s.category]) categories[s.category] = [];
       categories[s.category].push(s);
     });
     return categories;
-  }, []);
+  }, [services]);
 
   const updateQuantity = (service: Service, delta: number) => {
     setSelectedServices(prev => {
@@ -462,80 +480,82 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 </div>
               </div>
               
-              {(Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
-                <div key={category} id={category} ref={(el) => { categoryRefs.current[category] = el; }} className="space-y-16 pt-8">
-                  <div className="flex items-center gap-12">
-                    <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
-                    <div className="h-px bg-black/10 flex-1" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {services.map(s => {
-                      const qty = getQuantity(s.id);
-                      const isSelected = qty > 0;
-                      return (
-                        <div 
-                          key={s.id} 
-                          onClick={() => !isSelected && updateQuantity(s, 1)} 
-                          className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${isSelected ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}
-                        >
-                          <div className="flex justify-between items-start mb-6">
-                            <div className="flex-1 pr-6">
-                              <h4 className="font-bold text-2xl tracking-tight text-black">{s.name}</h4>
-                              <div className="flex items-center gap-4 mt-3">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
-                                <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
-                              </div>
-                              {s.pointsPrice && (
-                                <div className="flex items-center gap-2 mt-2 text-[#C4A484]">
-                                  <Sparkles size={10} />
-                                  <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{s.pointsPrice} Reward Points Required</span>
+              {loading ? (
+                <div className="py-20 text-center text-[10px] font-bold uppercase tracking-[0.4em] opacity-30">Loading Atelier Menu...</div>
+              ) : (
+                (Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
+                  <div key={category} id={category} ref={(el) => { categoryRefs.current[category] = el; }} className="space-y-16 pt-8">
+                    <div className="flex items-center gap-12">
+                      <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
+                      <div className="h-px bg-black/10 flex-1" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {services.map(s => {
+                        const qty = getQuantity(s.id);
+                        const isSelected = qty > 0;
+                        return (
+                          <div 
+                            key={s.id} 
+                            onClick={() => !isSelected && updateQuantity(s, 1)} 
+                            className={`group relative p-10 border-2 transition-all duration-700 cursor-pointer ${isSelected ? 'border-black bg-white shadow-2xl' : 'border-black/5 bg-transparent hover:border-black/20'}`}
+                          >
+                            <div className="flex justify-between items-start mb-6">
+                              <div className="flex-1 pr-6">
+                                <h4 className="font-bold text-2xl tracking-tight text-black">{s.name}</h4>
+                                <div className="flex items-center gap-4 mt-3">
+                                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.duration} MIN</span>
+                                  <span className="text-[#C4A484] font-bold text-lg">${s.price}</span>
                                 </div>
-                              )}
+                                {s.pointsPrice && (
+                                  <div className="flex items-center gap-2 mt-2 text-[#C4A484]">
+                                    <Sparkles size={10} />
+                                    <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{s.pointsPrice} Reward Points Required</span>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div 
+                                className={`h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                                  isSelected 
+                                    ? 'bg-black border-black text-white px-4 min-w-[100px] shadow-lg' 
+                                    : 'w-10 border-black/10 group-hover:border-black/40 text-black hover:bg-black hover:text-white'
+                                }`}
+                              >
+                                {isSelected ? (
+                                  <div className="flex items-center justify-between w-full animate-in zoom-in-95 duration-200">
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); updateQuantity(s, -1); }} 
+                                      className="p-1 hover:text-[#C4A484] transition-colors"
+                                    >
+                                      <Minus size={14} strokeWidth={3} />
+                                    </button>
+                                    <span className="text-xs font-black tabular-nums">{qty}</span>
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); updateQuantity(s, 1); }} 
+                                      className="p-1 hover:text-[#C4A484] transition-colors"
+                                    >
+                                      <Plus size={14} strokeWidth={3} />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <Plus size={20} />
+                                )}
+                              </div>
                             </div>
                             
-                            {/* Refined Selection Control: Expanding Pill */}
-                            <div 
-                              className={`h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                                isSelected 
-                                  ? 'bg-black border-black text-white px-4 min-w-[100px] shadow-lg' 
-                                  : 'w-10 border-black/10 group-hover:border-black/40 text-black hover:bg-black hover:text-white'
-                              }`}
-                            >
-                              {isSelected ? (
-                                <div className="flex items-center justify-between w-full animate-in zoom-in-95 duration-200">
-                                  <button 
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, -1); }} 
-                                    className="p-1 hover:text-[#C4A484] transition-colors"
-                                  >
-                                    <Minus size={14} strokeWidth={3} />
-                                  </button>
-                                  <span className="text-xs font-black tabular-nums">{qty}</span>
-                                  <button 
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(s, 1); }} 
-                                    className="p-1 hover:text-[#C4A484] transition-colors"
-                                  >
-                                    <Plus size={14} strokeWidth={3} />
-                                  </button>
-                                </div>
-                              ) : (
-                                <Plus size={20} />
-                              )}
+                            <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
+                            
+                            <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">Earn with session:</span>
+                                <span className="text-[10px] font-bold text-black">+{s.pointsEarned || 0} PTS</span>
                             </div>
                           </div>
-                          
-                          <p className="text-xs text-gray-600 leading-relaxed font-light tracking-wide">{s.description}</p>
-                          
-                          {/* Historical Points Earning Footer */}
-                          <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
-                              <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">Earn with session:</span>
-                              <span className="text-[10px] font-bold text-black">+{s.pointsEarned || 0} PTS</span>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           )}
 
@@ -546,7 +566,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <p className="text-gray-600 text-sm font-light tracking-wide">Select an artisan to curate your session.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
-                {EMPLOYEES.map(e => (
+                {employees.map(e => (
                   <button key={e.id} onClick={() => setSelectedEmployee(e)} className={`p-16 border-2 text-center transition-all duration-700 relative group ${selectedEmployee?.id === e.id ? 'border-black bg-white shadow-2xl' : 'border-black/5 hover:border-black/20'}`}>
                     <div className="w-32 h-32 rounded-full border border-black/10 overflow-hidden mx-auto mb-8 grayscale group-hover:grayscale-0 transition-all flex items-center justify-center bg-gray-50">
                        <User size={64} strokeWidth={0.5} className="text-gray-300" />

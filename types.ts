@@ -1,4 +1,3 @@
-
 export type Role = 'ADMIN' | 'OWNER' | 'EMPLOYEE' | 'CUSTOMER';
 
 export interface User {
@@ -52,4 +51,17 @@ export interface DailyStats {
   revenue: number;
   appointments: number;
   newCustomers: number;
+}
+
+/**
+ * Data Provider Interface (The Abstraction)
+ * Implementations will handle either Mock/Constants or Real Database
+ */
+export interface IDataProvider {
+  getServices(): Promise<Service[]>;
+  getEmployees(): Promise<Employee[]>;
+  getCustomers(): Promise<Customer[]>;
+  getAppointments(): Promise<Appointment[]>;
+  addAppointment(appointment: Partial<Appointment>): Promise<Appointment>;
+  getDailyStats(): Promise<any[]>;
 }

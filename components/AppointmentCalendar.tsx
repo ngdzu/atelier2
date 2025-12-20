@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Appointment } from '../types';
-import { EMPLOYEES, MOCK_CUSTOMERS, SERVICES } from '../constants';
+import React, { useState, useEffect } from 'react';
+import { Appointment, Employee, Customer, Service } from '../types';
+import { dataService } from '../services/dataService';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -81,11 +81,31 @@ interface Props {
 
 const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointment }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [activeSpecialistId, setActiveSpecialistId] = useState<string>(EMPLOYEES[0].id);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [activeSpecialistId, setActiveSpecialistId] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [empData, custData, svcData] = await Promise.all([
+        dataService.getEmployees(),
+        dataService.getCustomers(),
+        dataService.getServices()
+      ]);
+      setEmployees(empData);
+      setCustomers(custData);
+      setServices(svcData);
+      if (empData.length > 0) setActiveSpecialistId(empData[0].id);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
 
   // Helper: Find customer/service info
-  const getCustomer = (id: string) => MOCK_CUSTOMERS.find(c => c.id === id);
-  const getService = (id: string) => SERVICES.find(s => s.id === id);
+  const getCustomer = (id: string) => customers.find(c => c.id === id);
+  const getService = (id: string) => services.find(s => s.id === id);
 
   const getAppointmentsForSlot = (empId: string, hour: number, minute: number) => {
     return appointments.find(appt => {
@@ -98,7 +118,9 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
     });
   };
 
-  const activeSpecialist = EMPLOYEES.find(e => e.id === activeSpecialistId) || EMPLOYEES[0];
+  const activeSpecialist = employees.find(e => e.id === activeSpecialistId) || employees[0];
+
+  if (loading) return <div className="p-20 text-center text-[10px] font-bold uppercase tracking-[0.4em] opacity-30">Hydrating Sanctuary Calendar...</div>;
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 min-h-[700px]">
@@ -134,14 +156,14 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
             <div>
               <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Viewing Artist</p>
               <div className="flex items-center gap-2 cursor-pointer group">
-                <h3 className="text-md font-black text-black">{activeSpecialist.name}</h3>
+                <h3 className="text-md font-black text-black">{activeSpecialist?.name}</h3>
                 <ChevronDown size={12} className="text-[#C4A484] group-hover:translate-y-0.5 transition-transform" />
               </div>
             </div>
           </div>
 
           <div className="flex bg-gray-50 p-1 rounded-xl">
-            {EMPLOYEES.map(e => (
+            {employees.map(e => (
               <button 
                 key={e.id}
                 onClick={() => setActiveSpecialistId(e.id)}
@@ -180,7 +202,7 @@ const AppointmentCalendar: React.FC<Props> = ({ appointments, onUpdateAppointmen
 
                   <div className="flex-1 grid grid-cols-4 gap-4">
                     {MINUTE_INCREMENTS.map(min => {
-                      const appt = getAppointmentsForSlot(activeSpecialist.id, hour, min);
+                      const appt = getAppointmentsForSlot(activeSpecialist?.id || '', hour, min);
                       const customer = appt ? getCustomer(appt.customerId) : null;
                       const service = appt ? getService(appt.serviceId) : null;
 
