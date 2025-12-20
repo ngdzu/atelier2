@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { STORE_NAME } from '../constants';
+import { Lock } from 'lucide-react';
 
 interface HeaderProps {
   variant?: 'fixed' | 'standard';
@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ variant = 'standard' }) => {
     ? "fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-6 mix-blend-difference text-white"
     : "flex justify-between items-center px-8 py-6 border-b border-black/5 bg-[#FDFCFB]";
 
-  const linkBaseClasses = "hover:opacity-60 transition-opacity";
+  const linkBaseClasses = "hover:opacity-60 transition-opacity flex items-center gap-1.5";
   const activeClasses = isFixed ? "border-b border-white" : "text-black border-b border-black";
   const inactiveClasses = isFixed ? "" : "text-gray-400 hover:text-black";
 
@@ -34,10 +34,14 @@ const Header: React.FC<HeaderProps> = ({ variant = 'standard' }) => {
       <Link to="/" className="flex items-center gap-2 group">
         <span className="text-xl font-serif font-bold tracking-widest uppercase">{STORE_NAME}</span>
       </Link>
-      <div className="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
+      <div className="hidden md:flex gap-10 lg:gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
         <Link to="/gallery" className={getLinkClasses('/gallery')}>Collections</Link>
         <Link to="/about" className={getLinkClasses('/about')}>The Atelier</Link>
         <Link to="/book" className={getLinkClasses('/book')}>Services</Link>
+        <Link to="/admin" className={getLinkClasses('/admin')}>
+          <Lock size={10} className="mb-0.5" />
+          <span>Staff</span>
+        </Link>
       </div>
       <Link to="/book" className={buttonClasses}>
         Reserve

@@ -134,6 +134,7 @@ const LandingPage: React.FC = () => {
                 <li><Link to="/gallery">Lookbook</Link></li>
                 <li><Link to="/about">The Atelier</Link></li>
                 <li><Link to="/book">Services</Link></li>
+                <li><Link to="/admin" className="text-[#C4A484] border-b border-transparent hover:border-[#C4A484] transition-all">Staff Portal</Link></li>
               </ul>
             </div>
             <div>
