@@ -1,0 +1,638 @@
+---
+description: Guidelines for writing and managing tasks in .task files
+globs: *.task
+alwaysApply: false
+---
+
+# Task Management Guidelines
+
+## Overview
+
+Tasks are units of work that describe what needs to be done to accomplish a specific goal. Tasks are documented in `.task` files (Markdown format) and serve as a clear record of work items, their requirements, and completion criteria.
+
+## Task File Format
+
+Tasks are written in Markdown files with the `.task` extension. Each file can contain one or more tasks, typically organized by feature, sprint, or category.
+
+### File Naming Convention
+
+- Use descriptive names: `booking-flow.task`, `auth-service.task`, `deployment.task`
+- Use kebab-case: `user-authentication.task`
+- Group related tasks: `api-endpoints.task`
+
+## Task Structure
+
+Every task must include the following sections:
+
+### 1. Task Header
+
+```markdown
+## TASK-[CATEGORY]-[NUMBER]: Task Title
+
+**Status:** [PENDING | IN_PROGRESS | BLOCKED | COMPLETED | CANCELLED]
+**Priority:** [LOW | MEDIUM | HIGH | CRITICAL]
+**Assignee:** [name or unassigned]
+**Created:** YYYY-MM-DD
+**Updated:** YYYY-MM-DD
+**Estimated Time:** [hours or story points]
+**Dependencies:** [Task IDs or none]
+```
+
+### 2. Description
+
+Clear, concise description of what needs to be done.
+
+### 3. Requirements/What to Do
+
+Detailed breakdown of the work required, including:
+- Specific steps to complete
+- Files/components to create or modify
+- Technical specifications
+- Design requirements (if applicable)
+
+### 4. Definition of Done (DoD)
+
+Clear criteria that must be met for the task to be considered complete.
+
+### 5. Verification Steps
+
+How to verify that the task is complete and working correctly.
+
+### 6. Acceptance Criteria
+
+User-facing or stakeholder-facing criteria that define success.
+
+## Task Categories
+
+Tasks are categorized to help organize and prioritize work. The category is reflected in the task ID.
+
+### Category Codes
+
+| Category | Code | Description | Examples |
+|----------|------|-------------|----------|
+| **Feature** | `FEAT` | New features or major functionality | Booking system, Payment integration |
+| **Bug Fix** | `BUG` | Bug fixes and defect resolution | Fix calendar timezone, Resolve login error |
+| **Enhancement** | `ENH` | Improvements to existing features | Optimize booking flow, Add loading states |
+| **Refactoring** | `REF` | Code improvement without changing functionality | Extract service layer, Rename variables |
+| **UI/UX** | `UI` | User interface and user experience work | Redesign booking form, Improve mobile layout |
+| **API** | `API` | Backend API development | Create booking endpoint, Add authentication |
+| **Database** | `DB` | Database schema, migrations, queries | Add appointments table, Create indexes |
+| **Testing** | `TEST` | Unit, integration, or E2E tests | Add booking service tests, Test auth flow |
+| **Documentation** | `DOC` | Documentation updates | Update README, Add API docs |
+| **DevOps** | `OPS` | Deployment, CI/CD, infrastructure | Set up Docker, Configure CI pipeline |
+| **Security** | `SEC` | Security-related tasks | Add input validation, Implement CSRF protection |
+| **Performance** | `PERF` | Performance optimization | Optimize bundle size, Add caching |
+| **Accessibility** | `A11Y` | Accessibility improvements | Add ARIA labels, Keyboard navigation |
+| **Configuration** | `CONFIG` | Configuration and setup | Update environment variables, Add TypeScript config |
+
+### Task ID Format
+
+**Format:** `TASK-[CATEGORY]-[NUMBER]`
+
+**Examples:**
+- `TASK-FEAT-001`: First feature task
+- `TASK-BUG-042`: 42nd bug fix
+- `TASK-UI-015`: 15th UI task
+- `TASK-API-003`: 3rd API task
+
+**Numbering:**
+- Sequential numbering within each category
+- Numbers should be padded with zeros (001, 002, ... 042)
+- Never reuse numbers (even if a task is cancelled)
+
+## Task Template
+
+```markdown
+## TASK-[CATEGORY]-[NUMBER]: [Descriptive Task Title]
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2024-01-15
+**Updated:** 2024-01-15
+**Estimated Time:** 4 hours
+**Dependencies:** TASK-FEAT-001, TASK-API-005
+**Related Tasks:** TASK-UI-010
+
+### Description
+
+[Clear, one-paragraph description of what this task accomplishes and why it's needed.]
+
+### Requirements / What to Do
+
+#### Step 1: [Action]
+- [ ] Specific action item
+- [ ] Another action item
+- [ ] File/component to create: `path/to/file.tsx`
+
+#### Step 2: [Action]
+- [ ] Specific action item
+- [ ] Code changes required
+
+#### Step 3: [Action]
+- [ ] Testing requirements
+- [ ] Integration points
+
+### Definition of Done (DoD)
+
+- [ ] All code changes implemented
+- [ ] Code reviewed and approved
+- [ ] All tests passing (unit, integration, E2E)
+- [ ] Documentation updated
+- [ ] No linter/TypeScript errors
+- [ ] Feature tested manually
+- [ ] Accessibility requirements met (if applicable)
+- [ ] Performance benchmarks met (if applicable)
+- [ ] Security review completed (if applicable)
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Step-by-step instructions to test the feature
+   - Expected vs actual results
+   - Test data/scenarios needed
+
+2. **Automated Testing:**
+   - Run test suite: `npm test`
+   - Check test coverage: `npm run test:coverage`
+   - Verify no regressions
+
+3. **Code Quality:**
+   - Linter passes: `npm run lint`
+   - TypeScript compiles: `npm run type-check`
+   - Build succeeds: `npm run build`
+
+4. **Integration Testing:**
+   - Test with related services/components
+   - Verify API endpoints (if applicable)
+   - Check database changes (if applicable)
+
+### Acceptance Criteria
+
+- ✅ [User-facing criterion 1]
+- ✅ [User-facing criterion 2]
+- ✅ [Stakeholder requirement 1]
+- ✅ [Technical requirement 1]
+
+### Technical Details
+
+**Files to Create:**
+- `services/bookingService.ts`
+- `components/BookingForm.tsx`
+
+**Files to Modify:**
+- `App.tsx` (add route)
+- `types.ts` (add Booking interface)
+
+**Dependencies:**
+- React Router for navigation
+- date-fns for date handling
+
+**Notes:**
+- Consider timezone handling
+- Ensure mobile responsiveness
+- Follow existing code patterns
+
+### Testing Checklist
+
+- [ ] Unit tests written for new functions
+- [ ] Component tests for React components
+- [ ] Integration tests for service layer
+- [ ] E2E test for user flow (if applicable)
+- [ ] Edge cases handled
+- [ ] Error scenarios tested
+
+### Additional Context
+
+[Any additional information, references, links, or context that would be helpful for someone working on this task.]
+
+---
+
+**Completion Date:** [YYYY-MM-DD]
+**Completed By:** [name]
+**Notes:** [Any final notes or lessons learned]
+```
+
+## Best Practices for Writing Tasks
+
+### 1. Clarity and Specificity
+
+✅ **DO:**
+- Write clear, actionable task titles
+- Break down complex tasks into smaller, manageable pieces
+- Use specific file paths and component names
+- Include code examples when helpful
+- Reference related tasks, issues, or PRs
+
+❌ **DON'T:**
+- Use vague descriptions like "Fix bugs" or "Improve code"
+- Create overly large tasks (break them down)
+- Use ambiguous language
+- Skip verification steps
+
+### 2. Task Size
+
+**Recommended Task Sizes:**
+- **Small:** 1-2 hours (quick fixes, minor updates)
+- **Medium:** 2-8 hours (typical feature work)
+- **Large:** 1-3 days (break down if possible)
+- **Epic:** 3+ days (should be broken into smaller tasks)
+
+If a task exceeds 3 days, consider breaking it into multiple tasks.
+
+### 3. Dependencies
+
+Always document dependencies clearly:
+- **Blocks:** This task blocks other tasks
+- **Blocked By:** This task cannot start until dependencies are complete
+- **Related:** Tasks that are related but not dependent
+
+### 4. Priority Guidelines
+
+- **CRITICAL:** Production bugs, security issues, blocking deployments
+- **HIGH:** Important features, significant bugs, deadline-driven work
+- **MEDIUM:** Regular feature work, improvements, standard bugs
+- **LOW:** Nice-to-haves, optimizations, technical debt cleanup
+
+### 5. Status Management
+
+**Status Flow:**
+```
+PENDING → IN_PROGRESS → COMPLETED
+                ↓
+            BLOCKED → IN_PROGRESS → COMPLETED
+                ↓
+            CANCELLED
+```
+
+- **PENDING:** Task is ready to be worked on
+- **IN_PROGRESS:** Actively being worked on
+- **BLOCKED:** Cannot proceed due to dependency or issue
+- **COMPLETED:** All DoD criteria met and verified
+- **CANCELLED:** No longer needed or superseded
+
+### 6. Estimation
+
+Estimate time realistically:
+- Consider research time
+- Account for testing and verification
+- Include code review time
+- Buffer for unexpected issues (add 20-30% for unknowns)
+
+### 7. Verification
+
+Verification steps should be:
+- **Specific:** Exact commands or actions to run
+- **Reproducible:** Anyone should be able to verify
+- **Comprehensive:** Cover all aspects of the task
+- **Testable:** Clear pass/fail criteria
+
+### 8. Documentation
+
+Always update:
+- Code comments where logic is complex
+- README files for new setup steps
+- API documentation for new endpoints
+- Type definitions for new interfaces
+- Component documentation for UI changes
+
+## Task File Organization
+
+### Single Task Files
+
+For standalone or significant tasks:
+```markdown
+# Booking System Implementation
+
+[TASK-FEAT-001 content]
+```
+
+### Multiple Tasks Files
+
+For related tasks in a feature or sprint:
+```markdown
+# Booking Feature Tasks
+
+## TASK-FEAT-001: Booking API Endpoints
+[task content]
+
+## TASK-FEAT-002: Booking UI Components
+[task content]
+
+## TASK-FEAT-003: Booking Form Validation
+[task content]
+```
+
+### Category-Based Organization
+
+Organize by category when useful:
+```markdown
+# API Development Tasks
+
+## TASK-API-001: Authentication Endpoints
+[task content]
+
+## TASK-API-002: Booking Endpoints
+[task content]
+```
+
+## Task Lifecycle
+
+### 1. Task Creation
+
+When creating a task:
+1. Assign appropriate category and ID
+2. Write clear description and requirements
+3. Define DoD and verification steps
+4. Set initial status to PENDING
+5. Estimate time and priority
+6. Document dependencies
+
+### 2. Task Assignment
+
+When starting work:
+1. Update status to IN_PROGRESS
+2. Assign to team member
+3. Update "Updated" date
+4. Review dependencies are complete
+
+### 3. Task Completion
+
+Before marking complete:
+1. Complete all DoD checklist items
+2. Run all verification steps
+3. Update documentation
+4. Update status to COMPLETED
+5. Add completion date and notes
+6. Link to related PRs or commits
+
+### 4. Task Blocking
+
+If blocked:
+1. Update status to BLOCKED
+2. Document blocking issue clearly
+3. Update dependencies if needed
+4. Notify team/stakeholders
+
+### 5. Task Cancellation
+
+If cancelling:
+1. Update status to CANCELLED
+2. Document reason for cancellation
+3. Update any dependent tasks
+4. Archive task file if needed
+
+## Examples
+
+### Example 1: Feature Task
+
+```markdown
+## TASK-FEAT-015: Implement Appointment Booking Flow
+
+**Status:** IN_PROGRESS
+**Priority:** HIGH
+**Assignee:** Jane Developer
+**Created:** 2024-01-15
+**Updated:** 2024-01-18
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-API-008, TASK-UI-022
+
+### Description
+
+Implement the complete appointment booking flow that allows customers to select services, choose a date/time, select an employee, and confirm their booking. This is a critical user-facing feature for the nail salon website.
+
+### Requirements / What to Do
+
+#### Step 1: Create Booking Service
+- [x] Create `services/bookingService.ts`
+- [x] Implement `createAppointment()` function
+- [x] Add error handling and validation
+- [ ] Add unit tests
+
+#### Step 2: Update BookingFlow Component
+- [x] Add date/time picker integration
+- [ ] Add employee selection dropdown
+- [ ] Implement form validation
+- [ ] Add loading and error states
+
+#### Step 3: Integration
+- [ ] Connect BookingFlow to bookingService
+- [ ] Update App.tsx routing
+- [ ] Test end-to-end flow
+
+### Definition of Done (DoD)
+
+- [ ] All code changes implemented
+- [ ] Code reviewed and approved
+- [ ] Unit tests written and passing
+- [ ] Integration tests passing
+- [ ] No TypeScript/linter errors
+- [ ] Feature tested on mobile and desktop
+- [ ] Accessibility requirements met (keyboard nav, screen readers)
+- [ ] Error messages user-friendly
+- [ ] Loading states implemented
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Navigate to /book route
+   - Select a service from the list
+   - Choose a date and time slot
+   - Select an available employee
+   - Fill in customer information
+   - Submit booking
+   - Verify success message appears
+   - Check that appointment appears in calendar
+
+2. **Automated Testing:**
+   ```bash
+   npm test services/bookingService.test.ts
+   npm test components/BookingFlow.test.tsx
+   npm run test:coverage  # Should show >80% coverage
+   ```
+
+3. **Code Quality:**
+   ```bash
+   npm run lint
+   npm run type-check
+   npm run build
+   ```
+
+4. **Edge Cases:**
+   - Test with no available time slots
+   - Test with invalid date selection
+   - Test with network errors
+   - Test form validation errors
+
+### Acceptance Criteria
+
+- ✅ Users can successfully book an appointment through the UI
+- ✅ Bookings are saved to the backend
+- ✅ Users receive confirmation of their booking
+- ✅ Form validation prevents invalid submissions
+- ✅ Mobile experience is intuitive and functional
+- ✅ Booking appears in admin calendar view
+
+### Technical Details
+
+**Files to Create:**
+- `services/bookingService.ts`
+- `components/BookingFlow.test.tsx`
+
+**Files to Modify:**
+- `components/BookingFlow.tsx`
+- `App.tsx` (routing already exists)
+- `types.ts` (Booking interface exists)
+
+**Dependencies:**
+- date-fns for date manipulation
+- Existing dataService for API calls
+
+### Testing Checklist
+
+- [x] Unit test for bookingService.createAppointment()
+- [ ] Component test for BookingFlow form submission
+- [ ] Integration test for full booking flow
+- [ ] Error handling tests
+- [ ] Validation tests
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+```
+
+### Example 2: Bug Fix Task
+
+```markdown
+## TASK-BUG-023: Fix Calendar Timezone Display Issue
+
+**Status:** COMPLETED
+**Priority:** HIGH
+**Assignee:** Bob Developer
+**Created:** 2024-01-20
+**Updated:** 2024-01-21
+**Estimated Time:** 2 hours
+**Dependencies:** none
+
+### Description
+
+The appointment calendar is displaying times in UTC instead of the user's local timezone, causing confusion when viewing appointments. This fix will ensure all times are displayed in the user's local timezone.
+
+### Requirements / What to Do
+
+- [x] Identify timezone conversion issue in AppointmentCalendar component
+- [x] Use date-fns-tz for timezone handling
+- [x] Update time display to convert from UTC to local time
+- [x] Test with different timezones
+
+### Definition of Done (DoD)
+
+- [x] Code changes implemented
+- [x] Code reviewed
+- [x] Tests updated and passing
+- [x] Manual testing in different timezones
+- [x] No regressions introduced
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Open calendar in browser with timezone set to PST
+   - Verify appointment times match local time
+   - Change browser timezone to EST
+   - Verify times update correctly
+   - Check that appointment creation still works correctly
+
+2. **Automated Testing:**
+   ```bash
+   npm test components/AppointmentCalendar.test.tsx
+   ```
+
+### Acceptance Criteria
+
+- ✅ Calendar displays times in user's local timezone
+- ✅ Times update correctly when timezone changes
+- ✅ Appointment creation still works correctly
+- ✅ No console errors related to dates
+
+### Technical Details
+
+**Files Modified:**
+- `components/AppointmentCalendar.tsx`
+
+**Changes:**
+- Added timezone conversion using date-fns-tz
+- Updated time display logic
+
+---
+
+**Completion Date:** 2024-01-21
+**Completed By:** Bob Developer
+**Notes:** Used date-fns-tz library for timezone conversion. Consider adding timezone selection in user preferences for future enhancement.
+```
+
+## Task Review Checklist
+
+Before marking a task as complete, review:
+
+- [ ] All requirements are met
+- [ ] Definition of Done is satisfied
+- [ ] Verification steps have been executed
+- [ ] Acceptance criteria are met
+- [ ] Code follows project guidelines
+- [ ] Tests are written and passing
+- [ ] Documentation is updated
+- [ ] No breaking changes (or documented if intentional)
+- [ ] Related tasks are updated if dependencies exist
+
+## Task File Maintenance
+
+### Regular Updates
+
+- Update task status regularly
+- Keep "Updated" date current
+- Add notes when blockers are resolved
+- Update dependencies as they complete
+
+### Task File Organization
+
+- Group related tasks in the same file
+- Use consistent formatting across tasks
+- Archive completed task files periodically
+- Keep task files in version control
+
+### Task Tracking
+
+Consider maintaining a task index file:
+```markdown
+# Task Index
+
+## Active Tasks
+- TASK-FEAT-015: Implement Appointment Booking Flow (IN_PROGRESS)
+- TASK-BUG-023: Fix Calendar Timezone (PENDING)
+
+## Completed Tasks (Last 30 days)
+- TASK-FEAT-014: Customer Dashboard (COMPLETED 2024-01-10)
+- TASK-BUG-022: Login Error Fix (COMPLETED 2024-01-08)
+```
+
+## Integration with Development Workflow
+
+### Git Integration
+
+- Reference task ID in commit messages: `feat(TASK-FEAT-015): implement booking flow`
+- Create branches named after tasks: `TASK-FEAT-015-booking-flow`
+- Link PRs to task IDs in PR description
+
+### Code Review
+
+- Reviewers should verify DoD criteria
+- Check that verification steps were followed
+- Ensure acceptance criteria are met
+
+### Continuous Integration
+
+- Automated tests should verify task requirements
+- Build should pass for completed tasks
+- Coverage should meet project standards

@@ -1,720 +1,788 @@
 ---
-description: when create/modify Docker related files.
+description: Docker best practices for Node.js microservices in small business websites
 alwaysApply: false
 ---
-# Docker Architecture and Guidelines
+
+# Docker Guidelines for Node.js Microservices
 
 ## Overview
 
-This document defines the Docker architecture, build patterns, and best practices for the Z Monitor project. All Dockerfiles must follow the multi-stage build pattern to minimize image size and ensure consistent, reproducible builds.
+These guidelines provide best practices for containerizing Node.js microservices for small business websites. Focus on simplicity, security, maintainability, and cost-effectiveness while following industry standards.
 
-**Key Principles:**
-- **Multi-Stage Builds** - Separate builder and runtime stages
-- **Base Image Consistency** - Use shared base images for efficiency
-- **Storage Efficiency** - Minimize image size through layer optimization
-- **Reproducibility** - Builds must be deterministic and consistent
-- **Cross-Platform** - Support macOS, Linux, and Windows (via Docker)
+## Dockerfile Best Practices
 
----
+### Multi-Stage Builds
 
-## 1. Base Images
-
-### Standard Base Images
-
-- **`qtapp-qt-dev-env:latest`** - Qt 6 SDK, CMake, build tools (builder stage)
-  - Contains: Qt 6 development packages, CMake, compiler, build tools
-  - Use for: Building Qt applications
-  - Size: ~2-3 GB (shared across all builds)
-
-- **`qtapp-qt-runtime:latest`** - Qt 6 runtime libraries only (runtime stage)
-  - Contains: Qt 6 runtime libraries, minimal system dependencies
-  - Use for: Running Qt applications
-  - Size: ~611 MB (shared across all runtime images)
-
-### Base Image Rules
-
-- **Never introduce alternative base images** - All projects must use the standard base images
-- **Tag consistency** - Always use `:latest` tag (or `:local` for local development)
-- **Shared base** - All lessons/applications share the same runtime base for efficiency
-
-### Storage Efficiency
-
-- **All lessons share the runtime base** (~611 MB)
-- **Each lesson adds ~40 KB** (the executable only)
-- **Total for 28 lessons ≈ 612 MB** (not 28 × 611 MB)
-- **Never duplicate base images** - Reuse shared bases
-
----
-
-## 2. Multi-Stage Build Pattern
-
-### Standard Pattern
-
-All Dockerfiles must use the multi-stage build pattern:
+Always use multi-stage builds to reduce image size and improve security:
 
 ```dockerfile
-# Builder stage: Compile the application
-FROM qtapp-qt-dev-env:latest AS builder
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
 
-WORKDIR /build
+# Stage 2: Build (if needed)
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# Copy source files
-COPY CMakeLists.txt main.cpp ./
+# Stage 3: Runtime
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# Build and install
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodejs
 
-# Runtime stage: Minimal runtime image
-FROM qtapp-qt-runtime:latest AS runtime
+# Copy only production dependencies
+COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --chown=nodejs:nodejs package*.json ./
 
-WORKDIR /opt/lesson##
+USER nodejs
 
-# Copy only the executable from builder
-COPY --from=builder /opt/lesson##/<executable> .
+EXPOSE 3000
 
-# Set entrypoint
-CMD ["./<executable>"]
+ENV NODE_ENV=production
+CMD ["node", "dist/index.js"]
 ```
 
-### Stage Separation
+### Base Image Selection
 
-- **Builder stage**: Contains build tools, compilers, development packages
-- **Runtime stage**: Contains only runtime libraries and the executable
-- **No build tools in runtime**: Keep runtime image minimal
+- **Use Alpine Linux**: `node:20-alpine` for smaller images (~40MB vs ~900MB)
+- **Pin specific versions**: Use `node:20.11.0-alpine` instead of `node:20-alpine` for reproducibility
+- **Use LTS versions**: Prefer Node.js LTS versions (18.x, 20.x)
+- **Avoid**: `node:latest` or unversioned tags in production
 
----
+### Layer Caching Optimization
 
-## 3. Build Patterns by Application Type
-
-### 3.1. Console Applications
-
-**Pattern:** Simple executable, no GUI dependencies
+Order Dockerfile instructions from least to most frequently changing:
 
 ```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
+# 1. Base image (changes rarely)
+FROM node:20-alpine
 
-WORKDIR /build
-COPY CMakeLists.txt main.cpp ./
+# 2. Install system dependencies (changes rarely)
+RUN apk add --no-cache dumb-init
 
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
+# 3. Set working directory (changes rarely)
+WORKDIR /app
 
-FROM qtapp-qt-runtime:latest AS runtime
+# 4. Copy dependency files (changes less frequently)
+COPY package*.json ./
 
-WORKDIR /opt/lesson##
-COPY --from=builder /opt/lesson##/<executable> .
+# 5. Install dependencies (changes when package.json changes)
+RUN npm ci --only=production
 
-CMD ["./<executable>"]
-```
-
-**Characteristics:**
-- No X11 setup needed
-- Minimal runtime dependencies
-- Fastest build and smallest image
-
-### 3.2. GUI Applications (Qt Widgets)
-
-**Pattern:** Requires X11 for display
-
-```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
-
-WORKDIR /build
-COPY CMakeLists.txt main.cpp ./
-
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
-
-FROM qtapp-qt-runtime:latest AS runtime
-
-WORKDIR /opt/lesson##
-
-# Install X11 runtime dependencies (if not in base)
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libx11-6 \
-    libxcb1 \
-    && rm -rf /var/lib/apt/lists/* || true
-
-COPY --from=builder /opt/lesson##/<executable> .
-
-CMD ["./<executable>"]
-```
-
-**Run Instructions (README.md):**
-- **macOS**: `DISPLAY=host.docker.internal:0 docker run -e DISPLAY=host.docker.internal:0 <image>`
-- **Linux**: `docker run -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY <image>`
-- **Suppress GL noise**: `-e QT_LOGGING_RULES="*.debug=false;qt.qpa.*=false"`
-
-### 3.3. QML Applications (Qt Quick)
-
-**Pattern:** Requires Qt Quick runtime and QML files
-
-```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
-
-WORKDIR /build
+# 6. Copy application code (changes most frequently)
 COPY . .
 
-# Install QML-specific dev packages if needed
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6quick6-dev \
-    && rm -rf /var/lib/apt/lists/* || true
-
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
-
-FROM qtapp-qt-runtime:latest AS runtime
-
-WORKDIR /opt/lesson##
-
-# Install QML runtime dependencies
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6quick6 \
-    libqt6qml6 \
-    xvfb \
-    x11vnc \
-    libgl1-mesa-dri \
-    libgl1-mesa-glx \
-    libegl1-mesa \
-    && rm -rf /var/lib/apt/lists/* || true
-
-# Force software GL for macOS compatibility
-ENV LIBGL_ALWAYS_SOFTWARE=1
-ENV QT_QUICK_BACKEND=software
-
-# Copy executable and QML resources
-COPY --from=builder /opt/lesson##/<executable> .
-COPY --from=builder /workspace/qml ./qml
-
-CMD ["./<executable>"]
+# 7. Set runtime configuration (changes rarely)
+ENV NODE_ENV=production
+USER nodejs
+EXPOSE 3000
+CMD ["dumb-init", "node", "index.js"]
 ```
 
-**Characteristics:**
-- Requires QML runtime libraries
-- May need QML files copied to runtime
-- Software GL for cross-platform compatibility
+### Security Practices
 
----
+1. **Run as non-root user**:
+   ```dockerfile
+   RUN addgroup --system --gid 1001 nodejs && \
+       adduser --system --uid 1001 nodejs
+   USER nodejs
+   ```
 
-## 4. Dockerfile Best Practices
+2. **Use minimal base images**: Alpine Linux reduces attack surface
 
-### 4.1. Layer Optimization
+3. **Scan for vulnerabilities**: Use `docker scan` or tools like Trivy/Snyk
 
-- **Combine RUN commands**: Reduce layer count
-  ```dockerfile
-  # ✅ Good: Combined RUN commands
-  RUN apt-get update && \
-      DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      package1 \
-      package2 \
-      && rm -rf /var/lib/apt/lists/* || true
-  
-  # ❌ Bad: Separate RUN commands (more layers)
-  RUN apt-get update
-  RUN apt-get install -y package1
-  RUN apt-get install -y package2
-  ```
+4. **Don't expose secrets**: Use environment variables or secrets management
 
-- **Clean up in same layer**: Remove package lists in the same RUN command
-  ```dockerfile
-  # ✅ Good: Cleanup in same layer
-  RUN apt-get update && \
-      apt-get install -y package && \
-      rm -rf /var/lib/apt/lists/*
-  ```
+5. **Keep images updated**: Regularly update base images and dependencies
 
-### 4.2. COPY Optimization
+6. **Use `.dockerignore`**: Prevent sensitive files from being copied
 
-- **Copy only what's needed**: Use `.dockerignore` to exclude unnecessary files
-- **Copy in order**: Copy files that change less frequently first (for layer caching)
-  ```dockerfile
-  # ✅ Good: Dependencies first, source last
-  COPY CMakeLists.txt ./
-  COPY main.cpp ./
-  
-  # ❌ Bad: Copy everything at once (breaks cache)
-  COPY . .
-  ```
+### .dockerignore File
 
-### 4.3. Build Arguments
-
-- **Use ARG for build-time variables**:
-  ```dockerfile
-  ARG BUILD_TYPE=Release
-  RUN cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
-  ```
-
-### 4.4. Environment Variables
-
-- **Use ENV for runtime configuration**:
-  ```dockerfile
-  ENV QT_LOGGING_RULES="*.debug=false;qt.qpa.*=false"
-  ENV LIBGL_ALWAYS_SOFTWARE=1
-  ```
-
-### 4.5. Working Directory
-
-- **Set WORKDIR early**: Reduces path repetition
-  ```dockerfile
-  WORKDIR /build
-  # All subsequent commands run in /build
-  ```
-
----
-
-## 5. Application-Specific Patterns
-
-### 5.1. Lessons (Simple Executables)
-
-**Pattern:** Minimal, focused on single concept
-
-```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
-
-WORKDIR /build
-COPY CMakeLists.txt main.cpp ./
-
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
-
-FROM qtapp-qt-runtime:latest AS runtime
-
-WORKDIR /opt/lesson##
-COPY --from=builder /opt/lesson##/<executable> .
-
-CMD ["./<executable>"]
-```
-
-**Requirements:**
-- Single executable
-- Minimal dependencies
-- ~40 KB incremental size
-
-### 5.2. Sensor Simulator (QML + WebSocket)
-
-**Pattern:** QML application with additional dependencies
-
-```dockerfile
-FROM qtapp-qt-qtquick-dev:local AS builder
-
-WORKDIR /workspace
-COPY . .
-
-# Install app-specific dev packages
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6websockets6-dev \
-    && rm -rf /var/lib/apt/lists/* || true
-
-RUN mkdir -p build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . --target install
-
-FROM qtapp-qt-qtquick:local AS runtime
-
-WORKDIR /opt/sensor-simulator
-
-# Install app-specific runtime packages
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6websockets6 \
-    libqt6svg6 \
-    xvfb \
-    x11vnc \
-    libgl1-mesa-dri \
-    && rm -rf /var/lib/apt/lists/* || true
-
-ENV LIBGL_ALWAYS_SOFTWARE=1
-
-COPY --from=builder /opt/sensor-simulator/sensor_simulator .
-COPY --from=builder /workspace/qml ./qml
-
-CMD ["./sensor_simulator"]
-```
-
-**Characteristics:**
-- Additional Qt modules (WebSockets, SVG)
-- QML files copied to runtime
-- X11/VNC support for headless operation
-
-### 5.3. Z Monitor (Complex Application)
-
-**Pattern:** Full application with multiple dependencies
-
-```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
-
-WORKDIR /build
-COPY . .
-
-# Install all development dependencies
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6quick6-dev \
-    libqt6sql6-dev \
-    libsqlcipher-dev \
-    && rm -rf /var/lib/apt/lists/* || true
-
-RUN mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . && \
-    cmake --install .
-
-FROM qtapp-qt-runtime:latest AS runtime
-
-WORKDIR /opt/z-monitor
-
-# Install runtime dependencies
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libqt6quick6 \
-    libqt6sql6 \
-    libsqlcipher0 \
-    && rm -rf /var/lib/apt/lists/* || true
-
-COPY --from=builder /opt/z-monitor/z-monitor .
-COPY --from=builder /build/resources ./resources
-
-CMD ["./z-monitor"]
-```
-
----
-
-## 6. Docker Compose Patterns
-
-### 6.1. Simple Service
-
-```yaml
-services:
-  app:
-    image: qtapp-app:local
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    ports:
-      - "9002:9002"
-    environment:
-      - DISPLAY=host.docker.internal:0
-      - QT_LOGGING_RULES="*.debug=false;qt.qpa.*=false"
-```
-
-### 6.2. Multi-Service Setup
-
-```yaml
-services:
-  simulator:
-    image: qtapp-sensor-simulator:local
-    build:
-      context: ./sensor-simulator
-      dockerfile: Dockerfile
-    ports:
-      - "9002:9002"
-    environment:
-      - USE_HOST_X=1
-      - DISPLAY=host.docker.internal:0
-      - LIBGL_ALWAYS_SOFTWARE=1
-
-  z-monitor:
-    image: qtapp-z-monitor:local
-    build:
-      context: ./z-monitor
-      dockerfile: Dockerfile
-    depends_on:
-      - simulator
-    environment:
-      - DISPLAY=host.docker.internal:0
-```
-
----
-
-## 7. Platform-Specific Considerations
-
-### 7.1. macOS (XQuartz)
-
-**X11 Setup:**
-- Use `DISPLAY=host.docker.internal:0`
-- Allow X11 connections in XQuartz preferences
-- Use software GL: `LIBGL_ALWAYS_SOFTWARE=1`
-
-**Run Command:**
-```bash
-DISPLAY=host.docker.internal:0 docker run \
-  -e DISPLAY=host.docker.internal:0 \
-  -e QT_LOGGING_RULES="*.debug=false;qt.qpa.*=false" \
-  <image>
-```
-
-### 7.2. Linux
-
-**X11 Setup:**
-- Mount X11 socket: `-v /tmp/.X11-unix:/tmp/.X11-unix`
-- Use host DISPLAY: `-e DISPLAY=$DISPLAY`
-
-**Run Command:**
-```bash
-docker run \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=$DISPLAY \
-  <image>
-```
-
-### 7.3. Windows
-
-**X11 Setup:**
-- Use VcXsrv or similar X server
-- Configure DISPLAY appropriately
-- Use software GL for compatibility
-
----
-
-## 8. Storage Efficiency Guidelines
-
-### 8.1. Layer Sharing
-
-- **All applications share base images**: Don't create custom base images
-- **Runtime base is shared**: All runtime images share `qtapp-qt-runtime:latest`
-- **Only executables differ**: Each application adds only its executable
-
-### 8.2. Size Targets
-
-- **Lesson executables**: ~40 KB each
-- **Runtime base**: ~611 MB (shared)
-- **Total for 28 lessons**: ~612 MB (not 28 × 611 MB)
-
-### 8.3. Optimization Techniques
-
-- **Multi-stage builds**: Separate builder and runtime
-- **Minimal runtime**: Only copy executables and required resources
-- **Layer caching**: Order COPY commands for optimal caching
-- **Cleanup**: Remove package lists and build artifacts
-
----
-
-## 9. Build Optimization
-
-### 9.1. Build Cache
-
-- **Order matters**: Copy files that change less frequently first
-  ```dockerfile
-  # ✅ Good: Dependencies first
-  COPY CMakeLists.txt ./
-  COPY main.cpp ./
-  # Changes to main.cpp won't invalidate CMakeLists.txt layer
-  
-  # ❌ Bad: Everything at once
-  COPY . .
-  # Any change invalidates entire layer
-  ```
-
-### 9.2. Parallel Builds
-
-- **Use build cache**: Leverage Docker's build cache
-- **Build arguments**: Use ARG for build-time configuration
-- **Multi-stage caching**: Builder stage can be cached separately
-
-### 9.3. Build Time Reduction
-
-- **Minimal dependencies**: Only install what's needed
-- **Combined RUN commands**: Reduce layer count
-- **Cache package lists**: Structure apt-get commands for caching
-
----
-
-## 10. Security Best Practices
-
-### 10.1. Base Image Security
-
-- **Use official base images**: Or trusted custom bases
-- **Keep bases updated**: Regularly update base images
-- **Scan for vulnerabilities**: Use security scanning tools
-
-### 10.2. Runtime Security
-
-- **Minimal runtime**: Only include necessary runtime libraries
-- **No build tools in runtime**: Keep runtime image minimal
-- **Non-root user**: Consider running as non-root when possible
-
-### 10.3. Secrets Management
-
-- **Never commit secrets**: Use Docker secrets or environment variables
-- **Use .dockerignore**: Exclude sensitive files from builds
-- **Runtime secrets**: Pass secrets at runtime, not build time
-
----
-
-## 11. Common Patterns
-
-### 11.1. .dockerignore
-
-Create `.dockerignore` to exclude unnecessary files:
+Always include a `.dockerignore` file:
 
 ```
+node_modules
+npm-debug.log
+.env
+.env.local
+.env.*.local
 .git
 .gitignore
+README.md
+.vscode
+.idea
 *.md
-build/
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+.DS_Store
+coverage
+.nyc_output
+dist
+build
+*.log
+docker-compose*.yml
+Dockerfile*
 ```
 
-### 11.2. Build Scripts
+## Microservices Architecture Patterns
 
-Use build scripts for complex builds:
+### Service Organization
+
+```
+project-root/
+├── services/
+│   ├── api-gateway/
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   └── src/
+│   ├── auth-service/
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   └── src/
+│   ├── booking-service/
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   └── src/
+│   └── notification-service/
+│       ├── Dockerfile
+│       ├── package.json
+│       └── src/
+├── docker-compose.yml
+└── docker-compose.prod.yml
+```
+
+### Service-Specific Dockerfiles
+
+Each microservice should have its own Dockerfile optimized for its needs:
+
+**Example: API Service**
+```dockerfile
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodejs
+COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs . .
+USER nodejs
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node healthcheck.js
+CMD ["node", "index.js"]
+```
+
+## Docker Compose Configuration
+
+### Development Docker Compose
+
+```yaml
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:pass@db:5432/nailsalon
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./services/api-gateway:/app
+      - /app/node_modules
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:pass@db:5432/nailsalon
+      - JWT_SECRET=dev-secret-change-in-prod
+    volumes:
+      - ./services/auth-service:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # Booking Service
+  booking-service:
+    build:
+      context: ./services/booking-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:pass@db:5432/nailsalon
+    volumes:
+      - ./services/booking-service:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # Database
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=nailsalon
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+### Production Docker Compose
+
+```yaml
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  booking-service:
+    build:
+      context: ./services/booking-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+## Environment Management
+
+### Environment Variables
+
+1. **Use `.env` files for local development**:
+   ```bash
+   # .env.example (commit to git)
+   DATABASE_URL=postgresql://user:pass@localhost:5432/nailsalon
+   REDIS_URL=redis://localhost:6379
+   JWT_SECRET=change-me-in-production
+   NODE_ENV=development
+   ```
+
+2. **Never commit `.env` files** with real secrets
+
+3. **Use Docker secrets** for production (Docker Swarm) or environment variables from secure sources
+
+4. **Validate required environment variables** at startup:
+   ```javascript
+   const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET'];
+   const missing = requiredEnvVars.filter(key => !process.env[key]);
+   if (missing.length > 0) {
+     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+   }
+   ```
+
+## Health Checks
+
+### Implement Health Check Endpoints
+
+```javascript
+// healthcheck.js
+const http = require('http');
+
+const options = {
+  host: 'localhost',
+  port: process.env.PORT || 3000,
+  path: '/health',
+  timeout: 2000
+};
+
+const request = http.request(options, (res) => {
+  console.log(`Health check status: ${res.statusCode}`);
+  if (res.statusCode === 200) {
+    process.exit(0);
+  } else {
+    process.exit(1);
+  }
+});
+
+request.on('error', (err) => {
+  console.error('Health check failed:', err);
+  process.exit(1);
+});
+
+request.end();
+```
+
+### Dockerfile Health Check
+
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node healthcheck.js
+```
+
+### Application Health Endpoint
+
+```javascript
+// Express example
+app.get('/health', async (req, res) => {
+  try {
+    // Check database connection
+    await db.query('SELECT 1');
+    
+    // Check Redis connection
+    await redis.ping();
+    
+    res.status(200).json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'unhealthy',
+      error: error.message
+    });
+  }
+});
+```
+
+## Logging Best Practices
+
+### Structured Logging
+
+1. **Use JSON logs** for better parsing:
+   ```javascript
+   const logger = {
+     info: (message, meta = {}) => {
+       console.log(JSON.stringify({
+         level: 'info',
+         message,
+         timestamp: new Date().toISOString(),
+         ...meta
+       }));
+     },
+     error: (message, error, meta = {}) => {
+       console.error(JSON.stringify({
+         level: 'error',
+         message,
+         error: error?.message,
+         stack: error?.stack,
+         timestamp: new Date().toISOString(),
+         ...meta
+       }));
+     }
+   };
+   ```
+
+2. **Log to stdout/stderr**: Docker captures these automatically
+
+3. **Avoid logging sensitive data**: Never log passwords, tokens, or PII
+
+4. **Use log levels appropriately**: debug, info, warn, error
+
+### Docker Logging Configuration
+
+```yaml
+services:
+  api-gateway:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+```
+
+## Resource Limits
+
+### Set Resource Constraints
+
+```yaml
+services:
+  api-gateway:
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+```
+
+**Small Business Recommendations**:
+- **API Services**: 512MB-1GB RAM, 0.5-1 CPU
+- **Database**: 1-2GB RAM, 1 CPU
+- **Cache (Redis)**: 256MB-512MB RAM, 0.25 CPU
+
+## Networking
+
+### Service-to-Service Communication
+
+1. **Use service names** in Docker Compose for internal communication:
+   ```javascript
+   const dbUrl = process.env.DATABASE_URL || 'postgresql://user:pass@db:5432/nailsalon';
+   ```
+
+2. **Don't expose unnecessary ports** to host machine in production
+
+3. **Use internal networks** for service communication:
+   ```yaml
+   networks:
+     app-network:
+       driver: bridge
+       internal: false  # Set to true if no external access needed
+   ```
+
+4. **API Gateway pattern**: Expose only the gateway to external traffic
+
+## Volume Management
+
+### Named Volumes for Data Persistence
+
+```yaml
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+```
+
+### Bind Mounts for Development Only
+
+```yaml
+# Development only
+volumes:
+  - ./services/api-gateway:/app
+  - /app/node_modules  # Prevent overwriting node_modules
+```
+
+## Development Workflow
+
+### Development Dockerfile
+
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies including devDependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Use nodemon or similar for hot reload
+CMD ["npm", "run", "dev"]
+```
+
+### Useful Docker Commands
 
 ```bash
-#!/bin/bash
-docker build -t qtapp-app:local -f Dockerfile .
+# Build images
+docker-compose build
+
+# Start services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f [service-name]
+
+# Execute commands in container
+docker-compose exec [service-name] sh
+
+# Stop services
+docker-compose down
+
+# Remove volumes (careful - deletes data)
+docker-compose down -v
+
+# Rebuild specific service
+docker-compose build [service-name]
+docker-compose up -d [service-name]
 ```
 
-### 11.3. Development vs Production
+## Production Deployment
 
-- **Development**: Use `:local` tags, include debug symbols
-- **Production**: Use `:latest` tags, Release builds, optimized
+### Build for Production
 
----
+```bash
+# Build production images
+docker-compose -f docker-compose.prod.yml build
 
-## 12. Troubleshooting
+# Tag for registry
+docker tag nailsalon-api-gateway:latest registry.example.com/nailsalon-api-gateway:v1.0.0
 
-### 12.1. Build Failures
-
-- **Check base image**: Ensure base images are available
-- **Verify dependencies**: Check that all dependencies are installed
-- **Build logs**: Review build logs for specific errors
-- **Layer inspection**: Use `docker history` to inspect layers
-
-### 12.2. Runtime Issues
-
-- **X11 connection**: Verify X11 setup for GUI applications
-- **Missing libraries**: Check that runtime dependencies are installed
-- **Permissions**: Verify file permissions on executables
-- **Environment variables**: Check required environment variables
-
-### 12.3. Size Issues
-
-- **Inspect layers**: Use `docker history` to see layer sizes
-- **Optimize COPY**: Ensure only necessary files are copied
-- **Cleanup**: Verify cleanup commands are working
-- **Base image**: Ensure using shared base images
-
----
-
-## 13. Quick Reference
-
-### Base Images
-
-| Image | Purpose | Size | Contains |
-|-------|---------|------|-----------|
-| `qtapp-qt-dev-env:latest` | Builder | ~2-3 GB | Qt SDK, CMake, build tools |
-| `qtapp-qt-runtime:latest` | Runtime | ~611 MB | Qt runtime libraries |
-
-### Build Pattern
-
-```dockerfile
-FROM qtapp-qt-dev-env:latest AS builder
-WORKDIR /build
-COPY source files
-RUN build commands
-
-FROM qtapp-qt-runtime:latest AS runtime
-WORKDIR /opt/app
-COPY --from=builder /opt/app/executable .
-CMD ["./executable"]
+# Push to registry
+docker push registry.example.com/nailsalon-api-gateway:v1.0.0
 ```
 
-### Run Commands
+### Production Checklist
 
-| Platform | Command |
-|----------|---------|
-| **macOS** | `DISPLAY=host.docker.internal:0 docker run -e DISPLAY=host.docker.internal:0 <image>` |
-| **Linux** | `docker run -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY <image>` |
+- [ ] Use multi-stage builds
+- [ ] Run as non-root user
+- [ ] Set resource limits
+- [ ] Configure health checks
+- [ ] Set up logging
+- [ ] Use secrets management
+- [ ] Enable restart policies
+- [ ] Configure backups for volumes
+- [ ] Set up monitoring
+- [ ] Use reverse proxy (nginx/traefik)
+- [ ] Enable HTTPS/TLS
+- [ ] Set up CI/CD pipeline
 
----
+## Small Business Optimization Tips
 
-## 14. Anti-Patterns to Avoid
+### Cost Optimization
 
-### ❌ Don't Use Single-Stage Builds
+1. **Use Alpine images**: Smaller images = less storage and faster pulls
+2. **Multi-stage builds**: Reduce final image size
+3. **Resource limits**: Prevent resource waste
+4. **Consolidate services**: For small businesses, consider fewer microservices initially
+5. **Use Docker Hub free tier** or self-hosted registry
+
+### Simplified Architecture
+
+For small businesses, start simple:
+- **Monorepo with separate services** (easier to manage)
+- **Single Docker Compose file** for all services
+- **Shared database** (upgrade to separate DBs when scaling)
+- **Single network** for all services
+
+### Scaling Considerations
+
+When ready to scale:
+1. **Horizontal scaling**: Run multiple instances with load balancer
+2. **Service separation**: Split database by service if needed
+3. **Caching layer**: Add Redis for frequently accessed data
+4. **CDN**: Use CDN for static assets
+5. **Container orchestration**: Consider Kubernetes only if needed (Docker Swarm is simpler)
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port already in use**:
+   ```bash
+   # Find process using port
+   lsof -i :3000
+   # Kill process or change port in docker-compose.yml
+   ```
+
+2. **Container keeps restarting**:
+   ```bash
+   # Check logs
+   docker-compose logs [service-name]
+   # Check health check status
+   docker ps
+   ```
+
+3. **Out of memory**:
+   ```bash
+   # Check container resource usage
+   docker stats
+   # Adjust memory limits in docker-compose.yml
+   ```
+
+4. **Database connection errors**:
+   - Ensure database service is healthy
+   - Check network connectivity
+   - Verify environment variables
+
+## Testing in Docker
+
+### Test Dockerfiles
 
 ```dockerfile
-# ❌ Bad: Single-stage (includes build tools in runtime)
-FROM qtapp-qt-dev-env:latest
+# Dockerfile.test
+FROM node:20-alpine
+
 WORKDIR /app
-COPY . .
-RUN cmake .. && cmake --build .
-CMD ["./app"]
-```
 
-### ❌ Don't Copy Everything
+COPY package*.json ./
+RUN npm ci
 
-```dockerfile
-# ❌ Bad: Copies unnecessary files
 COPY . .
 
-# ✅ Good: Copy only what's needed
-COPY CMakeLists.txt main.cpp ./
+CMD ["npm", "test"]
 ```
 
-### ❌ Don't Create Custom Base Images
+### Run Tests in Container
 
-```dockerfile
-# ❌ Bad: Custom base image
-FROM ubuntu:22.04
-RUN apt-get install qt6...
-
-# ✅ Good: Use shared base
-FROM qtapp-qt-dev-env:latest
+```bash
+docker-compose run --rm api-gateway npm test
 ```
 
-### ❌ Don't Leave Build Artifacts
+## Best Practices Summary
 
-```dockerfile
-# ❌ Bad: Build artifacts in runtime
-COPY --from=builder /build/* .
+✅ **DO**:
+- Use multi-stage builds
+- Run as non-root user
+- Use Alpine base images
+- Set resource limits
+- Implement health checks
+- Use .dockerignore
+- Pin image versions
+- Structure layers for caching
+- Use named volumes for data
+- Log to stdout/stderr
+- Validate environment variables
 
-# ✅ Good: Only executable
-COPY --from=builder /opt/app/executable .
-```
+❌ **DON'T**:
+- Expose secrets in Dockerfiles
+- Use `latest` tags in production
+- Run as root user
+- Copy entire project before installing dependencies
+- Commit .env files with secrets
+- Expose unnecessary ports
+- Use bind mounts in production
+- Ignore health checks
+- Skip resource limits
+- Log sensitive information
 
----
+## Additional Resources
 
-## 15. Related Guidelines
-
-- **Lesson Guidelines**: See `.cursor/rules/lesson_guidelines.mdc` for lesson-specific Dockerfile requirements
-- **Common Patterns**: See `.cursor/rules/common_patterns.mdc` for application-specific patterns
-- **C++ Guidelines**: See `.cursor/rules/cpp_guidelines.mdc` for code that goes into containers
-
----
-
-## Enforcement
-
-- **Code Review**: All Dockerfiles must follow multi-stage pattern
-- **Base Image Compliance**: Must use standard base images
-- **Size Verification**: Runtime images should be minimal
-- **Build Verification**: Dockerfiles must build successfully
-
----
-
-**Remember:** Multi-stage builds are essential for efficiency. Keep builder stages for building, runtime stages minimal. Always use shared base images to maximize storage efficiency. Each application should add only its executable (~40 KB), not duplicate the entire runtime base.
+- [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
+- [Node.js Docker Best Practices](https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md)
+- [Docker Security](https://docs.docker.com/engine/security/)
+- [Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)

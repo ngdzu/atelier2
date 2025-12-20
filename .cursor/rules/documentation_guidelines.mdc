@@ -1,204 +1,422 @@
 ---
 alwaysApply: true
 appliesTo:
-  - "project-dashboard/doc/**/*.md"
-  - "project-dashboard/doc/**/*.mmd"
-  - "project-dashboard/ZTODO.md"
+  - "**/*.md"
+  - "**/*.mmd"
+  - "**/*.task"
   - "**/*requirements*.md"
   - "**/*design*.md"
   - "**/*architecture*.md"
-  - "**/*database*.md"
+  - "**/*api*.md"
+  - "**/*component*.md"
 ---
+
 # Documentation Maintenance Guidelines
 
-When making changes to requirements, design, database schema, architecture, or any system components, you **must** update the related documentation to keep it synchronized with the codebase.
+When making changes to requirements, design, database schema, architecture, components, services, or any system components, you **must** update the related documentation to keep it synchronized with the codebase.
 
 ## Required Updates Checklist
 
 When modifying any of the following, update the corresponding documentation:
 
-### Requirements & Design Changes
-- [ ] **Architecture Documents** (`project-dashboard/doc/02_ARCHITECTURE.md`)
+### Architecture & Design Changes
+- [ ] **Architecture Documents** (e.g., `doc/ARCHITECTURE.md`)
   - Update component descriptions
   - Update data flow descriptions
-  - Update system interactions
+  - Update service interactions
+  - Update routing structure
+  - Update state management approach
 
-- [ ] **Class Design Documents** (`project-dashboard/doc/09_CLASS_DESIGNS.md`)
-  - Update class responsibilities
-  - Update method signatures
-  - Update properties and signals
-  - Update dependencies
-
-- [ ] **System Components Reference** (`project-dashboard/doc/29_SYSTEM_COMPONENTS.md`)
+- [ ] **Component Documentation** (e.g., `doc/COMPONENTS.md` or `components/README.md`)
   - Update component inventory when adding/removing components
-  - Update component interaction diagram (`29_SYSTEM_COMPONENTS.mmd`)
-  - Regenerate SVG: `npx @mermaid-js/mermaid-cli -i doc/29_SYSTEM_COMPONENTS.mmd -o doc/29_SYSTEM_COMPONENTS.svg`
-  - Update component count summary
-  - Ensure alignment with architecture and class design docs
+  - Update component props and interfaces
+  - Update component responsibilities
+  - Update component dependencies
+  - Update component interaction diagrams
 
-- [ ] **Thread Model** (`project-dashboard/doc/12_THREAD_MODEL.md`)
-  - Update service-to-thread mapping when adding/removing components
-  - Update thread topology diagram (`12_THREAD_MODEL.mmd`)
-  - Regenerate SVG: `npx @mermaid-js/mermaid-cli -i doc/12_THREAD_MODEL.mmd -o doc/12_THREAD_MODEL.svg`
-  - Update component count per thread
-  - Ensure all 98 components are accounted for
+- [ ] **Service Documentation** (e.g., `doc/SERVICES.md` or `services/README.md`)
+  - Update service responsibilities
+  - Update service method signatures
+  - Update API endpoints (if applicable)
+  - Update data flow between services
+  - Update error handling patterns
 
-- [ ] **Database Design** (`project-dashboard/doc/10_DATABASE_DESIGN.md`)
-  - Update table schemas (DDL)
-  - Update indices
-  - Update relationships
-  - Update retention/archival policies
+- [ ] **Type Definitions Documentation** (`types.ts` or `doc/TYPES.md`)
+  - Document new TypeScript interfaces/types
+  - Update existing type definitions
+  - Document type relationships
+  - Update type usage examples
 
-- [ ] **Interface Documentation** (`project-dashboard/doc/interfaces/*.md`)
-  - Update interface methods
-  - Update responsibilities
-  - Update error semantics
-  - Update example code paths
+### Data & Database Changes
+- [ ] **Database/Data Design** (if applicable, e.g., `doc/DATABASE_DESIGN.md` or `doc/DATA_STRUCTURE.md`)
+  - Update data models/schemas
+  - Update relationships between entities
+  - Update data validation rules
+  - Update data flow descriptions
+  - Document API response structures
 
-- [ ] **Definitions** (`project-dashboard/doc/08_DEFINITIONS.md`)
-  - Add new terms
-  - Update existing definitions
-  - Ensure alphabetical organization
+- [ ] **API Documentation** (if applicable, e.g., `doc/API.md` or `doc/ENDPOINTS.md`)
+  - Update API endpoint specifications
+  - Update request/response formats
+  - Update authentication requirements
+  - Update error codes and messages
+  - Update example requests/responses
+
+### UI/UX Changes
+- [ ] **UI/UX Guide** (e.g., `doc/UI_UX_GUIDE.md`)
+  - Update component specifications
+  - Update interaction patterns
+  - Update layout descriptions
+  - Update accessibility features
+  - Update responsive design patterns
+  - Update design system (colors, typography, spacing)
+
+- [ ] **Component Story Documentation** (if using Storybook or similar)
+  - Update component stories
+  - Update component variants
+  - Update component examples
+
+### Routing & Navigation
+- [ ] **Routing Documentation** (e.g., `doc/ROUTING.md` or in `ARCHITECTURE.md`)
+  - Update route definitions
+  - Update route guards and protection
+  - Update navigation patterns
+  - Update route parameters
+
+### Configuration & Environment
+- [ ] **Configuration Documentation** (e.g., `doc/CONFIGURATION.md` or update `README.md`)
+  - Update environment variables
+  - Update configuration options
+  - Update setup instructions
+  - Update deployment configurations
+
+- [ ] **Constants Documentation** (e.g., in `constants.tsx` or `doc/CONSTANTS.md`)
+  - Document new constants
+  - Update constant usage
+  - Document constant relationships
+
+### Security & Authentication
+- [ ] **Security Documentation** (e.g., `doc/SECURITY.md`)
+  - Update security architecture
+  - Update authentication mechanisms
+  - Update authorization rules
+  - Update data protection measures
+  - Update security best practices
+
+### Testing
+- [ ] **Testing Documentation** (e.g., `doc/TESTING.md` or `tests/README.md`)
+  - Update test structure
+  - Update test patterns
+  - Update test coverage requirements
+  - Update testing guidelines
 
 ### Diagram Updates
-- [ ] **Mermaid Diagrams** (`project-dashboard/doc/**/*.mmd`)
+- [ ] **Mermaid Diagrams** (`doc/**/*.mmd` or `**/*.mmd`)
   - Update sequence diagrams for workflow changes
-  - Update class diagrams for new classes/methods
-  - Update architecture diagrams for component changes
-  - **Regenerate SVG files** after editing MMD files (see `mermaid_guidelines.mdc`)
+  - Update component diagrams for new components
+  - Update architecture diagrams for system changes
+  - Update data flow diagrams
+  - **Regenerate SVG files** after editing MMD files:
+    ```bash
+    npx @mermaid-js/mermaid-cli -i <path/to/diagram>.mmd -o <path/to/diagram>.svg
+    ```
 
-- [ ] **Architecture Diagrams** (`project-dashboard/doc/02_ARCHITECTURE.mmd`)
+- [ ] **Architecture Diagrams** (e.g., `doc/ARCHITECTURE.mmd`)
   - Update component relationships
-  - Add new components
+  - Add new components/services
   - Update data flow
+  - Update user flow diagrams
 
 ### Task Tracking
-- [ ] **ZTODO.md**
+- [ ] **Task Files** (`*.task` files)
   - Add new tasks for new features
   - Update existing tasks with implementation details
   - Mark completed tasks
   - Add notes about design decisions
   - Reference related documentation
+  - Link tasks to related code changes
 
-### Security & Configuration
-- [ ] **Security Documentation** (`project-dashboard/doc/06_SECURITY.md`)
-  - Update security architecture
-  - Update authentication mechanisms
-  - Update certificate management
-  - Update encryption details
-
-- [ ] **Setup Guides** (`project-dashboard/doc/07_SETUP_GUIDE.md`)
+### Setup & Deployment
+- [ ] **Setup Guides** (`README.md` or `doc/SETUP.md`)
   - Update build instructions
+  - Update installation steps
   - Update configuration steps
   - Update prerequisites
+  - Update development workflow
 
-### UI/UX Changes
-- [ ] **UI/UX Guide** (`project-dashboard/doc/03_UI_UX_GUIDE.md`)
-  - Update component specifications
-  - Update interaction patterns
-  - Update layout descriptions
+- [ ] **Deployment Documentation** (e.g., `doc/DEPLOYMENT.md`)
+  - Update deployment steps
+  - Update environment setup
+  - Update build processes
+  - Update CI/CD configurations
+
+### Definitions & Glossary
+- [ ] **Definitions/Glossary** (e.g., `doc/DEFINITIONS.md` or `doc/GLOSSARY.md`)
+  - Add new terms
+  - Update existing definitions
+  - Ensure alphabetical organization
+  - Update domain-specific terminology (nail salon terms)
 
 ## Common Change Scenarios
 
-### Adding a New Feature
-1. Update architecture document with new component
-2. Update class designs with new classes
-3. Update database design if new tables/columns needed
-4. Update interface documentation if new interfaces
-5. Update definitions with new terms
-6. Add tasks to ZTODO.md
-7. Update/create diagrams (MMD + SVG)
-8. Update UI/UX guide if UI changes
+### Adding a New React Component
 
-### Modifying Database Schema
-1. Update `10_DATABASE_DESIGN.md` with new DDL
-2. Update class designs if DatabaseManager changes
-3. Add migration notes
-4. Update ZTODO.md with migration tasks
-5. Update architecture if schema affects data flow
+1. **Create component file** with proper structure
+2. **Update component documentation**:
+   - Add to component inventory
+   - Document props interface
+   - Document component purpose and usage
+   - Add component to architecture diagram
+3. **Update TypeScript types** if new types are needed
+4. **Update routing** if component is a page/route
+5. **Update UI/UX guide** if component affects user experience
+6. **Add tasks** to `.task` files for related work
+7. **Update/create diagrams** (MMD + SVG) if component affects architecture
+8. **Update README** if component is significant
+
+### Adding a New Service
+
+1. **Create service file** with proper structure
+2. **Update service documentation**:
+   - Document service purpose and responsibilities
+   - Document public methods and signatures
+   - Document data flow
+   - Add service to architecture diagram
+3. **Update TypeScript types** if new interfaces are needed
+4. **Update API documentation** if service exposes API endpoints
+5. **Update component documentation** if components use the service
+6. **Add tasks** to `.task` files for related work
+7. **Update data flow diagrams** if service affects data architecture
+
+### Modifying TypeScript Types/Interfaces
+
+1. **Update type definition** in `types.ts` or appropriate file
+2. **Update type documentation**:
+   - Document new fields/properties
+   - Update type relationships
+   - Update usage examples
+3. **Update component documentation** if types affect component props
+4. **Update service documentation** if types affect service interfaces
+5. **Update API documentation** if types affect API contracts
+6. **Check for breaking changes** and document migration path if needed
+
+### Adding a New Route/Page
+
+1. **Create page component**
+2. **Add route** in `App.tsx` or routing configuration
+3. **Update routing documentation**:
+   - Document route path and parameters
+   - Document route guards if applicable
+   - Update navigation patterns
+4. **Update UI/UX guide** if page affects user experience
+5. **Update architecture** if route requires new services or data
+6. **Update task files** for related work
+
+### Modifying Data Structure/API
+
+1. **Update data models** in `types.ts`
+2. **Update service methods** that handle the data
+3. **Update API documentation** if backend API changes
+4. **Update component documentation** if components use the data
+5. **Update data flow diagrams**
+6. **Document migration path** if breaking changes
+7. **Update task files** for migration work
 
 ### Adding Configuration Options
-1. Update `SettingsManager` in class designs
-2. Update `SettingsController` in class designs
-3. Update database design (settings table)
-4. Update UI/UX guide (Settings View section)
-5. Update definitions with new setting terms
-6. Update ZTODO.md with implementation tasks
 
-### Changing Security Architecture
-1. Update `06_SECURITY.md` comprehensively
-2. Update interface documentation (ITelemetryServer, etc.)
-3. Update class designs (NetworkManager, CertificateManager)
-4. Update database design (certificates, security_audit_log tables)
-5. Update certificate provisioning guide if needed
-6. Update diagrams for security workflows
-7. Update ZTODO.md with security implementation tasks
+1. **Add configuration** to `constants.tsx` or environment variables
+2. **Update configuration documentation**:
+   - Document new configuration options
+   - Document default values
+   - Document how to set/override values
+3. **Update setup guide** if configuration affects setup
+4. **Update README** if configuration is important for users
+5. **Update deployment docs** if configuration affects deployment
 
-### Adding New Interfaces
-1. Create interface documentation in `doc/interfaces/`
-2. Update architecture document
-3. Update class designs (implementations)
-4. Update ZTODO.md interface definition tasks
-5. Add to interface list in relevant docs
+### Changing Security/Authentication
+
+1. **Update security implementation**
+2. **Update security documentation** comprehensively:
+   - Document authentication flow
+   - Document authorization rules
+   - Document security measures
+   - Update security best practices
+3. **Update service documentation** if services handle auth
+4. **Update API documentation** if API authentication changes
+5. **Update component documentation** if components handle auth
+6. **Update diagrams** for authentication workflows
+7. **Update task files** for security implementation tasks
+
+### Adding New Features
+
+1. **Plan feature implementation**
+2. **Update architecture document** with new components/services
+3. **Create/update component documentation** for new UI
+4. **Create/update service documentation** for new logic
+5. **Update type definitions** for new data structures
+6. **Update UI/UX guide** if feature affects user experience
+7. **Add tasks** to `.task` files
+8. **Update/create diagrams** (MMD + SVG)
+9. **Update README** if feature is significant
+
+### Refactoring Code
+
+1. **Refactor code** following project guidelines
+2. **Update documentation** to reflect refactored structure:
+   - Update component/service documentation if structure changes
+   - Update architecture if refactoring affects system design
+   - Update diagrams if relationships change
+3. **Update examples** if refactoring changes usage patterns
+4. **Document reasons** for refactoring in task files or commit messages
 
 ## Diagram Maintenance
 
 When updating Mermaid diagrams:
-1. Edit the `.mmd` file
-2. Regenerate the `.svg` file using:
+
+1. **Edit the `.mmd` file** with your changes
+2. **Regenerate the `.svg` file** using:
    ```bash
    npx @mermaid-js/mermaid-cli -i <path/to/diagram>.mmd -o <path/to/diagram>.svg
    ```
-3. Commit both `.mmd` and `.svg` files
-4. Verify SVG renders correctly (no syntax errors)
+3. **Commit both `.mmd` and `.svg` files** together
+4. **Verify SVG renders correctly** (no syntax errors in preview)
 
-See `mermaid_guidelines.mdc` for detailed Mermaid diagram guidelines.
+Common diagram types for web projects:
+- **Component diagrams**: Show React component hierarchy and relationships
+- **Sequence diagrams**: Show user flows and data flows
+- **Architecture diagrams**: Show system architecture and service interactions
+- **Data flow diagrams**: Show how data moves through the application
+- **State diagrams**: Show application state management (if using state management library)
 
 ## Documentation Cross-References
 
 Ensure documentation cross-references are updated:
-- Links between related documents
-- References to diagrams (both MMD and SVG)
-- References to interface documentation
-- References to ZTODO.md tasks
-- References to code files/paths
+
+- **Links between related documents**: Use relative markdown links
+- **References to diagrams**: Link to both MMD and SVG files when helpful
+- **References to code files**: Use markdown links to actual code files (e.g., `[BookingFlow.tsx](../components/BookingFlow.tsx)`)
+- **References to task files**: Link to relevant `.task` files
+- **References to components**: Link to component files and documentation
+- **References to services**: Link to service files and API documentation
+- **Anchor links**: Link to specific sections within documents using `#section-name`
 
 ## Review Checklist
 
 Before marking documentation updates complete:
+
 - [ ] All related documents updated
-- [ ] Diagrams regenerated (MMD → SVG)
-- [ ] ZTODO.md tasks added/updated
-- [ ] Cross-references verified
-- [ ] Definitions updated
-- [ ] No broken links
+- [ ] Diagrams regenerated (MMD → SVG) if diagrams were modified
+- [ ] Task files (`.task`) added/updated
+- [ ] Cross-references verified and working
+- [ ] Type definitions documented
+- [ ] Component/service documentation updated
+- [ ] No broken links (verify all markdown links resolve)
 - [ ] Consistent terminology across all docs
+- [ ] Code examples are accurate and tested
+- [ ] README updated if changes affect setup or usage
 
 ## Best Practices
 
 1. **Update documentation as you code** - Don't leave it for later
-2. **Keep diagrams synchronized** - Update MMD files and regenerate SVGs
-3. **Use consistent terminology** - Check definitions document
-4. **Reference related docs** - Link to related sections
-5. **Update ZTODO.md proactively** - Add tasks before implementation
+   - Document components as you create them
+   - Document services as you implement them
+   - Document types as you define them
+
+2. **Keep diagrams synchronized** - Update MMD files and regenerate SVGs when architecture changes
+
+3. **Use consistent terminology** - Check definitions/glossary document and project conventions
+
+4. **Reference related docs** - Link to related sections and files
+
+5. **Update task files proactively** - Add tasks before implementation, update as you work
+
 6. **Verify diagram syntax** - Always regenerate SVG to catch errors
-7. **Review cross-references** - Ensure links still work after changes
+
+7. **Review cross-references** - Ensure links still work after moving or renaming files
+
+8. **Keep examples up to date** - Code examples in documentation should match actual code
+
+9. **Document decisions** - Record why design decisions were made in relevant docs
+
+10. **Keep it simple** - Documentation should be clear and concise, not exhaustive
+
+## Documentation Structure Recommendations
+
+### Suggested Documentation Organization
+
+```
+/
+├── README.md                    # Main project README
+├── doc/                         # Documentation directory
+│   ├── ARCHITECTURE.md          # System architecture overview
+│   ├── COMPONENTS.md            # Component documentation
+│   ├── SERVICES.md              # Service layer documentation
+│   ├── API.md                   # API documentation (if applicable)
+│   ├── ROUTING.md               # Routing and navigation
+│   ├── UI_UX_GUIDE.md           # UI/UX guidelines and patterns
+│   ├── SECURITY.md              # Security documentation
+│   ├── TESTING.md               # Testing guidelines
+│   ├── DEPLOYMENT.md            # Deployment instructions
+│   ├── CONFIGURATION.md         # Configuration guide
+│   ├── DEFINITIONS.md           # Glossary and definitions
+│   ├── SETUP.md                 # Setup and development guide
+│   └── diagrams/                # Diagram files
+│       ├── architecture.mmd
+│       ├── architecture.svg
+│       ├── component-hierarchy.mmd
+│       └── component-hierarchy.svg
+├── components/                  # Component source files
+│   └── README.md                # Component-specific docs (optional)
+├── services/                    # Service source files
+│   └── README.md                # Service-specific docs (optional)
+└── *.task                       # Task files
+```
+
+### README.md Structure
+
+The main `README.md` should include:
+- Project overview and description
+- Quick start guide
+- Prerequisites
+- Installation instructions
+- Development workflow
+- Available scripts
+- Project structure overview
+- Links to detailed documentation
 
 ## Related Guidelines
 
-- `mermaid_guidelines.mdc` - Mermaid diagram creation and maintenance
-- `quality_checklist.mdc` - Quality standards for documentation
-- `maintenance_notes.mdc` - General maintenance procedures
+- [Markdown Guidelines](.cursor/rules/md_guidelines.mdc) - Markdown formatting standards
+- [Task Guidelines](.cursor/rules/task_guidelines.mdc) - Task documentation standards
+- [Project Rules](.cursor/rules/rules.mdc) - Project coding standards and conventions
+- [Docker Guidelines](.cursor/rules/docker_guidelines.mdc) - Docker-related documentation
 
-# Maintenance Notes
+## Maintenance Notes
 
-- Keep `table_of_contents.md` in sync with lesson changes.
-- Rebuild base images when Qt dependencies update:
-  - `docker build --target qt-dev-env -t qtapp-qt-dev-env:latest .`
-  - `docker build --target qt-runtime -t qtapp-qt-runtime:latest .`
-- Regularly test lesson builds to ensure compatibility.
-- Document deviations from standard patterns in the lesson README.
-- When editing Mermaid diagrams (`*.mmd`), render to SVG and verify there are no parser errors:
-  ```bash
-  npx @mermaid-js/mermaid-cli -i doc/12_THREAD_MODEL.mmd -o doc/12_THREAD_MODEL.svg
-  ```
+### Regular Maintenance Tasks
+
+- **Review documentation quarterly**: Ensure documentation stays current with codebase
+- **Update diagrams**: Regenerate diagrams when architecture changes significantly
+- **Check broken links**: Periodically verify all markdown links resolve correctly
+- **Update examples**: Keep code examples in sync with actual code
+- **Review terminology**: Ensure consistent use of domain-specific terms
+
+### When Creating New Documentation
+
+1. **Choose appropriate location**: Use `doc/` for general docs, or component/service directories for specific docs
+2. **Follow naming conventions**: Use UPPERCASE for main docs (e.g., `ARCHITECTURE.md`)
+3. **Include frontmatter** (optional): Add metadata if using documentation tools
+4. **Link from README**: Add new documentation to main README or table of contents
+5. **Cross-reference**: Link to related documentation
+
+### Diagram Best Practices
+
+- **Keep diagrams simple**: Focus on key relationships and flows
+- **Use consistent styling**: Follow Mermaid best practices
+- **Regenerate regularly**: Always regenerate SVG after editing MMD
+- **Version control**: Commit both MMD and SVG files
+- **Review rendered output**: Verify diagrams render correctly in documentation viewers
+
+---
+
+**Remember:** Good documentation is a living part of your codebase. Keep it updated, accurate, and helpful. Documentation that's out of sync with the code is worse than no documentation at all.

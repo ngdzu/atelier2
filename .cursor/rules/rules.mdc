@@ -1,178 +1,421 @@
 ---
 alwaysApply: true
 ---
-# ZTODO Task Execution Workflow
 
-## When User Says "Do the Next Task" or "Perform the Next Task"
+# Nail Salon Website - Project Rules & Guidelines
 
-Follow this exact workflow:
+## Project Overview
 
-### Step 1: Find the Next Uncompleted Task
+This is a React + TypeScript website for a nail salon business (LuxeNail) built with Vite. The application includes both public-facing pages (landing, gallery, booking) and admin dashboard features (calendar, customer management, analytics, marketing).
 
-1. **Read `project-dashboard/ZTODO.md`** and find the first task marked with `- [ ]` (unchecked checkbox)
-2. **Skip tasks marked with `- [x]`** (completed tasks)
-3. **Respect task ordering:**
-   - "Sequential Tasks" must be done in order
-   - "Parallel Tasks" can be done concurrently
-   - Check for dependencies mentioned in task descriptions
+## Project Structure
 
-### Step 2: Understand the Task
-
-1. **Read the complete task description**, including:
-   - **What:** What needs to be implemented
-   - **Why:** Rationale and requirements
-   - **Files:** All files that need to be created/modified
-   - **Acceptance:** Acceptance criteria
-   - **Verification Steps:** All verification requirements (5 categories: Functional, Code Quality, Documentation, Integration, Tests)
-   - **Dependencies:** Any prerequisites
-   - **Documentation:** Related documentation files to read
-
-2. **Read related documentation** mentioned in the task:
-   - Design documents (e.g., `doc/33_SCHEMA_MANAGEMENT.md`)
-   - Architecture documents (e.g., `doc/02_ARCHITECTURE.md`)
-   - Interface documentation (e.g., `doc/interfaces/*.md`)
-   - Any other referenced docs
-
-3. **Read related code files** to understand context:
-   - Existing implementations mentioned in the task
-   - Similar patterns in the codebase
-   - Dependencies and interfaces
-
-### Step 3: Execute the Task
-
-1. **Implement all requirements** from the "What" section
-2. **Follow all coding guidelines:**
-   - Doxygen comments for all public APIs (see `api_documentation.mdc`)
-   - No hardcoded values (see `cpp_guidelines.mdc` - Constants and Magic Numbers section)
-   - Error handling with `Result<T, Error>` (see `cpp_guidelines.mdc`)
-   - DDD layer separation (domain, application, infrastructure, interface)
-   - Code style guidelines (see `cpp_guidelines.mdc`)
-
-3. **Complete all subtasks** if the task has sub-items:
-   - Check off each subtask as you complete it: `- [x]`
-   - Don't mark the main task complete until ALL subtasks are done
-
-4. **Update related files** mentioned in the "Files" section:
-   - Create new files if needed
-   - Modify existing files
-   - Update CMakeLists.txt if adding new sources
-   - Update documentation if required
-
-### Step 4: Perform Verification (CRITICAL)
-
-**⚠️ NEVER mark a task complete without performing ALL verification steps.**
-
-Follow the verification workflow from `ztodo_verification.mdc`. For each verification step:
-
-1. **Functional Verification:**
-   - Test that the feature works as specified
-   - Verify all requirements from "Why" section are met
-   - Handle edge cases and error conditions
-   - Update status: `**Status:** ✅ Verified - [details]`
-
-2. **Code Quality Verification:**
-   - Run linter checks (`clang-format`, `clang-tidy`)
-   - Check for compiler warnings
-   - Verify Doxygen comments are present
-   - Ensure no hardcoded values (grep verification)
-   - Update status: `**Status:** ✅ Verified - [details]`
-
-3. **Documentation Verification:**
-   - Update all related design documents
-   - Update architecture diagrams if needed
-   - Regenerate Mermaid diagrams (MMD → SVG) if modified
-   - Update cross-references
-   - Update status: `**Status:** ✅ Verified - [details]`
-
-4. **Integration Verification:**
-   - Verify code builds successfully
-   - Check that all tests pass
-   - Verify CI/CD integration (if applicable)
-   - Ensure no breaking changes (unless intentional)
-   - Update status: `**Status:** ✅ Verified - [details]`
-
-5. **Test Verification:**
-   - Write unit tests if required
-   - Write integration tests if required
-   - Verify test coverage meets requirements
-   - Update status: `**Status:** ✅ Verified - [details]`
-
-### Step 5: Update ZTODO.md
-
-1. **Update verification step statuses** in the task:
-   - Change `**Status:** ⏳` to `**Status:** ✅ Verified - [details]`
-   - Add specific verification results for each step
-
-2. **Mark subtasks complete** as you finish them:
-   - Change `- [ ]` to `- [x]` for completed subtasks
-
-3. **Mark main task complete** ONLY when:
-   - All subtasks are complete (`- [x]`)
-   - All 5 verification steps are verified (`**Status:** ✅ Verified`)
-   - All acceptance criteria are met
-   - All related documentation is updated
-
-4. **Update task status** in ZTODO.md:
-   - Change `- [ ]` to `- [x]` for the main task
-   - Add completion note if needed
-
-### Step 6: Report Completion
-
-Provide a summary of:
-- What was implemented
-- What was verified
-- Any issues encountered
-- Next steps or follow-up tasks
-
-## Example Workflow
+### Directory Organization
 
 ```
-User: "Do the next task"
-
-1. Read ZTODO.md → Find first `- [ ]` task
-2. Read task description → Understand requirements
-3. Read related docs → Understand context
-4. Implement → Create/modify files
-5. Verify → Run all 5 verification steps
-6. Update ZTODO.md → Mark complete with verification status
-7. Report → Summarize completion
+/
+├── components/          # React components organized by feature/page
+│   ├── AboutPage.tsx
+│   ├── AppointmentCalendar.tsx
+│   ├── BookingFlow.tsx
+│   ├── Footer.tsx
+│   ├── GalleryPage.tsx
+│   ├── Header.tsx
+│   ├── LandingPage.tsx
+│   ├── Layout.tsx
+│   ├── MarketingCenter.tsx
+│   ├── PerformanceDashboard.tsx
+│   └── ScrollToTop.tsx
+├── services/           # Business logic and data access layer
+│   ├── dataService.ts
+│   └── geminiService.ts
+├── types.ts           # TypeScript type definitions
+├── constants.tsx      # Application constants and configuration
+├── App.tsx           # Root component and routing
+└── index.tsx         # Application entry point
 ```
 
-## Important Rules
+### Naming Conventions
 
-- **Never skip verification** - It's required, not optional
-- **Never mark complete without verification** - All 5 steps must be verified
-- **Read related docs first** - Understanding context prevents mistakes
-- **Follow DDD principles** - Respect layer boundaries
-- **Document as you code** - Doxygen comments are required
-- **No hardcoded values** - Use constants or configuration
-- **Error handling** - Use `Result<T, Error>` for operations that can fail
-- **Never stop working on the task until it is done** - Complete all subtasks and verification steps before moving on
-- **⚠️ Loop Detection and Safety Stop:** If you detect that you are repeatedly doing the same action or making the same attempt without progress, **stop after 10 repetitions** and provide a summary:
-  - **What has been done:** List all completed steps, files created/modified, and progress made
-  - **What is getting stuck:** Identify the specific issue, error, or blocker preventing progress
-  - **Why it's stuck:** Explain the root cause (e.g., missing dependency, configuration issue, unclear requirement)
-  - **Next steps needed:** Suggest what needs to happen to unblock progress (user input, clarification, dependency resolution, etc.) 
+- **Files & Components**: Use PascalCase for React components (e.g., `BookingFlow.tsx`, `AppointmentCalendar.tsx`)
+- **Services**: Use camelCase with descriptive names ending in `Service` (e.g., `dataService.ts`, `geminiService.ts`)
+- **Types/Interfaces**: Use PascalCase, interfaces prefixed with `I` only when representing abstractions (e.g., `IDataProvider`, but `User`, `Customer`, `Service`)
+- **Constants**: Use UPPER_SNAKE_CASE for exported constants (e.g., `STORE_NAME`, `PHONE_NUMBER`)
+- **Variables/Functions**: Use camelCase (e.g., `handleBookingComplete`, `userRole`)
 
-## Related Rules
+## TypeScript Guidelines
 
-The detailed rules have been split into topic-specific files to reduce token usage. Each file in `.cursor/rules/` with the `alwaysApply` front-matter is loaded automatically. Refer to:
+### Type Safety
 
-### Core Guidelines
-- `cpp_guidelines.mdc` - C++ coding standards, error handling, constants, and best practices
-- `api_documentation.mdc` - Doxygen documentation requirements for all public APIs
-- `qml_guidelines.mdc` - QML coding standards and best practices
-- `md_guidelines.mdc` - Markdown documentation standards and formatting
+- **Always use TypeScript types**: Avoid `any` types. Use `unknown` if the type is truly unknown and needs runtime checks.
+- **Define interfaces for complex objects**: All domain models should have TypeScript interfaces (e.g., `User`, `Service`, `Appointment`)
+- **Use union types for enums**: Prefer union types over enums for better tree-shaking (e.g., `type Role = 'ADMIN' | 'OWNER' | 'EMPLOYEE' | 'CUSTOMER'`)
+- **Type props explicitly**: All component props must have explicit types via interfaces or inline types
+- **Return types**: Explicitly type function return types, especially for async functions: `async function getServices(): Promise<Service[]>`
 
-### Workflow and Process
-- `ztodo_verification.mdc` - Complete verification workflow (CRITICAL) - Required for all ZTODO tasks
-- `documentation_guidelines.mdc` - Documentation creation and maintenance standards
-- `mermaid_guidelines.mdc` - Diagram creation guidelines (Mermaid syntax and best practices)
+### Type Organization
 
-### Project-Specific
-- `lesson_guidelines.mdc` - Lesson file requirements, structure, and quality standards
-- `common_patterns.mdc` - Common Qt/C++ patterns (GUI, console, CMake templates)
-- `docker_guidelines.mdc` - Docker build patterns, multi-stage builds, and best practices
+- Keep all shared types in `types.ts`
+- Group related types together
+- Export types that are used across multiple files
+- Use type aliases for complex repeated types
 
-### Note on Constants and Hardcoded Values
-The "No Hardcoded Values" rule is covered in `cpp_guidelines.mdc` (Section 4: Constants and Magic Numbers). Always use constants, configuration, or constants files instead of hardcoded strings, numbers, or paths in production code.
+## React Component Guidelines
+
+### Component Structure
+
+1. **Functional Components Only**: Use function components with hooks, never class components
+2. **Component Organization**:
+   ```typescript
+   // 1. Imports (React, third-party, local)
+   import React, { useState, useEffect } from 'react';
+   import { Link } from 'react-router-dom';
+   import { dataService } from '../services/dataService';
+   
+   // 2. Types/Interfaces (if component-specific)
+   interface ComponentProps {
+     id: string;
+     onComplete: (data: SomeType) => void;
+   }
+   
+   // 3. Component
+   const Component: React.FC<ComponentProps> = ({ id, onComplete }) => {
+     // 4. Hooks (useState, useEffect, custom hooks)
+     const [state, setState] = useState<string>('');
+     
+     // 5. Event handlers
+     const handleClick = () => { /* ... */ };
+     
+     // 6. Effects
+     useEffect(() => { /* ... */ }, []);
+     
+     // 7. Render
+     return <div>...</div>;
+   };
+   
+   export default Component;
+   ```
+
+### Hooks Best Practices
+
+- **Dependency Arrays**: Always include all dependencies in `useEffect`, `useCallback`, `useMemo` dependency arrays
+- **Custom Hooks**: Extract reusable logic into custom hooks (prefixed with `use`, e.g., `useBooking`, `useAppointments`)
+- **State Management**: Use `useState` for local component state, lift state up when shared across siblings
+- **Effect Cleanup**: Always clean up subscriptions, timers, and event listeners in `useEffect` cleanup functions
+
+### Props & State
+
+- **Props Interface**: Always define explicit prop interfaces/types
+- **Default Props**: Use default parameters in function signatures: `const Component = ({ title = 'Default' }: Props) => {}`
+- **State Initialization**: Initialize state with proper types, avoid `null` when possible
+- **Immutable Updates**: Always create new objects/arrays when updating state: `setItems([...items, newItem])`
+
+## Service Layer Pattern
+
+### Data Services
+
+- **Abstraction**: Use interfaces for data providers (e.g., `IDataProvider`) to allow swapping implementations
+- **Async Operations**: All data operations should be async and return Promises
+- **Error Handling**: Services should handle errors appropriately and throw meaningful errors
+- **Single Responsibility**: Each service should handle one domain (e.g., `dataService` for CRUD, `geminiService` for AI)
+
+Example:
+```typescript
+export interface IDataProvider {
+  getServices(): Promise<Service[]>;
+  getEmployees(): Promise<Employee[]>;
+  addAppointment(appointment: Partial<Appointment>): Promise<Appointment>;
+}
+
+export const dataService: IDataProvider = {
+  async getServices(): Promise<Service[]> {
+    // Implementation
+  }
+};
+```
+
+## Styling Guidelines (Tailwind CSS)
+
+### Class Organization
+
+- **Order**: Group Tailwind classes logically (layout, spacing, typography, colors, effects)
+- **Responsive Design**: Always consider mobile-first approach with Tailwind responsive prefixes
+- **Custom Colors**: Use the defined color constants from `constants.tsx` via Tailwind config or inline styles
+- **Consistency**: Maintain consistent spacing using Tailwind's spacing scale (4, 8, 12, 16, etc.)
+
+### Design System
+
+- **Colors**: Use the defined color palette from `constants.tsx` (primary, secondary, accent, background, surface)
+- **Typography**: Use consistent font families and sizes throughout
+- **Spacing**: Use Tailwind spacing utilities consistently (p-4, m-8, gap-4, etc.)
+- **Borders & Shadows**: Use consistent border and shadow utilities
+
+## Code Quality Standards
+
+### Code Style
+
+- **Formatting**: Use Prettier (or similar) for consistent formatting
+- **ESLint**: Follow React and TypeScript ESLint rules
+- **Line Length**: Keep lines under 100 characters when possible
+- **Imports**: Organize imports: React → third-party → local (alphabetically within groups)
+
+### Error Handling
+
+- **Try-Catch**: Wrap async operations in try-catch blocks
+- **Error Messages**: Provide meaningful error messages to users
+- **Error Boundaries**: Use React Error Boundaries for component-level error handling
+- **Loading States**: Always handle loading states during async operations
+- **Validation**: Validate user input before submission
+
+### Performance
+
+- **Code Splitting**: Use React.lazy() for route-based code splitting
+- **Memoization**: Use `React.memo`, `useMemo`, `useCallback` judiciously (only when needed)
+- **Image Optimization**: Optimize images, use appropriate formats (WebP, AVIF)
+- **Bundle Size**: Monitor bundle size, avoid unnecessary dependencies
+- **Re-renders**: Minimize unnecessary re-renders by properly managing dependencies
+
+## State Management
+
+### Local State
+
+- Use `useState` for component-local state
+- Lift state up to the nearest common ancestor when shared between components
+
+### Global State (if needed)
+
+- Consider Context API for simple global state (user auth, theme)
+- For complex state, consider state management libraries (Zustand, Redux Toolkit) only if needed
+- Avoid prop drilling - use Context or state management if passing props through many levels
+
+## Routing (React Router)
+
+- **Route Organization**: Organize routes logically in `App.tsx`
+- **Public vs Protected**: Separate public routes from protected/admin routes
+- **Route Guards**: Implement route guards for protected routes based on user roles
+- **404 Handling**: Include a catch-all route that redirects to a 404 page or landing page
+
+## Constants & Configuration
+
+### Constants File (`constants.tsx`)
+
+- **Store Information**: Business information (name, phone, email, address)
+- **Navigation**: Navigation links and menu items
+- **Data**: Static data (services, employees, mock data) if not from API
+- **Configuration**: App-wide configuration values
+- **Magic Numbers**: Never hardcode values - extract to constants
+
+## Testing (When Implemented)
+
+### Unit Tests
+
+- Test services and utility functions
+- Test component logic (not implementation details)
+- Aim for high code coverage on business logic
+
+### Integration Tests
+
+- Test user flows (booking flow, navigation)
+- Test API integration points
+- Test route navigation
+
+### Component Tests
+
+- Test component rendering
+- Test user interactions
+- Test prop variations
+
+## Security Best Practices
+
+### Data Security
+
+- **API Keys**: Never commit API keys to version control. Use environment variables (`.env.local`)
+- **Input Validation**: Validate and sanitize all user inputs
+- **XSS Prevention**: Use React's built-in XSS protection (don't use `dangerouslySetInnerHTML` without sanitization)
+- **Authentication**: Implement proper authentication for admin routes
+- **Authorization**: Check user roles before allowing actions
+
+### Environment Variables
+
+- Store sensitive data in `.env.local` (gitignored)
+- Prefix environment variables appropriately (e.g., `VITE_API_KEY`)
+- Document required environment variables in README
+
+## Accessibility (a11y)
+
+- **Semantic HTML**: Use semantic HTML elements (nav, main, section, article, etc.)
+- **ARIA Labels**: Add ARIA labels for screen readers where needed
+- **Keyboard Navigation**: Ensure all interactive elements are keyboard accessible
+- **Focus Management**: Manage focus appropriately (especially in modals and forms)
+- **Alt Text**: Always provide alt text for images
+- **Color Contrast**: Ensure sufficient color contrast for text readability
+
+## Documentation
+
+### Code Comments
+
+- **Complex Logic**: Comment complex algorithms or business logic
+- **Why, not What**: Focus comments on "why" rather than "what"
+- **JSDoc**: Use JSDoc comments for public APIs and complex functions
+- **TODO Comments**: Use TODO comments for known issues or future improvements
+
+### README
+
+- Keep README updated with setup instructions
+- Document required environment variables
+- Include development workflow instructions
+- Document deployment process
+
+## Git Workflow
+
+### Commit Messages
+
+- Use clear, descriptive commit messages
+- Follow conventional commits format: `type(scope): description`
+  - `feat`: New feature
+  - `fix`: Bug fix
+  - `docs`: Documentation changes
+  - `style`: Formatting, missing semicolons, etc.
+  - `refactor`: Code refactoring
+  - `test`: Adding or updating tests
+  - `chore`: Maintenance tasks
+
+### Branching
+
+- Use feature branches for new features
+- Keep main/master branch stable
+- Use descriptive branch names: `feature/booking-flow`, `fix/calendar-timezone`
+
+## Business Logic Specific to Nail Salon
+
+### Appointment Management
+
+- **Time Slots**: Respect service durations when scheduling
+- **Employee Availability**: Check employee availability before booking
+- **Service Combinations**: Handle service add-ons and combinations properly
+- **Points System**: Implement loyalty points system correctly (points earned, points price)
+
+### Service Data
+
+- **Service Types**: Distinguish between MAIN and ADDON service types
+- **Durations**: Service durations are in minutes
+- **Pricing**: Handle pricing calculations including add-ons
+- **Categories**: Organize services by category (Manicure, Pedicure, Waxing, etc.)
+
+### Customer Management
+
+- **Customer Data**: Maintain customer history, spending, and visit tracking
+- **Privacy**: Handle customer data according to privacy regulations
+- **Communication**: Support customer communication channels (email, phone)
+
+## Development Workflow
+
+### Before Committing
+
+1. Run linter and formatter
+2. Ensure TypeScript compiles without errors
+3. Test the changes manually
+4. Check for console errors/warnings
+5. Verify responsive design on multiple screen sizes
+
+### Before Deploying
+
+1. Run all tests
+2. Build production bundle successfully
+3. Test production build locally
+4. Verify environment variables are set correctly
+5. Check performance (lighthouse audit)
+6. Verify accessibility (a11y audit)
+
+## Common Patterns
+
+### Loading States
+
+```typescript
+const [loading, setLoading] = useState(true);
+const [data, setData] = useState<DataType[]>([]);
+
+useEffect(() => {
+  setLoading(true);
+  dataService.getData()
+    .then(setData)
+    .finally(() => setLoading(false));
+}, []);
+
+if (loading) return <LoadingSpinner />;
+return <DataDisplay data={data} />;
+```
+
+### Error Handling
+
+```typescript
+const [error, setError] = useState<string | null>(null);
+
+try {
+  const result = await dataService.addItem(item);
+  // Handle success
+} catch (err) {
+  setError(err instanceof Error ? err.message : 'An error occurred');
+}
+```
+
+### Form Handling
+
+```typescript
+const [formData, setFormData] = useState<FormData>(initialState);
+
+const handleChange = (field: keyof FormData) => (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  setFormData(prev => ({ ...prev, [field]: e.target.value }));
+};
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  // Validate and submit
+};
+```
+
+## Anti-Patterns to Avoid
+
+- ❌ **Don't** use `any` types
+- ❌ **Don't** mutate state directly
+- ❌ **Don't** put business logic in components (move to services)
+- ❌ **Don't** hardcode values (use constants)
+- ❌ **Don't** commit API keys or secrets
+- ❌ **Don't** ignore TypeScript errors
+- ❌ **Don't** create unnecessary re-renders
+- ❌ **Don't** mix concerns (keep components, services, types separate)
+- ❌ **Don't** ignore accessibility
+- ❌ **Don't** skip error handling
+
+## Tools & Dependencies
+
+### Required Tools
+
+- Node.js (LTS version)
+- npm or yarn
+- Git
+
+### Key Dependencies
+
+- React 19+
+- TypeScript 5.8+
+- React Router DOM 7+
+- Vite 6+
+- Tailwind CSS (via configuration)
+
+### Development Tools
+
+- ESLint (recommended)
+- Prettier (recommended)
+- TypeScript compiler for type checking
+
+## Questions & Clarifications
+
+When in doubt:
+1. Follow existing patterns in the codebase
+2. Prioritize type safety and error handling
+3. Keep code simple and readable
+4. Consider maintainability and scalability
+5. Think about the user experience

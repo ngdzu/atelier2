@@ -2,12 +2,14 @@
 appliesTo:
   - "**/*.md"
   - "**/*.mdx"
+  - "**/*.task"
 ---
+
 # Markdown Guidelines
 
 ## Overview
 
-This document defines the markdown coding standards and best practices for documentation in the Z Monitor project. These guidelines ensure consistent, readable, and maintainable documentation that renders correctly across different markdown processors.
+This document defines the markdown coding standards and best practices for documentation in the LuxeNail salon website project. These guidelines ensure consistent, readable, and maintainable documentation that renders correctly across different markdown processors.
 
 **Key Principles:**
 - **Valid Syntax** - All markdown must be valid and render correctly
@@ -70,8 +72,12 @@ This document defines the markdown coding standards and best practices for docum
 
 - **Always use fenced code blocks** with language identifiers:
   ```markdown
-  ```cpp
-  // Code here
+  ```typescript
+  // TypeScript code here
+  ```
+  
+  ```tsx
+  // React/TSX code here
   ```
   
   ```bash
@@ -79,7 +85,7 @@ This document defines the markdown coding standards and best practices for docum
   ```
   ```
 
-- **Language identifiers**: Use appropriate language tags (`cpp`, `bash`, `python`, `cmake`, `sql`, `qml`, `yaml`, `json`, etc.)
+- **Language identifiers**: Use appropriate language tags (`typescript`, `tsx`, `ts`, `javascript`, `jsx`, `js`, `json`, `yaml`, `yml`, `css`, `scss`, `html`, `bash`, `shell`, `sql`, etc.)
 
 ### Code Block Best Practices
 
@@ -87,32 +93,32 @@ This document defines the markdown coding standards and best practices for docum
   ```markdown
   # ❌ Bad: Comments in code block
   ```bash
-  docker build -t myapp .  # Build the image
-  docker run myapp  # Run the container
+  npm install  # Install dependencies
+  npm run dev  # Start dev server
   ```
   
   # ✅ Good: Explanatory text outside code block
-  Build the Docker image:
+  Install dependencies:
   
   ```bash
-  docker build -t myapp .
+  npm install
   ```
   
-  Then run the container:
+  Then start the development server:
   
   ```bash
-  docker run myapp
+  npm run dev
   ```
   ```
 
-- **Ensure code samples compile or type-check**: Verify code examples are correct
+- **Ensure code samples compile or type-check**: Verify code examples are correct TypeScript/React code
 - **Include context**: Add brief explanation before code blocks when needed
 - **Keep code blocks focused**: Show only relevant code, not entire files
 
 ### Inline Code
 
-- **Use backticks for inline code**: `` `variableName` ``, `` `function()` ``
-- **Use for**: File names, function names, variable names, commands, technical terms
+- **Use backticks for inline code**: `` `variableName` ``, `` `function()` ``, `` `Component` ``
+- **Use for**: File names, function names, variable names, component names, props, commands, technical terms, API endpoints
 - **Don't use for**: Emphasis (use `*italic*` or `**bold**` instead)
 
 ---
@@ -181,39 +187,42 @@ This document defines the markdown coding standards and best practices for docum
 - **Always use markdown links for file references** - Makes documents navigable
   ```markdown
   # ✅ Good: Markdown link
-  See [Sensor Integration Summary](../z-monitor/architecture_and_design/37_SENSOR_INTEGRATION.md) for details.
+  See [BookingFlow Component](../components/BookingFlow.tsx) for the booking implementation.
   
   # ❌ Bad: Plain text path
-  See doc/z-monitor/architecture_and_design/37_SENSOR_INTEGRATION.md for details.
+  See components/BookingFlow.tsx for the booking implementation.
   ```
 
 - **Use descriptive link text**: Link text should describe the destination
   ```markdown
   # ✅ Good: Descriptive link text
-  [Database Design Documentation](10_DATABASE_DESIGN.md)
+  [Booking Service Documentation](services/dataService.ts)
   
   # ❌ Bad: Generic link text
-  [Click here](10_DATABASE_DESIGN.md)
+  [Click here](services/dataService.ts)
   ```
 
 ### Link Types
 
 - **Internal links**: Use relative paths for files in the same repository
   ```markdown
-  [Architecture Overview](./02_ARCHITECTURE.md)
-  [Database Design](../architecture_and_design/10_DATABASE_DESIGN.md)
+  [App Component](./App.tsx)
+  [Booking Service](../services/dataService.ts)
+  [Types Definition](../types.ts)
   ```
 
 - **External links**: Use absolute URLs with descriptive text
   ```markdown
-  [Qt Documentation](https://doc.qt.io/qt-6/)
-  [C++ Reference](https://en.cppreference.com/)
+  [React Documentation](https://react.dev/)
+  [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+  [Vite Documentation](https://vitejs.dev/)
+  [Tailwind CSS](https://tailwindcss.com/)
   ```
 
 - **Anchor links**: Link to sections within documents
   ```markdown
-  [Section Name](#section-name)
-  [Database Schema](#database-schema)
+  [Task Categories](#task-categories)
+  [Code Examples](#code-examples)
   ```
 
 ### Link Best Practices
@@ -265,7 +274,7 @@ This document defines the markdown coding standards and best practices for docum
 ### Task Lists
 
 - **Use for checklists**: `- [ ]` for unchecked, `- [x]` for checked
-- **Common in ZTODO.md**: Use for tracking task completion
+- **Common in task files**: Use for tracking task completion in `.task` files
 
 ```markdown
 # ✅ Good: Task list
@@ -296,7 +305,7 @@ This is ***very important*** text.
 - **Use `~~text~~`** for strikethrough (when showing deprecated content)
 
 ```markdown
-~~Deprecated feature~~ (use new feature instead)
+~~Deprecated API endpoint~~ (use new endpoint instead)
 ```
 
 ### Blockquotes
@@ -336,18 +345,18 @@ Section 2 content
 
 ```markdown
 # ✅ Good: Image with alt text
-![Architecture Diagram](diagrams/architecture.svg)
+![Booking Flow Diagram](diagrams/booking-flow.svg)
 
 # ❌ Bad: Missing alt text
-![](diagrams/architecture.svg)
+![](diagrams/booking-flow.svg)
 ```
 
 ### Image Best Practices
 
 - **Use SVG for diagrams**: Scalable, text-based format
-- **Optimize images**: Keep file sizes reasonable
+- **Optimize images**: Keep file sizes reasonable (especially for web performance)
 - **Descriptive alt text**: Alt text should describe the image content
-- **Reference images**: Link to images in documentation directories
+- **Reference images**: Link to images in documentation or assets directories
 
 ---
 
@@ -360,16 +369,18 @@ Section 2 content
 ```markdown
 > **⚠️ Warning:** This operation cannot be undone.
 
-> **💡 Tip:** Use this pattern for better performance.
+> **💡 Tip:** Use React.memo() for better performance with large lists.
 
-> **📝 Note:** This feature requires Qt 6.0 or later.
+> **📝 Note:** This feature requires React 19+ and TypeScript 5.8+.
 ```
 
 ### Code References
 
 - **Use code references for existing code**: When referencing code in the codebase
   ```markdown
-  See `DatabaseManager::open()` method in [DatabaseManager.h](../src/infrastructure/persistence/DatabaseManager.h)
+  See `dataService.getAppointments()` method in [dataService.ts](../services/dataService.ts)
+  
+  See `BookingFlow` component in [BookingFlow.tsx](../components/BookingFlow.tsx)
   ```
 
 ---
@@ -436,14 +447,14 @@ Section 2 content
 ```markdown
 # ❌ Bad: Comments in shell code block
 ```bash
-docker build -t myapp .  # Build the image
+npm install  # Install dependencies
 ```
 
 # ✅ Good: Explanatory text outside
-Build the Docker image:
+Install dependencies:
 
 ```bash
-docker build -t myapp .
+npm install
 ```
 ```
 
@@ -451,10 +462,10 @@ docker build -t myapp .
 
 ```markdown
 # ❌ Bad: Plain text path
-See doc/10_DATABASE_DESIGN.md for details.
+See components/BookingFlow.tsx for details.
 
 # ✅ Good: Markdown link
-See [Database Design](doc/10_DATABASE_DESIGN.md) for details.
+See [BookingFlow Component](components/BookingFlow.tsx) for details.
 ```
 
 ### ❌ Don't Skip Header Levels
@@ -532,8 +543,8 @@ This is **very important** text.
 | **Bold** | `**text**` | `**important**` |
 | **Italic** | `*text*` | `*emphasized*` |
 | **Code** | `` `code` `` | `` `variableName` `` |
-| **Code Block** | ` ```language` | ` ```cpp` |
-| **Link** | `[text](url)` | `[Docs](doc.md)` |
+| **Code Block** | ` ```language` | ` ```typescript` |
+| **Link** | `[text](url)` | `[Docs](README.md)` |
 | **Image** | `![alt](path)` | `![Diagram](img.svg)` |
 | **List** | `- item` | `- Item 1` |
 | **Table** | `\| Col \|` | `\| Col1 \| Col2 \|` |
@@ -543,19 +554,86 @@ This is **very important** text.
 
 | Pattern | ✅ Good | ❌ Bad |
 |---------|---------|--------|
-| **File Links** | `[Database Design](10_DATABASE_DESIGN.md)` | `doc/10_DATABASE_DESIGN.md` |
-| **Code Blocks** | ` ```cpp` with language | ` ``` ` without language |
+| **File Links** | `[BookingFlow](components/BookingFlow.tsx)` | `components/BookingFlow.tsx` |
+| **Code Blocks** | ` ```typescript` with language | ` ``` ` without language |
 | **Shell Commands** | Explanatory text outside block | Comments inside block |
 | **Tables** | Alignment row included | Missing alignment row |
 | **Headers** | Hierarchical (`#`, `##`, `###`) | Skipping levels |
 
 ---
 
-## 16. Related Guidelines
+## 16. TypeScript/React Specific Considerations
 
-- **Documentation Guidelines**: See `.cursor/rules/documentation_guidelines.mdc` for documentation standards
-- **API Documentation**: See `.cursor/rules/api_documentation.mdc` for API documentation requirements
-- **Code Style**: See `.cursor/rules/cpp_guidelines.mdc` for C++ code examples in documentation
+### Code Block Examples
+
+When documenting React components:
+
+```markdown
+Example of a React component:
+
+```tsx
+interface BookingFlowProps {
+  onComplete: (appointment: Partial<Appointment>) => void;
+}
+
+const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
+  const [step, setStep] = useState(1);
+  // Component implementation
+};
+```
+```
+
+When documenting TypeScript types:
+
+```markdown
+The `Appointment` interface is defined as:
+
+```typescript
+interface Appointment {
+  id: string;
+  customerId: string;
+  employeeId: string;
+  serviceId: string;
+  startTime: string;
+  endTime: string;
+  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+}
+```
+```
+
+When documenting API/service functions:
+
+```markdown
+The booking service provides the following method:
+
+```typescript
+async function addAppointment(
+  appointment: Partial<Appointment>
+): Promise<Appointment> {
+  // Implementation
+}
+```
+```
+
+### File Path References
+
+Use relative paths that match the project structure:
+
+```markdown
+- Components: `components/BookingFlow.tsx`
+- Services: `services/dataService.ts`
+- Types: `types.ts`
+- Configuration: `constants.tsx`
+- Root files: `App.tsx`, `index.tsx`
+```
+
+---
+
+## 17. Related Guidelines
+
+- **Project Rules**: See [rules.mdc](.cursor/rules/rules.mdc) for project-specific coding standards
+- **Task Guidelines**: See [task_guidelines.mdc](.cursor/rules/task_guidelines.mdc) for task documentation standards
+- **Docker Guidelines**: See [docker_guidelines.mdc](.cursor/rules/docker_guidelines.mdc) for Docker-related documentation
 
 ---
 
@@ -568,4 +646,4 @@ This is **very important** text.
 
 ---
 
-**Remember:** Markdown is meant to be readable in both source and rendered form. Write for humans first, rendering second. Keep formatting consistent, links navigable, and code blocks executable.
+**Remember:** Markdown is meant to be readable in both source and rendered form. Write for humans first, rendering second. Keep formatting consistent, links navigable, and code blocks executable. For a web project, ensure documentation helps developers understand the React components, TypeScript types, and service architecture.
