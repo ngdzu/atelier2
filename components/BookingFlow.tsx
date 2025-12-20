@@ -686,6 +686,19 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         </div>
       </div>
 
+      {/* FLOATING ACTION OVERLAYS */}
+      {step === 'SERVICE' && selectedServices.length > 0 && (
+        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
+          <button
+            onClick={handleNext}
+            className="flex items-center gap-6 px-12 py-6 bg-black text-white rounded-full shadow-2xl shadow-black/20 hover:scale-105 transition-all active:scale-95 group"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em]">Continue to Professional</span>
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      )}
+
       {step !== 'CONFIRM' && (
         <button
           onClick={() => setIsSummaryOpen(true)}
