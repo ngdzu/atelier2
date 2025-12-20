@@ -1,0 +1,31 @@
+# Template .dockerignore for microservices
+# Copy this to each microservice directory and customize as needed
+
+node_modules
+npm-debug.log
+.env
+.env.local
+.env.*.local
+.git
+.gitignore
+README.md
+.vscode
+.idea
+*.md
+.DS_Store
+coverage
+.nyc_output
+dist
+build
+*.log
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+test
+tests
+__tests__
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+

@@ -1,0 +1,293 @@
+# Docker Infrastructure Tasks
+
+## TASK-OPS-001: Set Up Docker Infrastructure for Client and Microservices
+
+**Status:** IN_PROGRESS
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 6-8 hours
+**Dependencies:** none
+**Related Tasks:** none
+
+### Description
+
+Set up Docker infrastructure to containerize the client application (React/Vite frontend) and prepare for future microservices. The client should run in a separate container from other microservices, following Docker best practices for Node.js applications. This includes creating Dockerfiles, docker-compose configurations, and supporting files for both development and production environments.
+
+### Requirements / What to Do
+
+#### Step 1: Create Client Dockerfile
+- [x] Create `client/Dockerfile` for production builds
+  - Use multi-stage build pattern (deps, builder, runner stages)
+  - Use `node:20-alpine` as base image
+  - Optimize layer caching (copy package.json first, then code)
+  - Run as non-root user (nodejs user)
+  - Build Vite application in builder stage
+  - Serve static files in runner stage using nginx or similar
+  - Expose appropriate port (default 80 or 3000)
+  - Set NODE_ENV=production
+
+- [x] Create `client/Dockerfile.dev` for development
+  - Use `node:20-alpine` as base image
+  - Install all dependencies (including devDependencies)
+  - Use volume mounts for hot reload
+  - Run `npm run dev` command
+  - Expose Vite dev server port (default 5173)
+
+#### Step 2: Create Client .dockerignore
+- [x] Create `client/.dockerignore` file
+  - Exclude `node_modules`
+  - Exclude `.env` and `.env.local` files
+  - Exclude `.git` directory
+  - Exclude build artifacts (`dist`, `build`)
+  - Exclude IDE files (`.vscode`, `.idea`)
+  - Exclude documentation files (`*.md`)
+  - Exclude test files and coverage reports
+  - Exclude Docker files themselves
+
+#### Step 3: Create Docker Compose Configuration
+- [x] Create `docker-compose.yml` for development
+  - Define `client` service
+    - Build from `client/Dockerfile.dev`
+    - Mount volumes for hot reload (`./client:/app`, exclude `node_modules`)
+    - Expose port 5173 (Vite dev server)
+    - Set environment variables for development
+    - Add health check (if applicable)
+  - Create `app-network` bridge network
+  - Add placeholder for future microservices (commented or with TODO)
+
+- [x] Create `docker-compose.prod.yml` for production
+  - Define `client` service
+    - Build from `client/Dockerfile`
+    - Set resource limits (memory, CPU)
+    - Set restart policy (`unless-stopped`)
+    - Expose port 80 or 3000
+    - Set environment variables for production
+    - Add health check
+  - Create `app-network` bridge network
+  - Add placeholder for future microservices
+
+#### Step 4: Create Base Dockerfile for Future Microservices
+- [x] Create `services/.dockerignore` template (for future use)
+- [x] Document microservice Dockerfile pattern in comments or README
+  - Multi-stage build pattern
+  - Non-root user
+  - Health checks
+  - Resource limits
+
+#### Step 5: Create Supporting Files
+- [x] Create root-level `.dockerignore` (if needed for multi-service builds)
+- [ ] Create `docker/` directory for shared Docker resources (optional - skipped as not needed)
+- [x] Create `README.md` or `DOCKER.md` with Docker usage instructions
+  - How to build images
+  - How to run development environment
+  - How to run production environment
+  - Environment variable documentation
+  - Troubleshooting guide
+
+#### Step 6: Update Project Documentation
+- [x] Update main `README.md` with Docker setup instructions (updated client/README.md)
+- [x] Document required environment variables
+- [x] Add Docker commands to README
+- [ ] Update `.cursor/rules/documentation_guidelines.mdc` if needed (not required for this task)
+
+### Definition of Done (DoD)
+
+- [x] Client Dockerfile created with multi-stage build
+- [x] Client Dockerfile.dev created for development
+- [x] Client .dockerignore file created and configured
+- [x] docker-compose.yml created for development environment
+- [x] docker-compose.prod.yml created for production environment
+- [ ] Client container builds successfully (needs verification)
+- [ ] Client container runs in development mode with hot reload (needs verification)
+- [ ] Client container runs in production mode serving static files (needs verification)
+- [x] All containers run as non-root users (configured in Dockerfiles)
+- [x] Health checks implemented (configured in production Dockerfile and compose)
+- [x] Resource limits set for production (configured in docker-compose.prod.yml)
+- [x] Documentation updated (DOCKER.md and client/README.md)
+- [ ] No security vulnerabilities in base images (needs verification with `docker scan`)
+- [x] All files follow Docker best practices from guidelines
+- [x] Network configuration allows for future microservices (app-network configured)
+
+### Verification Steps
+
+1. **Build Verification:**
+   ```bash
+   # Build client image
+   docker-compose -f docker-compose.yml build client
+   
+   # Verify image was created
+   docker images | grep client
+   
+   # Check image size (should be reasonable, <500MB for Alpine-based)
+   docker images
+   ```
+
+2. **Development Environment Testing:**
+   ```bash
+   # Start development environment
+   docker-compose up client
+   
+   # Verify client is accessible
+   curl http://localhost:5173
+   
+   # Verify hot reload works (make a change, see it reflect)
+   # Check logs for Vite dev server
+   docker-compose logs client
+   
+   # Stop environment
+   docker-compose down
+   ```
+
+3. **Production Environment Testing:**
+   ```bash
+   # Build production image
+   docker-compose -f docker-compose.prod.yml build client
+   
+   # Start production environment
+   docker-compose -f docker-compose.prod.yml up client
+   
+   # Verify client is accessible
+   curl http://localhost:80
+   # or
+   curl http://localhost:3000
+   
+   # Verify static files are served correctly
+   # Check that React app loads in browser
+   
+   # Check container is running as non-root
+   docker-compose -f docker-compose.prod.yml exec client whoami
+   # Should output: nodejs (not root)
+   
+   # Stop environment
+   docker-compose -f docker-compose.prod.yml down
+   ```
+
+4. **Security Verification:**
+   ```bash
+   # Scan for vulnerabilities
+   docker scan <client-image-name>
+   
+   # Verify no secrets in image
+   docker history <client-image-name>
+   ```
+
+5. **Code Quality:**
+   - Verify Dockerfiles follow multi-stage build pattern
+   - Verify .dockerignore excludes sensitive files
+   - Verify no hardcoded secrets in Dockerfiles
+   - Verify proper layer caching order
+   - Verify health checks are configured (if applicable)
+
+6. **Documentation Verification:**
+   - README or DOCKER.md has clear instructions
+   - Environment variables are documented
+   - Commands are copy-pasteable (no comments in code blocks)
+   - Examples work as documented
+
+### Acceptance Criteria
+
+- ✅ Client application runs successfully in Docker container
+- ✅ Development environment supports hot reload
+- ✅ Production environment serves optimized static files
+- ✅ Container follows security best practices (non-root user, minimal base image)
+- ✅ Docker Compose files are properly configured
+- ✅ Documentation is clear and complete
+- ✅ Infrastructure is ready for adding microservices
+- ✅ Build process is efficient (uses layer caching)
+- ✅ No security vulnerabilities in base images
+- ✅ Environment variables are properly configured
+
+### Technical Details
+
+**Files to Create:**
+- `client/Dockerfile` - Production Dockerfile for client
+- `client/Dockerfile.dev` - Development Dockerfile for client
+- `client/.dockerignore` - Docker ignore file for client
+- `docker-compose.yml` - Development Docker Compose configuration
+- `docker-compose.prod.yml` - Production Docker Compose configuration
+- `DOCKER.md` or update `README.md` - Docker documentation
+
+**Files to Modify:**
+- `README.md` - Add Docker setup instructions
+
+**Dependencies:**
+- Docker and Docker Compose installed
+- Node.js 20+ (for local development reference)
+- Vite build system (already in project)
+
+**Technical Specifications:**
+- Base image: `node:20-alpine` (Alpine Linux for smaller images)
+- Client port (dev): 5173 (Vite default)
+- Client port (prod): 80 or 3000 (to be determined)
+- Build tool: Vite
+- Static file server: nginx or serve (to be determined based on requirements)
+
+**Architecture Considerations:**
+- Client container should be isolated from future microservices
+- Network should allow communication between services when needed
+- Environment variables should be externalized
+- Volume mounts for development hot reload
+- Health checks for production monitoring
+
+### Testing Checklist
+
+- [ ] Client Dockerfile builds without errors
+- [ ] Client Dockerfile.dev builds without errors
+- [ ] Development container starts and serves application
+- [ ] Hot reload works in development mode
+- [ ] Production container builds and serves static files
+- [ ] Application loads correctly in browser from container
+- [ ] Container runs as non-root user
+- [ ] Health checks work (if implemented)
+- [ ] Resource limits are respected
+- [ ] Network configuration allows future service integration
+- [ ] Environment variables are properly passed
+- [ ] No sensitive files are included in image
+- [ ] Image size is reasonable (<500MB for Alpine-based)
+
+### Additional Context
+
+**Design Decisions:**
+- Use Alpine Linux for smaller image sizes and better security
+- Multi-stage builds to reduce final image size
+- Separate dev and prod Dockerfiles for different optimization needs
+- Non-root user for security best practices
+- Bridge network for service communication
+
+**Future Considerations:**
+- When microservices are added, they will use similar Dockerfile patterns
+- API Gateway may be needed for routing between services
+- Database service will need separate container
+- Redis/cache service may be needed
+- Consider using Docker secrets for sensitive data in production
+
+**Notes:**
+- This task sets up the foundation for containerized development and deployment
+- Future tasks will add microservices following similar patterns
+- Consider using nginx for serving static files in production for better performance
+- Health checks may need to be implemented based on specific requirements
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:** 
+All Docker infrastructure files have been created:
+- ✅ Production and development Dockerfiles
+- ✅ Docker Compose configurations (dev and prod)
+- ✅ .dockerignore files
+- ✅ Nginx configuration for production
+- ✅ Documentation (DOCKER.md, services/README.md)
+- ✅ Updated client/README.md
+
+**Next Steps for Verification:**
+1. Build and test development container: `docker-compose build client && docker-compose up client`
+2. Build and test production container: `docker-compose -f docker-compose.prod.yml build client && docker-compose -f docker-compose.prod.yml up client`
+3. Verify hot reload works in development
+4. Verify static files are served correctly in production
+5. Run security scan: `docker scan <image-name>`
+6. Test health checks
+7. Verify resource limits are respected
+
