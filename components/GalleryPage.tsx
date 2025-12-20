@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { GALLERY_IMAGES, STORE_NAME } from '../constants';
+import { GALLERY_IMAGES } from '../constants';
 import Header from './Header';
+import Footer from './Footer';
 
 const GalleryPage: React.FC = () => {
   const [filter, setFilter] = useState('All');
@@ -70,10 +71,7 @@ const GalleryPage: React.FC = () => {
         </div>
       </section>
 
-      <footer className="py-20 flex flex-col items-center border-t border-black/5 text-[10px] font-bold tracking-[0.3em] text-gray-300">
-        <div className="mb-4">© 2024 {STORE_NAME.toUpperCase()} ATELIER</div>
-        <Link to="/admin" className="text-gray-200 hover:text-[#C4A484] transition-colors uppercase tracking-[0.4em]">Staff Access</Link>
-      </footer>
+      <Footer />
     </div>
   );
 };

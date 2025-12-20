@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { STORE_NAME } from '../constants';
-import { Lock } from 'lucide-react';
+import { STORE_NAME, NAV_LINKS } from '../constants';
 
 interface HeaderProps {
   variant?: 'fixed' | 'standard';
@@ -35,13 +34,11 @@ const Header: React.FC<HeaderProps> = ({ variant = 'standard' }) => {
         <span className="text-xl font-serif font-bold tracking-widest uppercase">{STORE_NAME}</span>
       </Link>
       <div className="hidden md:flex gap-10 lg:gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
-        <Link to="/gallery" className={getLinkClasses('/gallery')}>Collections</Link>
-        <Link to="/about" className={getLinkClasses('/about')}>The Atelier</Link>
-        <Link to="/book" className={getLinkClasses('/book')}>Services</Link>
-        <Link to="/admin" className={getLinkClasses('/admin')}>
-          <Lock size={10} className="mb-0.5" />
-          <span>Staff</span>
-        </Link>
+        {NAV_LINKS.map((link) => (
+          <Link key={link.path} to={link.path} className={getLinkClasses(link.path)}>
+            {link.name}
+          </Link>
+        ))}
       </div>
       <Link to="/book" className={buttonClasses}>
         Reserve

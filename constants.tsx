@@ -6,6 +6,12 @@ export const CONTACT_EMAIL = `concierge@${STORE_NAME.toLowerCase()}.com`;
 export const ADDRESS_STREET = '123 Design Blvd, Suite 400';
 export const ADDRESS_CITY = 'Los Angeles, CA 90210';
 
+export const NAV_LINKS = [
+  { name: 'Collections', path: '/gallery' },
+  { name: 'The Atelier', path: '/about' },
+  { name: 'Services', path: '/book' },
+];
+
 export const COLORS = {
   primary: '#000000',
   secondary: '#C4A484',

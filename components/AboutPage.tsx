@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import Footer from './Footer';
 import { STORE_NAME, PHONE_NUMBER, CONTACT_EMAIL, ADDRESS_STREET, ADDRESS_CITY } from '../constants';
 
 const AboutPage: React.FC = () => {
@@ -92,11 +93,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Editorial Footer */}
-      <footer className="py-20 flex flex-col items-center border-t border-black/5 text-[10px] font-bold tracking-[0.3em] text-gray-300">
-        <div className="mb-4">© 2024 {STORE_NAME.toUpperCase()} ATELIER — LOS ANGELES</div>
-        <Link to="/admin" className="text-gray-200 hover:text-[#C4A484] transition-colors uppercase tracking-[0.4em]">Staff Access</Link>
-      </footer>
+      <Footer />
     </div>
   );
 };
