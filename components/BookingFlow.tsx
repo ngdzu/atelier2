@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICES, EMPLOYEES } from '../constants';
 import { Service, Employee, Appointment } from '../types';
@@ -93,6 +93,7 @@ interface SelectedServiceItem {
 const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [step, setStep] = useState<Step>('SERVICE');
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>('');
   
   // Cart-based selection for quantities
   const [selectedServices, setSelectedServices] = useState<SelectedServiceItem[]>([]);
@@ -102,10 +103,57 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState({ name: '', email: '', phone: '' });
 
+  const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const indexScrollRef = useRef<HTMLDivElement>(null);
+  const scrollIntervalRef = useRef<number | null>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if ((window as any).refreshReveals) (window as any).refreshReveals();
   }, [step]);
+
+  // Scroll spy logic
+  useEffect(() => {
+    if (step !== 'SERVICE') return;
+
+    const options = {
+      root: null,
+      rootMargin: '-100px 0px -60% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveCategory(entry.target.id);
+        }
+      });
+    }, options);
+
+    (Object.values(categoryRefs.current) as (HTMLDivElement | null)[]).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [step]);
+
+  // Hover-to-scroll logic
+  const startScrolling = (direction: 'left' | 'right') => {
+    if (scrollIntervalRef.current) return;
+    scrollIntervalRef.current = window.setInterval(() => {
+      if (indexScrollRef.current) {
+        const speed = direction === 'left' ? -10 : 10;
+        indexScrollRef.current.scrollLeft += speed;
+      }
+    }, 16);
+  };
+
+  const stopScrolling = () => {
+    if (scrollIntervalRef.current) {
+      clearInterval(scrollIntervalRef.current);
+      scrollIntervalRef.current = null;
+    }
+  };
 
   const steps: { key: Step; label: string; nextLabel: string }[] = [
     { key: 'SERVICE', label: 'Service', nextLabel: 'Choose Professional' },
@@ -156,6 +204,15 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
 
   const getQuantity = (serviceId: string) => {
     return selectedServices.find(item => item.service.id === serviceId)?.quantity || 0;
+  };
+
+  const scrollToCategory = (category: string) => {
+    const el = categoryRefs.current[category];
+    if (el) {
+      const yOffset = -120; // Account for sticky nav
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   };
 
   /**
@@ -329,6 +386,18 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
     <div className="bg-[#FDFCFB] min-h-screen pb-32 selection:bg-black selection:text-white">
       <Header />
 
+      <style>{`
+        .atelier-index-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .atelier-index-container::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
       <div className="max-w-6xl mx-auto py-24 px-6">
         {step !== 'CONFIRM' && (
           <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
@@ -370,9 +439,51 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                   </p>
                 </div>
               </div>
+
+              {/* FLOATING ATELIER INDEX - Clean, minimalist version */}
+              <div className="sticky top-4 z-40 px-4 -mx-4 md:px-0 md:-mx-0 group/index">
+                <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-2xl border border-black/5 rounded-full p-1 shadow-2xl shadow-black/5 flex items-center relative overflow-hidden">
+                  
+                  {/* Hover Scroll Areas */}
+                  <div 
+                    onMouseEnter={() => startScrolling('left')} 
+                    onMouseLeave={stopScrolling}
+                    className="absolute left-0 top-0 bottom-0 w-20 z-10 cursor-w-resize" 
+                  />
+                  <div 
+                    onMouseEnter={() => startScrolling('right')} 
+                    onMouseLeave={stopScrolling}
+                    className="absolute right-0 top-0 bottom-0 w-20 z-10 cursor-e-resize" 
+                  />
+
+                  <div 
+                    ref={indexScrollRef}
+                    className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth atelier-index-container px-6"
+                  >
+                    {(Object.keys(servicesByCategory)).map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => scrollToCategory(cat)}
+                        className={`px-8 py-4 rounded-full text-[8px] font-black uppercase tracking-[0.4em] transition-all whitespace-nowrap ${
+                          activeCategory === cat 
+                            ? 'bg-black text-white shadow-xl' 
+                            : 'text-gray-400 hover:text-black hover:bg-gray-50'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
               
               {(Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
-                <div key={category} className="space-y-16">
+                <div 
+                  key={category} 
+                  id={category} 
+                  ref={(el) => (categoryRefs.current[category] = el)}
+                  className="space-y-16 pt-8"
+                >
                   <div className="flex items-center gap-12">
                     <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
                     <div className="h-px bg-black/10 flex-1" />
