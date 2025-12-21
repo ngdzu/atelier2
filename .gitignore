@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# npm
+.npm-cache
+
+# Test coverage
+coverage
+*.lcov

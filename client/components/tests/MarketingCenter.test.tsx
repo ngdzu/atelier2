@@ -2,10 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { render as customRender } from './utils/test-utils';
 import MarketingCenter from '../MarketingCenter';
-import { mockGeminiService } from './utils/mocks';
-import * as geminiServiceModule from '../../services/geminiService';
 
-// Mock geminiService
+// Mock geminiService - use hoisted to avoid circular dependency
+const mockGeminiService = vi.hoisted(() => ({
+  generatePromotion: vi.fn(),
+  crawlCompetitorData: vi.fn(),
+  analyzeBusinessPerformance: vi.fn(),
+}));
+
 vi.mock('../../services/geminiService', () => ({
   gemini: mockGeminiService,
 }));
@@ -13,6 +17,9 @@ vi.mock('../../services/geminiService', () => ({
 describe('MarketingCenter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockGeminiService.generatePromotion.mockResolvedValue('Mocked promotion text');
+    mockGeminiService.crawlCompetitorData.mockResolvedValue({ text: 'Mocked research', sources: [] });
+    mockGeminiService.analyzeBusinessPerformance.mockResolvedValue('Mocked analysis');
   });
 
   it('should render without errors', () => {
@@ -29,16 +36,18 @@ describe('MarketingCenter', () => {
 
   it('should display campaign creator by default', () => {
     customRender(<MarketingCenter />);
-    expect(screen.getByText('Campaign Creator')).toBeInTheDocument();
+    // Check for the heading (h3) which is more specific than the button
+    expect(screen.getByRole('heading', { name: /Campaign Creator/i })).toBeInTheDocument();
   });
 
   it('should switch to market intelligence tab', () => {
     customRender(<MarketingCenter />);
-    const intelligenceTab = screen.getByText('Market Intelligence');
+    // Find the button by role and name
+    const intelligenceTab = screen.getByRole('button', { name: 'Market Intelligence' });
     fireEvent.click(intelligenceTab);
     
-    // After switching, intelligence content should be visible
-    expect(screen.getByText(/Market Intelligence/i)).toBeInTheDocument();
+    // After switching, intelligence content should be visible (check for heading or specific content)
+    expect(screen.getByText(/Market Research Data/i)).toBeInTheDocument();
   });
 
   it('should generate promotion when form is submitted', async () => {
@@ -61,13 +70,59 @@ describe('MarketingCenter', () => {
     
     customRender(<MarketingCenter />);
     const textarea = screen.getByPlaceholderText(/20% off all Russian Manicures/i);
-    const generateButton = screen.getByText(/Generate Content/i);
+    // Find button by role, not by text (text is in a span inside)
+    const generateButton = screen.getByRole('button', { name: /Generate Content/i });
     
     fireEvent.change(textarea, { target: { value: 'Test' } });
     fireEvent.click(generateButton);
     
-    // Button should be disabled during loading (check for disabled state)
-    expect(generateButton).toBeDisabled();
+    // Button should be disabled during loading
+    await waitFor(() => {
+      expect(generateButton).toBeDisabled();
+    });
+  });
+
+  it('should handle research query submission', async () => {
+    customRender(<MarketingCenter />);
+    
+    // Switch to intelligence tab
+    const intelligenceTab = screen.getByRole('button', { name: 'Market Intelligence' });
+    fireEvent.click(intelligenceTab);
+    
+    // Find research input and button
+    const researchInput = screen.getByPlaceholderText(/competitor-salon.com/i);
+    const researchButton = screen.getByRole('button', { name: /Crawl Market Data/i });
+    
+    fireEvent.change(researchInput, { target: { value: 'Test Salon' } });
+    fireEvent.click(researchButton);
+    
+    await waitFor(() => {
+      expect(mockGeminiService.crawlCompetitorData).toHaveBeenCalledWith('Test Salon');
+    });
+  });
+
+  it('should display research results', async () => {
+    mockGeminiService.crawlCompetitorData.mockResolvedValue({
+      text: 'Research results text',
+      sources: [{ url: 'https://example.com' }]
+    });
+    
+    customRender(<MarketingCenter />);
+    
+    // Switch to intelligence tab
+    const intelligenceTab = screen.getByRole('button', { name: 'Market Intelligence' });
+    fireEvent.click(intelligenceTab);
+    
+    // Submit research
+    const researchInput = screen.getByPlaceholderText(/competitor-salon.com/i);
+    const researchButton = screen.getByRole('button', { name: /Crawl Market Data/i });
+    
+    fireEvent.change(researchInput, { target: { value: 'Test' } });
+    fireEvent.click(researchButton);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Research results text')).toBeInTheDocument();
+    });
   });
 });
 

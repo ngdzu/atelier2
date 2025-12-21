@@ -2,11 +2,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { render as customRender } from './utils/test-utils';
 import PerformanceDashboard from '../PerformanceDashboard';
-import { mockDataService, mockGeminiService } from './utils/mocks';
-import * as dataServiceModule from '../../services/dataService';
-import * as geminiServiceModule from '../../services/geminiService';
 
-// Mock services
+// Mock services - use hoisted to avoid circular dependency
+const mockDataService = vi.hoisted(() => ({
+  getServices: vi.fn(),
+  getEmployees: vi.fn(),
+  getCustomers: vi.fn(),
+  getAppointments: vi.fn(),
+  addAppointment: vi.fn(),
+  getDailyStats: vi.fn(),
+}));
+
+const mockGeminiService = vi.hoisted(() => ({
+  generatePromotion: vi.fn(),
+  crawlCompetitorData: vi.fn(),
+  analyzeBusinessPerformance: vi.fn(),
+}));
+
 vi.mock('../../services/dataService', () => ({
   dataService: mockDataService,
 }));
@@ -18,6 +30,11 @@ vi.mock('../../services/geminiService', () => ({
 describe('PerformanceDashboard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockDataService.getDailyStats.mockResolvedValue([
+      { name: 'Mon', revenue: 1200, appts: 12 },
+      { name: 'Tue', revenue: 1500, appts: 15 },
+    ]);
+    mockGeminiService.analyzeBusinessPerformance.mockResolvedValue('Mocked analysis');
   });
 
   it('should render without errors', async () => {
