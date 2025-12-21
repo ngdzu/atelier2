@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged for linting and formatting staged files
+npx lint-staged
+
+# Run tests with coverage (coverage threshold is enforced in vitest.config.ts)
+npm run test:ci
+
+# Check if tests passed
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed or coverage below threshold. Commit blocked."
+  exit 1
+fi
+
+echo "✅ All checks passed. Proceeding with commit."
+

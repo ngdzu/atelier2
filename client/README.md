@@ -85,7 +85,18 @@ client/
 └── index.tsx      # Entry point
 ```
 
+## Testing
+
+Run tests:
+
+```bash
+npm run test
+```
+
+For detailed testing documentation, see [TESTING.md](TESTING.md).
+
 ## Additional Resources
 
 - [Docker Setup Guide](../DOCKER.md)
+- [Testing Guide](TESTING.md)
 - [Project Documentation](../README.md)

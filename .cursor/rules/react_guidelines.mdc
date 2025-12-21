@@ -1,0 +1,942 @@
+---
+description: React component guidelines for good software principles
+alwaysApply: false
+---
+
+# React Component Guidelines
+
+## Overview
+
+These guidelines promote maintainable, reusable, and well-structured React components following software engineering best practices. The focus is on breaking down complex components, promoting reusability, and maintaining clean, readable code.
+
+## Core Principles
+
+1. **Single Responsibility** - Each component should have one clear purpose
+2. **Composition over Inheritance** - Build complex UIs from simple, reusable components
+3. **Don't Repeat Yourself (DRY)** - Extract reusable logic and components
+4. **Keep It Simple** - Prefer simple, readable code over clever optimizations
+5. **Separation of Concerns** - Separate business logic from presentation logic
+
+---
+
+## Component Size and Complexity
+
+### Maximum Component Length
+
+- **Single Component File**: Maximum 300-400 lines of code
+- **If a component exceeds 300 lines**: It should be broken down into smaller components
+- **Large files are a code smell**: Indicates the component is doing too much
+
+### When to Break Down Components
+
+Break down components when they:
+
+1. **Have multiple responsibilities**:
+   ```typescript
+   // ❌ Bad: Component handles both data fetching and multiple UI sections
+   const BookingFlow = () => {
+     // 200+ lines of mixed logic
+   };
+   
+   // ✅ Good: Broken into focused components
+   const BookingFlow = () => {
+     return (
+       <ServiceSelection />
+       <EmployeeSelection />
+       <DateTimeSelection />
+       <CustomerInfoForm />
+     );
+   };
+   ```
+
+2. **Have complex nested conditional rendering**:
+   ```typescript
+   // ❌ Bad: Deeply nested conditionals
+   return (
+     <div>
+       {step === 'SERVICE' && (
+         <div>
+           {loading ? <Loader /> : (
+             <div>
+               {services.length > 0 ? (
+                 services.map(service => (
+                   // ... complex rendering
+                 ))
+               ) : <EmptyState />}
+             </div>
+           )}
+         </div>
+       )}
+     </div>
+   );
+   
+   // ✅ Good: Extract to separate component
+   return (
+     <div>
+       {step === 'SERVICE' && <ServiceSelectionView services={services} loading={loading} />}
+     </div>
+   );
+   ```
+
+3. **Have large state objects**:
+   ```typescript
+   // ❌ Bad: One large state object
+   const [state, setState] = useState({
+     services: [],
+     employees: [],
+     selectedService: null,
+     selectedEmployee: null,
+     date: null,
+     time: null,
+     customerInfo: {},
+     // ... 10+ more properties
+   });
+   
+   // ✅ Good: Separate related state
+   const [services, setServices] = useState<Service[]>([]);
+   const [employees, setEmployees] = useState<Employee[]>([]);
+   const [selection, setSelection] = useState({ service: null, employee: null });
+   const [schedule, setSchedule] = useState({ date: null, time: null });
+   ```
+
+4. **Have multiple useEffects doing different things**:
+   ```typescript
+   // ❌ Bad: Multiple unrelated effects
+   useEffect(() => { /* fetch data */ }, []);
+   useEffect(() => { /* scroll spy */ }, [step]);
+   useEffect(() => { /* analytics */ }, [selectedService]);
+   // Extract to custom hooks
+   ```
+
+---
+
+## Component Composition
+
+### Extract Reusable Sub-Components
+
+When a component has distinct UI sections, extract them:
+
+```typescript
+// ❌ Bad: Large component with embedded sub-components
+const BookingFlow = () => {
+  const CustomCalendar = ({ selectedDate, onSelectDate }) => {
+    // 50+ lines of calendar logic
+  };
+  
+  const TimeSlotPicker = ({ slots, onSelect }) => {
+    // 40+ lines of time slot logic
+  };
+  
+  // 200+ more lines
+  return (/* ... */);
+};
+
+// ✅ Good: Extract to separate files
+// components/booking/CustomCalendar.tsx
+export const CustomCalendar = ({ selectedDate, onSelectDate }: CalendarProps) => {
+  // Calendar logic
+};
+
+// components/booking/TimeSlotPicker.tsx
+export const TimeSlotPicker = ({ slots, onSelect }: TimeSlotProps) => {
+  // Time slot logic
+};
+
+// components/BookingFlow.tsx
+import { CustomCalendar } from './booking/CustomCalendar';
+import { TimeSlotPicker } from './booking/TimeSlotPicker';
+
+const BookingFlow = () => {
+  // Main component logic only
+};
+```
+
+### Component Organization
+
+Organize related components in directories:
+
+```
+components/
+├── booking/
+│   ├── BookingFlow.tsx
+│   ├── CustomCalendar.tsx
+│   ├── TimeSlotPicker.tsx
+│   ├── ServiceSelection.tsx
+│   └── index.ts
+├── common/
+│   ├── Button.tsx
+│   ├── Input.tsx
+│   └── Card.tsx
+└── layout/
+    ├── Header.tsx
+    └── Footer.tsx
+```
+
+---
+
+## Custom Hooks for Logic Extraction
+
+### Extract Complex Logic to Custom Hooks
+
+When components have complex logic, extract it to custom hooks:
+
+```typescript
+// ❌ Bad: Business logic mixed with component
+const BookingFlow = () => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const [svcData, empData] = await Promise.all([
+        dataService.getServices(),
+        dataService.getEmployees()
+      ]);
+      setServices(svcData);
+      setEmployees(empData);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+  
+  // Complex selection logic...
+  // Complex validation logic...
+  // 200+ more lines
+};
+
+// ✅ Good: Extract to custom hooks
+// hooks/useBookingData.ts
+export const useBookingData = () => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const [svcData, empData] = await Promise.all([
+        dataService.getServices(),
+        dataService.getEmployees()
+      ]);
+      setServices(svcData);
+      setEmployees(empData);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+  
+  return { services, employees, loading };
+};
+
+// hooks/useServiceSelection.ts
+export const useServiceSelection = () => {
+  const [selectedServices, setSelectedServices] = useState<SelectedServiceItem[]>([]);
+  
+  const addService = (service: Service) => { /* ... */ };
+  const removeService = (serviceId: string) => { /* ... */ };
+  const calculateTotal = () => { /* ... */ };
+  
+  return { selectedServices, addService, removeService, calculateTotal };
+};
+
+// components/BookingFlow.tsx
+const BookingFlow = () => {
+  const { services, employees, loading } = useBookingData();
+  const { selectedServices, addService, removeService } = useServiceSelection();
+  
+  // Component focuses on rendering
+  return (/* ... */);
+};
+```
+
+### Custom Hook Best Practices
+
+- **Prefix with `use`**: All custom hooks must start with `use`
+- **Single Responsibility**: Each hook should handle one concern
+- **Return objects, not arrays**: For hooks with multiple return values, use objects for clarity
+- **Document dependencies**: Clearly document what the hook depends on
+
+```typescript
+// ✅ Good: Returns object with named properties
+export const useServiceSelection = () => {
+  // ...
+  return {
+    selectedServices,
+    addService,
+    removeService,
+    calculateTotal,
+    isLoading: false
+  };
+};
+
+// ❌ Bad: Returns array (hard to remember order)
+export const useServiceSelection = () => {
+  // ...
+  return [selectedServices, addService, removeService]; // What's what?
+};
+```
+
+---
+
+## Function Length and Complexity
+
+### Maximum Function Length
+
+- **Functions should be 20-30 lines maximum**
+- **If a function exceeds 30 lines**: Break it down into smaller functions
+- **Complex functions**: Should be broken down even if under 30 lines
+
+### Extract Helper Functions
+
+```typescript
+// ❌ Bad: Long, complex function
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  // Validation (20 lines)
+  if (!selectedService) {
+    setError('Please select a service');
+    return;
+  }
+  if (!selectedEmployee) {
+    setError('Please select an employee');
+    return;
+  }
+  // ... more validation
+  
+  // Data transformation (15 lines)
+  const appointment = {
+    customerId: customer.id,
+    employeeId: selectedEmployee.id,
+    serviceId: selectedService.id,
+    startTime: new Date(`${selectedDate}T${selectedTime}`).toISOString(),
+    // ... more fields
+  };
+  
+  // API call (10 lines)
+  try {
+    setLoading(true);
+    const result = await dataService.addAppointment(appointment);
+    onComplete(result);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ✅ Good: Broken into smaller functions
+const validateForm = (): string | null => {
+  if (!selectedService) return 'Please select a service';
+  if (!selectedEmployee) return 'Please select an employee';
+  // ... more validation
+  return null;
+};
+
+const buildAppointmentData = (): Partial<Appointment> => {
+  return {
+    customerId: customer.id,
+    employeeId: selectedEmployee.id,
+    serviceId: selectedService.id,
+    startTime: new Date(`${selectedDate}T${selectedTime}`).toISOString(),
+    // ... more fields
+  };
+};
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  const validationError = validateForm();
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
+  
+  try {
+    setLoading(true);
+    const appointmentData = buildAppointmentData();
+    const result = await dataService.addAppointment(appointmentData);
+    onComplete(result);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'An error occurred');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+---
+
+## Props and Interfaces
+
+### Explicit Prop Interfaces
+
+Always define explicit prop interfaces:
+
+```typescript
+// ✅ Good: Explicit interface
+interface BookingFlowProps {
+  onComplete: (appointment: Appointment) => void;
+  initialServiceId?: string;
+  customerId?: string;
+}
+
+const BookingFlow: React.FC<BookingFlowProps> = ({ 
+  onComplete, 
+  initialServiceId,
+  customerId 
+}) => {
+  // Component implementation
+};
+
+// ❌ Bad: Inline types or any
+const BookingFlow = ({ onComplete, initialServiceId }: any) => {
+  // Component implementation
+};
+```
+
+### Prop Best Practices
+
+- **Keep props minimal**: Components should have fewer than 10 props
+- **Use composition for complex props**: Instead of many boolean flags, use component composition
+- **Group related props**: Use objects for related props
+
+```typescript
+// ❌ Bad: Too many boolean props
+<Button primary large disabled loading outlined rounded />
+
+// ✅ Good: Use composition or grouped props
+<Button variant="primary" size="large" disabled loading />
+// or
+<Button 
+  style={{ variant: 'primary', size: 'large' }}
+  state={{ disabled: true, loading: true }}
+/>
+```
+
+### Destructuring Props
+
+Always destructure props in the function signature:
+
+```typescript
+// ✅ Good: Destructured props
+const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete, customerId }) => {
+  // Use onComplete and customerId directly
+};
+
+// ❌ Bad: Access via props object
+const BookingFlow: React.FC<BookingFlowProps> = (props) => {
+  props.onComplete(); // Harder to read
+};
+```
+
+---
+
+## State Management
+
+### Keep State Local When Possible
+
+```typescript
+// ✅ Good: Local state for component-specific data
+const ServiceCard = ({ service }: { service: Service }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  // isExpanded only used in this component
+};
+
+// ❌ Bad: Lifting state unnecessarily
+// In parent: const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+// Passed down through multiple components
+```
+
+### Group Related State
+
+```typescript
+// ❌ Bad: Scattered state
+const [name, setName] = useState('');
+const [email, setEmail] = useState('');
+const [phone, setPhone] = useState('');
+
+// ✅ Good: Grouped related state
+const [customerInfo, setCustomerInfo] = useState({
+  name: '',
+  email: '',
+  phone: ''
+});
+
+// Or use useReducer for complex state
+const [state, dispatch] = useReducer(customerReducer, initialState);
+```
+
+### Use useReducer for Complex State
+
+When state has complex update logic, use `useReducer`:
+
+```typescript
+// ✅ Good: Complex state with useReducer
+type ServiceSelectionState = {
+  selectedServices: SelectedServiceItem[];
+  totalPrice: number;
+  totalDuration: number;
+};
+
+type ServiceSelectionAction =
+  | { type: 'ADD_SERVICE'; service: Service }
+  | { type: 'REMOVE_SERVICE'; serviceId: string }
+  | { type: 'UPDATE_QUANTITY'; serviceId: string; quantity: number }
+  | { type: 'CLEAR_ALL' };
+
+const serviceSelectionReducer = (
+  state: ServiceSelectionState,
+  action: ServiceSelectionAction
+): ServiceSelectionState => {
+  switch (action.type) {
+    case 'ADD_SERVICE':
+      // Complex logic for adding service
+      return { /* ... */ };
+    case 'REMOVE_SERVICE':
+      // Complex logic for removing service
+      return { /* ... */ };
+    // ... more cases
+  }
+};
+
+const BookingFlow = () => {
+  const [state, dispatch] = useReducer(serviceSelectionReducer, initialState);
+  // Clean, predictable state updates
+};
+```
+
+---
+
+## Component Structure
+
+### Standard Component Structure
+
+Organize components in this order:
+
+```typescript
+// 1. Imports
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { dataService } from '../services/dataService';
+
+// 2. Types/Interfaces
+interface ComponentProps {
+  id: string;
+  onComplete: (data: Data) => void;
+}
+
+// 3. Constants (if component-specific)
+const MAX_ITEMS = 10;
+
+// 4. Helper Functions (outside component, pure functions)
+const formatDate = (date: Date): string => {
+  // Pure function, can be tested independently
+};
+
+// 5. Component
+const Component: React.FC<ComponentProps> = ({ id, onComplete }) => {
+  // 6. Hooks (state, effects, custom hooks)
+  const [state, setState] = useState<string>('');
+  const { data, loading } = useCustomHook();
+  
+  useEffect(() => {
+    // Effect logic
+  }, []);
+  
+  // 7. Event Handlers
+  const handleClick = () => {
+    // Handler logic
+  };
+  
+  // 8. Computed Values (useMemo if expensive)
+  const computedValue = useMemo(() => {
+    return expensiveCalculation(state);
+  }, [state]);
+  
+  // 9. Early Returns
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+  
+  // 10. Render
+  return (
+    <div>
+      {/* JSX */}
+    </div>
+  );
+};
+
+// 11. Export
+export default Component;
+```
+
+---
+
+## Reusability
+
+### Create Reusable Components
+
+Extract commonly used patterns into reusable components:
+
+```typescript
+// ✅ Good: Reusable Button component
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'small' | 'medium' | 'large';
+  disabled?: boolean;
+  loading?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+export const Button: React.FC<ButtonProps> = ({
+  variant = 'primary',
+  size = 'medium',
+  disabled = false,
+  loading = false,
+  onClick,
+  children
+}) => {
+  const baseClasses = 'font-medium rounded-lg transition-colors';
+  const variantClasses = {
+    primary: 'bg-black text-white hover:bg-gray-800',
+    secondary: 'bg-gray-200 text-black hover:bg-gray-300',
+    outline: 'border border-black text-black hover:bg-black hover:text-white'
+  };
+  
+  return (
+    <button
+      className={`${baseClasses} ${variantClasses[variant]}`}
+      disabled={disabled || loading}
+      onClick={onClick}
+    >
+      {loading ? <Spinner /> : children}
+    </button>
+  );
+};
+```
+
+### Extract Reusable Logic
+
+Create utility functions for repeated logic:
+
+```typescript
+// ✅ Good: Reusable utility functions
+// utils/dateUtils.ts
+export const formatAppointmentDate = (date: Date): string => {
+  return date.toLocaleDateString('en-US', { 
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+export const formatTime = (time: string): string => {
+  const [hours, minutes] = time.split(':');
+  const hour = parseInt(hours);
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour % 12 || 12;
+  return `${displayHour}:${minutes} ${period}`;
+};
+
+// Use in components
+const AppointmentCard = ({ appointment }) => {
+  return (
+    <div>
+      <p>{formatAppointmentDate(new Date(appointment.startTime))}</p>
+      <p>{formatTime(appointment.startTime.split('T')[1])}</p>
+    </div>
+  );
+};
+```
+
+---
+
+## Performance Considerations
+
+### Memoization Best Practices
+
+Only use memoization when necessary:
+
+```typescript
+// ❌ Bad: Unnecessary memoization
+const Component = React.memo(({ simpleProp }: { simpleProp: string }) => {
+  return <div>{simpleProp}</div>; // Simple render, no memoization needed
+});
+
+// ✅ Good: Memoize expensive computations
+const Component = ({ items }: { items: Item[] }) => {
+  const expensiveResult = useMemo(() => {
+    return items.reduce((acc, item) => {
+      // Complex calculation
+      return acc + complexCalculation(item);
+    }, 0);
+  }, [items]); // Only recalculate when items change
+  
+  return <div>{expensiveResult}</div>;
+};
+
+// ✅ Good: Memoize callbacks passed to child components
+const Parent = ({ items }: { items: Item[] }) => {
+  const handleItemClick = useCallback((itemId: string) => {
+    // Handler logic
+  }, []); // Empty deps if handler doesn't depend on props/state
+  
+  return (
+    <ChildComponent items={items} onItemClick={handleItemClick} />
+  );
+};
+```
+
+### Code Splitting
+
+Use React.lazy for route-based code splitting:
+
+```typescript
+// ✅ Good: Lazy load heavy components
+const PerformanceDashboard = React.lazy(() => import('./PerformanceDashboard'));
+const MarketingCenter = React.lazy(() => import('./MarketingCenter'));
+
+const App = () => {
+  return (
+    <Routes>
+      <Route 
+        path="/performance" 
+        element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <PerformanceDashboard />
+          </Suspense>
+        } 
+      />
+    </Routes>
+  );
+};
+```
+
+---
+
+## Error Handling
+
+### Error Boundaries
+
+Use Error Boundaries for component-level error handling:
+
+```typescript
+// ✅ Good: Error Boundary component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+    // Log to error tracking service
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallback error={this.state.error} />;
+    }
+    return this.props.children;
+  }
+}
+```
+
+### Async Error Handling
+
+Always handle errors in async operations:
+
+```typescript
+// ✅ Good: Proper error handling
+const fetchData = async () => {
+  try {
+    setLoading(true);
+    const data = await dataService.getServices();
+    setServices(data);
+  } catch (error) {
+    setError(error instanceof Error ? error.message : 'An error occurred');
+    // Show user-friendly error message
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+---
+
+## Testing Considerations
+
+### Write Testable Components
+
+Structure components to be easily testable:
+
+```typescript
+// ✅ Good: Testable component (logic extracted)
+// Component focuses on rendering
+const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
+  const { services, employees, loading } = useBookingData();
+  const { selectedServices, addService } = useServiceSelection();
+  
+  return (
+    <div>
+      {loading ? <LoadingSpinner /> : <ServiceList services={services} onSelect={addService} />}
+    </div>
+  );
+};
+
+// Logic is in hooks and can be tested separately
+// Component rendering can be tested with simple props
+```
+
+### Extract Pure Functions
+
+Extract pure functions that can be unit tested:
+
+```typescript
+// ✅ Good: Pure function, easily testable
+export const calculateTotalPrice = (services: SelectedServiceItem[]): number => {
+  return services.reduce((total, item) => {
+    return total + (item.service.price * item.quantity);
+  }, 0);
+};
+
+// In component
+const totalPrice = useMemo(() => calculateTotalPrice(selectedServices), [selectedServices]);
+```
+
+---
+
+## Naming Conventions
+
+### Component Names
+
+- Use **PascalCase** for component names: `BookingFlow`, `ServiceCard`
+- Use descriptive names that indicate purpose: `CustomerInfoForm` not `Form1`
+- Prefix with domain if needed: `BookingCalendar`, `AppointmentCard`
+
+### Function Names
+
+- Use **camelCase** for functions: `handleSubmit`, `calculateTotal`
+- Use verb prefixes for handlers: `handle`, `on`, `set`, `get`, `is`, `has`
+- Use descriptive names: `validateForm` not `validate`
+
+### File Names
+
+- Match component name: `BookingFlow.tsx` contains `BookingFlow` component
+- Use PascalCase: `ServiceCard.tsx`
+- Group related components: `booking/BookingFlow.tsx`, `booking/ServiceCard.tsx`
+
+---
+
+## Code Review Checklist
+
+Before submitting a component, check:
+
+- [ ] Component is under 300-400 lines
+- [ ] Functions are under 30 lines
+- [ ] Component has single responsibility
+- [ ] Complex logic is extracted to custom hooks
+- [ ] Reusable patterns are extracted to separate components
+- [ ] Props have explicit TypeScript interfaces
+- [ ] State is properly organized (grouped or useReducer if complex)
+- [ ] Error handling is implemented
+- [ ] Loading states are handled
+- [ ] Component is testable (logic separated from presentation)
+- [ ] No unnecessary memoization
+- [ ] Code follows project style guidelines
+- [ ] No commented-out code
+- [ ] No console.logs in production code
+
+---
+
+## Anti-Patterns to Avoid
+
+### ❌ Don't Create God Components
+
+```typescript
+// ❌ Bad: Component that does everything
+const GodComponent = () => {
+  // Handles data fetching
+  // Handles multiple forms
+  // Handles routing
+  // Handles state management
+  // Handles API calls
+  // 500+ lines
+};
+```
+
+### ❌ Don't Use Inline Functions in Render
+
+```typescript
+// ❌ Bad: New function on every render
+return (
+  <div>
+    {items.map(item => (
+      <ItemCard key={item.id} onClick={() => handleClick(item.id)} />
+    ))}
+  </div>
+);
+
+// ✅ Good: Use useCallback or extract handler
+const handleItemClick = useCallback((itemId: string) => {
+  // Handler logic
+}, []);
+
+return (
+  <div>
+    {items.map(item => (
+      <ItemCard key={item.id} onClick={handleItemClick} itemId={item.id} />
+    ))}
+  </div>
+);
+```
+
+### ❌ Don't Mutate State Directly
+
+```typescript
+// ❌ Bad: Mutating state
+const addItem = (newItem: Item) => {
+  items.push(newItem); // Mutation!
+  setItems(items);
+};
+
+// ✅ Good: Create new array
+const addItem = (newItem: Item) => {
+  setItems([...items, newItem]);
+};
+```
+
+### ❌ Don't Use Index as Key
+
+```typescript
+// ❌ Bad: Using index as key
+{items.map((item, index) => (
+  <ItemCard key={index} item={item} />
+))}
+
+// ✅ Good: Use unique identifier
+{items.map((item) => (
+  <ItemCard key={item.id} item={item} />
+))}
+```
+
+---
+
+## Related Guidelines
+
+- [Project Rules](.cursor/rules/rules.mdc) - General project coding standards
+- [Task Guidelines](.cursor/rules/task_guidelines.mdc) - Task documentation standards
+- [Documentation Guidelines](.cursor/rules/documentation_guidelines.mdc) - Documentation standards
+
+---
+
+**Remember:** Good React components are like good functions - they do one thing well, are easy to understand, easy to test, and easy to reuse. When in doubt, break it down further!
