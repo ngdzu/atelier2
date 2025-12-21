@@ -418,7 +418,12 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         }
       `}</style>
 
-      <div className="max-w-6xl mx-auto py-24 px-6">
+      <div className="max-w-6xl mx-auto py-24 px-6 relative">
+        {/* Decorative logo in top corner */}
+        <div className="absolute top-0 right-0 pointer-events-none">
+          <img src="/logo.png" alt="" className="h-32 w-auto opacity-10" />
+        </div>
+        
         {step !== 'CONFIRM' && (
           <div className="flex items-center justify-between mb-32 max-w-2xl mx-auto">
             {steps.map((s, idx) => {
@@ -447,8 +452,11 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
         <div className="min-h-[600px] reveal">
           {step === 'SERVICE' && (
             <div className="space-y-32">
-              <div className="text-center max-w-xl mx-auto">
-                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Selection.</h2>
+              <div className="text-center max-w-xl mx-auto relative">
+                <div className="absolute -left-20 top-1/2 -translate-y-1/2 opacity-10 hidden lg:block">
+                  <img src="/logo.png" alt="" className="h-16 w-auto" />
+                </div>
+                <h2 className="text-5xl font-serif font-bold text-black mb-6 text-center">The Selection.</h2>
                 <p className="text-gray-600 text-sm font-light tracking-wide mb-12">Select artisanal treatments for yourself and your collective.</p>
                 <div className="bg-[#C4A484]/5 border border-[#C4A484]/10 rounded-2xl p-6 flex items-center justify-center gap-4 reveal animate-in fade-in slide-in-from-top-4 duration-1000">
                   <Sparkles size={16} className="text-[#C4A484]" />
@@ -463,6 +471,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                 <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-2xl border border-black/5 rounded-full p-1 shadow-2xl shadow-black/5 flex items-center relative overflow-hidden">
                   <div onMouseEnter={() => startScrolling('left')} onMouseLeave={stopScrolling} className="absolute left-0 top-0 bottom-0 w-20 z-10 cursor-w-resize" />
                   <div onMouseEnter={() => startScrolling('right')} onMouseLeave={stopScrolling} className="absolute right-0 top-0 bottom-0 w-20 z-10 cursor-e-resize" />
+                  <img src="/logo.png" alt="" className="h-6 w-auto ml-4 flex-shrink-0" />
                   <div ref={indexScrollRef} className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth atelier-index-container px-6">
                     {(Object.keys(servicesByCategory)).map(cat => (
                       <button
@@ -477,6 +486,7 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
                       </button>
                     ))}
                   </div>
+                  <img src="/logo.png" alt="" className="h-6 w-auto mr-4 flex-shrink-0" />
                 </div>
               </div>
               
@@ -485,8 +495,11 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
               ) : (
                 (Object.entries(servicesByCategory) as [string, Service[]][]).map(([category, services]) => (
                   <div key={category} id={category} ref={(el) => { categoryRefs.current[category] = el; }} className="space-y-16 pt-8">
-                    <div className="flex items-center gap-12">
+                    <div className="flex items-center gap-6">
+                      <div className="h-px bg-black/10 flex-1" />
+                      <img src="/logo.png" alt="" className="h-6 w-auto" />
                       <h3 className="text-4xl font-serif font-bold tracking-tight text-black">{category}</h3>
+                      <img src="/logo.png" alt="" className="h-6 w-auto" />
                       <div className="h-px bg-black/10 flex-1" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -560,9 +573,16 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'EMPLOYEE' && (
-            <div className="space-y-16">
+            <div className="space-y-16 relative">
+              <div className="absolute top-0 left-0 pointer-events-none">
+                <img src="/logo.png" alt="" className="h-24 w-auto opacity-10" />
+              </div>
               <div className="text-center max-w-xl mx-auto">
-                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Specialists.</h2>
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                  <h2 className="text-5xl font-serif font-bold text-black">The Specialists.</h2>
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                </div>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Select an artisan to curate your session.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-3xl mx-auto">
@@ -580,9 +600,16 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'TIME' && (
-            <div className="space-y-24">
+            <div className="space-y-24 relative">
+              <div className="absolute top-0 right-0 pointer-events-none">
+                <img src="/logo.png" alt="" className="h-24 w-auto opacity-10" />
+              </div>
               <div className="text-center max-w-xl mx-auto">
-                <h2 className="text-5xl font-serif font-bold text-black mb-6">The Schedule.</h2>
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                  <h2 className="text-5xl font-serif font-bold text-black">The Schedule.</h2>
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                </div>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Select your date and a 15-minute sanctuary moment.</p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -613,9 +640,16 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'DETAILS' && (
-            <div className="space-y-16 max-w-md mx-auto">
+            <div className="space-y-16 max-w-md mx-auto relative">
+              <div className="absolute -left-32 top-0 pointer-events-none hidden lg:block">
+                <img src="/logo.png" alt="" className="h-20 w-auto opacity-10" />
+              </div>
               <div className="text-center">
-                <h2 className="text-5xl font-serif font-bold text-black mb-6">Final Details.</h2>
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                  <h2 className="text-5xl font-serif font-bold text-black">Final Details.</h2>
+                  <img src="/logo.png" alt="LuxeNail" className="h-8 w-auto" />
+                </div>
                 <p className="text-gray-600 text-sm font-light tracking-wide">Enter your identification to finalize the reservation.</p>
               </div>
               <div className="space-y-12">
@@ -636,9 +670,19 @@ const BookingFlow: React.FC<BookingFlowProps> = ({ onComplete }) => {
           )}
 
           {step === 'CONFIRM' && (
-            <div className="flex flex-col items-center justify-center text-center py-24 space-y-12 reveal">
-              <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center shadow-2xl"><CheckCircle2 size={80} /></div>
-              <h2 className="text-7xl font-serif font-bold text-black">Confirmed.</h2>
+            <div className="flex flex-col items-center justify-center text-center py-24 space-y-12 reveal relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none">
+                <img src="/logo.png" alt="" className="h-40 w-auto opacity-10" />
+              </div>
+              <div className="w-40 h-40 bg-black text-white rounded-full flex items-center justify-center shadow-2xl relative">
+                <CheckCircle2 size={80} />
+                <img src="/logo.png" alt="LuxeNail" className="absolute h-12 w-auto opacity-20" />
+              </div>
+              <div className="flex items-center justify-center gap-6">
+                <img src="/logo.png" alt="LuxeNail" className="h-12 w-auto" />
+                <h2 className="text-7xl font-serif font-bold text-black">Confirmed.</h2>
+                <img src="/logo.png" alt="LuxeNail" className="h-12 w-auto" />
+              </div>
               <div className="space-y-4 max-w-sm">
                 <p className="text-gray-600 text-lg italic tracking-wide">The sanctuary awaits your arrival, {customerInfo.name}.</p>
                 <div className="p-6 bg-black/5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] space-y-2">

@@ -30,7 +30,12 @@ const Header: React.FC<HeaderProps> = ({ variant = 'standard' }) => {
 
   return (
     <nav className={navClasses}>
-      <Link to="/" className="flex items-center gap-2 group">
+      <Link to="/" className="flex items-center gap-3 group">
+        <img 
+          src="/logo.png" 
+          alt="LuxeNail Logo" 
+          className="h-10 w-auto object-contain"
+        />
         <span className="text-xl font-serif font-bold tracking-widest uppercase">{STORE_NAME}</span>
       </Link>
       <div className="hidden md:flex gap-10 lg:gap-12 text-[10px] font-bold uppercase tracking-[0.3em]">
