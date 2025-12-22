@@ -1,0 +1,38 @@
+{
+    "name": "@task-portal/core",
+    "version": "1.0.0",
+    "description": "Task Portal core data abstraction layer - work with any backend (JSON, database, API)",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "vitest",
+        "test:watch": "vitest --watch",
+        "test:coverage": "vitest --coverage"
+    },
+    "keywords": [
+        "task",
+        "portal",
+        "abstraction",
+        "provider",
+        "repository",
+        "data-access"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "typescript": "^5.3.3",
+        "vitest": "^1.1.0"
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    }
+}
