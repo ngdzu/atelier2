@@ -1,0 +1,42 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "watch",
+            "problemMatcher": {
+                "owner": "esbuild",
+                "fileLocation": "autoDetect",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*watching for changes.*",
+                    "endsPattern": ".*watching for changes.*"
+                },
+                "pattern": {
+                    "regexp": "^ > (.*):(\\d+):(\\d+): (error): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "label": "npm: watch",
+            "detail": "npm run build -- --watch"
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}

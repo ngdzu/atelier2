@@ -12,24 +12,27 @@ This guide explains how to build, run, and deploy the LuxeNail salon website usi
 
 ### Development Environment
 
-Start the development environment with hot reload:
+Start the development environment with hot reload for client, server, and database:
 
-```bash
-docker-compose up client
+```
+docker-compose up client server database
 ```
 
-The client will be available at `http://localhost:5173`
+- Client: http://localhost:5174
+- Server: http://localhost:3000/health
+- Postgres: localhost:5432 (user: postgres, password: postgres, db: atelier2)
 
 ### Production Environment
 
 Build and run the production environment:
 
-```bash
-docker-compose -f docker-compose.prod.yml build client
-docker-compose -f docker-compose.prod.yml up client
+```
+docker-compose -f docker-compose.prod.yml build client server
+docker-compose -f docker-compose.prod.yml up -d client server database
 ```
 
-The client will be available at `http://localhost:80`
+- Client: http://localhost:80
+- Server: http://localhost:3000/health (reachable on host; internal DNS: http://server:3000)
 
 ## Environment Variables
 
@@ -40,7 +43,16 @@ Create a `.env.local` file in the `client/` directory:
 ```env
 GEMINI_API_KEY=your_api_key_here
 VITE_HOST=0.0.0.0
-VITE_PORT=5173
+VITE_PORT=5174
+```
+
+Create a `.env` file in the `server/` directory (copy from `.env.example`):
+
+```env
+NODE_ENV=development
+PORT=3000
+DATABASE_URL=postgresql://postgres:postgres@database:5432/atelier2
+CLIENT_URL=http://localhost:5174
 ```
 
 ### Production
@@ -50,68 +62,59 @@ Set environment variables in `docker-compose.prod.yml` or use Docker secrets:
 ```yaml
 environment:
   - NODE_ENV=production
-  - GEMINI_API_KEY=${GEMINI_API_KEY}
+  - DATABASE_URL=${DATABASE_URL}
+  - CLIENT_URL=${CLIENT_URL}
 ```
+
+Recommended values:
+- `CLIENT_URL=http://localhost`
+- `PORT=3000`
 
 ## Docker Commands
 
 ### Build Images
 
-Build development image:
-```bash
-docker-compose build client
 ```
-
-Build production image:
-```bash
-docker-compose -f docker-compose.prod.yml build client
+docker-compose build client server
+docker-compose -f docker-compose.prod.yml build client server
 ```
 
 ### Run Containers
 
-Start development environment:
-```bash
-docker-compose up client
 ```
+# Development (foreground)
+docker-compose up client server database
 
-Start in detached mode:
-```bash
-docker-compose up -d client
-```
+# Development (detached)
+docker-compose up -d client server database
 
-Start production environment:
-```bash
-docker-compose -f docker-compose.prod.yml up -d client
+# Production
+docker-compose -f docker-compose.prod.yml up -d client server database
 ```
 
 ### View Logs
 
-View client logs:
-```bash
+```
 docker-compose logs -f client
+
+docker-compose logs -f server
+
+docker-compose logs -f database
 ```
 
 ### Stop Containers
 
-Stop development environment:
-```bash
-docker-compose down
 ```
+docker-compose down
 
-Stop production environment:
-```bash
 docker-compose -f docker-compose.prod.yml down
 ```
 
 ### Clean Up
 
-Remove containers and volumes:
-```bash
-docker-compose down -v
 ```
+docker-compose down -v
 
-Remove images:
-```bash
 docker-compose down --rmi all
 ```
 
@@ -124,6 +127,11 @@ docker-compose down --rmi all
 │   ├── Dockerfile.dev      # Development Dockerfile
 │   ├── .dockerignore       # Files to exclude from build
 │   └── nginx.conf          # Nginx configuration for production
+├── server/
+│   ├── Dockerfile          # Production Dockerfile
+│   ├── Dockerfile.dev      # Development Dockerfile
+│   ├── .dockerignore       # Files to exclude from build
+│   └── README.md           # Server setup and usage
 ├── docker-compose.yml      # Development configuration
 ├── docker-compose.prod.yml # Production configuration
 └── .dockerignore           # Root-level ignore file
@@ -133,64 +141,30 @@ docker-compose down --rmi all
 
 ### Development
 
-- **Client**: React/Vite application running in development mode
-- **Port**: 5173 (Vite dev server)
-- **Hot Reload**: Enabled via volume mounts
-- **Network**: `app-network` bridge network
+- Client: React/Vite application on port 5174
+- Server: Express/TypeORM API on port 3000
+- Database: PostgreSQL 16-alpine on port 5432
+- Network: `app-network` bridge network
 
 ### Production
 
-- **Client**: Static files served by nginx
-- **Port**: 80
-- **Build**: Multi-stage build with optimized static assets
-- **Network**: `app-network` bridge network
+- Client: Static assets served by nginx on port 80
+- Server: Express/TypeORM API on port 3000 (exposed for testing)
+- Database: PostgreSQL 16-alpine (internal only)
+- Network: `app-network` bridge network
 
 ## Health Checks
 
-Production containers include health checks. Check container health:
-
-```bash
-docker-compose -f docker-compose.prod.yml ps
-```
+- Client: nginx health via `docker-compose -f docker-compose.prod.yml ps`
+- Server: `/health` endpoint
+- Database: `pg_isready` check
 
 ## Troubleshooting
 
-### Port Already in Use
-
-If port 5173 or 80 is already in use:
-
-```bash
-# Find process using port
-lsof -i :5173
-# or
-lsof -i :80
-
-# Kill process or change port in docker-compose.yml
-```
-
-### Container Keeps Restarting
-
-Check logs for errors:
-```bash
-docker-compose logs client
-```
-
-### Build Fails
-
-Clear Docker cache and rebuild:
-```bash
-docker-compose build --no-cache client
-```
-
-### Permission Issues
-
-Ensure Docker has proper permissions:
-```bash
-sudo usermod -aG docker $USER
-# Log out and log back in
-```
-
-### Hot Reload Not Working
+- Ports already in use: `lsof -i :5174`, `lsof -i :3000`, or `lsof -i :5432`
+- Container keeps restarting: `docker-compose logs -f <service>`
+- Build fails: `docker-compose build --no-cache <service>`
+- Hot reload issues: `docker-compose config` to verify volume mounts
 
 Ensure volumes are properly mounted:
 ```bash

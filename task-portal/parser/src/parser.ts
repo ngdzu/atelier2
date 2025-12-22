@@ -10,14 +10,43 @@ import { CATEGORY_INFO, CategoryCodes, type CategoryCode } from './schema.js';
  */
 export async function parseTaskFiles(tasksDir: string): Promise<TaskRegistry> {
     const taskFiles = await findTaskFiles(tasksDir);
-    const allTasks: Task[] = [];
+    const collectedTasks: Task[] = [];
 
     for (const file of taskFiles) {
         const filePath = path.join(tasksDir, file);
         const content = await fs.readFile(filePath, 'utf-8');
         const tasks = await parseTaskFile(content, file, filePath);
-        allTasks.push(...tasks);
+        collectedTasks.push(...tasks);
     }
+
+    // Dedupe tasks by ID, preferring phase files and newer updates
+    const taskById = new Map<string, Task>();
+    for (const task of collectedTasks) {
+        const existing = taskById.get(task.id);
+        if (!existing) {
+            taskById.set(task.id, task);
+            continue;
+        }
+
+        // Compute preference score
+        const score = (t: Task) => {
+            const f = t.file.toLowerCase();
+            let s = 0;
+            if (f.includes('portal-phase')) s += 3;
+            else if (f.endsWith('portal.task')) s += 1;
+            else s += 2;
+
+            // Prefer newer updated date if available
+            const ts = Date.parse(t.updated || '') || 0;
+            return s * 1_000_000_000 + ts; // weight file preference heavily, then date
+        };
+
+        if (score(task) >= score(existing)) {
+            taskById.set(task.id, task);
+        }
+    }
+
+    const allTasks: Task[] = Array.from(taskById.values());
 
     // Build categories
     const categories = buildCategories(allTasks);

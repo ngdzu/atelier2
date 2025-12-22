@@ -1,0 +1,69 @@
+{
+    "name": "task-portal",
+    "displayName": "Task Portal",
+    "description": "Integrated task tracking and management portal for .task files",
+    "version": "0.1.0",
+    "publisher": "task-portal",
+    "license": "MIT",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished",
+        "workspaceContains:.tasks/*.task"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "taskPortal.open",
+                "title": "Open Portal",
+                "category": "Task Portal"
+            },
+            {
+                "command": "taskPortal.sync",
+                "title": "Sync Tasks",
+                "category": "Task Portal"
+            },
+            {
+                "command": "taskPortal.refresh",
+                "title": "Refresh",
+                "category": "Task Portal"
+            },
+            {
+                "command": "taskPortal.openTask",
+                "title": "Open Task File",
+                "category": "Task Portal"
+            }
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "type": "webview",
+                    "id": "taskPortal.portalView",
+                    "name": "Task Portal"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node18 --format=cjs",
+        "watch": "npm run build -- --watch",
+        "compile": "tsc -p ./",
+        "watch:tsc": "tsc -watch -p ./",
+        "package": "vsce package",
+        "publish": "vsce publish"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "@types/vscode": "^1.85.0",
+        "@vscode/test-electron": "^2.3.0",
+        "@vscode/vsce": "^2.22.0",
+        "esbuild": "^0.19.0",
+        "typescript": "^5.3.3"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "name": "atelier2",
+    "version": "1.0.0",
+    "description": "A comprehensive project management and task tracking system",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "sync-tasks": "cd task-portal/parser && npm run build && node dist/cli.js sync ../../.tasks ../../.tasks/TASK_REGISTRY.json",
+        "sync-tasks:watch": "cd task-portal/parser && npm run build && node dist/cli.js watch ../../.tasks ../../.tasks/TASK_REGISTRY.json"
+    },
+    "workspaces": [
+        "task-portal/parser",
+        "task-portal/core",
+        "client"
+    ],
+    "keywords": [
+        "task-management",
+        "project-management",
+        "portal",
+        "parser"
+    ],
+    "author": "",
+    "license": "MIT"
+}
