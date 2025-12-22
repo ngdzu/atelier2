@@ -2,10 +2,10 @@ import { Customer, Employee, Service, Appointment, GalleryImage } from './types'
 import { generateGalleryPhotos } from './utils/generateGalleryPhotos';
 
 export const STORE_NAME = 'LuxeNail';
-export const PHONE_NUMBER = '(555) 012-3456';
-export const CONTACT_EMAIL = `concierge@${STORE_NAME.toLowerCase()}.com`;
-export const ADDRESS_STREET = '123 Design Blvd, Suite 400';
-export const ADDRESS_CITY = 'Los Angeles, CA 90210';
+export const PHONE_NUMBER = '(617) 012-3456';
+export const CONTACT_EMAIL = `support@${STORE_NAME.toLowerCase()}.com`;
+export const ADDRESS_STREET = '123 Maint Street';
+export const ADDRESS_CITY = 'Boston, MA 02116';
 
 export const NAV_LINKS = [
   { name: 'Collections', path: '/gallery' },
