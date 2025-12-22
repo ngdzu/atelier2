@@ -10,7 +10,7 @@ const LandingPage: React.FC = () => {
       <Header variant="fixed" />
 
       {/* Hero: Split Screen Editorial */}
-      <section className="relative h-screen w-full flex flex-col lg:flex-row overflow-hidden">
+      <section className="relative h-[min(100vh,1200px)] w-full flex flex-col lg:flex-row overflow-hidden">
         <div className="flex-1 relative h-1/2 lg:h-full overflow-hidden border-b lg:border-b-0 lg:border-r border-black/5">
           <img 
             src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=1200" 
