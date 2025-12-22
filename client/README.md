@@ -73,6 +73,26 @@ VITE_PORT=5173
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 
+## Gallery Photo Management
+
+Gallery images are served from `client/public/gallery`. The gallery page is driven by a generated TypeScript file that lists the actual filenames, so you need to regenerate that list when you add or remove photos.
+
+### After Adding or Deleting Photos
+
+Whenever you add new images to `public/gallery` or delete existing ones, regenerate the gallery file list:
+
+```bash
+cd client
+node scripts/generateGalleryFileList.js
+```
+
+This command:
+- Scans `public/gallery` for image files (`.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`)
+- Writes `utils/galleryFileList.ts` with the current filenames
+- Ensures the gallery page only attempts to load images that actually exist
+
+After running the command, refresh the Gallery page in the browser. Deleted photos will disappear, and newly added ones will be included.
+
 ## Project Structure
 
 ```
