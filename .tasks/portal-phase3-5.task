@@ -1,0 +1,796 @@
+# Task Portal Development Tasks - Phase 3, 4, and 5
+
+## TASK-FEAT-007: Add Kanban Board View
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 10-12 hours
+**Dependencies:** TASK-FEAT-006
+**Related Tasks:** TASK-FEAT-008
+
+### Description
+
+Implement a Kanban board view that visualizes tasks as cards organized by status columns. Add drag-and-drop functionality to move tasks between statuses, with swimlanes for grouping by category or assignee. This provides an alternative, more visual way to manage tasks.
+
+### Requirements / What to Do
+
+#### Step 1: Choose Drag-and-Drop Library
+- [ ] Evaluate DnD libraries:
+  - @dnd-kit (modern, hooks-based)
+  - react-dnd
+- [ ] Choose based on bundle size, TypeScript support, and accessibility
+- [ ] Install chosen library
+- [ ] Configure for webview environment
+
+#### Step 2: Create Kanban Board Component
+- [ ] Create `KanbanBoard.tsx` component
+- [ ] Add to navigation/routing
+- [ ] Create column layout for statuses:
+  - PENDING
+  - IN_PROGRESS
+  - BLOCKED
+  - COMPLETED
+- [ ] Make responsive (horizontal scroll on small screens)
+
+#### Step 3: Create Task Card Component
+- [ ] Create `TaskCard.tsx` component
+- [ ] Display on card:
+  - Title (truncated if long)
+  - Priority indicator (color dot/badge)
+  - Category badge
+- [ ] Add hover effects
+- [ ] Make compact but readable
+- [ ] Color code column header by status
+- [ ] Add "Add Task" button (optional)
+- [ ] Make task cards draggable
+- [ ] Make columns droppable
+- [ ] Show visual feedback while dragging:
+  - Show drop zone indicator
+  - Highlight target column
+- [ ] Prevent dropping in invalid columns (if any rules)
+- [ ] Smooth animations for card movement
+
+#### Step 6: Update Task Status on Drop
+- [ ] Rollback on error
+
+- [ ] Group tasks horizontally by selected dimension
+- [ ] Show swimlane labels
+- [ ] Maintain status columns within each swimlane
+- [ ] Make swimlanes collapsible (optional)
+- [ ] Apply existing filters to Kanban view
+- [ ] Apply search to visible cards
+- [ ] Dim or hide filtered-out cards
+
+#### Step 9: Add Quick Actions on Cards
+- [ ] Hover menu with:
+  - Open in editor
+  - Copy task ID
+- [ ] Keyboard shortcuts for actions
+#### Step 10: Optimize Performance
+- [ ] Virtualize columns if many tasks
+- [ ] Lazy render off-screen cards
+- [ ] Debounce drag events
+- [ ] Minimize re-renders during drag
+- [ ] Test with 100+ tasks
+
+- [ ] Drag-and-drop works smoothly
+- [ ] Dropping card updates task status
+- [ ] Swimlanes group tasks effectively
+- [ ] Filtering and search work in Kanban view
+- [ ] UI is visually appealing
+- [ ] Performance is good with many tasks
+- [ ] Works in light and dark themes
+- [ ] Responsive design adapts to panel size
+
+### Verification Steps
+   - Verify card count matches per column
+
+   - Verify reverts
+
+3. **Visual Feedback:**
+
+5. **Quick Actions:**
+   - Hover over task card
+   - Verify action menu appears
+   - Click "View Details"
+   - Verify details modal opens
+   - Click "Open in Editor"
+   - Verify file opens
+
+6. **Performance:**
+   - Load board with many tasks
+   - Verify smooth scrolling
+   - Verify drag-and-drop responsive
+   - Check no lag
+
+### Acceptance Criteria
+
+- ✅ Kanban board provides intuitive visual task management
+- ✅ Drag-and-drop is smooth and intuitive
+- ✅ Status updates reflect in files
+- ✅ Swimlanes organize tasks effectively
+- ✅ Quick actions enhance productivity
+- ✅ Performance is acceptable with realistic task counts
+- ✅ UI is polished and professional
+- ✅ Works well in both themes
+- ✅ Accessible via keyboard
+
+### Technical Details
+
+**Files to Create:**
+- `webview/src/components/KanbanBoard.tsx`
+- `webview/src/components/KanbanColumn.tsx`
+- `webview/src/components/TaskCard.tsx`
+- `webview/src/components/Swimlane.tsx`
+- `webview/src/hooks/useKanban.ts`
+
+**Drag-and-Drop Library (Recommended: @dnd-kit):**
+```bash
+npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
+```
+
+**Board Layout:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Kanban Board          [Swimlane: None ▼]    [Filters ▼]   │
+├───────────┬───────────┬───────────┬───────────┬─────────────┤
+│ PENDING   │IN_PROGRESS│  BLOCKED  │ COMPLETED │  CANCELLED  │
+│   (3)     │   (2)     │   (0)     │   (6)     │    (1)      │
+├───────────┼───────────┼───────────┼───────────┼─────────────┤
+**Update Task Message:**
+```typescript
+{
+  type: 'updateTaskStatus',
+- [ ] Board renders all columns
+- [ ] Tasks appear in correct columns
+- [ ] Card shows task ID, title, priority
+- [ ] Drag initiates correctly
+- [ ] Drop zone highlights
+- [ ] Card moves to new column
+- [ ] Status updates in extension
+- [ ] File sync triggers
+- [ ] Swimlane by category works
+- [ ] Swimlane by assignee works
+- [ ] Filter applies to board
+- [ ] Search filters cards
+- [ ] Quick actions menu appears
+- [ ] Open in editor works
+- [ ] View details works
+- [ ] Keyboard navigation works
+- [ ] Light theme looks good
+- [ ] Dark theme looks good
+
+### Additional Context
+
+**Status Column Order:**
+Left to right workflow: PENDING → IN_PROGRESS → BLOCKED → COMPLETED → CANCELLED
+
+**Swimlane Example:**
+```
+Category: OPS
+├─ PENDING │ IN_PROGRESS │ COMPLETED
+│  Card 1  │   Card 2    │  Card 3
+
+Category: FEAT
+├─ PENDING │ IN_PROGRESS │ COMPLETED
+│  Card 4  │   Card 5    │  Card 6
+```
+
+**Accessibility:**
+- Cards are keyboard navigable (Tab)
+- Space/Enter to pick up/drop card
+- Arrow keys to move between columns
+- Screen reader announces drag state
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-008: Add Quick Actions
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 6-8 hours
+**Dependencies:** TASK-FEAT-007
+**Related Tasks:** TASK-FEAT-009
+
+### Description
+
+Add quick action buttons and shortcuts throughout the task portal to improve productivity. Enable users to quickly open task files, change status, copy task IDs, create new tasks from templates, and perform other common actions without navigating away from the current view.
+
+### Requirements / What to Do
+
+#### Step 1: Add Quick Action Toolbar
+- [ ] Create toolbar component
+- [ ] Position at top of task list/board
+- [ ] Add common action buttons:
+  - New Task
+  - Sync Tasks
+  - Refresh View
+  - Export Data (optional)
+- [ ] Add keyboard shortcuts indicator
+
+#### Step 2: Implement "Open in Editor" Action
+- [ ] Add button to task details view
+- [ ] Add context menu item on task cards/rows
+- [ ] Send message to extension with task file path
+- [ ] Extension opens file in editor
+- [ ] Navigate to task section (bonus: scroll to task heading)
+- [ ] Show confirmation toast
+
+#### Step 3: Implement "Quick Status Change"
+- [ ] Add status dropdown on task cards
+- [ ] Show current status, allow selection of new status
+  - Category selection
+  - Title input
+  - Priority selection
+  - Status (default: PENDING)
+  - Assignee (optional)
+  - Description (optional)
+- [ ] Generate task ID automatically (next available for category)
+- [ ] Create .task file with template
+- [ ] Show success notification
+- [ ] Navigate to new task
+
+#### Step 6: Add Task Templates
+- [ ] Create default task template
+- [ ] Support custom templates by category
+- [ ] Template includes:
+  - Task header structure
+
+#### Step 7: Implement "Quick Assign"
+- [ ] Update task assignee
+
+#### Step 8: Implement "Quick Priority Change"
+- [ ] Add priority buttons/dropdown on task cards
+- [ ] Visual priority indicators (colors, icons)
+- [ ] Update priority immediately
+#### Step 9: Add Context Menus
+- [ ] Right-click on task card shows context menu:
+  - Open in Editor
+  - Copy Task ID
+  - Change Status →
+  - Change Priority →
+  - View Details
+  - Delete (with confirmation)
+- [ ] Support keyboard (Shift+F10 or Menu key)
+
+#### Step 10: Add Keyboard Shortcuts
+  - `Ctrl+R` - Refresh
+  - `Ctrl+S` - Sync
+  - `Ctrl+F` - Focus search
+  - `Ctrl+K` - Command palette (bonus)
+- [ ] Task-specific shortcuts (when task focused):
+  - `Enter` - Open details
+- [ ] Show keyboard shortcuts in help panel
+
+
+### Definition of Done (DoD)
+- [ ] Status change action works and syncs
+- [ ] Create new task modal works
+- [ ] Quick assign works
+- [ ] UI is polished and intuitive
+#### Step 11: Add Confirmation Dialogs
+  - Delete task
+  - Cancel task
+  - Major status changes (e.g., COMPLETED → PENDING)
+  - Allow "Don't ask again" option for some actions
+### Verification Steps
+
+1. **Open in Editor:**
+   - Click "Open in Editor" on task
+   - Verify file opens in VS Code
+   - Verify cursor near task section
+   - Try keyboard shortcut
+
+2. **Quick Status:**
+   - Click status dropdown on task card
+   - Select "IN_PROGRESS"
+   - Verify status updates immediately
+   - Sync tasks
+   - Open file, verify status changed
+
+3. **Copy Task ID:**
+   - Click copy button on task
+   - Paste in VS Code (Ctrl+V)
+   - Verify task ID pasted
+   - Try keyboard shortcut
+
+4. **New Task:**
+   - Click "New Task" button
+   - Fill in form (FEAT category, title)
+   - Submit
+   - Verify task created
+   - Verify .task file created
+   - Verify task appears in list
+
+5. **Context Menu:**
+   - Right-click task card
+   - Verify menu appears with all options
+   - Click "Copy Task ID"
+   - Verify copied
+
+6. **Keyboard Shortcuts:**
+   - Press Ctrl+F
+   - Verify search focused
+   - Press Ctrl+N
+   - Verify new task modal opens
+   - Press Esc to close
+   - Focus task, press O
+   - Verify opens in editor
+
+### Acceptance Criteria
+
+- ✅ Quick actions improve workflow efficiency
+- ✅ Open in editor saves time navigating files
+- ✅ Status and priority changes are fast
+- ✅ Copy task ID is instant and reliable
+- ✅ New task creation is streamlined
+- ✅ Templates make task creation easier
+- ✅ Context menus are discoverable and useful
+- ✅ Keyboard shortcuts empower power users
+- ✅ Confirmations prevent mistakes
+- ✅ All actions provide clear feedback
+
+### Technical Details
+
+**Files to Create:**
+- `webview/src/components/QuickActionToolbar.tsx`
+- `webview/src/components/NewTaskModal.tsx`
+- `webview/src/components/ContextMenu.tsx`
+- `webview/src/components/ConfirmDialog.tsx`
+- `webview/src/hooks/useKeyboardShortcuts.ts`
+- `webview/src/utils/clipboard.ts`
+- `extension/src/commands/createTask.ts`
+- `extension/src/templates/taskTemplate.ts`
+
+**Message Types:**
+```typescript
+type QuickActionMessage =
+  | { type: 'openInEditor', filePath: string, taskId: string }
+  | { type: 'updateStatus', taskId: string, status: TaskStatus }
+  | { type: 'updatePriority', taskId: string, priority: TaskPriority }
+  | { type: 'updateAssignee', taskId: string, assignee: string }
+  | { type: 'createTask', data: Partial<Task> }
+  | { type: 'deleteTask', taskId: string };
+```
+
+**Task Template:**
+```markdown
+## TASK-[CATEGORY]-[NUMBER]: [Title]
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** YYYY-MM-DD
+**Updated:** YYYY-MM-DD
+**Estimated Time:** X hours
+**Dependencies:** none
+
+### Description
+
+[Describe what this task accomplishes]
+
+### Requirements / What to Do
+
+- [ ] Step 1
+- [ ] Step 2
+
+### Definition of Done (DoD)
+
+- [ ] Requirement 1 met
+- [ ] All tests passing
+
+### Verification Steps
+
+1. Test step 1
+2. Test step 2
+
+### Acceptance Criteria
+
+- ✅ Criterion 1
+- ✅ Criterion 2
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+```
+
+### Testing Checklist
+
+- [ ] Toolbar renders correctly
+- [ ] New Task button works
+- [ ] Sync button works
+- [ ] Refresh button works
+- [ ] Open in editor opens correct file
+- [ ] Status dropdown shows all statuses
+- [ ] Status change updates task
+- [ ] Priority change updates task
+- [ ] Copy ID works
+- [ ] Paste shows task ID
+- [ ] New task modal opens
+- [ ] New task form validates
+- [ ] New task creates file
+- [ ] Templates populate correctly
+- [ ] Context menu appears
+- [ ] Context menu actions work
+- [ ] Keyboard shortcuts work
+- [ ] Confirmation dialogs appear
+- [ ] Confirmation can be bypassed
+
+### Additional Context
+
+**Keyboard Shortcuts Reference:**
+```
+Global:
+  Ctrl+N     New Task
+  Ctrl+R     Refresh
+  Ctrl+S     Sync
+  Ctrl+F     Search
+  Ctrl+1-5   Filter by priority
+
+Task-Focused:
+  Enter      View Details
+  O          Open in Editor
+  C          Copy Task ID
+  D          Delete
+  1-5        Set Priority
+  S          Change Status
+```
+
+**Toast Notifications:**
+- Success: Green with checkmark icon
+- Error: Red with X icon
+- Info: Blue with info icon
+- Duration: 3 seconds (auto-dismiss)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-009: Add Progress Tracking
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 6-8 hours
+**Dependencies:** TASK-FEAT-008
+**Related Tasks:** TASK-FEAT-010
+
+### Description
+
+Implement comprehensive progress tracking that calculates task completion based on checklist items in the Definition of Done and Requirements sections. Display progress bars on task cards and in details view, show overall project progress, and track completion trends over time.
+
+### Requirements / What to Do
+
+#### Step 1: Enhance Parser for Checklist Extraction
+- [ ] Update parser to extract all checklist items from:
+  - Requirements / What to Do section
+  - Definition of Done section
+  - Verification Steps section (optional)
+- [ ] Count total checklist items
+- [ ] Count completed items (marked with `[x]`)
+- [ ] Calculate percentage: (completed / total) * 100
+- [ ] Include in TASK_REGISTRY.json
+
+#### Step 2: Add Progress to Task Data Model
+- [ ] Update Task interface to include:
+  ```typescript
+  progress: {
+    completed: number;
+    total: number;
+    percentage: number;
+    updatedAt?: string;
+  }
+  ```
+- [ ] Ensure parser populates this data
+- [ ] Validate progress data in schema
+
+#### Step 3: Create Progress Bar Component
+- [ ] Create `ProgressBar.tsx` component
+- [ ] Accept props: percentage, size, color
+- [ ] Render filled bar proportional to percentage
+- [ ] Show percentage text
+- [ ] Color code by completion:
+  - 0-33%: Red
+  - 34-66%: Yellow
+  - 67-99%: Blue
+  - 100%: Green
+- [ ] Animate on value change
+- [ ] Support light/dark themes
+
+#### Step 4: Add Progress to Task Cards
+- [ ] Display progress bar on task cards (list and Kanban)
+- [ ] Show compact progress indicator
+- [ ] Include percentage text
+- [ ] Update in real-time when task changes
+
+#### Step 5: Add Progress to Task Details
+- [ ] Show larger progress bar in details view
+- [ ] Display breakdown:
+  - X of Y items completed
+  - Percentage
+  - Last updated timestamp
+- [ ] List incomplete checklist items
+- [ ] Highlight recently completed items
+
+#### Step 6: Calculate Overall Project Progress
+- [ ] Calculate across all active tasks:
+  - Total checklist items in all tasks
+  - Total completed items
+  - Overall percentage
+- [ ] Weight by priority (optional):
+  - CRITICAL: 4x
+  - HIGH: 2x
+  - MEDIUM: 1x
+  - LOW: 0.5x
+- [ ] Display on dashboard
+
+#### Step 7: Add Progress Filtering
+- [ ] Filter tasks by progress range:
+  - Not started (0%)
+  - In progress (1-99%)
+  - Completed (100%)
+  - At risk (<50% but status IN_PROGRESS)
+- [ ] Add progress range slider filter (optional)
+
+#### Step 8: Show Progress Trends
+- [ ] Track progress history (if data available)
+- [ ] Show progress chart over time (line graph)
+- [ ] Display:
+  - Tasks completed per week
+  - Average completion rate
+  - Velocity trend (speeding up/slowing down)
+- [ ] Add to dashboard
+
+#### Step 9: Add Progress Notifications
+- [ ] Notify when task reaches 100% progress
+- [ ] Suggest changing status to COMPLETED
+- [ ] Warn if task IN_PROGRESS but 0% progress (stale)
+- [ ] Celebrate milestones (25%, 50%, 75%)
+
+#### Step 10: Add Progress Export
+- [ ] Export progress report:
+  - CSV format
+  - JSON format
+  - Markdown summary
+- [ ] Include per-task and overall stats
+- [ ] Include timestamp and metadata
+
+### Definition of Done (DoD)
+
+- [ ] Parser extracts checklist items correctly
+- [ ] Progress data included in TASK_REGISTRY.json
+- [ ] Progress bars display accurately on task cards
+- [ ] Progress bars in details view show breakdown
+- [ ] Overall project progress calculated correctly
+- [ ] Progress filtering works
+- [ ] Progress trends visualized (if applicable)
+- [ ] Notifications trigger appropriately
+- [ ] Export functionality works
+- [ ] UI is visually appealing
+- [ ] Performance is good with many tasks
+- [ ] Works in light and dark themes
+
+### Verification Steps
+
+1. **Parse Checklists:**
+   - Run parser on task with checklists
+   - Check TASK_REGISTRY.json
+   - Verify progress object present
+   - Verify counts correct
+
+2. **Progress Bar:**
+   - View task with 5/10 items completed
+   - Verify progress bar shows 50%
+   - Verify color is yellow
+   - Complete another item
+   - Sync, verify progress updates
+
+3. **Task Card Progress:**
+   - View task list
+   - Verify progress bars on cards
+   - Verify percentages match
+   - Hover, see tooltip with details
+
+4. **Overall Progress:**
+   - View dashboard
+   - Check overall progress stat
+   - Calculate manually
+   - Verify match
+
+5. **Progress Filter:**
+   - Filter by "In Progress (1-99%)"
+   - Verify only partially complete tasks shown
+   - Filter by "Completed (100%)"
+   - Verify only fully complete tasks shown
+
+6. **Trends:**
+   - View progress trends chart
+   - Verify shows completion over time
+   - Complete task, sync, refresh
+   - Verify chart updates
+
+### Acceptance Criteria
+
+- ✅ Progress accurately reflects checklist completion
+- ✅ Progress bars provide visual feedback
+- ✅ Overall project progress gives big picture view
+- ✅ Filtering by progress helps find specific tasks
+- ✅ Trends show project momentum
+- ✅ Notifications are helpful not annoying
+- ✅ Export enables reporting
+- ✅ UI is polished and informative
+
+### Technical Details
+
+**Files to Create:**
+- `webview/src/components/ProgressBar.tsx`
+- `webview/src/components/ProgressTrends.tsx`
+- `webview/src/components/ProgressBreakdown.tsx`
+- `webview/src/hooks/useProgress.ts`
+- `webview/src/utils/progressCalculations.ts`
+- `parser/src/checklistExtractor.ts`
+
+**Parser Update:**
+```typescript
+// Extract checklists from Markdown
+function extractChecklists(markdown: string): {
+  completed: number;
+  total: number;
+} {
+  const checkboxRegex = /- \[(x| )\]/gi;
+  const matches = markdown.match(checkboxRegex) || [];
+  
+  const total = matches.length;
+  const completed = matches.filter(m => m.includes('x')).length;
+  
+  return { completed, total };
+}
+```
+
+**Progress Calculation:**
+```typescript
+function calculateOverallProgress(tasks: Task[]): number {
+  let totalItems = 0;
+  let completedItems = 0;
+  
+  tasks.forEach(task => {
+    if (task.status !== 'CANCELLED' && task.progress) {
+      totalItems += task.progress.total;
+      completedItems += task.progress.completed;
+    }
+  });
+  
+  return totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+}
+```
+
+**Weighted Progress (Optional):**
+```typescript
+const PRIORITY_WEIGHTS = {
+  CRITICAL: 4,
+  HIGH: 2,
+  MEDIUM: 1,
+  LOW: 0.5
+};
+
+function calculateWeightedProgress(tasks: Task[]): number {
+  let totalWeight = 0;
+  let completedWeight = 0;
+  
+  tasks.forEach(task => {
+    const weight = PRIORITY_WEIGHTS[task.priority];
+    if (task.progress) {
+      totalWeight += task.progress.total * weight;
+      completedWeight += task.progress.completed * weight;
+    }
+  });
+  
+  return totalWeight > 0 ? (completedWeight / totalWeight) * 100 : 0;
+}
+```
+
+### Testing Checklist
+
+- [ ] Parser extracts checklists
+- [ ] Completed count correct
+- [ ] Total count correct
+- [ ] Percentage calculated correctly
+- [ ] Progress bar renders
+- [ ] Progress bar color correct
+- [ ] Progress updates on sync
+- [ ] Task card shows progress
+- [ ] Details view shows breakdown
+- [ ] Overall progress calculates
+- [ ] Filter by progress works
+- [ ] Trends chart displays
+- [ ] Notification on 100% works
+- [ ] Export generates file
+- [ ] Light theme readable
+- [ ] Dark theme readable
+
+### Additional Context
+
+**Progress Bar Sizes:**
+- Task Card: Small (2px height, compact)
+- Task Details: Medium (8px height, with label)
+- Dashboard: Large (16px height, prominent)
+
+**Color Coding:**
+```
+0-33%:   Red (#EF4444)     - Behind
+34-66%:  Yellow (#F59E0B)  - On track
+67-99%:  Blue (#3B82F6)    - Good progress
+100%:    Green (#10B981)   - Complete
+```
+
+**Notification Examples:**
+- "🎉 Task TASK-FEAT-009 is 100% complete! Consider marking it as COMPLETED."
+- "⚠️  Task TASK-OPS-001 is IN_PROGRESS but has 0% progress. Is this task stale?"
+- "🎊 You've reached 50% completion on TASK-FEAT-005. Keep going!"
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-010: Build Static Site Generator
+
+This section has moved to the dedicated Phase 4 file: [.tasks/portal-phase4.task](.tasks/portal-phase4.task).
+
+Summary:
+- Status: PENDING
+- Priority: LOW
+- Assignee: unassigned
+- Dependencies: TASK-FEAT-009
+- Related Tasks: TASK-FEAT-011
+
+Refer to the Phase 4 file for the full specification, requirements, DoD, and verification steps.
+
+## TASK-FEAT-011: Add Timeline View
+
+This section has moved to the dedicated Phase 5 file: [.tasks/portal-phase5.task](.tasks/portal-phase5.task).
+
+Summary:
+- Status: PENDING
+- Priority: LOW
+- Assignee: unassigned
+- Dependencies: TASK-FEAT-010
+- Related Tasks: TASK-FEAT-012
+
+Refer to the Phase 5 file for the full specification, requirements, DoD, and verification steps.
+
+## TASK-FEAT-012: Add Analytics & Reporting
+
+This section has moved to the dedicated Phase 5 file: [.tasks/portal-phase5.task](.tasks/portal-phase5.task).
+
+Summary:
+- Status: PENDING
+- Priority: LOW
+- Assignee: unassigned
+- Dependencies: TASK-FEAT-011
+- Related Tasks: none
+
+Refer to the Phase 5 file for the full specification, requirements, DoD, and verification steps.

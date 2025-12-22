@@ -1,0 +1,493 @@
+# Task Portal Development Tasks - Phase 5
+
+## TASK-FEAT-011: Add Timeline View
+
+**Status:** PENDING
+**Priority:** LOW
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 10-14 hours
+**Dependencies:** TASK-FEAT-010
+**Related Tasks:** TASK-FEAT-012
+
+### Description
+
+Implement a timeline/Gantt chart view that visualizes tasks along a time axis, shows task dependencies as connecting lines, and displays task duration based on estimated time. This provides a project management perspective on task scheduling and dependencies.
+
+### Requirements / What to Do
+
+#### Step 1: Choose Gantt Chart Library
+- [ ] Evaluate libraries:
+  - DHTMLX Gantt
+  - Frappe Gantt
+  - Custom D3.js implementation
+  - React Big Calendar
+- [ ] Consider licensing and bundle size
+- [ ] Choose based on features needed
+
+#### Step 2: Add Time Fields to Tasks
+- [ ] Extend Task interface with:
+  - `startDate?: string` (ISO date)
+  - `endDate?: string` (ISO date)
+  - `duration?: number` (in days/hours)
+- [ ] Update parser to extract if present in .task files
+- [ ] Allow manual entry in task details
+
+#### Step 3: Calculate Task Scheduling
+- [ ] If start/end dates missing, estimate:
+  - Use created date as start
+  - Use estimated time to calculate duration
+  - Calculate end date
+- [ ] For dependent tasks:
+  - Start after dependencies complete
+  - Chain tasks logically
+- [ ] Allow manual override
+
+#### Step 4: Create Timeline Component
+- [ ] Create `TimelineView.tsx` component
+- [ ] Add to navigation
+- [ ] Initialize Gantt chart library
+- [ ] Configure timeline scale (days, weeks, months)
+- [ ] Add zoom controls
+
+#### Step 5: Render Tasks on Timeline
+- [ ] Each task as a bar on timeline
+- [ ] Position based on start date
+- [ ] Length based on duration
+- [ ] Color code by:
+  - Status
+  - Priority
+  - Category (user choice)
+- [ ] Show task ID and title on bar
+
+#### Step 6: Visualize Dependencies
+- [ ] Draw arrows between dependent tasks
+- [ ] Arrow from dependency to dependent task
+- [ ] Different arrow styles:
+  - Solid: Must complete before
+- [ ] Arrows update when tasks move
+
+#### Step 7: Add Interactivity
+- [ ] Click task bar to view details
+- [ ] Drag task bar to change dates
+- [ ] Resize bar to change duration
+- [ ] Create dependency by dragging between tasks
+- [ ] Update .task file when dates change
+
+#### Step 8: Add Milestones
+- [ ] Identify milestone tasks (e.g., high-priority, named milestones)
+- [ ] Display as diamonds or special markers
+- [ ] Highlight on timeline
+- [ ] Show milestone list sidebar
+
+#### Step 9: Add Critical Path
+- [ ] Calculate critical path (longest chain of dependent tasks)
+- [ ] Highlight critical path tasks
+- [ ] Show total project duration
+- [ ] Indicate any delays impact on completion
+
+#### Step 10: Add Timeline Filters
+- [ ] Filter by category
+- [ ] Filter by assignee
+- [ ] Filter by priority
+- [ ] Show only critical path
+- [ ] Collapse completed tasks
+
+### Definition of Done (DoD)
+
+- [ ] Timeline view displays all tasks
+- [ ] Tasks positioned by date
+- [ ] Duration visualized as bar length
+- [ ] Dependencies shown as arrows
+- [ ] Interactive dragging and resizing works
+- [ ] Task details accessible from timeline
+- [ ] Milestones highlighted
+- [ ] Critical path calculated and shown
+- [ ] Filtering works
+- [ ] UI is clean and readable
+- [ ] Performance good with many tasks
+- [ ] Works in light and dark themes
+
+### Verification Steps
+
+1. **Basic Timeline:**
+   - Switch to Timeline view
+   - Verify all tasks visible
+   - Verify tasks on correct dates
+   - Verify bars sized by duration
+
+2. **Dependencies:**
+   - View task with dependencies
+   - Verify arrow points from dependency to task
+   - Follow arrow visually
+   - Verify logical flow
+
+3. **Interactivity:**
+   - Drag task bar
+   - Verify dates update
+   - Resize bar
+   - Verify duration updates
+   - Click bar
+   - Verify details open
+
+4. **Critical Path:**
+   - Enable critical path view
+   - Verify longest chain highlighted
+   - Verify total duration shown
+   - Verify correct
+
+5. **Filtering:**
+   - Filter by category OPS
+   - Verify only OPS tasks shown
+   - Verify timeline adjusts
+   - Clear filter
+
+### Acceptance Criteria
+
+- ✅ Timeline provides visual project overview
+- ✅ Dependencies are clear and logical
+- ✅ Interactive features enable planning
+- ✅ Critical path helps identify bottlenecks
+- ✅ Milestones highlight key dates
+- ✅ UI is intuitive and professional
+- ✅ Performance is acceptable
+- ✅ Provides value for project management
+
+### Technical Details
+
+**Files to Create:**
+- `webview/src/components/TimelineView.tsx`
+- `webview/src/components/GanttChart.tsx`
+- `webview/src/hooks/useTimeline.ts`
+- `webview/src/utils/criticalPath.ts`
+- `webview/src/utils/scheduling.ts`
+
+**Gantt Library (Recommended: Frappe Gantt):**
+```bash
+npm install frappe-gantt
+```
+
+**Task Extension:**
+```typescript
+interface Task {
+  // ...existing fields
+  startDate?: string;
+  endDate?: string;
+  duration?: number;  // in hours
+}
+```
+
+**Critical Path Algorithm:**
+Uses topological sort and longest path calculation.
+
+### Testing Checklist
+
+- [ ] Timeline renders
+- [ ] All tasks displayed
+- [ ] Dates correct
+- [ ] Durations correct
+- [ ] Dependencies shown
+- [ ] Arrows connect correctly
+- [ ] Drag task updates date
+- [ ] Resize updates duration
+- [ ] Critical path highlighted
+- [ ] Milestones shown
+- [ ] Filters work
+- [ ] Click opens details
+- [ ] Light theme readable
+- [ ] Dark theme readable
+- [ ] Performance acceptable
+
+### Additional Context
+
+**Timeline Scale:**
+- Day view: Detailed, for short projects
+- Week view: Medium detail, for 1-3 month projects
+- Month view: High level, for long projects
+
+**Color Coding Options:**
+- By Status (default)
+- By Priority
+- By Category
+- By Assignee
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-012: Add Analytics & Reporting
+
+**Status:** PENDING
+**Priority:** LOW
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 10-14 hours
+**Dependencies:** TASK-FEAT-011
+**Related Tasks:** none
+
+### Description
+
+Add advanced analytics and reporting features that track task velocity, identify bottlenecks, analyze team workload, and provide exportable reports. This enables data-driven project management and helps optimize team productivity.
+
+### Requirements / What to Do
+
+#### Step 1: Track Task History
+- [ ] Add history tracking to parser:
+  - Status changes with timestamps
+  - Assignee changes
+  - Priority changes
+  - Progress updates
+- [ ] Store history in TASK_REGISTRY.json or separate file
+- [ ] Limit history size (e.g., last 100 events)
+
+#### Step 2: Calculate Task Velocity
+- [ ] Track tasks completed per week
+- [ ] Calculate average completion time
+- [ ] Show velocity trend (increasing/decreasing)
+- [ ] Display as line chart over time
+- [ ] Compare actual vs estimated time
+
+#### Step 3: Identify Bottlenecks
+- [ ] Find tasks that are:
+  - IN_PROGRESS for long time (> 2 weeks)
+  - BLOCKED
+  - 0% progress but IN_PROGRESS
+  - Overdue (if deadlines set)
+- [ ] Display bottleneck report
+- [ ] Sort by severity
+- [ ] Highlight on dashboard
+
+#### Step 4: Analyze Team Workload
+- [ ] Group tasks by assignee
+- [ ] Count active tasks per person
+- [ ] Calculate total estimated hours per person
+- [ ] Show workload balance chart (bar chart)
+- [ ] Identify overloaded assignees (> threshold)
+- [ ] Suggest task redistribution
+
+#### Step 5: Create Burndown Chart
+- [ ] Track remaining work over time
+- [ ] Ideal burndown line (linear)
+- [ ] Actual burndown line (based on completions)
+- [ ] Show if on track, ahead, or behind
+- [ ] Project completion date
+
+#### Step 6: Add Time Tracking
+- [ ] Allow logging actual time spent on tasks
+- [ ] Compare estimated vs actual time
+- [ ] Identify estimation accuracy
+- [ ] Improve future estimates
+- [ ] Show time spent per category/assignee
+
+#### Step 7: Generate Reports
+- [ ] Create report templates:
+  - Weekly summary (tasks completed, in progress, blocked)
+  - Sprint report (if using sprints)
+  - Team performance (velocity, workload)
+  - Bottleneck analysis
+- [ ] Export formats:
+  - PDF (formatted report)
+  - CSV (data export)
+  - Markdown (for documentation)
+  - JSON (raw data)
+
+#### Step 8: Add Report Scheduling
+- [ ] Schedule automated reports:
+  - Daily digest (email or notification)
+  - Weekly summary
+  - Monthly analytics
+- [ ] Allow customization of what's included
+- [ ] Send via email or save to file
+
+#### Step 9: Create Analytics Dashboard
+- [ ] Dedicated analytics view
+- [ ] Multiple charts and metrics
+- [ ] Key Performance Indicators (KPIs):
+  - Tasks completed this week/month
+  - Average completion time
+  - Velocity trend
+  - On-time completion rate
+  - Bottleneck count
+- [ ] Customizable widgets
+
+#### Step 10: Add Predictive Analytics
+- [ ] Predict project completion date
+- [ ] Estimate remaining time for in-progress tasks
+- [ ] Forecast future velocity
+- [ ] Identify risks (tasks likely to be delayed)
+- [ ] Confidence intervals
+
+### Definition of Done (DoD)
+
+- [ ] Task history tracked
+- [ ] Velocity calculated and visualized
+- [ ] Bottlenecks identified
+- [ ] Workload analysis functional
+- [ ] Burndown chart displays
+- [ ] Time tracking implemented
+- [ ] Reports generate successfully
+- [ ] Export formats work
+- [ ] Analytics dashboard comprehensive
+- [ ] Predictive features provide value
+- [ ] Performance acceptable
+- [ ] Documentation complete
+
+### Verification Steps
+
+1. **Velocity:**
+   - View velocity chart
+   - Complete a few tasks
+   - Sync
+   - Verify velocity updates
+   - Check trend
+
+2. **Bottlenecks:**
+   - View bottleneck report
+   - Verify blocked tasks listed
+   - Verify stale tasks listed
+   - Click task to view details
+
+3. **Workload:**
+   - View workload chart
+   - Verify bars per assignee
+   - Check totals accurate
+   - Identify overloaded assignee
+
+4. **Burndown:**
+   - View burndown chart
+   - Verify ideal line
+   - Verify actual line
+   - Check on track indicator
+
+5. **Reports:**
+   - Generate weekly report
+   - Verify includes all sections
+   - Export as PDF
+   - Open PDF, verify formatted
+   - Export as CSV
+   - Open in spreadsheet, verify data
+
+6. **Predictive:**
+   - View completion prediction
+   - Verify based on velocity
+   - Check confidence
+   - Compare with timeline
+
+### Acceptance Criteria
+
+- ✅ Analytics provide actionable insights
+- ✅ Velocity tracking helps measure progress
+- ✅ Bottleneck identification highlights issues
+- ✅ Workload analysis balances team
+- ✅ Reports enable stakeholder communication
+- ✅ Predictive features aid planning
+- ✅ UI is data-rich but not overwhelming
+- ✅ Performance is good with historical data
+- ✅ Exports are professional and useful
+
+### Technical Details
+
+**Files to Create:**
+- `webview/src/components/AnalyticsDashboard.tsx`
+- `webview/src/components/VelocityChart.tsx`
+- `webview/src/components/BurndownChart.tsx`
+- `webview/src/components/BottleneckReport.tsx`
+- `webview/src/components/WorkloadChart.tsx`
+- `webview/src/utils/analytics.ts`
+- `webview/src/utils/reportGenerator.ts`
+- `webview/src/utils/predictions.ts`
+- `extension/src/history/historyTracker.ts`
+
+**History Format:**
+```typescript
+interface TaskHistory {
+  taskId: string;
+  events: HistoryEvent[];
+}
+
+interface HistoryEvent {
+  timestamp: string;
+  type: 'status' | 'assignee' | 'priority' | 'progress';
+  oldValue: string | number;
+  newValue: string | number;
+  user?: string;
+}
+```
+
+**Velocity Calculation:**
+```typescript
+function calculateVelocity(tasks: Task[]): number[] {
+  // Get completed tasks grouped by week
+  // Count tasks per week
+  // Return array of weekly counts
+}
+```
+
+**Report Template:**
+```markdown
+# Weekly Summary - Week of [Date]
+
+## Completed Tasks
+- TASK-FEAT-005: Build Task Portal Webview UI
+- TASK-FEAT-006: Add Statistics Dashboard
+
+## In Progress
+- TASK-FEAT-007: Add Kanban Board View
+
+## Blocked
+- None
+
+## Metrics
+- Tasks completed: 2
+- Velocity: 2 tasks/week
+- On-time completion: 100%
+```
+
+### Testing Checklist
+
+- [ ] History tracking works
+- [ ] Velocity calculates correctly
+- [ ] Velocity chart displays
+- [ ] Bottleneck report shows blocked tasks
+- [ ] Workload chart shows assignees
+- [ ] Burndown chart renders
+- [ ] Ideal line correct
+- [ ] Actual line updates
+- [ ] Report generates
+- [ ] PDF export works
+- [ ] CSV export works
+- [ ] Markdown export works
+- [ ] Analytics dashboard loads
+- [ ] KPIs calculated correctly
+- [ ] Predictions reasonable
+- [ ] Performance acceptable
+
+### Additional Context
+
+**Analytics Views:**
+1. Overview: High-level KPIs
+2. Velocity: Completion trends
+3. Workload: Team distribution
+4. Bottlenecks: Issues requiring attention
+5. Predictive: Future projections
+
+**Export Use Cases:**
+- Share progress with stakeholders
+- Include in project documentation
+- Import into other tools (spreadsheet, PM software)
+- Archive historical snapshots
+
+**Predictive Algorithm:**
+Use linear regression on historical velocity to forecast completion.
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**

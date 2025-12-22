@@ -1,0 +1,330 @@
+# Task Portal Development Tasks - Phase 4
+
+## TASK-FEAT-010: Build Static Site Generator
+
+**Status:** PENDING
+**Priority:** LOW
+**Assignee:** unassigned
+**Created:** 2025-12-21
+**Updated:** 2025-12-21
+**Estimated Time:** 8-10 hours
+**Dependencies:** TASK-FEAT-009
+**Related Tasks:** TASK-FEAT-011
+
+### Description
+
+Create a static site generator that builds an HTML dashboard from TASK_REGISTRY.json for public/stakeholder viewing. The site should display task stats, lists, and basic filtering using client-side JavaScript. Set up GitHub Actions to auto-deploy to GitHub Pages on every push.
+
+### Requirements / What to Do
+
+#### Step 1: Choose Static Site Approach
+- [ ] Evaluate options:
+  - Custom HTML generator script
+  - 11ty (Eleventy)
+  - Astro (if more complex)
+- [ ] Choose based on simplicity and requirements
+- [ ] Set up project structure
+
+#### Step 2: Create Generator Script
+- [ ] Create `task-portal/static-site/generator.ts`
+- [ ] Read TASK_REGISTRY.json
+- [ ] Parse task data
+- [ ] Generate HTML from templates
+- [ ] Write to output directory (`public/`)
+- [ ] Copy assets (CSS, JS, images)
+
+#### Step 3: Create HTML Templates
+- [ ] Create `templates/index.html` - Main page
+- [ ] Create `templates/task.html` - Task details page (optional)
+- [ ] Use templating:
+  - Handlebars
+  - EJS
+  - Or plain string interpolation
+- [ ] Include:
+  - Header with project title
+  - Stats dashboard
+  - Task list table
+  - Footer with last updated timestamp
+
+#### Step 4: Create Styles
+- [ ] Use Tailwind CSS (reuse config from webview)
+- [ ] Or write custom CSS
+- [ ] Ensure responsive design
+- [ ] Light theme (public-facing, no dark mode needed)
+- [ ] Print-friendly styles
+
+#### Step 5: Add Client-Side Filtering
+- [ ] Include vanilla JavaScript or minimal framework
+- [ ] Implement filters:
+  - Category dropdown
+  - Status dropdown
+  - Priority dropdown
+  - Search input
+- [ ] Filter tasks without page reload
+- [ ] Update URL with filter params (optional)
+
+#### Step 6: Add Task Stats Section
+- [ ] Display same stats as dashboard:
+  - Total tasks
+  - Tasks by status
+  - Tasks by category
+  - Tasks by priority
+  - Completion rate
+- [ ] Use Chart.js for charts (client-side rendering)
+- [ ] Make stats interactive (click to filter)
+
+#### Step 7: Create Task List Table
+- [ ] Display all tasks in sortable table
+- [ ] Columns:
+  - Task ID (link to details)
+  - Title
+  - Status
+  - Priority
+  - Category
+  - Created
+  - Updated
+- [ ] Color code status and priority
+- [ ] Add sorting (click column header)
+- [ ] Make responsive (scroll on mobile)
+
+#### Step 8: Set Up GitHub Pages Deployment
+- [ ] Create `.github/workflows/deploy-static-site.yml`
+- [ ] Workflow triggers on:
+  - Push to main
+  - TASK_REGISTRY.json changes
+- [ ] Workflow steps:
+  - Checkout repo
+  - Install dependencies
+  - Run generator
+  - Deploy to GitHub Pages
+- [ ] Configure GitHub Pages in repo settings
+
+#### Step 9: Add Metadata and SEO
+- [ ] Add page title and description
+- [ ] Add favicon
+- [ ] Add Open Graph tags (for sharing)
+- [ ] Add sitemap.xml (if multiple pages)
+- [ ] Add robots.txt
+
+#### Step 10: Test and Optimize
+- [ ] Test generated site locally
+- [ ] Test on mobile devices
+- [ ] Optimize images and assets
+- [ ] Minify CSS and JavaScript
+- [ ] Check accessibility (a11y)
+- [ ] Verify GitHub Pages deployment
+
+### Definition of Done (DoD)
+
+- [ ] Generator script creates static HTML site
+- [ ] Site displays task data accurately
+- [ ] Stats section shows correct numbers
+- [ ] Task list table is complete
+- [ ] Client-side filtering works
+- [ ] Sorting works
+- [ ] Site is responsive
+- [ ] GitHub Actions workflow configured
+- [ ] Site deploys to GitHub Pages successfully
+- [ ] Site is publicly accessible
+- [ ] SEO metadata included
+- [ ] Documentation for maintaining site
+
+### Verification Steps
+
+1. **Local Generation:**
+   ```bash
+   cd task-portal/static-site
+   npm run build
+   # Site generated in public/
+   
+   # Serve locally
+   npx serve public
+   # Visit http://localhost:3000
+   ```
+
+2. **Data Accuracy:**
+   - Check task count matches TASK_REGISTRY.json
+   - Verify all tasks displayed
+   - Check stats calculations
+   - Compare with VS Code extension view
+
+3. **Filtering:**
+   - Select "OPS" category filter
+   - Verify only OPS tasks shown
+   - Select "COMPLETED" status
+   - Verify only completed OPS tasks shown
+   - Clear filters
+   - Verify all tasks shown
+
+4. **Sorting:**
+   - Click "Created" header
+   - Verify tasks sorted by date
+   - Click again
+   - Verify order reversed
+
+5. **GitHub Pages:**
+   - Push changes to GitHub
+   - Check Actions tab for workflow run
+   - Verify workflow succeeds
+   - Visit `https://[username].github.io/[repo]/`
+   - Verify site loads
+
+6. **Mobile:**
+   - Open site on mobile device
+   - Verify responsive layout
+   - Test filtering on mobile
+   - Check table scrolls
+
+### Acceptance Criteria
+
+- ✅ Static site generated from task data
+- ✅ Site displays comprehensive task information
+- ✅ Filtering and sorting enhance usability
+- ✅ Site is publicly accessible for stakeholders
+- ✅ Auto-deployment keeps site up to date
+- ✅ Site is responsive and accessible
+- ✅ Performance is good (fast page load)
+- ✅ SEO is optimized for discoverability
+
+### Technical Details
+
+**Files to Create:**
+- `task-portal/static-site/generator.ts`
+- `task-portal/static-site/templates/index.html`
+- `task-portal/static-site/templates/layout.html`
+- `task-portal/static-site/styles/main.css`
+- `task-portal/static-site/scripts/filter.js`
+- `task-portal/static-site/package.json`
+- `.github/workflows/deploy-static-site.yml`
+
+**Generator Script:**
+```typescript
+import fs from 'fs';
+import path from 'path';
+import Handlebars from 'handlebars';
+
+// Read TASK_REGISTRY.json
+const registry = JSON.parse(
+  fs.readFileSync('../../.tasks/TASK_REGISTRY.json', 'utf8')
+);
+
+// Read template
+const template = fs.readFileSync('./templates/index.html', 'utf8');
+const compiled = Handlebars.compile(template);
+
+// Generate HTML
+const html = compiled({
+  tasks: registry.tasks,
+  metadata: registry.metadata,
+  categories: registry.categories
+});
+
+// Write to public/index.html
+fs.writeFileSync('./public/index.html', html);
+```
+
+**GitHub Actions Workflow:**
+```yaml
+name: Deploy Static Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.tasks/TASK_REGISTRY.json'
+      - 'task-portal/static-site/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          cd task-portal/static-site
+          npm install
+      
+      - name: Generate site
+        run: |
+          cd task-portal/static-site
+          npm run build
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./task-portal/static-site/public
+```
+
+**Client-Side Filter Example:**
+```javascript
+function filterTasks() {
+  const category = document.getElementById('category-filter').value;
+  const status = document.getElementById('status-filter').value;
+  const search = document.getElementById('search-input').value.toLowerCase();
+  
+  document.querySelectorAll('.task-row').forEach(row => {
+    const matchCategory = !category || row.dataset.category === category;
+    const matchStatus = !status || row.dataset.status === status;
+    const matchSearch = !search || 
+      row.textContent.toLowerCase().includes(search);
+    
+    row.style.display = 
+      matchCategory && matchStatus && matchSearch ? '' : 'none';
+  });
+}
+```
+
+### Testing Checklist
+
+- [ ] Generator runs without errors
+- [ ] HTML generated correctly
+- [ ] All tasks included
+- [ ] Stats calculated correctly
+- [ ] Filters work
+- [ ] Sorting works
+- [ ] Search works
+- [ ] Links work
+- [ ] Styles apply correctly
+- [ ] Responsive on mobile
+- [ ] GitHub Actions workflow runs
+- [ ] Site deploys successfully
+- [ ] Public URL accessible
+- [ ] SEO metadata present
+- [ ] Accessibility tested
+
+### Additional Context
+
+**Site Structure:**
+```
+public/
+├── index.html         # Main page
+├── styles/
+│   └── main.css      # Compiled CSS
+├── scripts/
+│   └── filter.js     # Client-side JS
+└── assets/
+    └── favicon.ico
+```
+
+**URL Structure:**
+- Main page: `/`
+- Individual tasks: `/#task-FEAT-001` (anchor links)
+- Or separate pages: `/tasks/TASK-FEAT-001.html` (if desired)
+
+**Update Frequency:**
+- Site regenerates on every push to main
+- Or when TASK_REGISTRY.json changes
+- Shows "Last updated" timestamp on page
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**

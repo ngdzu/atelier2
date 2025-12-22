@@ -68,22 +68,22 @@ Tasks are categorized to help organize and prioritize work. The category is refl
 
 ### Category Codes
 
-| Category | Code | Description | Examples |
-|----------|------|-------------|----------|
-| **Feature** | `FEAT` | New features or major functionality | Booking system, Payment integration |
-| **Bug Fix** | `BUG` | Bug fixes and defect resolution | Fix calendar timezone, Resolve login error |
-| **Enhancement** | `ENH` | Improvements to existing features | Optimize booking flow, Add loading states |
-| **Refactoring** | `REF` | Code improvement without changing functionality | Extract service layer, Rename variables |
-| **UI/UX** | `UI` | User interface and user experience work | Redesign booking form, Improve mobile layout |
-| **API** | `API` | Backend API development | Create booking endpoint, Add authentication |
-| **Database** | `DB` | Database schema, migrations, queries | Add appointments table, Create indexes |
-| **Testing** | `TEST` | Unit, integration, or E2E tests | Add booking service tests, Test auth flow |
-| **Documentation** | `DOC` | Documentation updates | Update README, Add API docs |
-| **DevOps** | `OPS` | Deployment, CI/CD, infrastructure | Set up Docker, Configure CI pipeline |
-| **Security** | `SEC` | Security-related tasks | Add input validation, Implement CSRF protection |
-| **Performance** | `PERF` | Performance optimization | Optimize bundle size, Add caching |
-| **Accessibility** | `A11Y` | Accessibility improvements | Add ARIA labels, Keyboard navigation |
-| **Configuration** | `CONFIG` | Configuration and setup | Update environment variables, Add TypeScript config |
+| Category          | Code     | Description                                     | Examples                                            |
+| ----------------- | -------- | ----------------------------------------------- | --------------------------------------------------- |
+| **Feature**       | `FEAT`   | New features or major functionality             | Booking system, Payment integration                 |
+| **Bug Fix**       | `BUG`    | Bug fixes and defect resolution                 | Fix calendar timezone, Resolve login error          |
+| **Enhancement**   | `ENH`    | Improvements to existing features               | Optimize booking flow, Add loading states           |
+| **Refactoring**   | `REF`    | Code improvement without changing functionality | Extract service layer, Rename variables             |
+| **UI/UX**         | `UI`     | User interface and user experience work         | Redesign booking form, Improve mobile layout        |
+| **API**           | `API`    | Backend API development                         | Create booking endpoint, Add authentication         |
+| **Database**      | `DB`     | Database schema, migrations, queries            | Add appointments table, Create indexes              |
+| **Testing**       | `TEST`   | Unit, integration, or E2E tests                 | Add booking service tests, Test auth flow           |
+| **Documentation** | `DOC`    | Documentation updates                           | Update README, Add API docs                         |
+| **DevOps**        | `OPS`    | Deployment, CI/CD, infrastructure               | Set up Docker, Configure CI pipeline                |
+| **Security**      | `SEC`    | Security-related tasks                          | Add input validation, Implement CSRF protection     |
+| **Performance**   | `PERF`   | Performance optimization                        | Optimize bundle size, Add caching                   |
+| **Accessibility** | `A11Y`   | Accessibility improvements                      | Add ARIA labels, Keyboard navigation                |
+| **Configuration** | `CONFIG` | Configuration and setup                         | Update environment variables, Add TypeScript config |
 
 ### Task ID Format
 
@@ -341,20 +341,27 @@ Organize by category when useful:
 ### 1. Task Creation
 
 When creating a task:
-1. Assign appropriate category and ID
-2. Write clear description and requirements
-3. Define DoD and verification steps
-4. Set initial status to PENDING
-5. Estimate time and priority
-6. Document dependencies
+1. **Check TASK_REGISTRY.md** for the next available task number in your category
+2. Assign appropriate category and ID using the next sequential number
+3. Write clear description and requirements
+4. Define DoD and verification steps
+5. Set initial status to PENDING
+6. Estimate time and priority
+7. Document dependencies
+8. **Update TASK_REGISTRY.md** with the new task:
+   - Increment "Last Number" for the category
+   - Update "Next Available" number
+   - Add task entry to the "All Tasks Index" section
+   - Update the "Last updated" date
 
 ### 2. Task Assignment
 
 When starting work:
-1. Update status to IN_PROGRESS
+1. Update status to IN_PROGRESS in the .task file
 2. Assign to team member
 3. Update "Updated" date
 4. Review dependencies are complete
+5. **Update TASK_REGISTRY.md** to reflect the new status (IN_PROGRESS)
 
 ### 3. Task Completion
 
@@ -362,25 +369,28 @@ Before marking complete:
 1. Complete all DoD checklist items
 2. Run all verification steps
 3. Update documentation
-4. Update status to COMPLETED
+4. Update status to COMPLETED in the .task file
 5. Add completion date and notes
 6. Link to related PRs or commits
+7. **Update TASK_REGISTRY.md** to reflect COMPLETED status
 
 ### 4. Task Blocking
 
 If blocked:
-1. Update status to BLOCKED
+1. Update status to BLOCKED in the .task file
 2. Document blocking issue clearly
 3. Update dependencies if needed
 4. Notify team/stakeholders
+5. **Update TASK_REGISTRY.md** to reflect BLOCKED status
 
 ### 5. Task Cancellation
 
 If cancelling:
-1. Update status to CANCELLED
+1. Update status to CANCELLED in the .task file
 2. Document reason for cancellation
 3. Update any dependent tasks
 4. Archive task file if needed
+5. **Update TASK_REGISTRY.md** to reflect CANCELLED status (keep the task number reserved - do not reuse)
 
 ## Examples
 
@@ -590,10 +600,28 @@ Before marking a task as complete, review:
 
 ### Regular Updates
 
-- Update task status regularly
+- Update task status regularly in both .task file and TASK_REGISTRY.md
 - Keep "Updated" date current
 - Add notes when blockers are resolved
 - Update dependencies as they complete
+- **Always sync TASK_REGISTRY.md** with .task file changes
+
+### TASK_REGISTRY.md Synchronization
+
+The `.tasks/TASK_REGISTRY.md` file is the central tracking system for all tasks. It must be updated whenever:
+
+- **Creating a new task**: Check for next available number, then update registry with new task entry
+- **Changing task status**: Update status in the "All Tasks Index" section
+- **Completing a task**: Mark as COMPLETED in the registry
+- **Cancelling a task**: Mark as CANCELLED (never reuse the task number)
+
+**Benefits of keeping TASK_REGISTRY.md updated:**
+- Quick reference for next available task number in each category
+- Overview of all tasks and their current status across the project
+- Prevents task number conflicts and duplicates
+- Provides a single source of truth for task tracking
+
+**Important:** Never skip updating TASK_REGISTRY.md. It only takes a moment and prevents confusion later.
 
 ### Task File Organization
 
@@ -604,17 +632,28 @@ Before marking a task as complete, review:
 
 ### Task Tracking
 
-Consider maintaining a task index file:
+Use the centralized `.tasks/TASK_REGISTRY.md` file for tracking all tasks:
+- **Task numbering reference**: Shows next available number for each category
+- **All tasks index**: Complete list of tasks organized by category
+- **Quick reference**: Overview of task counts and status
+
+See `.tasks/TASK_REGISTRY.md` for the current task tracking system.
+
+Example structure:
 ```markdown
-# Task Index
+# Task Registry
 
-## Active Tasks
-- TASK-FEAT-015: Implement Appointment Booking Flow (IN_PROGRESS)
-- TASK-BUG-023: Fix Calendar Timezone (PENDING)
+## Task Numbering Reference
+| Category | Code | Last Number | Next Available |
+| -------- | ---- | ----------- | -------------- |
+| DevOps   | OPS  | 003         | 004            |
+| Feature  | FEAT | 001         | 002            |
 
-## Completed Tasks (Last 30 days)
-- TASK-FEAT-014: Customer Dashboard (COMPLETED 2024-01-10)
-- TASK-BUG-022: Login Error Fix (COMPLETED 2024-01-08)
+## All Tasks Index
+### DevOps (OPS)
+| Task ID      | Title                 | Status      | File       | Created    |
+| ------------ | --------------------- | ----------- | ---------- | ---------- |
+| TASK-OPS-001 | Docker Infrastructure | IN_PROGRESS | infra.task | 2025-01-20 |
 ```
 
 ## Integration with Development Workflow
