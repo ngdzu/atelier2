@@ -4,22 +4,22 @@ This file tracks all task IDs and their current numbering to ensure unique, sequ
 
 ## Task Numbering Reference
 
-Last updated: 2025-12-21
+Last updated: 2025-01-21
 
 | Category      | Code   | Last Number | Next Available |
 | ------------- | ------ | ----------- | -------------- |
-| Feature       | FEAT   | 012         | 013            |
+| Feature       | FEAT   | 013         | 014            |
 | Bug Fix       | BUG    | 000         | 001            |
 | Enhancement   | ENH    | 000         | 001            |
 | Refactoring   | REF    | 000         | 001            |
-| UI/UX         | UI     | 000         | 001            |
+| UI/UX         | UI     | 001         | 002            |
 | API           | API    | 000         | 001            |
 | Database      | DB     | 000         | 001            |
 | Testing       | TEST   | 000         | 001            |
 | Documentation | DOC    | 000         | 001            |
 | DevOps        | OPS    | 003         | 004            |
 | Security      | SEC    | 000         | 001            |
-| Performance   | PERF   | 000         | 001            |
+| Performance   | PERF   | 001         | 002            |
 | Accessibility | A11Y   | 000         | 001            |
 | Configuration | CONFIG | 000         | 001            |
 
@@ -49,6 +49,7 @@ Last updated: 2025-12-21
 | TASK-FEAT-010 | Build Static Site Generator        | PENDING | portal-phase4.task   | 2025-12-21 |
 | TASK-FEAT-011 | Add Timeline View                  | PENDING | portal-phase5.task   | 2025-12-21 |
 | TASK-FEAT-012 | Add Analytics & Reporting          | PENDING | portal-phase5.task   | 2025-12-21 |
+| TASK-FEAT-013 | Generate and Organize Gallery Photo Dataset | PENDING | gallery.task | 2025-01-21 |
 
 ### Bug Fix (BUG)
 
@@ -70,9 +71,9 @@ Last updated: 2025-12-21
 
 ### UI/UX (UI)
 
-| Task ID | Title | Status | File | Created |
-| ------- | ----- | ------ | ---- | ------- |
-| -       | -     | -      | -    | -       |
+| Task ID      | Title                                                    | Status  | File         | Created    |
+| ------------ | -------------------------------------------------------- | ------- | ------------ | ---------- |
+| TASK-UI-001  | Redesign Gallery Page with Instagram-style Masonry Grid  | PENDING | gallery.task | 2025-01-21 |
 
 ### API (API)
 
@@ -106,9 +107,9 @@ Last updated: 2025-12-21
 
 ### Performance (PERF)
 
-| Task ID | Title | Status | File | Created |
-| ------- | ----- | ------ | ---- | ------- |
-| -       | -     | -      | -    | -       |
+| Task ID      | Title                                          | Status  | File         | Created    |
+| ------------ | ---------------------------------------------- | ------- | ------------ | ---------- |
+| TASK-PERF-001 | Implement Image Lazy Loading and Pre-loading  | PENDING | gallery.task | 2025-01-21 |
 
 ### Accessibility (A11Y)
 
@@ -160,8 +161,10 @@ Creating a new Feature task:
 ## Quick Reference
 
 **Current highest task numbers by category:**
-- FEAT: 012 (12 tasks)
+- FEAT: 013 (13 tasks)
 - OPS: 003 (3 tasks)
+- UI: 001 (1 task)
+- PERF: 001 (1 task)
 - All other categories: 000 (no tasks)
 
-**Total tasks in project: 15**
+**Total tasks in project: 18**
