@@ -187,7 +187,7 @@ describe('BookingFlow', () => {
           btn.textContent?.includes('Choose Professional') || 
           btn.textContent?.includes('Continue')
         );
-        if (nextButton && !nextButton.disabled) {
+        if (nextButton && !(nextButton as HTMLButtonElement).disabled) {
           fireEvent.click(nextButton);
         }
       });
@@ -210,7 +210,7 @@ describe('BookingFlow', () => {
       await waitFor(() => {
         const stepButtons = screen.queryAllByRole('button');
         const stepOneButton = stepButtons.find(btn => btn.textContent?.includes('1') || btn.textContent?.includes('Service'));
-        if (stepOneButton && !stepOneButton.disabled) {
+        if (stepOneButton && !(stepOneButton as HTMLButtonElement).disabled) {
           fireEvent.click(stepOneButton);
         }
       });
@@ -377,7 +377,7 @@ describe('BookingFlow', () => {
       await waitFor(() => {
         const buttons = screen.queryAllByRole('button');
         const nextButton = buttons.find(btn => 
-          btn.textContent?.includes('Choose Professional') && !btn.disabled
+          btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
         );
         if (nextButton) {
           fireEvent.click(nextButton);
@@ -406,7 +406,7 @@ describe('BookingFlow', () => {
         const nextButtons = buttons.filter(btn => 
           (btn.textContent?.includes('Choose Professional') || 
            btn.textContent?.includes('Schedule Time')) && 
-          !btn.disabled
+          !(btn as HTMLButtonElement).disabled
         );
         // Click through steps (simplified)
         if (nextButtons.length > 0) {
@@ -430,11 +430,11 @@ describe('BookingFlow', () => {
       // Before selecting, step should not be valid
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       // Initially, button should be disabled or not exist
       if (nextButton) {
-        expect(nextButton.disabled).toBe(true);
+        expect((nextButton as HTMLButtonElement).disabled).toBe(true);
       }
       
       // After selecting service, step should be valid
@@ -442,11 +442,11 @@ describe('BookingFlow', () => {
       await waitFor(() => {
         const updatedButtons = screen.queryAllByRole('button');
         const enabledNextButton = updatedButtons.find(btn => 
-          btn.textContent?.includes('Choose Professional') && !btn.disabled
+          btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
         );
         // Button should now be enabled
         if (enabledNextButton) {
-          expect(enabledNextButton.disabled).toBe(false);
+          expect((enabledNextButton as HTMLButtonElement).disabled).toBe(false);
         }
       });
     }
@@ -572,7 +572,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -604,7 +604,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -619,7 +619,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -655,7 +655,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -670,7 +670,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -741,7 +741,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -793,7 +793,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -808,7 +808,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -862,7 +862,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -877,7 +877,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1018,7 +1018,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         expect(nextButton).toBeTruthy();
@@ -1047,7 +1047,7 @@ describe('BookingFlow', () => {
       });
       if (stepButtons.length > 0) {
         // Click a step button to test goToStep
-        const stepButton = stepButtons.find(btn => !btn.disabled);
+        const stepButton = stepButtons.find(btn => !(btn as HTMLButtonElement).disabled);
         if (stepButton) {
           fireEvent.click(stepButton);
           expect(stepButton).toBeInTheDocument();
@@ -1070,7 +1070,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1196,7 +1196,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1211,7 +1211,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1237,7 +1237,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1252,7 +1252,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1314,7 +1314,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1338,7 +1338,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1357,7 +1357,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeButton = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeButton) {
         fireEvent.click(timeButton);
@@ -1381,7 +1381,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1396,7 +1396,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1416,7 +1416,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const detailsButton = buttons.find(btn => 
-        btn.textContent?.includes('Your Details') && !btn.disabled
+        btn.textContent?.includes('Your Details') && !(btn as HTMLButtonElement).disabled
       );
       if (detailsButton) {
         fireEvent.click(detailsButton);
@@ -1447,7 +1447,7 @@ describe('BookingFlow', () => {
         return text === '1' || text === '2' || text?.includes('Service') || text?.includes('Professional');
       });
       if (stepButtons.length > 0) {
-        const enabledStepButton = stepButtons.find(btn => !btn.disabled);
+        const enabledStepButton = stepButtons.find(btn => !(btn as HTMLButtonElement).disabled);
         if (enabledStepButton) {
           fireEvent.click(enabledStepButton);
           // goToStep should be called
@@ -1478,7 +1478,7 @@ describe('BookingFlow', () => {
       });
       // Service is selected if we can find quantity controls or continue button is enabled
       const continueButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       expect(continueButton || quantityDisplay).toBeTruthy();
     });
@@ -1591,7 +1591,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         expect(nextButton).toBeTruthy();
@@ -1602,7 +1602,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1632,7 +1632,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1707,7 +1707,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) {
         fireEvent.click(nextButton);
@@ -1722,7 +1722,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
@@ -1919,7 +1919,7 @@ describe('BookingFlow', () => {
         waitFor(() => {
           const nextButton = screen.queryByRole('button', { name: /Choose Professional/i }) ||
             screen.queryByRole('button', { name: /Continue/i });
-          if (nextButton && !nextButton.disabled) {
+          if (nextButton && !(nextButton as HTMLButtonElement).disabled) {
             fireEvent.click(nextButton);
             // handleNext should be called
             expect(nextButton).toBeInTheDocument();
@@ -1980,7 +1980,7 @@ describe('BookingFlow', () => {
     await waitFor(() => {
       const buttons = screen.queryAllByRole('button');
       const continueButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       expect(continueButton).toBeTruthy();
     });
@@ -2000,7 +2000,7 @@ describe('BookingFlow', () => {
     await waitFor(async () => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) fireEvent.click(nextButton);
     }, { timeout: 2000 });
@@ -2013,7 +2013,7 @@ describe('BookingFlow', () => {
     await waitFor(async () => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) fireEvent.click(timeNext);
     }, { timeout: 2000 });
@@ -2030,7 +2030,7 @@ describe('BookingFlow', () => {
     await waitFor(async () => {
       const buttons = screen.queryAllByRole('button');
       const detailsNext = buttons.find(btn => 
-        btn.textContent?.includes('Your Details') && !btn.disabled
+        btn.textContent?.includes('Your Details') && !(btn as HTMLButtonElement).disabled
       );
       if (detailsNext) fireEvent.click(detailsNext);
     }, { timeout: 2000 });
@@ -2128,7 +2128,7 @@ describe('BookingFlow', () => {
     const futureStepButton = buttons.find(btn => {
       const text = btn.textContent?.trim();
       // Find a step indicator button that's disabled (future step)
-      return (text === '2' || text === '3' || text === '4') && btn.disabled;
+      return (text === '2' || text === '3' || text === '4') && (btn as HTMLButtonElement).disabled;
     });
     
     if (futureStepButton) {
@@ -2287,7 +2287,7 @@ describe('BookingFlow', () => {
     await waitFor(async () => {
       const buttons = screen.queryAllByRole('button');
       const nextButton = buttons.find(btn => 
-        btn.textContent?.includes('Choose Professional') && !btn.disabled
+        btn.textContent?.includes('Choose Professional') && !(btn as HTMLButtonElement).disabled
       );
       if (nextButton) fireEvent.click(nextButton);
     }, { timeout: 3000 });
@@ -2300,7 +2300,7 @@ describe('BookingFlow', () => {
     await waitFor(async () => {
       const buttons = screen.queryAllByRole('button');
       const timeNext = buttons.find(btn => 
-        btn.textContent?.includes('Schedule Time') && !btn.disabled
+        btn.textContent?.includes('Schedule Time') && !(btn as HTMLButtonElement).disabled
       );
       if (timeNext) {
         fireEvent.click(timeNext);
