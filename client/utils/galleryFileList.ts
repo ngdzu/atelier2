@@ -1,6 +1,6 @@
 // Auto-generated file - DO NOT EDIT
 // This file contains the actual filenames from public/gallery/
-// Generated at: 2025-12-22T07:33:53.272Z
+// Generated at: 2025-12-22T12:52:05.791Z
 // Only files that actually exist in the directory are included
 
 export const GALLERY_FILENAMES: string[] = [
@@ -19,14 +19,12 @@ export const GALLERY_FILENAMES: string[] = [
   "1572743686183-729b40b9230e.jpg",
   "1572814601679-4ef8f7b5ebd1.jpg",
   "1573232695307-4e8ead699457.jpg",
-  "1575676518671-e6a3ccca5eea.jpg",
   "1575717737414-31fec7786574.jpg",
   "1579888404538-707f2858870a.jpg",
   "1583747073667-bef748231eea.jpg",
   "1583747073850-2b4f2c355b06.jpg",
   "1583826198013-28269b3bc786.jpg",
   "1584566006505-8923576e70d4.jpg",
-  "1585731601359-b5edfffbf629.jpg",
   "1586973762963-9c610b87803d.jpg",
   "1587393795320-6e43b260ecd0.jpg",
   "1587729927031-830c32f520da.jpg",
@@ -37,7 +35,6 @@ export const GALLERY_FILENAMES: string[] = [
   "1590736945722-bf5c39bc6513.jpg",
   "1591097349275-4b4b778f274d.jpg",
   "1591097435420-39260dfa5c26.jpg",
-  "1593193611972-437ce4d601c6.jpg",
   "1599458348985-236f9b110da1.jpg",
   "1599948128020-9a44505b0d1b.jpg",
   "1601244668565-afba8cbd2b51.jpg",
@@ -49,7 +46,6 @@ export const GALLERY_FILENAMES: string[] = [
   "1606391907156-e2664f8dd56f.jpg",
   "1607779097040-26e80aa78e66.jpg",
   "1608278618512-c5968bfa0523.jpg",
-  "1609565771323-42b2567dee86.jpg",
   "1610992015732-2449b76344bc.jpg",
   "1610992015734-080387c1f66f.jpg",
   "1610992015762-45dca7fa3a85.jpg",
@@ -65,7 +61,6 @@ export const GALLERY_FILENAMES: string[] = [
   "1628610726537-6e9d2799f871.jpg",
   "1629821808604-770621ea70ad.jpg",
   "1630843599725-32ead7671867.jpg",
-  "1630939757617-462c09027875.jpg",
   "1632345031435-8727f6897d53.jpg",
   "1633092925902-2ccfad179aa8.jpg",
   "1633531697033-7d55f56f899a.jpg",
@@ -79,7 +74,6 @@ export const GALLERY_FILENAMES: string[] = [
   "1643648854897-7b5845b4c04c.jpg",
   "1644203541701-c67c866fd42a.jpg",
   "1645566372597-a6c10c07c393.jpg",
-  "1645566372718-e8b0bd40ccf6.jpg",
   "1645566373351-b69d3371d410.jpg",
   "1645566373422-6cac271a42ba.jpg",
   "1645566373617-866af9e5c599.jpg",
@@ -88,11 +82,9 @@ export const GALLERY_FILENAMES: string[] = [
   "1661290231745-15f1ed6fea88.jpg",
   "1661497590552-93536b2b84b9.jpg",
   "1661499249417-c20d6b668469.jpg",
-  "1661531666908-11c2d81ea71f.jpg",
   "1666107278223-780557577da0.jpg",
   "1667207229735-266c430cca15.jpg",
   "1667207229737-0adf3c700d5e.jpg",
-  "1667242196578-40ed5d6e5126.jpg",
   "1667769462514-1fd738b38498.jpg",
   "1670348051093-a3f94b408bcb.jpg",
   "1670590820777-3b03f589cb89.jpg",
@@ -108,7 +100,6 @@ export const GALLERY_FILENAMES: string[] = [
   "1690749138086-7422f71dc159.jpg",
   "1693776529070-2cdea397595b.jpg",
   "1693776529227-4d6c8799e743.jpg",
-  "1693776575278-62cea27893b4.jpg",
   "1694087590019-0e051d77e27e.jpg",
   "1694607140414-f8bfb76dfb22.jpg",
   "1695866648575-843558bd6293.jpg",
@@ -130,4 +121,4 @@ export const GALLERY_FILENAMES: string[] = [
   "1766146431842-95345cece43f.jpg"
 ];
 
-export const GALLERY_FILE_COUNT = 124;
+export const GALLERY_FILE_COUNT = 115;
