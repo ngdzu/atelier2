@@ -1,4 +1,5 @@
-import { Customer, Employee, Service, Appointment } from './types';
+import { Customer, Employee, Service, Appointment, GalleryImage } from './types';
+import { generateGalleryPhotos } from './utils/generateGalleryPhotos';
 
 export const STORE_NAME = 'LuxeNail';
 export const PHONE_NUMBER = '(555) 012-3456';
@@ -750,14 +751,8 @@ export const SERVICES: Service[] = [
   }
 ];
 
-export const GALLERY_IMAGES = [
-  { id: 'g1', url: 'https://images.unsplash.com/photo-1604654894610-df490c817265?q=80&w=1200', category: 'Look 01', title: 'The Gilded Edge' },
-  { id: 'g2', url: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=1200', category: 'Look 02', title: 'Rouge Precision' },
-  { id: 'g3', url: 'https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=1200', category: 'Look 03', title: 'Noir Marble' },
-  { id: 'g4', url: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=1200', category: 'Look 04', title: 'Pearl Luminescence' },
-  { id: 'g5', url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200', category: 'Look 05', title: 'Atelier Nude' },
-  { id: 'g6', url: 'https://images.unsplash.com/photo-1510520434124-5bc7e642b61d?q=80&w=1200', category: 'Look 06', title: 'Shadow Velvet' },
-];
+// Generate 500 gallery photos with metadata, sorted by newest first
+export const GALLERY_IMAGES: GalleryImage[] = generateGalleryPhotos();
 
 export const EMPLOYEES: Employee[] = [
   { id: 'e1', name: 'Elena Vance', email: `elena@${STORE_NAME.toLowerCase()}.com`, phone: '555-0101', role: 'EMPLOYEE', specialties: ['Dipping Powder', 'Gel-X Extensions'], color: '#F7F7F7' },

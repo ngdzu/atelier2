@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import { GALLERY_IMAGES } from '../constants';
 import Header from './Header';
 import Footer from './Footer';
+import MasonryGrid from './GalleryPage/MasonryGrid';
 
 const GalleryPage: React.FC = () => {
   const [filter, setFilter] = useState('All');
-  const categories = ['All', 'Manicure', 'Nail Art', 'Pedicure'];
+  // Get unique categories from images
+  const categories = ['All', ...Array.from(new Set(GALLERY_IMAGES.map(img => img.category)))];
 
   return (
     <div className="bg-[#FDFCFB] min-h-screen selection:bg-black selection:text-white">
@@ -34,32 +35,13 @@ const GalleryPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Grid: Large Lookbook Style */}
-      <section className="max-w-7xl mx-auto px-8 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-32">
-          {GALLERY_IMAGES.map((img, idx) => (
-            <div key={img.id} className={`reveal group space-y-8 ${idx % 2 === 1 ? 'md:mt-32' : ''}`}>
-              <div className="aspect-[4/5] overflow-hidden bg-gray-50 border border-black/5">
-                <img 
-                  src={img.url} 
-                  alt={img.title} 
-                  className="w-full h-full object-cover brightness-90 group-hover:scale-105 editorial-img"
-                />
-              </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400">{img.category}</p>
-                  <h4 className="text-3xl font-serif font-bold mt-2">{img.title}</h4>
-                </div>
-                <Link to="/book" className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
-                  <ArrowRight size={20} />
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Instagram-style Masonry Grid */}
+      <section className="w-full pb-32">
+        <MasonryGrid images={GALLERY_IMAGES} filter={filter} />
+      </section>
 
-        {/* Bottom CTA */}
+      {/* Bottom CTA */}
+      <section className="max-w-7xl mx-auto px-8 pb-32">
         <div className="mt-64 text-center reveal">
           <h3 className="text-4xl md:text-6xl font-serif font-bold mb-12">Curate Your Image.</h3>
           <Link 

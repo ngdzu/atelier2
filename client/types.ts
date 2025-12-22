@@ -53,6 +53,15 @@ export interface DailyStats {
   newCustomers: number;
 }
 
+export interface GalleryImage {
+  id: string;
+  url: string;
+  category: string;
+  title: string;
+  uploadedAt: string; // ISO 8601 date string
+  alt: string;
+}
+
 /**
  * Data Provider Interface (The Abstraction)
  * Implementations will handle either Mock/Constants or Real Database

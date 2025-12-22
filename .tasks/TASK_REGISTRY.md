@@ -49,7 +49,7 @@ Last updated: 2025-01-21
 | TASK-FEAT-010 | Build Static Site Generator        | PENDING | portal-phase4.task   | 2025-12-21 |
 | TASK-FEAT-011 | Add Timeline View                  | PENDING | portal-phase5.task   | 2025-12-21 |
 | TASK-FEAT-012 | Add Analytics & Reporting          | PENDING | portal-phase5.task   | 2025-12-21 |
-| TASK-FEAT-013 | Generate and Organize Gallery Photo Dataset | PENDING | gallery.task | 2025-01-21 |
+| TASK-FEAT-013 | Generate and Organize Gallery Photo Dataset | COMPLETED | gallery.task | 2025-01-21 |
 
 ### Bug Fix (BUG)
 
