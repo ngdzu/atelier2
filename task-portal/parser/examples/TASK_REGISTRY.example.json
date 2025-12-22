@@ -1,0 +1,243 @@
+{
+    "metadata": {
+        "version": "1.0.0",
+        "lastUpdated": "2025-12-21T10:30:00.000Z",
+        "totalTasks": 4,
+        "lastSync": "2025-12-21T10:30:00.000Z"
+    },
+    "categories": {
+        "FEAT": {
+            "name": "Feature",
+            "code": "FEAT",
+            "description": "New features and major additions",
+            "lastNumber": 2,
+            "nextAvailable": 3
+        },
+        "BUG": {
+            "name": "Bug Fix",
+            "code": "BUG",
+            "description": "Bug fixes and corrections",
+            "lastNumber": 1,
+            "nextAvailable": 2
+        },
+        "DOC": {
+            "name": "Documentation",
+            "code": "DOC",
+            "description": "Documentation improvements",
+            "lastNumber": 1,
+            "nextAvailable": 2
+        },
+        "ENH": {
+            "name": "Enhancement",
+            "code": "ENH",
+            "description": "Improvements to existing features",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "REF": {
+            "name": "Refactoring",
+            "code": "REF",
+            "description": "Code refactoring and restructuring",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "UI": {
+            "name": "UI/UX",
+            "code": "UI",
+            "description": "User interface and experience improvements",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "API": {
+            "name": "API",
+            "code": "API",
+            "description": "API changes and additions",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "DB": {
+            "name": "Database",
+            "code": "DB",
+            "description": "Database schema and query changes",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "TEST": {
+            "name": "Testing",
+            "code": "TEST",
+            "description": "Testing improvements and additions",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "OPS": {
+            "name": "Operations",
+            "code": "OPS",
+            "description": "DevOps, infrastructure, and operational tasks",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "SEC": {
+            "name": "Security",
+            "code": "SEC",
+            "description": "Security improvements and fixes",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "PERF": {
+            "name": "Performance",
+            "code": "PERF",
+            "description": "Performance optimization",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "A11Y": {
+            "name": "Accessibility",
+            "code": "A11Y",
+            "description": "Accessibility improvements",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        },
+        "CONFIG": {
+            "name": "Configuration",
+            "code": "CONFIG",
+            "description": "Configuration and settings changes",
+            "lastNumber": 0,
+            "nextAvailable": 1
+        }
+    },
+    "tasks": [
+        {
+            "id": "TASK-FEAT-001",
+            "category": "FEAT",
+            "number": 1,
+            "title": "Implement User Authentication",
+            "status": "COMPLETED",
+            "priority": "HIGH",
+            "assignee": "alice",
+            "created": "2025-12-01",
+            "updated": "2025-12-15",
+            "estimatedTime": "8 hours",
+            "actualTime": "7 hours",
+            "dependencies": [],
+            "relatedTasks": [
+                "TASK-DOC-001"
+            ],
+            "file": "features.task",
+            "filePath": ".tasks/features.task",
+            "tags": [
+                "authentication",
+                "security"
+            ],
+            "description": "Implement JWT-based authentication system with login, logout, and token refresh functionality.",
+            "sections": {
+                "requirements": "- [x] Set up JWT library\n- [x] Create login endpoint\n- [x] Create logout endpoint\n- [x] Implement token refresh\n- [x] Add authentication middleware",
+                "definitionOfDone": "- Authentication system works end-to-end\n- All tests passing\n- Documentation complete",
+                "technicalDetails": "Using jsonwebtoken library with RS256 signing. Tokens expire after 1 hour with refresh token valid for 30 days."
+            },
+            "progress": {
+                "completed": 5,
+                "total": 5,
+                "percentage": 100
+            }
+        },
+        {
+            "id": "TASK-FEAT-002",
+            "category": "FEAT",
+            "number": 2,
+            "title": "Add File Upload Feature",
+            "status": "IN_PROGRESS",
+            "priority": "MEDIUM",
+            "assignee": "bob",
+            "created": "2025-12-10",
+            "updated": "2025-12-20",
+            "estimatedTime": "6 hours",
+            "dependencies": [
+                "TASK-FEAT-001"
+            ],
+            "relatedTasks": [],
+            "file": "features.task",
+            "filePath": ".tasks/features.task",
+            "tags": [
+                "upload",
+                "storage"
+            ],
+            "description": "Add file upload functionality with validation, size limits, and S3 storage integration.",
+            "sections": {
+                "requirements": "- [x] Set up multer middleware\n- [x] Add file validation\n- [ ] Integrate with S3\n- [ ] Add progress indicators\n- [ ] Add error handling",
+                "definitionOfDone": "- Files upload successfully to S3\n- Proper error messages shown\n- File size limits enforced",
+                "technicalDetails": "Using multer for multipart/form-data parsing. Max file size: 10MB. Allowed types: images, PDFs, documents."
+            },
+            "progress": {
+                "completed": 2,
+                "total": 5,
+                "percentage": 40
+            }
+        },
+        {
+            "id": "TASK-BUG-001",
+            "category": "BUG",
+            "number": 1,
+            "title": "Fix Memory Leak in WebSocket Connection",
+            "status": "BLOCKED",
+            "priority": "CRITICAL",
+            "assignee": "charlie",
+            "created": "2025-12-18",
+            "updated": "2025-12-21",
+            "estimatedTime": "4 hours",
+            "dependencies": [],
+            "relatedTasks": [],
+            "file": "bugs.task",
+            "filePath": ".tasks/bugs.task",
+            "tags": [
+                "websocket",
+                "memory",
+                "critical"
+            ],
+            "description": "WebSocket connections are not being properly cleaned up, causing memory leaks over time.",
+            "sections": {
+                "requirements": "- [ ] Identify leak source\n- [ ] Add proper cleanup in disconnect handler\n- [ ] Add connection pooling\n- [ ] Test with load simulation",
+                "definitionOfDone": "- No memory growth over 24 hours\n- All connections properly closed\n- Load test passes",
+                "technicalDetails": "Memory grows ~50MB per hour under normal load. Need to ensure removeAllListeners() is called and connections are properly terminated."
+            },
+            "progress": {
+                "completed": 0,
+                "total": 4,
+                "percentage": 0
+            }
+        },
+        {
+            "id": "TASK-DOC-001",
+            "category": "DOC",
+            "number": 1,
+            "title": "Write API Documentation",
+            "status": "PENDING",
+            "priority": "MEDIUM",
+            "assignee": "alice",
+            "created": "2025-12-15",
+            "updated": "2025-12-15",
+            "estimatedTime": "3 hours",
+            "dependencies": [
+                "TASK-FEAT-001"
+            ],
+            "relatedTasks": [
+                "TASK-FEAT-002"
+            ],
+            "file": "documentation.task",
+            "filePath": ".tasks/documentation.task",
+            "tags": [
+                "docs",
+                "api"
+            ],
+            "description": "Create comprehensive API documentation using OpenAPI/Swagger specification.",
+            "sections": {
+                "requirements": "- [ ] Install swagger-jsdoc\n- [ ] Add JSDoc comments to routes\n- [ ] Generate OpenAPI spec\n- [ ] Set up Swagger UI\n- [ ] Add example requests/responses",
+                "definitionOfDone": "- All endpoints documented\n- Swagger UI accessible\n- Examples work correctly"
+            },
+            "progress": {
+                "completed": 0,
+                "total": 5,
+                "percentage": 0
+            }
+        }
+    ]
+}

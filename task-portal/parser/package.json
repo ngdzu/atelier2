@@ -1,0 +1,44 @@
+{
+    "name": "@task-portal/parser",
+    "version": "1.0.0",
+    "description": "Task parser for extracting structured data from .task Markdown files",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "bin": {
+        "task-parser": "dist/cli.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "dev": "tsx src/cli.ts",
+        "test": "vitest",
+        "test:coverage": "vitest --coverage",
+        "lint": "eslint src --ext .ts",
+        "clean": "rm -rf dist"
+    },
+    "keywords": [
+        "task",
+        "parser",
+        "markdown",
+        "project-management"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "unified": "^11.0.4",
+        "remark-parse": "^11.0.0",
+        "remark-stringify": "^11.0.0",
+        "zod": "^3.22.4",
+        "commander": "^11.1.0",
+        "chalk": "^5.3.0",
+        "chokidar": "^3.5.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.6",
+        "typescript": "^5.3.3",
+        "vitest": "^1.1.0",
+        "tsx": "^4.7.0",
+        "@vitest/coverage-v8": "^1.1.0"
+    }
+}
