@@ -17,10 +17,32 @@ const GalleryPage: React.FC = () => {
       {/* Header */}
       <header className="max-w-7xl mx-auto px-8 pt-32 pb-16">
         <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#C4A484] mb-8 reveal">The Portfolio</p>
-        <h1 className="text-6xl md:text-9xl font-serif font-bold text-black mb-12 reveal">
-          The <span className="italic font-normal italic">Lookbook.</span>
-        </h1>
-        <div className="flex gap-8 border-t border-black/10 pt-8 reveal">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10 reveal">
+          <h1 className="text-6xl md:text-9xl font-serif font-bold text-black">
+            The <span className="italic font-normal italic">Lookbook.</span>
+          </h1>
+
+          {/* Subtle brand mark */}
+          <div className="flex items-center gap-4 md:gap-6 self-start md:self-end">
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-black/10 overflow-hidden bg-white/80 shadow-sm shadow-black/5">
+              <img
+                src="/logo.png"
+                alt="LuxeNail logo"
+                className="h-full w-full object-contain"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-black/50">
+                LuxeNail
+              </span>
+              <span className="text-xs md:text-sm text-black/40">
+                Atelier Gallery
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-8 border-t border-black/10 pt-8 mt-10 reveal">
            {categories.map(cat => (
             <button
               key={cat}
