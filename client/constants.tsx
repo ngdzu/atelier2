@@ -21,6 +21,9 @@ export const COLORS = {
   surface: '#FFFFFF',
 };
 
+// Snow Effect Toggle - Set to true to enable snow effect, false to disable
+export const ENABLE_SNOW_EFFECT = true;
+
 export const SERVICES: Service[] = [
   // MANICURE
   { 

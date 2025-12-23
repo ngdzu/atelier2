@@ -9,8 +9,10 @@ import PerformanceDashboard from './components/PerformanceDashboard';
 import MarketingCenter from './components/MarketingCenter';
 import BookingFlow from './components/BookingFlow';
 import ScrollToTop from './components/ScrollToTop';
+import SnowEffect from './components/SnowEffect';
 import { dataService } from './services/dataService';
 import { Appointment, Customer } from './types';
+import { ENABLE_SNOW_EFFECT } from './constants';
 
 // Simple CRM Component refactored to use service
 const CustomerList = () => {
@@ -76,6 +78,7 @@ const App: React.FC = () => {
   return (
     <HashRouter>
       <ScrollToTop />
+      <SnowEffect enabled={ENABLE_SNOW_EFFECT} />
       <Routes>
         {/* Public Pages */}
         <Route path="/" element={<LandingPage />} />
