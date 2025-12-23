@@ -97,3 +97,28 @@ export const findBottlenecks = (tasks: Task[], staleDays = 14) => {
 };
 
 export const countCompleted = (tasks: Task[]) => tasks.filter(task => task.status === 'COMPLETED').length;
+
+export const buildOverallProgress = (tasks: Task[]) => {
+    let totalItems = 0;
+    let completedItems = 0;
+
+    tasks.forEach(task => {
+        const progress = task.progress;
+        if (!progress) return;
+        totalItems += progress.total;
+        completedItems += progress.completed;
+    });
+
+    const percentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
+
+    const buckets = {
+        notStarted: tasks.filter(t => (t.progress?.percentage ?? 0) === 0).length,
+        partial: tasks.filter(t => {
+            const pct = t.progress?.percentage ?? 0;
+            return pct > 0 && pct < 100;
+        }).length,
+        done: tasks.filter(t => (t.progress?.percentage ?? 0) === 100).length,
+    };
+
+    return { totalItems, completedItems, percentage, buckets };
+};

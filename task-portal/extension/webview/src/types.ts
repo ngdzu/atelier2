@@ -23,7 +23,10 @@ export interface Filters {
     category: string[];
     status: string[];
     priority: string[];
+    progress: ProgressFilter[];
 }
+
+export type ProgressFilter = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETE';
 
 declare global {
     interface Window {

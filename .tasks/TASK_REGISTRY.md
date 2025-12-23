@@ -35,21 +35,21 @@ Last updated: 2025-12-22
 
 ### Feature (FEAT)
 
-| Task ID       | Title                              | Status    | File                 | Created    |
-| ------------- | ---------------------------------- | --------- | -------------------- | ---------- |
-| TASK-FEAT-001 | Design and Plan Task Portal System | COMPLETED | portal.task          | 2025-12-21 |
-| TASK-FEAT-002 | Create Task Parser and JSON Schema | COMPLETED | portal.task          | 2025-12-21 |
-| TASK-FEAT-003 | Migrate Existing Tasks to JSON     | COMPLETED | portal.task          | 2025-12-21 |
-| TASK-FEAT-004 | Build VS Code Extension Foundation | COMPLETED | portal-phase2.task   | 2025-12-21 |
-| TASK-FEAT-005 | Build Task Portal Webview UI       | COMPLETED | portal-phase2.task   | 2025-12-21 |
-| TASK-FEAT-006 | Add Statistics Dashboard           | COMPLETED | portal-phase2.task   | 2025-12-21 |
-| TASK-FEAT-007 | Add Kanban Board View              | COMPLETED | portal-phase3-5.task | 2025-12-21 |
-| TASK-FEAT-008 | Add Quick Actions                  | COMPLETED | portal-phase3-5.task | 2025-12-21 |
-| TASK-FEAT-009 | Add Progress Tracking              | PENDING   | portal-phase3-5.task | 2025-12-21 |
-| TASK-FEAT-010 | Build Static Site Generator        | COMPLETED | portal-phase4.task   | 2025-12-21 |
-| TASK-FEAT-011 | Add Timeline View                  | COMPLETED | portal-phase5.task   | 2025-12-21 |
-| TASK-FEAT-012 | Add Analytics & Reporting          | PENDING   | portal-phase5.task   | 2025-12-21 |
-| TASK-FEAT-013 | Generate and Organize Gallery Photo Dataset | COMPLETED | gallery.task | 2025-01-21 |
+| Task ID       | Title                                       | Status    | File                 | Created    |
+| ------------- | ------------------------------------------- | --------- | -------------------- | ---------- |
+| TASK-FEAT-001 | Design and Plan Task Portal System          | COMPLETED | portal.task          | 2025-12-21 |
+| TASK-FEAT-002 | Create Task Parser and JSON Schema          | COMPLETED | portal.task          | 2025-12-21 |
+| TASK-FEAT-003 | Migrate Existing Tasks to JSON              | COMPLETED | portal.task          | 2025-12-21 |
+| TASK-FEAT-004 | Build VS Code Extension Foundation          | COMPLETED | portal-phase2.task   | 2025-12-21 |
+| TASK-FEAT-005 | Build Task Portal Webview UI                | COMPLETED | portal-phase2.task   | 2025-12-21 |
+| TASK-FEAT-006 | Add Statistics Dashboard                    | COMPLETED | portal-phase2.task   | 2025-12-21 |
+| TASK-FEAT-007 | Add Kanban Board View                       | COMPLETED | portal-phase3-5.task | 2025-12-21 |
+| TASK-FEAT-008 | Add Quick Actions                           | COMPLETED | portal-phase3-5.task | 2025-12-21 |
+| TASK-FEAT-009 | Add Progress Tracking                       | COMPLETED | portal-phase3-5.task | 2025-12-21 |
+| TASK-FEAT-010 | Build Static Site Generator                 | COMPLETED | portal-phase4.task   | 2025-12-21 |
+| TASK-FEAT-011 | Add Timeline View                           | COMPLETED | portal-phase5.task   | 2025-12-21 |
+| TASK-FEAT-012 | Add Analytics & Reporting                   | COMPLETED | portal-phase5.task   | 2025-12-21 |
+| TASK-FEAT-013 | Generate and Organize Gallery Photo Dataset | COMPLETED | gallery.task         | 2025-01-21 |
 
 ### Bug Fix (BUG)
 
@@ -71,9 +71,9 @@ Last updated: 2025-12-22
 
 ### UI/UX (UI)
 
-| Task ID      | Title                                                    | Status  | File         | Created    |
-| ------------ | -------------------------------------------------------- | ------- | ------------ | ---------- |
-| TASK-UI-001  | Redesign Gallery Page with Instagram-style Masonry Grid  | PENDING | gallery.task | 2025-01-21 |
+| Task ID     | Title                                                   | Status  | File         | Created    |
+| ----------- | ------------------------------------------------------- | ------- | ------------ | ---------- |
+| TASK-UI-001 | Redesign Gallery Page with Instagram-style Masonry Grid | PENDING | gallery.task | 2025-01-21 |
 
 ### API (API)
 
@@ -107,9 +107,9 @@ Last updated: 2025-12-22
 
 ### Performance (PERF)
 
-| Task ID      | Title                                          | Status  | File         | Created    |
-| ------------ | ---------------------------------------------- | ------- | ------------ | ---------- |
-| TASK-PERF-001 | Implement Image Lazy Loading and Pre-loading  | PENDING | gallery.task | 2025-01-21 |
+| Task ID       | Title                                        | Status  | File         | Created    |
+| ------------- | -------------------------------------------- | ------- | ------------ | ---------- |
+| TASK-PERF-001 | Implement Image Lazy Loading and Pre-loading | PENDING | gallery.task | 2025-01-21 |
 
 ### Accessibility (A11Y)
 

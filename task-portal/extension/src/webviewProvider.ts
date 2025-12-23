@@ -30,64 +30,87 @@ export class TaskPortalViewProvider implements vscode.WebviewViewProvider {
 
         // Handle messages from the webview
         webviewView.webview.onDidReceiveMessage(async (message) => {
-            switch (message.type) {
-                case 'getTasks':
-                    const tasks = await this._taskProvider.getAllTasks();
-                    webviewView.webview.postMessage({ type: 'tasksData', tasks });
-                    break;
+            try {
+                switch (message.type) {
+                    case 'getTasks':
+                        const tasks = await this._taskProvider.getAllTasks();
+                        webviewView.webview.postMessage({ type: 'tasksData', tasks });
+                        break;
 
-                case 'filterTasks':
-                    const filtered = await this._taskProvider.getTasksByStatus(message.status);
-                    webviewView.webview.postMessage({ type: 'tasksData', tasks: filtered });
-                    break;
+                    case 'filterTasks':
+                        const filtered = await this._taskProvider.getTasksByStatus(message.status);
+                        webviewView.webview.postMessage({ type: 'tasksData', tasks: filtered });
+                        break;
 
-                case 'searchTasks':
-                    const results = await this._taskProvider.searchTasks(message.query);
-                    webviewView.webview.postMessage({ type: 'tasksData', tasks: results });
-                    break;
+                    case 'searchTasks':
+                        const results = await this._taskProvider.searchTasks(message.query);
+                        webviewView.webview.postMessage({ type: 'tasksData', tasks: results });
+                        break;
 
-                case 'openTask':
-                    const task = await this._taskProvider.getTask(message.taskId);
-                    if (task?.file) {
-                        const doc = await vscode.workspace.openTextDocument(task.file);
-                        await vscode.window.showTextDocument(doc);
-                    }
-                    break;
+                    case 'openTask':
+                        const task = await this._taskProvider.getTask(message.taskId);
+                        if (task?.file) {
+                            const doc = await vscode.workspace.openTextDocument(task.file);
+                            await vscode.window.showTextDocument(doc);
+                        }
+                        break;
 
-                case 'openInEditor':
-                    if (message.filePath) {
-                        const doc = await vscode.workspace.openTextDocument(message.filePath);
-                        await vscode.window.showTextDocument(doc);
-                    }
-                    break;
+                    case 'openInEditor':
+                        if (message.filePath) {
+                            const doc = await vscode.workspace.openTextDocument(message.filePath);
+                            await vscode.window.showTextDocument(doc);
+                        }
+                        break;
 
-                case 'refresh':
-                    await this._taskProvider.refresh();
-                    const refreshedTasks = await this._taskProvider.getAllTasks();
-                    webviewView.webview.postMessage({ type: 'tasksData', tasks: refreshedTasks });
-                    break;
+                    case 'refresh':
+                        await this._taskProvider.refresh();
+                        const refreshedTasks = await this._taskProvider.getAllTasks();
+                        webviewView.webview.postMessage({ type: 'tasksData', tasks: refreshedTasks });
+                        break;
 
-                case 'updateTaskStatus':
-                    // Note: For now, we just acknowledge the request
-                    // Full implementation would require file editing capabilities
-                    vscode.window.showInformationMessage(
-                        `Update task ${message.taskId} to status: ${message.newStatus}`
-                    );
-                    break;
+                    case 'updateTaskStatus':
+                        // Note: For now, we just acknowledge the request
+                        // Full implementation would require file editing capabilities
+                        vscode.window.showInformationMessage(
+                            `Update task ${message.taskId} to status: ${message.newStatus}`
+                        );
+                        break;
+                }
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                webviewView.webview.postMessage({
+                    type: 'error',
+                    message: errorMessage
+                });
+                vscode.window.showErrorMessage(`Task Portal: ${errorMessage}`);
             }
         });
 
         // Send initial data
-        this._taskProvider.getAllTasks().then(tasks => {
-            webviewView.webview.postMessage({ type: 'tasksData', tasks });
-        });
+        this._taskProvider.getAllTasks()
+            .then(tasks => {
+                webviewView.webview.postMessage({ type: 'tasksData', tasks });
+            })
+            .catch(error => {
+                webviewView.webview.postMessage({
+                    type: 'error',
+                    message: error.message || 'Failed to load tasks'
+                });
+            });
     }
 
     public refresh() {
         if (this._view) {
-            this._taskProvider.getAllTasks().then(tasks => {
-                this._view!.webview.postMessage({ type: 'tasksData', tasks });
-            });
+            this._taskProvider.getAllTasks()
+                .then(tasks => {
+                    this._view!.webview.postMessage({ type: 'tasksData', tasks });
+                })
+                .catch(error => {
+                    this._view!.webview.postMessage({
+                        type: 'error',
+                        message: error.message || 'Failed to load tasks'
+                    });
+                });
         }
     }
 
@@ -110,14 +133,32 @@ export class TaskPortalViewProvider implements vscode.WebviewViewProvider {
             html = fs.readFileSync(indexPath.fsPath, 'utf8');
         } catch (error) {
             return `
-        <!DOCTYPE html>
-        <html>
-          <body>
-            <h2>Webview Build Not Found</h2>
-            <p>Please build the webview first:</p>
-            <pre>cd task-portal/extension/webview && npm run build</pre>
-          </body>
-        </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: var(--vscode-font-family);
+            color: var(--vscode-foreground);
+            background-color: var(--vscode-editor-background);
+            padding: 20px;
+        }
+        h2 { color: var(--vscode-errorForeground); }
+        pre {
+            background: var(--vscode-textBlockQuote-background);
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Webview Build Not Found</h2>
+    <p>Please build the webview first:</p>
+    <pre>cd task-portal/extension/webview && npm run build</pre>
+</body>
+</html>
       `;
         }
 

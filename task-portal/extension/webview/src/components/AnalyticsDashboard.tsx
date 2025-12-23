@@ -13,8 +13,9 @@ import {
     Cell
 } from 'recharts';
 import StatCard from './StatCard';
+import { ProgressBar } from './ProgressBar';
 import type { Task } from '../types';
-import { buildVelocity, buildBurnup, buildWorkload, findBottlenecks, countCompleted } from '../utils/analytics';
+import { buildVelocity, buildBurnup, buildWorkload, findBottlenecks, countCompleted, buildOverallProgress } from '../utils/analytics';
 
 interface AnalyticsDashboardProps {
     tasks: Task[];
@@ -49,6 +50,7 @@ const AnalyticsDashboard = ({ tasks, onOpenTask }: AnalyticsDashboardProps) => {
     const burnup = useMemo(() => buildBurnup(tasks, 8), [tasks]);
     const workload = useMemo(() => buildWorkload(tasks), [tasks]);
     const bottlenecks = useMemo(() => findBottlenecks(tasks), [tasks]);
+    const overallProgress = useMemo(() => buildOverallProgress(tasks), [tasks]);
 
     const total = tasks.length;
     const completed = countCompleted(tasks);
@@ -90,6 +92,23 @@ const AnalyticsDashboard = ({ tasks, onOpenTask }: AnalyticsDashboardProps) => {
                 <StatCard title="Completion Rate" value={`${completionRate}%`} color="#10B981" subtitle={`${completed} done`} />
                 <StatCard title="Active" value={active} color="#3B82F6" subtitle="Pending + In Progress" />
                 <StatCard title="Blocked" value={blocked} color={blocked ? '#EF4444' : undefined} subtitle={blocked ? 'Needs attention' : 'All clear'} />
+            </div>
+
+            <div className="border border-vscode-foreground/20 rounded p-4">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <h3 className="text-sm font-semibold">Overall Progress</h3>
+                        <p className="text-xs text-vscode-foreground/60">{overallProgress.completedItems}/{overallProgress.totalItems || 0} checklist items completed</p>
+                    </div>
+                    <div className="w-full md:w-80">
+                        <ProgressBar percentage={overallProgress.percentage} size="large" showLabel={true} />
+                    </div>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-vscode-foreground/70">
+                    <div className="p-2 rounded border border-vscode-foreground/10 bg-vscode-editor-background/30">Not started: {overallProgress.buckets.notStarted}</div>
+                    <div className="p-2 rounded border border-vscode-foreground/10 bg-vscode-editor-background/30">In progress: {overallProgress.buckets.partial}</div>
+                    <div className="p-2 rounded border border-vscode-foreground/10 bg-vscode-editor-background/30">Complete: {overallProgress.buckets.done}</div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

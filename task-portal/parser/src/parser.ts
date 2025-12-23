@@ -99,6 +99,11 @@ export async function parseTaskFile(
             }
 
             switch (currentSection.toLowerCase()) {
+                case 'description':
+                    // Store in both description field and sections
+                    currentTask.description = content;
+                    currentTask.sections.description = content;
+                    break;
                 case 'requirements':
                 case 'requirements / what to do':
                 case 'what to do':

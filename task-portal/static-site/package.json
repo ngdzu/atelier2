@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "build": "tsx generator.ts",
+        "watch": "tsx watch.ts",
         "serve": "npx serve public"
     },
     "devDependencies": {

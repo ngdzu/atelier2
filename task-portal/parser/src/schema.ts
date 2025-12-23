@@ -70,6 +70,7 @@ export type Progress = z.infer<typeof ProgressSchema>;
  * Task sections
  */
 export const TaskSectionsSchema = z.object({
+    description: z.string().optional(),
     requirements: z.string().optional(),
     definitionOfDone: z.string().optional(),
     verificationSteps: z.string().optional(),

@@ -3,12 +3,14 @@ interface Task {
     category: string;
     status: string;
     priority?: string;
+    progress?: { percentage: number };
 }
 
 interface Filters {
     category: string[];
     status: string[];
     priority: string[];
+    progress: Array<'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETE'>;
 }
 
 interface Props {
@@ -21,12 +23,19 @@ const FilterPanel = ({ filters, onFiltersChange, tasks }: Props) => {
     const categories = Array.from(new Set(tasks.map(t => t.category))).sort();
     const statuses = Array.from(new Set(tasks.map(t => t.status))).sort();
     const priorities = Array.from(new Set(tasks.map(t => t.priority).filter(Boolean) as string[])).sort();
+    const progressBuckets = [
+        { key: 'NOT_STARTED', label: 'Not started (0%)' },
+        { key: 'IN_PROGRESS', label: 'In progress (1-99%)' },
+        { key: 'COMPLETE', label: 'Complete (100%)' },
+    ] as const;
 
-    const toggleFilter = (type: keyof Filters, value: string) => {
-        const current = filters[type];
-        const newValues = current.includes(value)
+    const toggleFilter = <K extends keyof Filters>(type: K, value: Filters[K][number]) => {
+        const current = filters[type] as Array<Filters[K][number]>;
+        const nextValues = current.includes(value)
             ? current.filter(v => v !== value)
             : [...current, value];
+
+        const newValues = nextValues as Filters[K];
 
         onFiltersChange({
             ...filters,
@@ -38,14 +47,16 @@ const FilterPanel = ({ filters, onFiltersChange, tasks }: Props) => {
         onFiltersChange({
             category: [],
             status: [],
-            priority: []
+            priority: [],
+            progress: []
         });
     };
 
     const hasActiveFilters =
         filters.category.length > 0 ||
         filters.status.length > 0 ||
-        filters.priority.length > 0;
+        filters.priority.length > 0 ||
+        filters.progress.length > 0;
 
     return (
         <div className="space-y-4">
@@ -113,6 +124,23 @@ const FilterPanel = ({ filters, onFiltersChange, tasks }: Props) => {
                     </div>
                 </div>
             )}
+
+            <div>
+                <h4 className="font-medium text-sm mb-2">Progress</h4>
+                <div className="space-y-1">
+                    {progressBuckets.map(bucket => (
+                        <label key={bucket.key} className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={filters.progress.includes(bucket.key)}
+                                onChange={() => toggleFilter('progress', bucket.key)}
+                                className="cursor-pointer"
+                            />
+                            <span>{bucket.label}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };

@@ -11,79 +11,79 @@ const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 
 // Helper function to format date
 function formatDate(dateStr: string | undefined): string {
-    if (!dateStr) return 'N/A';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  if (!dateStr) return 'N/A';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 // Calculate statistics
 function calculateStats(tasks: any[]) {
-    const stats = {
-        total: tasks.length,
-        byStatus: {} as Record<string, number>,
-        byCategory: {} as Record<string, number>,
-        byPriority: {} as Record<string, number>,
-        completionRate: 0,
-        totalCompleted: 0
-    };
+  const stats = {
+    total: tasks.length,
+    byStatus: {} as Record<string, number>,
+    byCategory: {} as Record<string, number>,
+    byPriority: {} as Record<string, number>,
+    completionRate: 0,
+    totalCompleted: 0
+  };
 
-    tasks.forEach(task => {
-        // Count by status
-        stats.byStatus[task.status] = (stats.byStatus[task.status] || 0) + 1;
+  tasks.forEach(task => {
+    // Count by status
+    stats.byStatus[task.status] = (stats.byStatus[task.status] || 0) + 1;
 
-        // Count by category
-        stats.byCategory[task.category] = (stats.byCategory[task.category] || 0) + 1;
+    // Count by category
+    stats.byCategory[task.category] = (stats.byCategory[task.category] || 0) + 1;
 
-        // Count by priority
-        if (task.priority) {
-            stats.byPriority[task.priority] = (stats.byPriority[task.priority] || 0) + 1;
-        }
+    // Count by priority
+    if (task.priority) {
+      stats.byPriority[task.priority] = (stats.byPriority[task.priority] || 0) + 1;
+    }
 
-        // Count completed
-        if (task.status === 'COMPLETED') {
-            stats.totalCompleted++;
-        }
-    });
+    // Count completed
+    if (task.status === 'COMPLETED') {
+      stats.totalCompleted++;
+    }
+  });
 
-    stats.completionRate = stats.total > 0 ? Math.round((stats.totalCompleted / stats.total) * 100) : 0;
+  stats.completionRate = stats.total > 0 ? Math.round((stats.totalCompleted / stats.total) * 100) : 0;
 
-    return stats;
+  return stats;
 }
 
 // Get status color
 function getStatusColor(status: string): string {
-    const colors: Record<string, string> = {
-        'PENDING': '#3B82F6',
-        'IN_PROGRESS': '#F59E0B',
-        'BLOCKED': '#EF4444',
-        'COMPLETED': '#10B981',
-        'CANCELLED': '#6B7280'
-    };
-    return colors[status] || '#6B7280';
+  const colors: Record<string, string> = {
+    'PENDING': '#3B82F6',
+    'IN_PROGRESS': '#F59E0B',
+    'BLOCKED': '#EF4444',
+    'COMPLETED': '#10B981',
+    'CANCELLED': '#6B7280'
+  };
+  return colors[status] || '#6B7280';
 }
 
 // Get priority color
 function getPriorityColor(priority: string): string {
-    const colors: Record<string, string> = {
-        'CRITICAL': '#DC2626',
-        'HIGH': '#F59E0B',
-        'MEDIUM': '#3B82F6',
-        'LOW': '#6B7280'
-    };
-    return colors[priority] || '#6B7280';
+  const colors: Record<string, string> = {
+    'CRITICAL': '#DC2626',
+    'HIGH': '#F59E0B',
+    'MEDIUM': '#3B82F6',
+    'LOW': '#6B7280'
+  };
+  return colors[priority] || '#6B7280';
 }
 
 // Generate HTML
 function generateHTML(tasks: any[], stats: any, metadata: any): string {
-    const lastUpdated = new Date().toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+  const lastUpdated = new Date().toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -319,6 +319,142 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       color: #6b7280;
     }
 
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0;
+      flex: 1;
+      padding-right: 1rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: #f3f4f6;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      color: #111827;
+    }
+
+    .detail-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .detail-section-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.75rem;
+    }
+
+    .detail-description {
+      color: #4b5563;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .task-id {
+      cursor: pointer;
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .task-id:hover {
+      text-decoration: underline;
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .progress-percentage {
+      font-weight: 600;
+      color: #111827;
+    }
+
     @media (max-width: 768px) {
       .table-container {
         overflow-x: auto;
@@ -400,22 +536,22 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
         <div class="stat-label">By Status</div>
         <div class="stat-breakdown">
           ${Object.entries(stats.byStatus).map(([status, count]) =>
-        `<div class="stat-breakdown-item">
+    `<div class="stat-breakdown-item">
               <span>${status}</span>
               <span style="font-weight: 600;">${count}</span>
             </div>`
-    ).join('')}
+  ).join('')}
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-label">By Category</div>
         <div class="stat-breakdown">
           ${Object.entries(stats.byCategory).slice(0, 5).map(([category, count]) =>
-        `<div class="stat-breakdown-item">
+    `<div class="stat-breakdown-item">
               <span>${category}</span>
               <span style="font-weight: 600;">${count}</span>
             </div>`
-    ).join('')}
+  ).join('')}
           ${Object.keys(stats.byCategory).length > 5 ? `<div class="stat-breakdown-item"><span>...</span></div>` : ''}
         </div>
       </div>
@@ -469,7 +605,187 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
     </footer>
   </div>
 
+  <!-- Task Detail Modal -->
+  <div id="task-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title"></h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
   <script>
+    // Task data for modal
+    const tasksData = ${JSON.stringify(tasks, null, 2)};
+
+    // Modal functions
+    function openTaskModal(taskId) {
+      const task = tasksData.find(t => t.id === taskId);
+      if (!task) return;
+
+      const modal = document.getElementById('task-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBody = document.getElementById('modal-body');
+
+      modalTitle.textContent = task.title;
+
+      // Build modal content
+      let progressHTML = '';
+      if (task.progress) {
+        const percentage = task.progress.percentage || 0;
+        const completed = task.progress.completed || 0;
+        const total = task.progress.total || 0;
+        progressHTML = \`
+          <div class="detail-item">
+            <div class="detail-label">Progress</div>
+            <div class="progress-info">
+              <div class="progress-bar" style="flex: 1; height: 8px;">
+                <div class="progress-fill" style="width: \${percentage}%; background: \${percentage === 100 ? '#10B981' : percentage >= 50 ? '#3B82F6' : '#F59E0B'}"></div>
+              </div>
+              <span class="progress-percentage">\${percentage}%</span>
+            </div>
+            <div class="progress-text">\${completed} of \${total} steps completed</div>
+          </div>
+        \`;
+      }
+
+      modalBody.innerHTML = \`
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label">Task ID</div>
+            <div class="detail-value">\${task.id}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">
+              <span class="badge" style="background: \${getStatusColorJS(task.status)}20; color: \${getStatusColorJS(task.status)};">\${task.status}</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Priority</div>
+            <div class="detail-value">
+              \${task.priority ? \`<span class="badge" style="background: \${getPriorityColorJS(task.priority)}20; color: \${getPriorityColorJS(task.priority)};">\${task.priority}</span>\` : '-'}
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Category</div>
+            <div class="detail-value">
+              <span class="badge" style="background: #e5e7eb; color: #374151;">\${task.category}</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Assignee</div>
+            <div class="detail-value">\${task.assignee || 'unassigned'}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Created</div>
+            <div class="detail-value">\${formatDateJS(task.created)}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Updated</div>
+            <div class="detail-value">\${formatDateJS(task.updated)}</div>
+          </div>
+          \${task.estimatedTime ? \`
+            <div class="detail-item">
+              <div class="detail-label">Estimated Time</div>
+              <div class="detail-value">\${task.estimatedTime}</div>
+            </div>
+          \` : ''}
+          \${task.actualTime ? \`
+            <div class="detail-item">
+              <div class="detail-label">Actual Time</div>
+              <div class="detail-value">\${task.actualTime}</div>
+            </div>
+          \` : ''}
+          \${progressHTML}
+        </div>
+
+        \${task.description ? \`
+          <div class="detail-section">
+            <div class="detail-section-title">Description</div>
+            <div class="detail-description">\${task.description}</div>
+          </div>
+        \` : ''}
+
+        \${task.dependencies && task.dependencies.length > 0 ? \`
+          <div class="detail-section">
+            <div class="detail-section-title">Dependencies</div>
+            <div class="detail-value">\${task.dependencies.join(', ')}</div>
+          </div>
+        \` : ''}
+
+        \${task.relatedTasks && task.relatedTasks.length > 0 ? \`
+          <div class="detail-section">
+            <div class="detail-section-title">Related Tasks</div>
+            <div class="detail-value">\${task.relatedTasks.join(', ')}</div>
+          </div>
+        \` : ''}
+      \`;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('task-modal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on outside click
+    document.getElementById('task-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'task-modal') {
+        closeModal();
+      }
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Add click handlers to task IDs
+    document.querySelectorAll('.task-id').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const taskId = el.textContent.trim();
+        openTaskModal(taskId);
+      });
+      el.style.cursor = 'pointer';
+    });
+
+    // Helper functions for modal
+    function getStatusColorJS(status) {
+      const colors = {
+        'PENDING': '#3B82F6',
+        'IN_PROGRESS': '#F59E0B',
+        'BLOCKED': '#EF4444',
+        'COMPLETED': '#10B981',
+        'CANCELLED': '#6B7280'
+      };
+      return colors[status] || '#6B7280';
+    }
+
+    function getPriorityColorJS(priority) {
+      const colors = {
+        'CRITICAL': '#DC2626',
+        'HIGH': '#F59E0B',
+        'MEDIUM': '#3B82F6',
+        'LOW': '#6B7280'
+      };
+      return colors[priority] || '#6B7280';
+    }
+
+    function formatDateJS(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
     // Filter functionality
     const searchInput = document.getElementById('search');
     const categoryFilter = document.getElementById('category-filter');
@@ -557,27 +873,27 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
 
 // Main execution
 try {
-    const tasks = registry.tasks || [];
-    const metadata = registry.metadata || {};
-    const stats = calculateStats(tasks);
+  const tasks = registry.tasks || [];
+  const metadata = registry.metadata || {};
+  const stats = calculateStats(tasks);
 
-    const html = generateHTML(tasks, stats, metadata);
+  const html = generateHTML(tasks, stats, metadata);
 
-    // Create public directory if it doesn't exist
-    const publicDir = path.join(__dirname, 'public');
-    if (!fs.existsSync(publicDir)) {
-        fs.mkdirSync(publicDir, { recursive: true });
-    }
+  // Create public directory if it doesn't exist
+  const publicDir = path.join(__dirname, 'public');
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
 
-    // Write HTML file
-    const outputPath = path.join(publicDir, 'index.html');
-    fs.writeFileSync(outputPath, html, 'utf8');
+  // Write HTML file
+  const outputPath = path.join(publicDir, 'index.html');
+  fs.writeFileSync(outputPath, html, 'utf8');
 
-    console.log('✅ Static site generated successfully!');
-    console.log(`📁 Output: ${outputPath}`);
-    console.log(`📊 Generated dashboard with ${tasks.length} tasks`);
-    console.log(`\n🚀 To preview locally, run: npm run serve`);
+  console.log('✅ Static site generated successfully!');
+  console.log(`📁 Output: ${outputPath}`);
+  console.log(`📊 Generated dashboard with ${tasks.length} tasks`);
+  console.log(`\n🚀 To preview locally, run: npm run serve`);
 } catch (error) {
-    console.error('❌ Error generating static site:', error);
-    process.exit(1);
+  console.error('❌ Error generating static site:', error);
+  process.exit(1);
 }
