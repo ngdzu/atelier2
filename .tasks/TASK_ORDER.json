@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-22T01:00:00.000Z",
+    "lastUpdated": "2025-01-22T02:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -37,6 +37,16 @@
           "blocking": ["TASK-FEAT-014"],
           "estimatedTime": "4 hours",
           "notes": "Requirements analysis for dashboard management system. Can be done in parallel with TASK-ARCH-001 and TASK-DOC-004."
+        },
+        {
+          "taskId": "TASK-DOC-006",
+          "title": "Authentication and Authorization Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-ARCH-001"],
+          "blocking": ["TASK-DB-005"],
+          "estimatedTime": "6 hours",
+          "notes": "Design authentication and authorization system including user roles, permissions, and security requirements. Required before database schema implementation."
         }
       ]
     },
@@ -104,6 +114,16 @@
           "blocking": ["TASK-API-002", "TASK-SEC-002"],
           "estimatedTime": "8 hours",
           "notes": "Database schema for dashboard management system. Required before API and security implementation."
+        },
+        {
+          "taskId": "TASK-DB-005",
+          "title": "User Authentication Database Schema",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DOC-006", "TASK-DB-002"],
+          "blocking": ["TASK-API-005"],
+          "estimatedTime": "8 hours",
+          "notes": "Database schema for user authentication and authorization. Includes users table extensions, refresh tokens, password history, and login attempt tracking."
         }
       ]
     },
@@ -137,10 +157,20 @@
           "title": "Dashboard Backend API Implementation",
           "priority": "HIGH",
           "canStart": false,
-          "dependsOn": ["TASK-DB-003"],
+          "dependsOn": ["TASK-DB-003", "TASK-API-005"],
           "blocking": ["TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
           "estimatedTime": "16 hours",
-          "notes": "Backend API for dashboard management system. Required before all dashboard frontend implementations."
+          "notes": "Backend API for dashboard management system. Uses authentication middleware from TASK-API-005. Required before all dashboard frontend implementations."
+        },
+        {
+          "taskId": "TASK-API-005",
+          "title": "Authentication and Authorization API",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-005"],
+          "blocking": ["TASK-SEC-003"],
+          "estimatedTime": "16 hours",
+          "notes": "Complete authentication and authorization API including login, registration, JWT tokens, password management, and role-based access control. Required before security enhancements."
         }
       ]
     },
@@ -194,10 +224,20 @@
           "title": "Dashboard Authentication and Authorization",
           "priority": "CRITICAL",
           "canStart": false,
-          "dependsOn": ["TASK-DB-003"],
-          "blocking": [],
+          "dependsOn": ["TASK-API-005", "TASK-DB-003"],
+          "blocking": ["TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
           "estimatedTime": "8 hours",
-          "notes": "Authentication and authorization for dashboard system. Can be done in parallel with TASK-API-002 as it depends only on database schema."
+          "notes": "Dashboard frontend authentication integration. Uses general auth API from TASK-API-005. Implements AuthContext, ProtectedRoute, LoginPage, and role-based UI. Required before all dashboard frontend tasks."
+        },
+        {
+          "taskId": "TASK-SEC-003",
+          "title": "Authentication Security Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-005"],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Additional security measures for authentication system including secure token handling, session management, security headers, and security monitoring."
         }
       ]
     },
@@ -241,40 +281,40 @@
           "title": "Dashboard Frontend Implementation - Metrics and Analytics",
           "priority": "HIGH",
           "canStart": false,
-          "dependsOn": ["TASK-API-002"],
+          "dependsOn": ["TASK-API-002", "TASK-SEC-002"],
           "blocking": ["TASK-TEST-002"],
           "estimatedTime": "12 hours",
-          "notes": "Dashboard frontend for metrics and analytics. Can be done in parallel with other dashboard frontend tasks (FEAT-016, 017, 018)."
+          "notes": "Dashboard frontend for metrics and analytics. Requires authentication integration. Can be done in parallel with other dashboard frontend tasks (FEAT-016, 017, 018)."
         },
         {
           "taskId": "TASK-FEAT-016",
           "title": "Dashboard Frontend Implementation - Promotions Management",
           "priority": "MEDIUM",
           "canStart": false,
-          "dependsOn": ["TASK-API-002"],
+          "dependsOn": ["TASK-API-002", "TASK-SEC-002"],
           "blocking": ["TASK-TEST-002"],
           "estimatedTime": "10 hours",
-          "notes": "Dashboard frontend for promotions management. Can be done in parallel with FEAT-015, 017, 018."
+          "notes": "Dashboard frontend for promotions management. Requires authentication integration. Can be done in parallel with FEAT-015, 017, 018."
         },
         {
           "taskId": "TASK-FEAT-017",
           "title": "Dashboard Frontend Implementation - Website Content Editor",
           "priority": "MEDIUM",
           "canStart": false,
-          "dependsOn": ["TASK-API-002"],
+          "dependsOn": ["TASK-API-002", "TASK-SEC-002"],
           "blocking": ["TASK-TEST-002"],
           "estimatedTime": "10 hours",
-          "notes": "Dashboard frontend for website content editing. Can be done in parallel with FEAT-015, 016, 018."
+          "notes": "Dashboard frontend for website content editing. Requires authentication integration. Can be done in parallel with FEAT-015, 016, 018."
         },
         {
           "taskId": "TASK-FEAT-018",
           "title": "Dashboard Frontend Implementation - Gallery Image Management",
           "priority": "MEDIUM",
           "canStart": false,
-          "dependsOn": ["TASK-API-002"],
+          "dependsOn": ["TASK-API-002", "TASK-SEC-002"],
           "blocking": ["TASK-TEST-002"],
           "estimatedTime": "8 hours",
-          "notes": "Dashboard frontend for gallery image management. Can be done in parallel with FEAT-015, 016, 017."
+          "notes": "Dashboard frontend for gallery image management. Requires authentication integration. Can be done in parallel with FEAT-015, 016, 017."
         }
       ]
     },
@@ -354,14 +394,14 @@
       "note": "TASK-DB-001 and TASK-DB-003 can be done in parallel as they depend on different parent tasks (DB-000 vs FEAT-014)."
     },
     "phase3": {
-      "description": "Some API tasks can be done in parallel",
-      "tasks": ["TASK-API-001", "TASK-API-002", "TASK-API-004"],
-      "note": "These API tasks depend on different database schemas and can be worked on independently once their respective DB tasks complete."
+      "description": "Some API tasks can be done in parallel, but TASK-API-005 (auth) should be completed before TASK-API-002 (dashboard API)",
+      "tasks": ["TASK-API-001", "TASK-API-004", "TASK-API-005"],
+      "note": "TASK-API-001, API-004, and API-005 depend on different database schemas and can be worked on independently. TASK-API-002 depends on API-005 for authentication middleware, so complete API-005 first."
     },
     "phase4": {
       "description": "Infrastructure and quality tasks in Phase 4 can be done in parallel",
-      "tasks": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001", "TASK-SEC-002"],
-      "note": "These tasks all depend on their respective API tasks but not on each other, so they can be worked on simultaneously."
+      "tasks": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001"],
+      "note": "These tasks all depend on their respective API tasks but not on each other, so they can be worked on simultaneously. TASK-SEC-002 depends on TASK-API-005 and blocks dashboard frontend tasks."
     },
     "phase5": {
       "description": "Dashboard frontend tasks can be done in parallel",
@@ -379,11 +419,21 @@
     "TASK-MIG-001",
     "TASK-DOC-001"
   ],
+  "authenticationCriticalPath": [
+    "TASK-DOC-006",
+    "TASK-DB-005",
+    "TASK-API-005",
+    "TASK-SEC-003"
+  ],
   "dashboardCriticalPath": [
     "TASK-DOC-002",
     "TASK-FEAT-014",
     "TASK-DB-003",
+    "TASK-DOC-006",
+    "TASK-DB-005",
+    "TASK-API-005",
     "TASK-API-002",
+    "TASK-SEC-002",
     "TASK-FEAT-015",
     "TASK-TEST-002",
     "TASK-TEST-003"
@@ -403,7 +453,8 @@
     "blockingTasks": "Pay attention to 'blocking' field - these tasks cannot start until the current task is complete.",
     "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible.",
     "featureParallelism": "Dashboard system (TASK-DOC-002 → FEAT-014 → DB-003 → API-002) and Customer Promotions (TASK-DOC-004 → DB-004 → API-004) can be developed in parallel as they are independent feature sets.",
-    "criticalPaths": "There are three main critical paths: (1) Core backend infrastructure, (2) Dashboard system, and (3) Customer Promotions system. These can progress independently after Phase 1."
+    "criticalPaths": "There are four main critical paths: (1) Core backend infrastructure, (2) Dashboard system, (3) Customer Promotions system, and (4) Authentication system. These can progress independently after Phase 1, though dashboard requires authentication before frontend implementation.",
+    "authenticationNote": "Authentication system (DOC-006 → DB-005 → API-005 → SEC-003) provides system-wide auth that dashboard (SEC-002) and other features use. Dashboard frontend tasks require both API-002 and SEC-002 (which depends on API-005)."
   }
 }
 

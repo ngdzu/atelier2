@@ -1,9 +1,9 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-22T00:00:00.000Z",
-    "totalTasks": 47,
-    "lastSync": "2025-01-22T00:00:00.000Z"
+    "lastUpdated": "2025-01-22T02:00:00.000Z",
+    "totalTasks": 51,
+    "lastSync": "2025-01-22T02:00:00.000Z"
   },
   "categories": {
     "FEAT": {
@@ -45,15 +45,15 @@
       "name": "API",
       "code": "API",
       "description": "Backend API development",
-      "lastNumber": 4,
-      "nextAvailable": 5
+      "lastNumber": 5,
+      "nextAvailable": 6
     },
     "DB": {
       "name": "Database",
       "code": "DB",
       "description": "Database schema, migrations, queries",
-      "lastNumber": 4,
-      "nextAvailable": 5
+      "lastNumber": 5,
+      "nextAvailable": 6
     },
     "TEST": {
       "name": "Testing",
@@ -66,8 +66,8 @@
       "name": "Documentation",
       "code": "DOC",
       "description": "Documentation updates",
-      "lastNumber": 5,
-      "nextAvailable": 6
+      "lastNumber": 6,
+      "nextAvailable": 7
     },
     "OPS": {
       "name": "DevOps",
@@ -80,8 +80,8 @@
       "name": "Security",
       "code": "SEC",
       "description": "Security-related tasks",
-      "lastNumber": 2,
-      "nextAvailable": 3
+      "lastNumber": 3,
+      "nextAvailable": 4
     },
     "PERF": {
       "name": "Performance",
@@ -1235,6 +1235,7 @@
       "updated": "2025-01-22",
       "estimatedTime": "8 hours",
       "dependencies": [
+        "TASK-API-005",
         "TASK-DB-003"
       ],
       "relatedTasks": [
@@ -1243,7 +1244,7 @@
       ],
       "file": "dashboard.task",
       "filePath": ".tasks/dashboard.task",
-      "description": "Implement comprehensive authentication and authorization system for the dashboard.",
+      "description": "Implement dashboard frontend authentication integration. Uses general authentication API from TASK-API-005. Implements AuthContext, ProtectedRoute, LoginPage, and role-based UI components.",
       "sections": {},
       "progress": {
         "completed": 0,
@@ -1488,6 +1489,98 @@
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
       "description": "Create comprehensive documentation for the customer management and promotion automation system, including API documentation, user guides for dashboard features, configuration guides, and troubleshooting documentation.",
+      "sections": {},
+      "progress": {
+        "completed": 0,
+        "total": 0,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-006",
+      "category": "DOC",
+      "number": 6,
+      "title": "Authentication and Authorization Design",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-22",
+      "updated": "2025-01-22",
+      "estimatedTime": "6 hours",
+      "dependencies": ["TASK-ARCH-001"],
+      "relatedTasks": ["TASK-DB-005", "TASK-API-005", "TASK-SEC-003"],
+      "file": "backend.task",
+      "filePath": ".tasks/backend.task",
+      "description": "Design comprehensive authentication and authorization system for the LuxeNail application. This includes defining user roles, permissions, authentication flows, authorization rules, and security requirements.",
+      "sections": {},
+      "progress": {
+        "completed": 0,
+        "total": 0,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DB-005",
+      "category": "DB",
+      "number": 5,
+      "title": "User Authentication Database Schema",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-22",
+      "updated": "2025-01-22",
+      "estimatedTime": "8 hours",
+      "dependencies": ["TASK-DOC-006", "TASK-DB-002"],
+      "relatedTasks": ["TASK-API-005"],
+      "file": "backend.task",
+      "filePath": ".tasks/backend.task",
+      "description": "Implement database schema for user authentication and authorization system. This includes extending the users table with authentication fields, creating roles and permissions tables, implementing password storage, and setting up authorization data structures.",
+      "sections": {},
+      "progress": {
+        "completed": 0,
+        "total": 0,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-005",
+      "category": "API",
+      "number": 5,
+      "title": "Authentication and Authorization API",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-22",
+      "updated": "2025-01-22",
+      "estimatedTime": "16 hours",
+      "dependencies": ["TASK-DB-005"],
+      "relatedTasks": ["TASK-SEC-003"],
+      "file": "backend.task",
+      "filePath": ".tasks/backend.task",
+      "description": "Implement complete authentication and authorization API endpoints and middleware for the LuxeNail application. This includes login, registration, password management, JWT token handling, role-based access control, and authorization middleware.",
+      "sections": {},
+      "progress": {
+        "completed": 0,
+        "total": 0,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-SEC-003",
+      "category": "SEC",
+      "number": 3,
+      "title": "Authentication Security Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-22",
+      "updated": "2025-01-22",
+      "estimatedTime": "6 hours",
+      "dependencies": ["TASK-API-005"],
+      "relatedTasks": ["TASK-DOC-006"],
+      "file": "backend.task",
+      "filePath": ".tasks/backend.task",
+      "description": "Implement additional security measures for the authentication system, including secure token handling, session management, security headers, and security monitoring.",
       "sections": {},
       "progress": {
         "completed": 0,

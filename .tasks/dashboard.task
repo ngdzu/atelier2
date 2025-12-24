@@ -583,29 +583,33 @@ Implement the complete database schema for the dashboard management system inclu
 **Created:** 2025-01-22
 **Updated:** 2025-01-22
 **Estimated Time:** 16 hours
-**Dependencies:** TASK-DB-003
+**Dependencies:** TASK-DB-003, TASK-API-005
 **Related Tasks:** TASK-SEC-002, TASK-FEAT-015
 
 ### Description
 
-Implement the complete backend API for the dashboard management system including endpoints for metrics, promotions, website content management, and gallery image management. Include authentication middleware, request validation, error handling, and comprehensive documentation.
+Implement the complete backend API for the dashboard management system including endpoints for metrics, promotions, website content management, and gallery image management. This task uses the authentication and authorization middleware already implemented in TASK-API-005 (Authentication and Authorization API). Include request validation, error handling, and comprehensive documentation.
 
 ### Requirements / What to Do
 
-#### Step 1: Set Up Authentication and Authorization Middleware
-- [ ] Create `server/src/middleware/auth.middleware.ts`:
-  - JWT token verification
-  - Extract user from token
-  - Attach user to request object
-- [ ] Create `server/src/middleware/authorize.middleware.ts`:
-  - Role-based access control
-  - Check user permissions
-  - Return 403 for unauthorized access
-- [ ] Create `server/src/services/auth.service.ts`:
-  - User registration
-  - User login (JWT token generation)
-  - Password hashing (bcrypt)
-  - Token refresh logic
+#### Step 1: Integrate Authentication and Authorization Middleware
+- [ ] Use existing authentication middleware from TASK-API-005:
+  - Import and use `authenticate` middleware from `server/src/middleware/auth.middleware.ts`
+  - JWT token verification is already implemented
+  - User extraction and request attachment is already handled
+- [ ] Use existing authorization middleware from TASK-API-005:
+  - Import and use `authorize(...roles)` middleware from `server/src/middleware/authorize.middleware.ts`
+  - Role-based access control is already implemented
+- [ ] Apply authentication middleware to all dashboard API routes:
+  - All dashboard endpoints require authentication
+  - Use `authenticate` middleware on all routes
+- [ ] Apply authorization middleware based on endpoint requirements:
+  - Metrics endpoints: MANAGER+ (OWNER, ADMIN, MANAGER)
+  - Promotions endpoints: MANAGER+ 
+  - Content management: ADMIN+
+  - Gallery management: MANAGER+
+  - User management: ADMIN+
+- [ ] Do NOT create new auth middleware or services (already done in TASK-API-005)
 
 #### Step 2: Implement Metrics API Endpoints
 - [ ] Create `server/src/routes/metrics.routes.ts`:
@@ -1645,51 +1649,27 @@ Implement the frontend interface for managing gallery images including upload, e
 **Created:** 2025-01-22
 **Updated:** 2025-01-22
 **Estimated Time:** 8 hours
-**Dependencies:** TASK-DB-003
+**Dependencies:** TASK-API-005, TASK-DB-003
 **Related Tasks:** TASK-API-002, TASK-FEAT-015
 
 ### Description
 
-Implement comprehensive authentication and authorization system for the dashboard. This includes user authentication (login/logout), role-based access control, protected routes, and permission checks for all dashboard features.
+Implement dashboard frontend authentication integration. This task uses the general authentication API implemented in TASK-API-005 (Authentication and Authorization API). This task focuses on frontend integration: AuthContext, ProtectedRoute, LoginPage, role-based UI components, and dashboard-specific authorization logic. The backend authentication API (login, register, JWT, etc.) is already implemented in TASK-API-005.
 
 ### Requirements / What to Do
 
-#### Step 1: Backend Authentication Implementation
-- [ ] Create `server/src/services/auth.service.ts`:
-  - User registration (for admin/owner creation)
-  - User login (email/password)
-  - Password hashing using bcrypt
-  - JWT token generation
-  - Token verification
-  - Password reset functionality (optional)
-- [ ] Create `server/src/controllers/auth.controller.ts`:
-  - POST `/api/auth/register` - Register new user
-  - POST `/api/auth/login` - Login user
-  - POST `/api/auth/logout` - Logout (token invalidation, optional)
+#### Step 1: Integrate with General Authentication API
+- [ ] Review TASK-API-005 authentication endpoints:
+  - POST `/api/auth/login` - User login
+  - POST `/api/auth/logout` - User logout
   - GET `/api/auth/me` - Get current user info
-  - POST `/api/auth/refresh` - Refresh JWT token (optional)
-- [ ] Create `server/src/middleware/auth.middleware.ts`:
-  - Verify JWT token
-  - Extract user from token
-  - Attach user to request object
-  - Handle token expiration
-  - Handle invalid tokens
+  - POST `/api/auth/refresh` - Refresh access token
+  - POST `/api/auth/change-password` - Change password
+- [ ] Ensure dashboard uses the same authentication API endpoints
+- [ ] No backend auth implementation needed (already done in TASK-API-005)
+- [ ] Focus on frontend integration only
 
-#### Step 2: Backend Authorization Implementation
-- [ ] Create `server/src/middleware/authorize.middleware.ts`:
-  - Role-based access control
-  - Check user role against required roles
-  - Permission-based checks (if needed beyond roles)
-  - Return 403 for unauthorized access
-- [ ] Create role permission matrix:
-  - OWNER: Full access to all features
-  - MANAGER: Access to metrics, promotions, content, gallery (no user management)
-  - ADMIN: Access to metrics, promotions, content, gallery (may include user management)
-  - EMPLOYEE: Limited access (view-only metrics, if applicable)
-- [ ] Apply authorization middleware to all protected routes
-- [ ] Create helper functions for checking permissions
-
-#### Step 3: Frontend Authentication Context
+#### Step 2: Frontend Authentication Context
 - [ ] Create `client/contexts/AuthContext.tsx`:
   - User state management
   - Login function
@@ -1704,7 +1684,7 @@ Implement comprehensive authentication and authorization system for the dashboar
   - `isAuthenticated()`: Check if user is logged in
   - Token refresh logic (if implemented)
 
-#### Step 4: Create Login Page
+#### Step 3: Create Login Page
 - [ ] Create `client/components/auth/LoginPage.tsx`:
   - Login form (email, password)
   - Form validation
@@ -1713,7 +1693,7 @@ Implement comprehensive authentication and authorization system for the dashboar
   - Redirect after successful login
   - Remember me option (optional)
 
-#### Step 5: Implement Protected Routes
+#### Step 4: Implement Protected Routes
 - [ ] Create `client/components/auth/ProtectedRoute.tsx`:
   - Check if user is authenticated
   - Redirect to login if not authenticated
@@ -1722,34 +1702,45 @@ Implement comprehensive authentication and authorization system for the dashboar
 - [ ] Wrap all dashboard routes with ProtectedRoute
 - [ ] Apply role-based route protection
 
-#### Step 6: Add Role-Based UI Rendering
+#### Step 5: Add Role-Based UI Rendering
 - [ ] Create `client/components/auth/RequireRole.tsx`:
   - Component that renders children only if user has required role
   - Show nothing or access denied message if unauthorized
 - [ ] Use RequireRole to conditionally render dashboard sections
 - [ ] Hide/disable features based on user role
 
-#### Step 7: Add Navigation Based on Roles
+#### Step 6: Add Navigation Based on Roles
 - [ ] Update `client/components/Layout.tsx`:
   - Show navigation items based on user role
   - Hide unauthorized sections
   - Show user info and logout button
 - [ ] Add user profile dropdown/menu
 
-#### Step 8: Implement Token Management
+#### Step 7: Implement Token Management
 - [ ] Store JWT token securely (localStorage or httpOnly cookie)
 - [ ] Include token in API requests (Authorization header)
 - [ ] Handle token expiration (redirect to login)
 - [ ] Implement token refresh if needed
 - [ ] Clear token on logout
 
-#### Step 9: Add API Request Interceptor
+#### Step 8: Add API Request Interceptor
 - [ ] Create `client/services/apiClient.ts` or update existing:
   - Axios or fetch wrapper
   - Add Authorization header to all requests
   - Handle 401 responses (redirect to login)
   - Handle 403 responses (show access denied)
   - Handle token refresh
+
+#### Step 9: Dashboard-Specific Authorization Rules
+- [ ] Define dashboard-specific permission checks:
+  - OWNER: Full access to all dashboard features
+  - MANAGER: Access to metrics, promotions, content, gallery (no user management)
+  - ADMIN: Access to metrics, promotions, content, gallery (may include user management)
+  - EMPLOYEE: Limited access (view-only metrics, if applicable)
+- [ ] Implement dashboard feature-level authorization:
+  - Check permissions before rendering dashboard sections
+  - Hide/disable features based on user role
+  - Apply authorization to dashboard API endpoints (handled by TASK-API-002)
 
 #### Step 10: Security Best Practices
 - [ ] Implement password strength requirements
@@ -1760,7 +1751,7 @@ Implement comprehensive authentication and authorization system for the dashboar
 - [ ] Use HTTPS in production
 - [ ] Implement secure password reset (if needed)
 
-#### Step 11: Add Session Management
+#### Step 11: Add Session Management (Optional)
 - [ ] Track user sessions (optional)
 - [ ] Implement session timeout (optional)
 - [ ] Allow users to see active sessions (optional)
@@ -1816,7 +1807,8 @@ Implement comprehensive authentication and authorization system for the dashboar
 ### Technical Details
 
 **Files to Create:**
-- `server/src/services/auth.service.ts`
+- Frontend authentication files only (backend auth is in TASK-API-005)
+- `client/contexts/AuthContext.tsx`
 - `server/src/controllers/auth.controller.ts`
 - `server/src/middleware/auth.middleware.ts`
 - `server/src/middleware/authorize.middleware.ts`

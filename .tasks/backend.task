@@ -41,7 +41,7 @@ Design and document the complete database schema for the LuxeNail nail salon app
     - name (string)
     - email (string, unique)
     - phone (string)
-    - role (enum: ADMIN, OWNER, EMPLOYEE, CUSTOMER)
+    - role (enum: ADMIN, OWNER, MANAGER, EMPLOYEE, CUSTOMER)
     - avatar (string, nullable)
     - created_at (timestamp)
     - updated_at (timestamp)
@@ -1525,3 +1525,979 @@ This task file outlines a comprehensive backend implementation plan covering:
 6. Migrate client to use backend
 7. Finalize documentation
 
+---
+
+## TASK-DOC-006: Authentication and Authorization Design
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-ARCH-001
+**Related Tasks:** TASK-DB-005, TASK-API-005, TASK-SEC-003
+
+### Description
+
+Design comprehensive authentication and authorization system for the LuxeNail application. This includes defining user roles, permissions, authentication flows, authorization rules, and security requirements. This design will serve as the foundation for database schema, API implementation, and frontend authentication integration.
+
+### Requirements / What to Do
+
+#### Step 1: Define User Roles and Hierarchy
+
+- [ ] Document all user roles (already defined in types.ts):
+  - **CUSTOMER**: End users who book appointments
+    - Can view public pages (landing, gallery, services)
+    - Can create appointments
+    - Can view their own appointment history
+    - Can view their own profile
+    - Cannot access dashboard or admin features
+  - **EMPLOYEE**: Staff members who provide services
+    - Can view their own schedule/appointments
+    - Can view their own earnings/stats
+    - Can upload gallery images (if mobile app implemented)
+    - Cannot access dashboard metrics or customer management
+    - Cannot modify services or settings
+  - **MANAGER**: Store managers with operational access
+    - All EMPLOYEE permissions
+    - Can view dashboard metrics and analytics
+    - Can manage appointments (view, edit, cancel)
+    - Can view customer information
+    - Can manage gallery images
+    - Can send promotions
+    - Cannot modify system settings or manage users
+  - **ADMIN**: Technical administrators
+    - All MANAGER permissions
+    - Can manage users (create, edit, delete)
+    - Can manage services
+    - Can configure system settings
+    - Can access all analytics and reports
+    - Cannot change ownership or delete critical system data
+  - **OWNER**: Business owner with full access
+    - All ADMIN permissions
+    - Can manage all users including OWNER accounts
+    - Can modify business settings
+    - Can access financial reports
+    - Full system access
+
+#### Step 2: Define Permission Matrix
+
+- [ ] Create permission matrix document showing:
+  - Resource/action permissions for each role
+  - Resources: Services, Appointments, Customers, Employees, Dashboard, Gallery, Promotions, Settings, Users
+  - Actions: Create, Read, Update, Delete, View, Manage, Configure
+- [ ] Document permission inheritance:
+  - OWNER > ADMIN > MANAGER > EMPLOYEE > CUSTOMER
+  - Higher roles inherit all permissions from lower roles
+- [ ] Identify permission exceptions:
+  - Employees can view own data but not others
+  - Managers can view employee data
+  - Customers can only view own data
+
+#### Step 3: Design Authentication Flow
+
+- [ ] **Customer Registration Flow:**
+  - Email/phone registration (optional)
+  - Social login options (future: Google, Facebook)
+  - Email verification (optional but recommended)
+  - Phone verification for SMS promotions
+- [ ] **Employee/Staff Login Flow:**
+  - Username/email + password authentication
+  - Role-based access control
+  - Multi-factor authentication (MFA) option (future)
+  - Session management
+- [ ] **Dashboard Login Flow:**
+  - Email + password
+  - Remember me functionality
+  - Password reset flow
+  - Account lockout after failed attempts
+  - Session timeout for security
+- [ ] **API Authentication:**
+  - JWT (JSON Web Token) based authentication
+  - Access tokens (short-lived, 15 minutes)
+  - Refresh tokens (long-lived, 7 days)
+  - Token refresh mechanism
+  - Token revocation on logout/password change
+
+#### Step 4: Design Authorization Rules
+
+- [ ] **Route Protection:**
+  - Public routes: Landing, Gallery, Services, About
+  - Protected routes: Dashboard, Profile, Appointments
+  - Role-based route access
+- [ ] **API Endpoint Protection:**
+  - Public endpoints: GET /api/services, GET /api/employees
+  - Authenticated endpoints: POST /api/appointments, GET /api/appointments/me
+  - Role-protected endpoints: GET /api/customers (MANAGER+), POST /api/services (ADMIN+)
+- [ ] **Resource-Level Authorization:**
+  - Users can only access their own resources
+  - Managers can access resources within their scope
+  - Admins can access all resources
+- [ ] **Field-Level Authorization:**
+  - Sensitive fields (financial data, personal info) restricted to appropriate roles
+
+#### Step 5: Security Requirements
+
+- [ ] **Password Security:**
+  - Minimum 8 characters
+  - Require uppercase, lowercase, number (optional: special character)
+  - Password hashing using bcrypt (salt rounds: 10-12)
+  - Password history to prevent reuse (last 5 passwords)
+  - Password expiration (optional, 90 days for staff accounts)
+- [ ] **Account Security:**
+  - Account lockout after 5 failed login attempts (lock for 15 minutes)
+  - Email notification on login from new device/IP
+  - Password reset via secure email link (expires in 1 hour)
+  - Account deletion requires confirmation
+- [ ] **Token Security:**
+  - JWT secret key stored securely (environment variable)
+  - HTTPS only for token transmission
+  - Token payload should not contain sensitive information
+  - Implement token blacklist for logout
+- [ ] **Session Management:**
+  - Session timeout: 30 minutes of inactivity
+  - Maximum session duration: 8 hours
+  - Single session per user (optional: allow multiple sessions)
+  - Session invalidation on password change
+
+#### Step 6: Document Authentication Endpoints
+
+- [ ] **Authentication Endpoints:**
+  - POST /api/auth/register - Customer registration
+  - POST /api/auth/login - User login (all roles)
+  - POST /api/auth/logout - User logout
+  - POST /api/auth/refresh - Refresh access token
+  - POST /api/auth/forgot-password - Request password reset
+  - POST /api/auth/reset-password - Reset password with token
+  - POST /api/auth/change-password - Change password (authenticated)
+  - GET /api/auth/me - Get current user information
+  - POST /api/auth/verify-email - Verify email address
+- [ ] **Authorization Middleware:**
+  - Authentication middleware (verify JWT)
+  - Role-based authorization middleware
+  - Resource ownership middleware
+  - Permission check middleware
+
+#### Step 7: Document User Registration Requirements
+
+- [ ] **Customer Registration:**
+  - Required: Name, Email or Phone, Password
+  - Optional: Phone (if email provided), Birthday (for promotions)
+  - Email verification: Optional but recommended
+  - Auto-assign CUSTOMER role
+- [ ] **Employee Registration:**
+  - Admin/Manager creates employee accounts
+  - Required: Name, Email, Password, Role (EMPLOYEE or MANAGER)
+  - Optional: Phone, Specialties, Color (for calendar)
+  - Email verification: Required
+- [ ] **Admin/Owner Registration:**
+  - Only existing OWNER can create ADMIN accounts
+  - Only during initial setup or special circumstances
+  - Requires email verification
+  - Requires additional security verification
+
+#### Step 8: Create Authentication Design Document
+
+- [ ] Create `doc/AUTHENTICATION_DESIGN.md`:
+  - User roles and hierarchy
+  - Permission matrix
+  - Authentication flows (diagrams)
+  - Authorization rules
+  - Security requirements
+  - API endpoint specifications
+  - Database requirements
+  - Frontend integration requirements
+- [ ] Create sequence diagrams for:
+  - Login flow
+  - Registration flow
+  - Password reset flow
+  - Token refresh flow
+  - Authorization check flow
+
+### Definition of Done (DoD)
+
+- [ ] All user roles defined with permissions
+- [ ] Permission matrix created and documented
+- [ ] Authentication flows designed and documented
+- [ ] Authorization rules specified
+- [ ] Security requirements documented
+- [ ] API endpoints specified
+- [ ] Database requirements identified
+- [ ] Design document created with diagrams
+- [ ] Design reviewed and approved
+
+### Verification Steps
+
+1. **Design Review:**
+   - Review permission matrix for completeness
+   - Verify all roles have appropriate permissions
+   - Check authentication flows are secure
+   - Validate authorization rules cover all use cases
+
+2. **Stakeholder Validation:**
+   - Present design to business owner
+   - Get approval on role hierarchy
+   - Confirm permission matrix aligns with business needs
+   - Validate security requirements
+
+### Acceptance Criteria
+
+- ✅ Complete user role hierarchy defined
+- ✅ Permission matrix covers all resources and actions
+- ✅ Authentication flows are secure and user-friendly
+- ✅ Authorization rules prevent unauthorized access
+- ✅ Security requirements meet industry standards
+- ✅ API endpoints are clearly specified
+- ✅ Design document is comprehensive and clear
+
+### Technical Details
+
+**Files to Create:**
+- `doc/AUTHENTICATION_DESIGN.md`
+- `doc/diagrams/auth-login-flow.mmd`
+- `doc/diagrams/auth-authorization-flow.mmd`
+- `doc/PERMISSION_MATRIX.md`
+
+**Key Decisions to Document:**
+- JWT vs session-based authentication (JWT chosen)
+- Role-based vs permission-based authorization (hybrid approach)
+- Password policy strength
+- Token expiration times
+- Session management strategy
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-DB-005: User Authentication Database Schema
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-DOC-006, TASK-DB-002
+**Related Tasks:** TASK-API-005
+
+### Description
+
+Implement database schema for user authentication and authorization system. This includes extending the users table with authentication fields, creating roles and permissions tables, implementing password storage, and setting up authorization data structures.
+
+### Requirements / What to Do
+
+#### Step 1: Extend Users Table with Authentication Fields
+
+- [ ] Update `server/src/entities/User.entity.ts`:
+  - Add `email` field (VARCHAR, unique, required, indexed)
+  - Add `passwordHash` field (VARCHAR, required, nullable for OAuth users)
+  - Add `emailVerified` field (BOOLEAN, default false)
+  - Add `emailVerifiedAt` field (TIMESTAMP, nullable)
+  - Add `phoneVerified` field (BOOLEAN, default false)
+  - Add `phoneVerifiedAt` field (TIMESTAMP, nullable)
+  - Add `lastLoginAt` field (TIMESTAMP, nullable)
+  - Add `lastLoginIp` field (VARCHAR, nullable)
+  - Add `failedLoginAttempts` field (INTEGER, default 0)
+  - Add `lockedUntil` field (TIMESTAMP, nullable, for account lockout)
+  - Add `passwordChangedAt` field (TIMESTAMP, nullable)
+  - Add `passwordResetToken` field (VARCHAR, nullable, unique, indexed)
+  - Add `passwordResetExpiresAt` field (TIMESTAMP, nullable)
+  - Add `emailVerificationToken` field (VARCHAR, nullable, unique, indexed)
+  - Add `emailVerificationExpiresAt` field (TIMESTAMP, nullable)
+  - Update `role` field (ENUM: 'CUSTOMER', 'EMPLOYEE', 'MANAGER', 'ADMIN', 'OWNER', required)
+
+#### Step 2: Create Refresh Token Table
+
+- [ ] Create `server/src/entities/RefreshToken.entity.ts`:
+  - `id` (UUID, primary key)
+  - `userId` (UUID, foreign key to User, required, indexed)
+  - `token` (VARCHAR, unique, required, indexed)
+  - `expiresAt` (TIMESTAMP, required)
+  - `createdAt` (TIMESTAMP, auto-generated)
+  - `revokedAt` (TIMESTAMP, nullable)
+  - `revokedReason` (VARCHAR, nullable)
+  - `ipAddress` (VARCHAR, nullable)
+  - `userAgent` (TEXT, nullable)
+  - Indexes: `userId`, `token`, `expiresAt`
+  - Cascade delete on user deletion
+
+#### Step 3: Create Permission Table (Optional - if using granular permissions)
+
+- [ ] Create `server/src/entities/Permission.entity.ts`:
+  - `id` (UUID, primary key)
+  - `name` (VARCHAR, unique, required, e.g., 'customers.read', 'appointments.manage')
+  - `description` (TEXT, nullable)
+  - `resource` (VARCHAR, required, e.g., 'customers', 'appointments', 'dashboard')
+  - `action` (VARCHAR, required, e.g., 'read', 'create', 'update', 'delete', 'manage')
+  - `createdAt` (TIMESTAMP, auto-generated)
+  - Indexes: `name`, `resource`, `action`
+
+#### Step 4: Create Role-Permission Junction Table (Optional)
+
+- [ ] Create `server/src/entities/RolePermission.entity.ts`:
+  - `id` (UUID, primary key)
+  - `role` (ENUM: 'CUSTOMER', 'EMPLOYEE', 'MANAGER', 'ADMIN', 'OWNER', required)
+  - `permissionId` (UUID, foreign key to Permission, required)
+  - `createdAt` (TIMESTAMP, auto-generated)
+  - Unique constraint: (`role`, `permissionId`)
+  - Indexes: `role`, `permissionId`
+
+#### Step 5: Create Password History Table (for password reuse prevention)
+
+- [ ] Create `server/src/entities/PasswordHistory.entity.ts`:
+  - `id` (UUID, primary key)
+  - `userId` (UUID, foreign key to User, required, indexed)
+  - `passwordHash` (VARCHAR, required)
+  - `createdAt` (TIMESTAMP, auto-generated, default now)
+  - Indexes: `userId`, `createdAt`
+  - Cascade delete on user deletion
+  - Keep only last 5 passwords per user
+
+#### Step 6: Create Login Attempt Log Table (for security monitoring)
+
+- [ ] Create `server/src/entities/LoginAttempt.entity.ts`:
+  - `id` (UUID, primary key)
+  - `email` (VARCHAR, required, indexed)
+  - `ipAddress` (VARCHAR, required)
+  - `userAgent` (TEXT, nullable)
+  - `success` (BOOLEAN, required)
+  - `failureReason` (VARCHAR, nullable)
+  - `userId` (UUID, foreign key to User, nullable)
+  - `attemptedAt` (TIMESTAMP, auto-generated, default now, indexed)
+  - Indexes: `email`, `ipAddress`, `attemptedAt`
+  - Retention policy: Keep records for 90 days, then archive/delete
+
+#### Step 7: Create Database Migrations
+
+- [ ] Create migration for extending User entity:
+  - `server/src/migrations/XXXXXX-AddUserAuthenticationFields.ts`
+  - Add all authentication fields to users table
+  - Handle existing users (set defaults, migrate data if needed)
+  - Add indexes for performance
+- [ ] Create migration for RefreshToken entity:
+  - `server/src/migrations/XXXXXX-CreateRefreshToken.ts`
+- [ ] Create migration for PasswordHistory entity:
+  - `server/src/migrations/XXXXXX-CreatePasswordHistory.ts`
+- [ ] Create migration for LoginAttempt entity:
+  - `server/src/migrations/XXXXXX-CreateLoginAttempt.ts`
+- [ ] Create migration for Permission and RolePermission (if using):
+  - `server/src/migrations/XXXXXX-CreatePermissionTables.ts`
+  - Seed default permissions
+  - Seed role-permission mappings
+
+#### Step 8: Seed Initial Data
+
+- [ ] Create seed data for default OWNER account:
+  - Create initial owner user
+  - Set secure default password (to be changed on first login)
+  - Email: admin@luxenail.com (or configurable)
+  - Role: OWNER
+- [ ] Create seed data for permissions (if using permission system):
+  - Define all permissions for each resource/action
+  - Map permissions to roles
+- [ ] Document seed data in `server/src/seeds/auth.seed.ts`
+
+#### Step 9: Update Entity Relationships
+
+- [ ] Define relationships:
+  - User → RefreshToken (one-to-many)
+  - User → PasswordHistory (one-to-many)
+  - User → LoginAttempt (one-to-many, optional)
+  - Role → Permission (many-to-many via RolePermission, if using)
+
+#### Step 10: Create Database Indexes for Performance
+
+- [ ] Add indexes for authentication queries:
+  - `users.email` (unique index)
+  - `users.passwordResetToken` (index for password reset lookups)
+  - `users.emailVerificationToken` (index for email verification)
+  - `refreshTokens.token` (unique index)
+  - `refreshTokens.userId` (index for user token queries)
+  - `loginAttempts.email` (index for failed attempt queries)
+  - `loginAttempts.ipAddress` (index for IP-based rate limiting)
+
+### Definition of Done (DoD)
+
+- [ ] User entity extended with all authentication fields
+- [ ] RefreshToken entity created
+- [ ] PasswordHistory entity created
+- [ ] LoginAttempt entity created
+- [ ] Permission and RolePermission entities created (if using granular permissions)
+- [ ] All database migrations created and tested
+- [ ] Entity relationships defined
+- [ ] Seed data created for default owner
+- [ ] All indexes created for performance
+- [ ] ERD updated with authentication entities
+
+### Verification Steps
+
+1. **Run Migrations:**
+   - Execute migration scripts on development database
+   - Verify all tables and columns are created correctly
+   - Test data insertion
+
+2. **Schema Inspection:**
+   - Use database client to inspect schema
+   - Check data types, constraints, and relationships
+   - Verify indexes are created
+
+3. **Data Integrity Test:**
+   - Insert sample user with authentication data
+   - Test refresh token creation and lookup
+   - Test password history storage
+   - Test login attempt logging
+   - Verify foreign key constraints
+
+### Acceptance Criteria
+
+- ✅ Database schema supports all authentication requirements
+- ✅ Password security fields are properly stored
+- ✅ Token management is supported
+- ✅ Account security features are implemented
+- ✅ All migrations successfully apply
+- ✅ Data integrity maintained across relationships
+- ✅ Performance considerations addressed with indexing
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/entities/User.entity.ts` (update existing)
+- `server/src/entities/RefreshToken.entity.ts`
+- `server/src/entities/PasswordHistory.entity.ts`
+- `server/src/entities/LoginAttempt.entity.ts`
+- `server/src/entities/Permission.entity.ts` (optional)
+- `server/src/entities/RolePermission.entity.ts` (optional)
+- `server/src/migrations/XXXXXX-AddUserAuthenticationFields.ts`
+- `server/src/migrations/XXXXXX-CreateRefreshToken.ts`
+- `server/src/migrations/XXXXXX-CreatePasswordHistory.ts`
+- `server/src/migrations/XXXXXX-CreateLoginAttempt.ts`
+- `server/src/migrations/XXXXXX-CreatePermissionTables.ts` (optional)
+- `server/src/seeds/auth.seed.ts`
+
+**Tools:**
+- TypeORM for ORM and migrations
+- PostgreSQL (existing database)
+- bcrypt for password hashing (in API task)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-API-005: Authentication and Authorization API
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 16 hours
+**Dependencies:** TASK-DB-005
+**Related Tasks:** TASK-SEC-003
+
+### Description
+
+Implement complete authentication and authorization API endpoints and middleware for the LuxeNail application. This includes login, registration, password management, JWT token handling, role-based access control, and authorization middleware.
+
+### Requirements / What to Do
+
+#### Step 1: Install Authentication Dependencies
+
+- [ ] Install required packages:
+  - `jsonwebtoken` - JWT token generation and verification
+  - `@types/jsonwebtoken` - TypeScript types
+  - `bcrypt` - Password hashing
+  - `@types/bcrypt` - TypeScript types
+  - `express-rate-limit` - Rate limiting for auth endpoints
+  - `express-validator` or `class-validator` - Input validation
+  - `cookie-parser` - Cookie parsing for refresh tokens (optional)
+
+#### Step 2: Create Authentication Service
+
+- [ ] Create `server/src/services/AuthService.ts`:
+  - `hashPassword(password: string): Promise<string>` - Hash password with bcrypt
+  - `comparePassword(password: string, hash: string): Promise<boolean>` - Compare password with hash
+  - `generateAccessToken(user: User): string` - Generate JWT access token (15 min expiry)
+  - `generateRefreshToken(user: User): string` - Generate refresh token (7 day expiry)
+  - `verifyToken(token: string): JWTPayload` - Verify and decode JWT token
+  - `generatePasswordResetToken(): string` - Generate secure reset token
+  - `generateEmailVerificationToken(): string` - Generate email verification token
+  - `validatePassword(password: string): ValidationResult` - Validate password strength
+
+#### Step 3: Create User Service (Authentication-related methods)
+
+- [ ] Create/Update `server/src/services/UserService.ts`:
+  - `registerCustomer(data: RegisterDto): Promise<User>` - Register new customer
+  - `login(email: string, password: string, ipAddress: string): Promise<AuthResponse>` - User login
+  - `logout(userId: string, tokenId: string): Promise<void>` - Logout and revoke token
+  - `refreshToken(refreshToken: string): Promise<AuthResponse>` - Refresh access token
+  - `requestPasswordReset(email: string): Promise<void>` - Send password reset email
+  - `resetPassword(token: string, newPassword: string): Promise<void>` - Reset password
+  - `changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void>` - Change password
+  - `verifyEmail(token: string): Promise<void>` - Verify email address
+  - `checkAccountLocked(user: User): boolean` - Check if account is locked
+  - `incrementFailedAttempts(email: string): Promise<void>` - Track failed login attempts
+  - `resetFailedAttempts(email: string): Promise<void>` - Reset failed attempts on success
+  - `lockAccount(email: string): Promise<void>` - Lock account after too many failures
+
+#### Step 4: Create Authentication Routes
+
+- [ ] Create `server/src/routes/auth.routes.ts`:
+  - `POST /api/auth/register` - Customer registration
+    - Body: { name, email, phone?, password }
+    - Response: { user: User, accessToken, refreshToken }
+  - `POST /api/auth/login` - User login
+    - Body: { email, password }
+    - Response: { user: User, accessToken, refreshToken }
+    - Rate limit: 5 attempts per 15 minutes per IP
+  - `POST /api/auth/logout` - User logout
+    - Headers: Authorization Bearer token
+    - Response: { success: true }
+  - `POST /api/auth/refresh` - Refresh access token
+    - Body: { refreshToken }
+    - Response: { accessToken, refreshToken }
+  - `POST /api/auth/forgot-password` - Request password reset
+    - Body: { email }
+    - Response: { message: "Password reset email sent" }
+    - Rate limit: 3 requests per hour per email
+  - `POST /api/auth/reset-password` - Reset password with token
+    - Body: { token, newPassword }
+    - Response: { success: true }
+  - `POST /api/auth/change-password` - Change password (authenticated)
+    - Headers: Authorization Bearer token
+    - Body: { oldPassword, newPassword }
+    - Response: { success: true }
+  - `GET /api/auth/me` - Get current user
+    - Headers: Authorization Bearer token
+    - Response: User object
+  - `POST /api/auth/verify-email` - Verify email address
+    - Body: { token }
+    - Response: { success: true }
+
+#### Step 5: Create Authentication Controllers
+
+- [ ] Create `server/src/controllers/AuthController.ts`:
+  - Implement all route handlers
+  - Input validation using class-validator
+  - Error handling
+  - Business logic delegation to services
+  - Response formatting
+
+#### Step 6: Create Authentication Middleware
+
+- [ ] Create `server/src/middleware/auth.middleware.ts`:
+  - `authenticate` middleware:
+    - Extract JWT token from Authorization header
+    - Verify token signature and expiration
+    - Load user from database
+    - Attach user to request object (req.user)
+    - Handle token errors (expired, invalid, missing)
+  - `authorize(...roles: Role[])` middleware:
+    - Check if user has required role
+    - Return 403 if unauthorized
+    - Support multiple roles (OR logic)
+  - `requireAuth` middleware:
+    - Wrapper that ensures user is authenticated
+    - Used for protected routes
+
+#### Step 7: Create Authorization Service
+
+- [ ] Create `server/src/services/AuthorizationService.ts`:
+  - `canAccessResource(user: User, resource: string, action: string): Promise<boolean>` - Check permission
+  - `isResourceOwner(user: User, resourceId: string, resourceType: string): Promise<boolean>` - Check ownership
+  - `hasRole(user: User, ...roles: Role[]): boolean` - Check if user has any of the roles
+  - `getUserPermissions(user: User): Promise<Permission[]>` - Get all permissions for user (if using granular permissions)
+
+#### Step 8: Implement Password Security
+
+- [ ] Password validation:
+  - Minimum 8 characters
+  - Require uppercase, lowercase, number
+  - Optional: special character requirement
+  - Check against common password list (optional)
+- [ ] Password hashing:
+  - Use bcrypt with salt rounds 10-12
+  - Never store plain text passwords
+  - Hash passwords on registration and password change
+- [ ] Password history:
+  - Store last 5 password hashes
+  - Prevent reuse of recent passwords
+  - Check history on password change
+- [ ] Password reset:
+  - Generate secure random token
+  - Token expires in 1 hour
+  - One-time use only
+  - Invalidate token after use
+
+#### Step 9: Implement Account Security Features
+
+- [ ] Account lockout:
+  - Lock account after 5 failed login attempts
+  - Lock duration: 15 minutes
+  - Reset lockout on successful login
+  - Track failed attempts in database
+- [ ] Login attempt logging:
+  - Log all login attempts (success and failure)
+  - Store IP address and user agent
+  - Retention: 90 days
+  - Use for security monitoring
+- [ ] Session management:
+  - Track active refresh tokens per user
+  - Allow token revocation on logout
+  - Support multiple concurrent sessions (optional)
+  - Invalidate all tokens on password change
+
+#### Step 10: Integrate with User Management
+
+- [ ] Update user creation endpoints:
+  - Admin/Manager can create employee accounts
+  - Only OWNER can create ADMIN accounts
+  - Set appropriate role during creation
+  - Send welcome email with temporary password
+- [ ] Update user update endpoints:
+  - Role changes require appropriate permissions
+  - Password changes trigger token invalidation
+  - Email changes require verification
+
+#### Step 11: Add Rate Limiting for Auth Endpoints
+
+- [ ] Configure rate limiting:
+  - Login: 5 attempts per 15 minutes per IP
+  - Registration: 3 requests per hour per IP
+  - Password reset: 3 requests per hour per email
+  - Token refresh: 10 requests per minute per token
+- [ ] Use `express-rate-limit` middleware
+- [ ] Return appropriate error messages
+- [ ] Log rate limit violations
+
+#### Step 12: Create Authentication Tests
+
+- [ ] Unit tests for AuthService
+- [ ] Unit tests for UserService authentication methods
+- [ ] Integration tests for auth endpoints
+- [ ] Test password security features
+- [ ] Test account lockout
+- [ ] Test token generation and validation
+- [ ] Test authorization middleware
+
+### Definition of Done (DoD)
+
+- [ ] All authentication endpoints implemented
+- [ ] Password security implemented (hashing, validation, history)
+- [ ] JWT token system working (access and refresh tokens)
+- [ ] Account security features implemented (lockout, logging)
+- [ ] Authentication middleware functional
+- [ ] Authorization middleware functional
+- [ ] Role-based access control working
+- [ ] Rate limiting configured
+- [ ] All tests passing
+- [ ] API documentation updated
+
+### Verification Steps
+
+1. **API Testing:**
+   - Test registration flow
+   - Test login with valid credentials
+   - Test login with invalid credentials (lockout)
+   - Test password reset flow
+   - Test token refresh
+   - Test protected endpoints with valid token
+   - Test protected endpoints with invalid/expired token
+   - Test role-based authorization
+
+2. **Security Testing:**
+   - Verify passwords are hashed
+   - Test password strength validation
+   - Test account lockout after 5 failures
+   - Test rate limiting
+   - Verify tokens expire correctly
+   - Test token revocation on logout
+
+### Acceptance Criteria
+
+- ✅ Users can register as customers
+- ✅ Users can login with email and password
+- ✅ JWT tokens are generated and validated correctly
+- ✅ Password security is enforced
+- ✅ Account lockout works after failed attempts
+- ✅ Role-based authorization prevents unauthorized access
+- ✅ Password reset flow works securely
+- ✅ All endpoints are properly protected
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/routes/auth.routes.ts`
+- `server/src/controllers/AuthController.ts`
+- `server/src/services/AuthService.ts`
+- `server/src/services/UserService.ts` (update/create)
+- `server/src/services/AuthorizationService.ts`
+- `server/src/middleware/auth.middleware.ts`
+- `server/src/middleware/authorize.middleware.ts`
+- `server/src/dto/RegisterDto.ts`
+- `server/src/dto/LoginDto.ts`
+- `server/src/dto/PasswordResetDto.ts`
+- `server/src/types/jwt.types.ts`
+
+**Dependencies:**
+- jsonwebtoken
+- bcrypt
+- express-rate-limit
+- class-validator (for DTOs)
+
+**Environment Variables:**
+- `JWT_SECRET` - Secret key for JWT signing
+- `JWT_ACCESS_EXPIRY` - Access token expiry (default: 15m)
+- `JWT_REFRESH_EXPIRY` - Refresh token expiry (default: 7d)
+- `BCRYPT_ROUNDS` - Bcrypt salt rounds (default: 10)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-SEC-003: Authentication Security Implementation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-API-005
+**Related Tasks:** TASK-DOC-006
+
+### Description
+
+Implement additional security measures for the authentication system, including secure token handling, session management, security headers, and security monitoring. This complements TASK-API-005 with advanced security features.
+
+### Requirements / What to Do
+
+#### Step 1: Implement Secure Token Storage
+
+- [ ] Configure token storage strategy:
+  - Store refresh tokens in HTTP-only cookies (recommended)
+  - Or store in database (current implementation)
+  - Never store tokens in localStorage (XSS vulnerability)
+- [ ] Implement token rotation:
+  - Rotate refresh token on each use
+  - Invalidate old refresh token when new one is issued
+  - Prevent token reuse attacks
+- [ ] Implement token blacklist:
+  - Store revoked tokens in Redis or database
+  - Check blacklist on token validation
+  - Clean up expired tokens periodically
+  - Use for logout and password change scenarios
+
+#### Step 2: Implement HTTPS Enforcement
+
+- [ ] Configure HTTPS redirect in production:
+  - Redirect all HTTP traffic to HTTPS
+  - Use HSTS (HTTP Strict Transport Security) header
+  - Set secure cookie flags in production
+- [ ] Validate secure context:
+  - Ensure tokens only transmitted over HTTPS
+  - Warn in logs if tokens used over HTTP in production
+- [ ] Configure security headers:
+  - Content-Security-Policy
+  - X-Frame-Options: DENY
+  - X-Content-Type-Options: nosniff
+  - Referrer-Policy: strict-origin-when-cross-origin
+
+#### Step 3: Implement Session Security
+
+- [ ] Configure session timeout:
+  - Inactive session timeout: 30 minutes
+  - Maximum session duration: 8 hours
+  - Automatic token refresh before expiry
+- [ ] Implement session monitoring:
+  - Track active sessions per user
+  - Allow users to view and revoke active sessions
+  - Send notification on login from new device
+- [ ] Implement concurrent session limits:
+  - Optional: Allow only one active session per user
+  - Or: Limit to 3 concurrent sessions
+  - Revoke oldest session when limit reached
+
+#### Step 4: Implement Security Monitoring
+
+- [ ] Log security events:
+  - Failed login attempts
+  - Account lockouts
+  - Password changes
+  - Email changes
+  - Role changes
+  - Unusual login patterns (new IP, new device)
+- [ ] Create security alerts:
+  - Email notification on account lockout
+  - Email notification on login from new IP/device
+  - Email notification on password change
+  - Email notification on sensitive actions
+- [ ] Implement security dashboard (future):
+  - View recent login attempts
+  - View active sessions
+  - View security events
+
+#### Step 5: Implement Input Sanitization
+
+- [ ] Sanitize authentication inputs:
+  - Email: Trim, lowercase, validate format
+  - Password: Strip whitespace (but allow spaces in middle)
+  - Tokens: Validate format before processing
+- [ ] Prevent SQL injection:
+  - Use parameterized queries (TypeORM handles this)
+  - Validate all inputs
+  - Escape special characters
+- [ ] Prevent XSS attacks:
+  - Sanitize user inputs before storing
+  - Use Content-Security-Policy headers
+  - Validate and escape outputs
+
+#### Step 6: Implement CSRF Protection
+
+- [ ] Add CSRF tokens for state-changing operations:
+  - POST /api/auth/login
+  - POST /api/auth/register
+  - POST /api/auth/logout
+  - POST /api/auth/change-password
+- [ ] Use double-submit cookie pattern:
+  - Set CSRF token in cookie
+  - Require token in request header
+  - Validate tokens match
+- [ ] Or use SameSite cookie attribute:
+  - Set SameSite=Strict for auth cookies
+  - Prevents CSRF for most scenarios
+
+#### Step 7: Implement Security Headers
+
+- [ ] Configure Helmet.js for security headers:
+  - Content-Security-Policy
+  - X-Frame-Options
+  - X-Content-Type-Options
+  - Strict-Transport-Security
+  - X-XSS-Protection
+  - Referrer-Policy
+- [ ] Configure per-route headers if needed
+- [ ] Test headers in production
+
+#### Step 8: Implement Password Security Enhancements
+
+- [ ] Password strength meter (for frontend):
+  - Provide visual feedback on password strength
+  - Real-time validation
+- [ ] Password breach checking (optional):
+  - Check passwords against Have I Been Pwned API
+  - Warn users if password found in breaches
+  - Recommend password change
+- [ ] Password expiration policy (optional):
+  - Enforce password change every 90 days for staff
+  - Send reminder emails before expiration
+  - Force password change on expiration
+
+#### Step 9: Implement Two-Factor Authentication (Future, Optional)
+
+- [ ] Design 2FA flow:
+  - TOTP (Time-based One-Time Password) support
+  - SMS-based 2FA (optional)
+  - Backup codes
+- [ ] Create database schema for 2FA:
+  - Store TOTP secret (encrypted)
+  - Store backup codes (hashed)
+  - Track 2FA enrollment status
+- [ ] Implement 2FA endpoints:
+  - POST /api/auth/2fa/enable
+  - POST /api/auth/2fa/verify
+  - POST /api/auth/2fa/disable
+
+#### Step 10: Create Security Documentation
+
+- [ ] Document security measures:
+  - Authentication security features
+  - Password policies
+  - Token security
+  - Session management
+  - Security headers
+- [ ] Create security checklist:
+  - Pre-deployment security checklist
+  - Security testing procedures
+  - Incident response procedures
+- [ ] Document security best practices:
+  - For developers
+  - For administrators
+  - For users
+
+### Definition of Done (DoD)
+
+- [ ] Secure token storage implemented
+- [ ] HTTPS enforcement configured
+- [ ] Session security measures implemented
+- [ ] Security monitoring and logging working
+- [ ] Input sanitization implemented
+- [ ] CSRF protection implemented
+- [ ] Security headers configured
+- [ ] Password security enhancements implemented
+- [ ] Security documentation created
+- [ ] Security testing completed
+
+### Verification Steps
+
+1. **Security Testing:**
+   - Test token security (no XSS vulnerabilities)
+   - Test HTTPS enforcement
+   - Test CSRF protection
+   - Test session timeout
+   - Test account lockout
+   - Test input sanitization
+
+2. **Penetration Testing (Optional):**
+   - Security audit
+   - Vulnerability scanning
+   - Penetration testing
+
+### Acceptance Criteria
+
+- ✅ Tokens are stored securely
+- ✅ HTTPS is enforced in production
+- ✅ Session security is implemented
+- ✅ Security events are logged
+- ✅ CSRF protection works
+- ✅ Security headers are configured
+- ✅ Password security meets requirements
+- ✅ System is resistant to common attacks
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/middleware/security.middleware.ts`
+- `server/src/middleware/csrf.middleware.ts`
+- `server/src/services/SecurityService.ts`
+- `server/src/services/SessionService.ts`
+- `doc/SECURITY.md`
+
+**Files to Modify:**
+- `server/src/middleware/auth.middleware.ts` (add token blacklist check)
+- `server/src/index.ts` (configure security headers)
+
+**Dependencies:**
+- Helmet.js (security headers)
+- express-rate-limit (rate limiting)
+- csrf (CSRF protection, if needed)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
