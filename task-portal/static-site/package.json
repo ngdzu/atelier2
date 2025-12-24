@@ -1,21 +1,32 @@
 {
-    "name": "task-portal-static-site",
-    "version": "1.0.0",
-    "description": "Static site generator for task portal",
+    "name": "task-portal-app",
+    "version": "2.0.0",
+    "description": "React-based task portal dashboard",
     "type": "module",
     "scripts": {
-        "build": "tsx src/generator.ts",
-        "watch": "tsx watch.ts",
-        "serve": "npx serve public",
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
         "test": "vitest",
         "test:watch": "vitest --watch",
         "test:ui": "vitest --ui"
     },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
     "devDependencies": {
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/react": "^16.3.1",
+        "@testing-library/user-event": "^14.6.1",
         "@types/node": "^20.10.0",
+        "@types/react": "^18.2.45",
+        "@types/react-dom": "^18.2.18",
+        "@vitejs/plugin-react": "^4.2.1",
         "@vitest/ui": "^1.0.4",
-        "tsx": "^4.7.0",
+        "jsdom": "^27.3.0",
         "typescript": "^5.3.3",
+        "vite": "^5.0.8",
         "vitest": "^1.0.4"
     }
 }
