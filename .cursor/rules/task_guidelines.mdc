@@ -341,18 +341,25 @@ Organize by category when useful:
 ### 1. Task Creation
 
 When creating a task:
-1. **Check TASK_REGISTRY.md** for the next available task number in your category
+1. **Check TASK_REGISTRY.json** for the next available task number in your category
 2. Assign appropriate category and ID using the next sequential number
 3. Write clear description and requirements
 4. Define DoD and verification steps
 5. Set initial status to PENDING
 6. Estimate time and priority
 7. Document dependencies
-8. **Update TASK_REGISTRY.md** with the new task:
-   - Increment "Last Number" for the category
-   - Update "Next Available" number
-   - Add task entry to the "All Tasks Index" section
-   - Update the "Last updated" date
+8. **Update TASK_REGISTRY.json** with the new task:
+   - Add the new task entry to the `tasks` array with all required fields
+   - Update the category metadata: increment `lastNumber` and `nextAvailable` for the task's category
+   - Update the metadata section:
+     - Increment `totalTasks` count
+     - Update `lastUpdated` timestamp to current date
+     - Update `lastSync` timestamp to current date
+9. **Update TASK_ORDER.json** with the new task:
+   - Add the task to the appropriate phase in the `phases` array
+   - Include task metadata: `taskId`, `title`, `priority`, `canStart`, `dependsOn`, `blocking`, `estimatedTime`, `notes`
+   - If the task can be done in parallel with others, add it to the `parallelization` section for that phase
+   - Update the `metadata.lastUpdated` timestamp
 
 ### 2. Task Assignment
 

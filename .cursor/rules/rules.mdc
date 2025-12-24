@@ -286,6 +286,40 @@ export const dataService: IDataProvider = {
 - Keep main/master branch stable
 - Use descriptive branch names: `feature/booking-flow`, `fix/calendar-timezone`
 
+## Task Management
+
+### Adding New Tasks
+
+When adding new tasks to the project, you **must** update both the task registry and task order files:
+
+1. **Update `.tasks/TASK_REGISTRY.json`:**
+   - Add the new task entry to the `tasks` array with all required fields
+   - Update the category metadata: increment `lastNumber` and `nextAvailable` for the task's category
+   - Update the metadata section:
+     - Increment `totalTasks` count
+     - Update `lastUpdated` timestamp to current date
+     - Update `lastSync` timestamp to current date
+
+2. **Update `.tasks/TASK_ORDER.json`:**
+   - Add the task to the appropriate phase in the `phases` array
+   - Include task metadata: `taskId`, `title`, `priority`, `canStart`, `dependsOn`, `blocking`, `estimatedTime`, `notes`
+   - If the task can be done in parallel with others, add it to the `parallelization` section for that phase
+   - Update the `metadata.lastUpdated` timestamp
+
+**Example workflow:**
+- Create task in `.task` file (e.g., `requirements.task`)
+- Add task to `TASK_REGISTRY.json` tasks array
+- Update category counters (e.g., `DOC.lastNumber: 8`, `DOC.nextAvailable: 9`)
+- Update registry metadata (`totalTasks`, `lastUpdated`, `lastSync`)
+- Add task to appropriate phase in `TASK_ORDER.json`
+- Update `TASK_ORDER.json` metadata (`lastUpdated`)
+
+**Why this matters:**
+- Keeps task tracking accurate and up-to-date
+- Ensures task ordering and dependencies are correctly maintained
+- Prevents duplicate task numbers
+- Maintains a single source of truth for task status
+
 ## Business Logic Specific to Nail Salon
 
 ### Appointment Management
