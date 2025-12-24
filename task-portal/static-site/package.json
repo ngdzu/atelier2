@@ -4,13 +4,18 @@
     "description": "Static site generator for task portal",
     "type": "module",
     "scripts": {
-        "build": "tsx generator.ts",
+        "build": "tsx src/generator.ts",
         "watch": "tsx watch.ts",
-        "serve": "npx serve public"
+        "serve": "npx serve public",
+        "test": "vitest",
+        "test:watch": "vitest --watch",
+        "test:ui": "vitest --ui"
     },
     "devDependencies": {
         "@types/node": "^20.10.0",
+        "@vitest/ui": "^1.0.4",
         "tsx": "^4.7.0",
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "vitest": "^1.0.4"
     }
 }

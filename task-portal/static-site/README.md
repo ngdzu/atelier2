@@ -1,18 +1,49 @@
 # Task Portal Static Site
 
+> **Recently Refactored** 🎉 - Now with modular components, full test coverage, and improved maintainability!
+
 This directory contains the static site generator for the Task Portal dashboard.
 
 ## Overview
 
 The static site generator creates a public HTML dashboard from `TASK_REGISTRY.json` that can be deployed to GitHub Pages for stakeholder viewing.
 
+Built with a **component-based architecture** using TypeScript template functions for maximum maintainability and testability.
+
 ## Features
 
 - 📊 **Statistics Dashboard** - Total tasks, completion rate, breakdowns by status/category/priority
+- 📈 **Interactive Charts** - Area, bar, and pie charts with tooltips
+- 🎯 **Animated Stats** - Progress bars and count-up animations
 - 🔍 **Filtering** - Filter by category, status, priority, and search by keyword
 - 📋 **Task List** - Sortable table showing all tasks with details
 - 🎨 **Responsive Design** - Works on desktop, tablet, and mobile
 - 🖨️ **Print-Friendly** - Clean printable format
+- ✅ **Fully Tested** - 52 passing tests with 100% component coverage
+
+## Architecture
+
+This generator uses a **modular component-based architecture**:
+
+```
+src/
+├── components/     # Reusable UI components
+│   ├── Header.ts
+│   ├── StatsCards.ts
+│   ├── Charts.ts
+│   ├── Filters.ts
+│   └── TaskTable.ts
+├── utils/          # Shared utilities
+│   └── colors.ts
+├── styles/         # CSS styles
+│   └── styles.ts
+├── scripts/        # Client-side JavaScript
+│   └── scripts.ts
+├── __tests__/      # Test suite (52 tests)
+└── generator.ts    # Main orchestrator
+```
+
+See [REFACTORING.md](REFACTORING.md) for detailed architecture documentation.
 
 ## Local Development
 
@@ -30,6 +61,16 @@ npm run build
 
 This reads `../../.tasks/TASK_REGISTRY.json` and generates `public/index.html`.
 
+### Run Tests
+
+```bash
+npm test              # Run tests once
+npm run test:watch    # Watch mode
+npm run test:ui       # Visual test UI
+```
+
+**Test Status**: ✅ 52/52 passing
+
 ### Preview Locally
 
 ```bash
@@ -46,6 +87,12 @@ The site auto-deploys to GitHub Pages when:
 - Push to `main` branch
 
 Deployment is handled by GitHub Actions (`.github/workflows/deploy-static-site.yml`).
+
+## Documentation
+
+- **[REFACTORING.md](REFACTORING.md)** - Complete architecture guide
+- **[COMPARISON.md](COMPARISON.md)** - Before/after comparison
+- **[SUMMARY.md](SUMMARY.md)** - Quick reference summary
 
 ## File Structure
 
