@@ -100,6 +100,13 @@ function getPriorityColor(priority: string): string {
   return colors[priority] || '#6B7280';
 }
 
+// Get category color - matches pie chart palette
+function getCategoryColor(category: string, allCategories: string[]): string {
+  const palette = ['#8B5CF6', '#3B82F6', '#EC4899', '#F59E0B', '#10B981', '#6B7280', '#22C55E'];
+  const index = allCategories.indexOf(category);
+  return index >= 0 ? palette[index % palette.length] : '#6B7280';
+}
+
 // Generate HTML
 function generateHTML(tasks: any[], stats: any, metadata: any): string {
   const lastUpdated = new Date().toLocaleString('en-US', {
@@ -141,15 +148,17 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
     }
 
     header {
-      margin-bottom: 3rem;
-      text-align: center;
-      position: relative;
-      padding: 3rem 2rem;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(248, 250, 252, 0.5) 100%);
-      border-radius: 24px;
+      margin-bottom: 2rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+      border-radius: 16px;
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
     }
 
     header::before {
@@ -160,19 +169,19 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       right: 0;
       height: 2px;
       background: linear-gradient(90deg, transparent, #3B82F6, #8B5CF6, #EC4899, transparent);
-      border-radius: 24px 24px 0 0;
+      border-radius: 16px 16px 0 0;
     }
 
     h1 {
-      font-size: 3.5rem;
-      font-weight: 900;
+      font-size: 1.5rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 0.75rem;
+      margin: 0;
       background: linear-gradient(135deg, #1f2937 0%, #3B82F6 25%, #8B5CF6 75%, #EC4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.1;
+      line-height: 1;
       position: relative;
       z-index: 1;
     }
@@ -199,6 +208,20 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       border: 1px solid rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(10px);
       position: relative;
+    }
+
+    .filters-section {
+      margin-bottom: 2rem;
+    }
+
+    .filters-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+      border-left: 4px solid #8B5CF6;
+    }
       overflow: visible;
       z-index: 1;
     }
@@ -506,6 +529,21 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
 
     .stat-card {
       padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 56px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-card:hover .stat-value {
+      animation: countUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .stat-card:hover .progress-fill {
+      animation: fillProgress 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     .stat-card-icon {
@@ -706,15 +744,37 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       }
     }
 
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cardPulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.02);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
       overflow: hidden;
-      animation: fillProgress 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .progress-fill::after {
@@ -926,59 +986,10 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
   <div class="container">
     <header>
       <h1>${metadata?.projectName || 'Task Portal'}</h1>
-      <p class="subtitle">Project Task Management Dashboard</p>
-      <p class="subtitle" style="margin-top: 0.5rem;">
-        Design reference: <a href="../../.tasks/resources/dashboard_wireframe.png" style="color:#8B5CF6; text-decoration:underline;">dashboard_wireframe.png</a>
-      </p>
+      <nav class="header-nav">
+        <!-- Future navigation items -->
+      </nav>
     </header>
-
-    <div class="controls">
-      <div class="control-group">
-        <label for="search">Search</label>
-        <input type="text" id="search" placeholder="Search tasks...">
-      </div>
-      <div class="control-group">
-        <label>Category</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="category-toggle">Select Category</button>
-          <div class="dropdown-menu" id="category-dropdown">
-            ${Object.keys(stats.byCategory).map(cat => `<div class="checkbox-item">
-                <input type="checkbox" id="category-${cat}" value="${cat}" class="category-checkbox">
-                <label for="category-${cat}">${cat}</label>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label>Status</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="status-toggle">Select Status</button>
-          <div class="dropdown-menu" id="status-dropdown">
-            ${Object.keys(stats.byStatus).map(status => {
-    const colors = { 'PENDING': '#3B82F6', 'IN_PROGRESS': '#F59E0B', 'BLOCKED': '#EF4444', 'COMPLETED': '#10B981', 'CANCELLED': '#6B7280' };
-    return `<div class="checkbox-item">
-                <input type="checkbox" id="status-${status}" value="${status}" class="status-checkbox">
-                <label for="status-${status}" style="color: ${colors[status as keyof typeof colors] || '#6B7280'}; display: flex; align-items: center;">
-                  <span class="status-badge" style="background: ${colors[status as keyof typeof colors] || '#6B7280'}20; color: ${colors[status as keyof typeof colors] || '#6B7280'};">${status}</span>
-                </label>
-              </div>`;
-  }).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label>Priority</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="priority-toggle">Select Priority</button>
-          <div class="dropdown-menu" id="priority-dropdown">
-            ${Object.keys(stats.byPriority).map(priority => `<div class="checkbox-item">
-                <input type="checkbox" id="priority-${priority}" value="${priority}" class="priority-checkbox">
-                <label for="priority-${priority}">${priority}</label>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="stats">
       <div class="stat-card card-surface">
@@ -1016,6 +1027,57 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       </div>
     </div>
 
+    <div class="filters-section">
+      <h2 class="filters-title">Filters</h2>
+      <div class="controls">
+        <div class="control-group">
+          <label for="search">Search</label>
+          <input type="text" id="search" placeholder="Search tasks...">
+        </div>
+        <div class="control-group">
+          <label>Category</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="category-toggle">Select Category</button>
+            <div class="dropdown-menu" id="category-dropdown">
+              ${Object.keys(stats.byCategory).map(cat => `<div class="checkbox-item">
+                  <input type="checkbox" id="category-${cat}" value="${cat}" class="category-checkbox">
+                  <label for="category-${cat}">${cat}</label>
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Status</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="status-toggle">Select Status</button>
+            <div class="dropdown-menu" id="status-dropdown">
+              ${Object.keys(stats.byStatus).map(status => {
+    const colors = { 'PENDING': '#3B82F6', 'IN_PROGRESS': '#F59E0B', 'BLOCKED': '#EF4444', 'COMPLETED': '#10B981', 'CANCELLED': '#6B7280' };
+    return `<div class="checkbox-item">
+                  <input type="checkbox" id="status-${status}" value="${status}" class="status-checkbox">
+                  <label for="status-${status}" style="color: ${colors[status as keyof typeof colors] || '#6B7280'}; display: flex; align-items: center;">
+                    <span class="status-badge" style="background: ${colors[status as keyof typeof colors] || '#6B7280'}20; color: ${colors[status as keyof typeof colors] || '#6B7280'};">${status}</span>
+                  </label>
+                </div>`;
+  }).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Priority</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="priority-toggle">Select Priority</button>
+            <div class="dropdown-menu" id="priority-dropdown">
+              ${Object.keys(stats.byPriority).map(priority => `<div class="checkbox-item">
+                  <input type="checkbox" id="priority-${priority}" value="${priority}" class="priority-checkbox">
+                  <label for="priority-${priority}">${priority}</label>
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="table-container">
       <table id="task-table">
         <thead>
@@ -1043,7 +1105,7 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
                 data-updated="${task.updated || ''}">
               <td><span class="task-id">${task.id}</span></td>
               <td><span class="task-title">${task.title}</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">${task.category}</span></td>
+              <td><span class="badge" style="background: ${getCategoryColor(task.category, Object.keys(stats.byCategory).sort((a, b) => stats.byCategory[b] - stats.byCategory[a]))}20; color: ${getCategoryColor(task.category, Object.keys(stats.byCategory).sort((a, b) => stats.byCategory[b] - stats.byCategory[a]))}; border: 1px solid ${getCategoryColor(task.category, Object.keys(stats.byCategory).sort((a, b) => stats.byCategory[b] - stats.byCategory[a]))}40;">${task.category}</span></td>
               <td><span class="badge" style="background: ${getStatusColor(task.status)}20; color: ${getStatusColor(task.status)};">${task.status}</span></td>
               <td>${task.priority ? `<span class="badge" style="background: ${getPriorityColor(task.priority)}20; color: ${getPriorityColor(task.priority)};">${task.priority}</span>` : '-'}</td>
               <td>${task.assignee || 'unassigned'}</td>
@@ -1410,12 +1472,49 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       const progressFills = document.querySelectorAll('.progress-fill');
       progressFills.forEach(fill => {
         const width = fill.style.width;
-        fill.style.setProperty('--progress-width', width);
-        // Force reflow to restart animation
+        fill.dataset.targetWidth = width;
         fill.style.width = '0%';
         setTimeout(() => {
           fill.style.width = width;
-        }, 10);
+        }, 100);
+      });
+
+      // Add hover animation to stat cards with state management
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+        let isAnimating = false;
+        let animationTimeout = null;
+
+        card.addEventListener('mouseenter', () => {
+          if (isAnimating) return; // Don't interrupt ongoing animation
+          
+          const progressFill = card.querySelector('.progress-fill');
+          if (progressFill) {
+            isAnimating = true;
+            const targetWidth = progressFill.dataset.targetWidth;
+            
+            // Reset to 0 without transition
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            
+            // Use requestAnimationFrame to ensure the reset is applied
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                // Animate to target
+                progressFill.style.transition = 'width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                progressFill.style.width = targetWidth;
+                
+                // Clear any existing timeout
+                if (animationTimeout) clearTimeout(animationTimeout);
+                
+                // Mark animation as complete after 1.2s
+                animationTimeout = setTimeout(() => {
+                  isAnimating = false;
+                }, 1200);
+              });
+            });
+          }
+        });
       });
     });
 

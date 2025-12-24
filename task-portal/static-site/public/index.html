@@ -29,15 +29,17 @@
     }
 
     header {
-      margin-bottom: 3rem;
-      text-align: center;
-      position: relative;
-      padding: 3rem 2rem;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(248, 250, 252, 0.5) 100%);
-      border-radius: 24px;
+      margin-bottom: 2rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+      border-radius: 16px;
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
     }
 
     header::before {
@@ -48,19 +50,19 @@
       right: 0;
       height: 2px;
       background: linear-gradient(90deg, transparent, #3B82F6, #8B5CF6, #EC4899, transparent);
-      border-radius: 24px 24px 0 0;
+      border-radius: 16px 16px 0 0;
     }
 
     h1 {
-      font-size: 3.5rem;
-      font-weight: 900;
+      font-size: 1.5rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 0.75rem;
+      margin: 0;
       background: linear-gradient(135deg, #1f2937 0%, #3B82F6 25%, #8B5CF6 75%, #EC4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.1;
+      line-height: 1;
       position: relative;
       z-index: 1;
     }
@@ -87,6 +89,20 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(10px);
       position: relative;
+    }
+
+    .filters-section {
+      margin-bottom: 2rem;
+    }
+
+    .filters-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+      border-left: 4px solid #8B5CF6;
+    }
       overflow: visible;
       z-index: 1;
     }
@@ -394,6 +410,21 @@
 
     .stat-card {
       padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 56px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-card:hover .stat-value {
+      animation: countUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .stat-card:hover .progress-fill {
+      animation: fillProgress 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     .stat-card-icon {
@@ -594,15 +625,37 @@
       }
     }
 
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cardPulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.02);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
       overflow: hidden;
-      animation: fillProgress 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .progress-fill::after {
@@ -814,111 +867,10 @@
   <div class="container">
     <header>
       <h1>Task Portal</h1>
-      <p class="subtitle">Project Task Management Dashboard</p>
-      <p class="subtitle" style="margin-top: 0.5rem;">
-        Design reference: <a href="../../.tasks/resources/dashboard_wireframe.png" style="color:#8B5CF6; text-decoration:underline;">dashboard_wireframe.png</a>
-      </p>
+      <nav class="header-nav">
+        <!-- Future navigation items -->
+      </nav>
     </header>
-
-    <div class="controls">
-      <div class="control-group">
-        <label for="search">Search</label>
-        <input type="text" id="search" placeholder="Search tasks...">
-      </div>
-      <div class="control-group">
-        <label>Category</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="category-toggle">Select Category</button>
-          <div class="dropdown-menu" id="category-dropdown">
-            <div class="checkbox-item">
-                <input type="checkbox" id="category-DB" value="DB" class="category-checkbox">
-                <label for="category-DB">DB</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-ARCH" value="ARCH" class="category-checkbox">
-                <label for="category-ARCH">ARCH</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-API" value="API" class="category-checkbox">
-                <label for="category-API">API</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-OPS" value="OPS" class="category-checkbox">
-                <label for="category-OPS">OPS</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-TEST" value="TEST" class="category-checkbox">
-                <label for="category-TEST">TEST</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-SEC" value="SEC" class="category-checkbox">
-                <label for="category-SEC">SEC</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-MIG" value="MIG" class="category-checkbox">
-                <label for="category-MIG">MIG</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-DOC" value="DOC" class="category-checkbox">
-                <label for="category-DOC">DOC</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-FEAT" value="FEAT" class="category-checkbox">
-                <label for="category-FEAT">FEAT</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-UI" value="UI" class="category-checkbox">
-                <label for="category-UI">UI</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-PERF" value="PERF" class="category-checkbox">
-                <label for="category-PERF">PERF</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-CONFIG" value="CONFIG" class="category-checkbox">
-                <label for="category-CONFIG">CONFIG</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="category-REF" value="REF" class="category-checkbox">
-                <label for="category-REF">REF</label>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label>Status</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="status-toggle">Select Status</button>
-          <div class="dropdown-menu" id="status-dropdown">
-            <div class="checkbox-item">
-                <input type="checkbox" id="status-PENDING" value="PENDING" class="status-checkbox">
-                <label for="status-PENDING" style="color: #3B82F6; display: flex; align-items: center;">
-                  <span class="status-badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span>
-                </label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="status-COMPLETED" value="COMPLETED" class="status-checkbox">
-                <label for="status-COMPLETED" style="color: #10B981; display: flex; align-items: center;">
-                  <span class="status-badge" style="background: #10B98120; color: #10B981;">COMPLETED</span>
-                </label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="status-IN_PROGRESS" value="IN_PROGRESS" class="status-checkbox">
-                <label for="status-IN_PROGRESS" style="color: #F59E0B; display: flex; align-items: center;">
-                  <span class="status-badge" style="background: #F59E0B20; color: #F59E0B;">IN_PROGRESS</span>
-                </label>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div class="control-group">
-        <label>Priority</label>
-        <div class="checkbox-dropdown">
-          <button class="dropdown-toggle" id="priority-toggle">Select Priority</button>
-          <div class="dropdown-menu" id="priority-dropdown">
-            <div class="checkbox-item">
-                <input type="checkbox" id="priority-HIGH" value="HIGH" class="priority-checkbox">
-                <label for="priority-HIGH">HIGH</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="priority-MEDIUM" value="MEDIUM" class="priority-checkbox">
-                <label for="priority-MEDIUM">MEDIUM</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="priority-LOW" value="LOW" class="priority-checkbox">
-                <label for="priority-LOW">LOW</label>
-              </div><div class="checkbox-item">
-                <input type="checkbox" id="priority-CRITICAL" value="CRITICAL" class="priority-checkbox">
-                <label for="priority-CRITICAL">CRITICAL</label>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="stats">
       <div class="stat-card card-surface">
@@ -956,6 +908,109 @@
       </div>
     </div>
 
+    <div class="filters-section">
+      <h2 class="filters-title">Filters</h2>
+      <div class="controls">
+        <div class="control-group">
+          <label for="search">Search</label>
+          <input type="text" id="search" placeholder="Search tasks...">
+        </div>
+        <div class="control-group">
+          <label>Category</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="category-toggle">Select Category</button>
+            <div class="dropdown-menu" id="category-dropdown">
+              <div class="checkbox-item">
+                  <input type="checkbox" id="category-DB" value="DB" class="category-checkbox">
+                  <label for="category-DB">DB</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-ARCH" value="ARCH" class="category-checkbox">
+                  <label for="category-ARCH">ARCH</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-API" value="API" class="category-checkbox">
+                  <label for="category-API">API</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-OPS" value="OPS" class="category-checkbox">
+                  <label for="category-OPS">OPS</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-TEST" value="TEST" class="category-checkbox">
+                  <label for="category-TEST">TEST</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-SEC" value="SEC" class="category-checkbox">
+                  <label for="category-SEC">SEC</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-MIG" value="MIG" class="category-checkbox">
+                  <label for="category-MIG">MIG</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-DOC" value="DOC" class="category-checkbox">
+                  <label for="category-DOC">DOC</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-FEAT" value="FEAT" class="category-checkbox">
+                  <label for="category-FEAT">FEAT</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-UI" value="UI" class="category-checkbox">
+                  <label for="category-UI">UI</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-PERF" value="PERF" class="category-checkbox">
+                  <label for="category-PERF">PERF</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-CONFIG" value="CONFIG" class="category-checkbox">
+                  <label for="category-CONFIG">CONFIG</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="category-REF" value="REF" class="category-checkbox">
+                  <label for="category-REF">REF</label>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Status</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="status-toggle">Select Status</button>
+            <div class="dropdown-menu" id="status-dropdown">
+              <div class="checkbox-item">
+                  <input type="checkbox" id="status-PENDING" value="PENDING" class="status-checkbox">
+                  <label for="status-PENDING" style="color: #3B82F6; display: flex; align-items: center;">
+                    <span class="status-badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span>
+                  </label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="status-COMPLETED" value="COMPLETED" class="status-checkbox">
+                  <label for="status-COMPLETED" style="color: #10B981; display: flex; align-items: center;">
+                    <span class="status-badge" style="background: #10B98120; color: #10B981;">COMPLETED</span>
+                  </label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="status-IN_PROGRESS" value="IN_PROGRESS" class="status-checkbox">
+                  <label for="status-IN_PROGRESS" style="color: #F59E0B; display: flex; align-items: center;">
+                    <span class="status-badge" style="background: #F59E0B20; color: #F59E0B;">IN_PROGRESS</span>
+                  </label>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Priority</label>
+          <div class="checkbox-dropdown">
+            <button class="dropdown-toggle" id="priority-toggle">Select Priority</button>
+            <div class="dropdown-menu" id="priority-dropdown">
+              <div class="checkbox-item">
+                  <input type="checkbox" id="priority-HIGH" value="HIGH" class="priority-checkbox">
+                  <label for="priority-HIGH">HIGH</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="priority-MEDIUM" value="MEDIUM" class="priority-checkbox">
+                  <label for="priority-MEDIUM">MEDIUM</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="priority-LOW" value="LOW" class="priority-checkbox">
+                  <label for="priority-LOW">LOW</label>
+                </div><div class="checkbox-item">
+                  <input type="checkbox" id="priority-CRITICAL" value="CRITICAL" class="priority-checkbox">
+                  <label for="priority-CRITICAL">CRITICAL</label>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="table-container">
       <table id="task-table">
         <thead>
@@ -983,7 +1038,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-DB-006</span></td>
               <td><span class="task-title">Database Schema Design and Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1002,7 +1057,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-ARCH-001</span></td>
               <td><span class="task-title">Backend Architecture Design and Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">ARCH</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">ARCH</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1021,7 +1076,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-DB-001</span></td>
               <td><span class="task-title">Database Schema Design and Entity Models</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1040,7 +1095,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-DB-002</span></td>
               <td><span class="task-title">Database Migrations Setup and Initial Migration</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1059,7 +1114,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-API-001</span></td>
               <td><span class="task-title">RESTful API Endpoints Design and Implementation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">API</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">API</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1078,7 +1133,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-OPS-004</span></td>
               <td><span class="task-title">Docker Containerization and Orchestration</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1097,7 +1152,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-TEST-001</span></td>
               <td><span class="task-title">Research and Plan UI/Frontend Testing Framework and Strategy</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1116,7 +1171,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-SEC-001</span></td>
               <td><span class="task-title">Security Implementation and Best Practices</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">SEC</span></td>
+              <td><span class="badge" style="background: #22C55E20; color: #22C55E; border: 1px solid #22C55E40;">SEC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1135,7 +1190,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-MIG-001</span></td>
               <td><span class="task-title">Client Migration from Constants to Backend API</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">MIG</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">MIG</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1154,7 +1209,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-DOC-001</span></td>
               <td><span class="task-title">Backend Documentation and API Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1173,7 +1228,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DOC-006</span></td>
               <td><span class="task-title">Authentication and Authorization Design</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1192,7 +1247,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DB-005</span></td>
               <td><span class="task-title">User Authentication Database Schema</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1211,7 +1266,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-API-005</span></td>
               <td><span class="task-title">Authentication and Authorization API</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">API</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">API</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1230,7 +1285,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-SEC-003</span></td>
               <td><span class="task-title">Mobile App Security Implementation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">SEC</span></td>
+              <td><span class="badge" style="background: #22C55E20; color: #22C55E; border: 1px solid #22C55E40;">SEC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1249,7 +1304,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DOC-004</span></td>
               <td><span class="task-title">Customer Management and Automated Promotions Requirements Analysis</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1268,7 +1323,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DB-004</span></td>
               <td><span class="task-title">Customer Data and Promotion Automation Database Schema</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1287,7 +1342,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-API-004</span></td>
               <td><span class="task-title">Customer Management and Promotion Automation API</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">API</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">API</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1306,7 +1361,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-023</span></td>
               <td><span class="task-title">Dashboard - Customer Management UI</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1325,7 +1380,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-024</span></td>
               <td><span class="task-title">Dashboard - Promotion Automation Configuration UI</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1344,7 +1399,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-OPS-006</span></td>
               <td><span class="task-title">Email and SMS Service Integration Setup</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1363,7 +1418,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-TEST-006</span></td>
               <td><span class="task-title">Customer and Promotion System Testing</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1382,7 +1437,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DOC-005</span></td>
               <td><span class="task-title">Customer and Promotion System Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1401,7 +1456,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DOC-002</span></td>
               <td><span class="task-title">Dashboard Requirements Analysis and Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1420,7 +1475,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-014</span></td>
               <td><span class="task-title">Dashboard Architecture and Design</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1439,7 +1494,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DB-003</span></td>
               <td><span class="task-title">Database Schema for Dashboard System</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DB</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">DB</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1458,7 +1513,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-API-002</span></td>
               <td><span class="task-title">Dashboard Backend API Implementation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">API</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">API</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1477,7 +1532,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-015</span></td>
               <td><span class="task-title">Dashboard Frontend Implementation - Metrics and Analytics</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1496,7 +1551,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-016</span></td>
               <td><span class="task-title">Dashboard Frontend Implementation - Promotions Management</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1515,7 +1570,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-017</span></td>
               <td><span class="task-title">Dashboard Frontend Implementation - Website Content Editor</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1534,7 +1589,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-018</span></td>
               <td><span class="task-title">Dashboard Frontend Implementation - Gallery Image Management</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1553,7 +1608,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-SEC-002</span></td>
               <td><span class="task-title">Dashboard Authentication and Authorization</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">SEC</span></td>
+              <td><span class="badge" style="background: #22C55E20; color: #22C55E; border: 1px solid #22C55E40;">SEC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #DC262620; color: #DC2626;">CRITICAL</span></td>
               <td>unassigned</td>
@@ -1572,7 +1627,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-TEST-002</span></td>
               <td><span class="task-title">Dashboard Testing Suite</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1591,7 +1646,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-TEST-003</span></td>
               <td><span class="task-title">Dashboard Quality Assurance and User Acceptance Testing</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1610,7 +1665,7 @@
                 data-updated="2025-01-21">
               <td><span class="task-id">TASK-UI-001</span></td>
               <td><span class="task-title">Redesign Gallery Page with Instagram-style Masonry Grid Layout</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">UI</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">UI</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1629,7 +1684,7 @@
                 data-updated="2025-01-21">
               <td><span class="task-id">TASK-PERF-001</span></td>
               <td><span class="task-title">Implement Image Lazy Loading and Pre-loading for Gallery</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">PERF</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">PERF</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1648,7 +1703,7 @@
                 data-updated="2025-01-21">
               <td><span class="task-id">TASK-FEAT-013</span></td>
               <td><span class="task-title">Generate and Organize Gallery Photo Dataset (~500 Photos)</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1667,7 +1722,7 @@
                 data-updated="2025-01-20">
               <td><span class="task-id">TASK-OPS-001</span></td>
               <td><span class="task-title">Set Up Docker Infrastructure for Client and Microservices</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">IN_PROGRESS</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1686,7 +1741,7 @@
                 data-updated="2025-01-21">
               <td><span class="task-id">TASK-OPS-002</span></td>
               <td><span class="task-title">Set Up Testing Infrastructure and Pre-commit Hooks</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1705,7 +1760,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-OPS-003</span></td>
               <td><span class="task-title">Set Up Backend Server Microservice and Database Container</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -1724,7 +1779,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-CONFIG-001</span></td>
               <td><span class="task-title">Migrate Package Manager from npm to pnpm</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">CONFIG</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">CONFIG</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1743,7 +1798,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-REF-001</span></td>
               <td><span class="task-title">Code Refactoring and Test Compliance</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">REF</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">REF</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>unassigned</td>
@@ -1762,7 +1817,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-DOC-003</span></td>
               <td><span class="task-title">Mobile App Requirements Analysis and Documentation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">DOC</span></td>
+              <td><span class="badge" style="background: #10B98120; color: #10B981; border: 1px solid #10B98140;">DOC</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1781,7 +1836,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-ARCH-002</span></td>
               <td><span class="task-title">Mobile App Architecture and Design</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">ARCH</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">ARCH</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1800,7 +1855,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-API-003</span></td>
               <td><span class="task-title">Mobile App Backend API Extensions</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">API</span></td>
+              <td><span class="badge" style="background: #6B728020; color: #6B7280; border: 1px solid #6B728040;">API</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1819,7 +1874,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-019</span></td>
               <td><span class="task-title">Mobile App Implementation - Core Features</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1838,7 +1893,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-020</span></td>
               <td><span class="task-title">Mobile App Implementation - Employee Earnings Features</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1857,7 +1912,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-021</span></td>
               <td><span class="task-title">Mobile App Implementation - Photo Upload Features</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1876,7 +1931,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-FEAT-022</span></td>
               <td><span class="task-title">Mobile App Implementation - Manager Statistics Features</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1895,7 +1950,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-TEST-004</span></td>
               <td><span class="task-title">Mobile App Testing Suite</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1914,7 +1969,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-TEST-005</span></td>
               <td><span class="task-title">Mobile App Quality Assurance and User Acceptance Testing</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">TEST</span></td>
+              <td><span class="badge" style="background: #F59E0B20; color: #F59E0B; border: 1px solid #F59E0B40;">TEST</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1933,7 +1988,7 @@
                 data-updated="2025-01-22">
               <td><span class="task-id">TASK-OPS-005</span></td>
               <td><span class="task-title">Mobile App Build and Deployment</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">OPS</span></td>
+              <td><span class="badge" style="background: #EC489920; color: #EC4899; border: 1px solid #EC489940;">OPS</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>unassigned</td>
@@ -1952,7 +2007,7 @@
                 data-updated="2025-12-22">
               <td><span class="task-id">TASK-FEAT-004</span></td>
               <td><span class="task-title">Build VS Code Extension Foundation</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>copilot</td>
@@ -1971,7 +2026,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-005</span></td>
               <td><span class="task-title">Build Task Portal Webview UI</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>copilot</td>
@@ -1990,7 +2045,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-006</span></td>
               <td><span class="task-title">Add Statistics Dashboard</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>copilot</td>
@@ -2009,7 +2064,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-007</span></td>
               <td><span class="task-title">Add Kanban Board View</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">MEDIUM</span></td>
               <td>copilot</td>
@@ -2028,7 +2083,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-010</span></td>
               <td><span class="task-title">Build Static Site Generator</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>copilot</td>
@@ -2047,7 +2102,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-011</span></td>
               <td><span class="task-title">Add Timeline View</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>GitHub Copilot</td>
@@ -2066,7 +2121,7 @@
                 data-updated="2025-12-22">
               <td><span class="task-id">TASK-FEAT-012</span></td>
               <td><span class="task-title">Add Analytics & Reporting</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #6B728020; color: #6B7280;">LOW</span></td>
               <td>copilot</td>
@@ -2085,7 +2140,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-001</span></td>
               <td><span class="task-title">Design and Plan Task Portal System</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -2104,7 +2159,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-002</span></td>
               <td><span class="task-title">Create Task Parser and JSON Schema</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>copilot</td>
@@ -2123,7 +2178,7 @@
                 data-updated="2025-12-21">
               <td><span class="task-id">TASK-FEAT-003</span></td>
               <td><span class="task-title">Migrate Existing Tasks to JSON</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">FEAT</span></td>
+              <td><span class="badge" style="background: #8B5CF620; color: #8B5CF6; border: 1px solid #8B5CF640;">FEAT</span></td>
               <td><span class="badge" style="background: #10B98120; color: #10B981;">COMPLETED</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>copilot</td>
@@ -2142,7 +2197,7 @@
                 data-updated="2025-12-24">
               <td><span class="task-id">TASK-UI-002</span></td>
               <td><span class="task-title">Re-style Task Portal Dashboard with Modern Analytics UI</span></td>
-              <td><span class="badge" style="background: #e5e7eb; color: #374151;">UI</span></td>
+              <td><span class="badge" style="background: #3B82F620; color: #3B82F6; border: 1px solid #3B82F640;">UI</span></td>
               <td><span class="badge" style="background: #3B82F620; color: #3B82F6;">PENDING</span></td>
               <td><span class="badge" style="background: #F59E0B20; color: #F59E0B;">HIGH</span></td>
               <td>unassigned</td>
@@ -2158,7 +2213,7 @@
     </div>
 
     <footer>
-      <p>Last updated: December 24, 2025 at 02:27 PM</p>
+      <p>Last updated: December 24, 2025 at 02:59 PM</p>
       <p style="margin-top: 0.5rem;">Generated from TASK_REGISTRY.json</p>
     </footer>
   </div>
@@ -4696,12 +4751,49 @@
       const progressFills = document.querySelectorAll('.progress-fill');
       progressFills.forEach(fill => {
         const width = fill.style.width;
-        fill.style.setProperty('--progress-width', width);
-        // Force reflow to restart animation
+        fill.dataset.targetWidth = width;
         fill.style.width = '0%';
         setTimeout(() => {
           fill.style.width = width;
-        }, 10);
+        }, 100);
+      });
+
+      // Add hover animation to stat cards with state management
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+        let isAnimating = false;
+        let animationTimeout = null;
+
+        card.addEventListener('mouseenter', () => {
+          if (isAnimating) return; // Don't interrupt ongoing animation
+          
+          const progressFill = card.querySelector('.progress-fill');
+          if (progressFill) {
+            isAnimating = true;
+            const targetWidth = progressFill.dataset.targetWidth;
+            
+            // Reset to 0 without transition
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            
+            // Use requestAnimationFrame to ensure the reset is applied
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                // Animate to target
+                progressFill.style.transition = 'width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                progressFill.style.width = targetWidth;
+                
+                // Clear any existing timeout
+                if (animationTimeout) clearTimeout(animationTimeout);
+                
+                // Mark animation as complete after 1.2s
+                animationTimeout = setTimeout(() => {
+                  isAnimating = false;
+                }, 1200);
+              });
+            });
+          }
+        });
       });
     });
 
