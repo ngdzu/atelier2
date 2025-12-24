@@ -21,8 +21,16 @@ export const COLORS = {
   surface: '#FFFFFF',
 };
 
-// Snow Effect Toggle - Set to true to enable snow effect, false to disable
-export const ENABLE_SNOW_EFFECT = true;
+// Snow Effect Toggle - Automatically enabled during Christmas season (December 10-25)
+// Returns true if current date is between December 10 and December 25 (inclusive)
+export const ENABLE_SNOW_EFFECT = (() => {
+  const today = new Date();
+  const month = today.getMonth(); // 0-11, where 11 is December
+  const day = today.getDate(); // 1-31
+  
+  // Check if it's December (month === 11) and day is between 10 and 25 (inclusive)
+  return month === 11 && day >= 10 && day <= 25;
+})();
 
 // Snow Intensity - Scale from 1 (lightest) to 10 (heaviest)
 // Controls the density, speed, and visibility of snowflakes
