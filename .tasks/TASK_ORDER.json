@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-01-22T00:00:00.000Z",
+    "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
+    "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Foundation & Architecture",
+      "description": "Establish system architecture and design foundation. These tasks must be completed before any implementation begins.",
+      "tasks": [
+        {
+          "taskId": "TASK-ARCH-001",
+          "title": "Backend Architecture Design and Documentation",
+          "priority": "HIGH",
+          "canStart": true,
+          "blocking": ["TASK-DB-000"],
+          "estimatedTime": "8 hours",
+          "notes": "Foundation task - must be completed first. All other backend tasks depend on this."
+        },
+        {
+          "taskId": "TASK-DOC-004",
+          "title": "Customer Management and Automated Promotions Requirements Analysis",
+          "priority": "HIGH",
+          "canStart": true,
+          "blocking": ["TASK-DB-004"],
+          "estimatedTime": "6 hours",
+          "notes": "Requirements analysis for customer data management and promotion automation system. Can be done in parallel with TASK-ARCH-001."
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Database Design",
+      "description": "Design and document database schema. These tasks establish the data model.",
+      "tasks": [
+        {
+          "taskId": "TASK-DB-000",
+          "title": "Database Schema Design and Documentation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-ARCH-001"],
+          "blocking": ["TASK-DB-001"],
+          "estimatedTime": "8 hours",
+          "notes": "Documentation-focused task. Creates ERD diagrams and schema documentation."
+        },
+        {
+          "taskId": "TASK-DB-001",
+          "title": "Database Schema Design and Entity Models",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-000", "TASK-ARCH-001"],
+          "blocking": ["TASK-DB-002"],
+          "estimatedTime": "6 hours",
+          "notes": "Implements TypeORM entities based on schema design from TASK-DB-000."
+        },
+        {
+          "taskId": "TASK-DB-002",
+          "title": "Database Migrations Setup and Initial Migration",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-001"],
+          "blocking": ["TASK-API-001"],
+          "estimatedTime": "4 hours",
+          "notes": "Creates migration system and initial schema. Database must be ready before API implementation."
+        },
+        {
+          "taskId": "TASK-DB-004",
+          "title": "Customer Data and Promotion Automation Database Schema",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DOC-004"],
+          "blocking": ["TASK-API-004"],
+          "estimatedTime": "8 hours",
+          "notes": "Database schema for customer management and promotion automation. Depends on requirements analysis."
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "API Implementation",
+      "description": "Implement RESTful API endpoints and business logic.",
+      "tasks": [
+        {
+          "taskId": "TASK-API-001",
+          "title": "RESTful API Endpoints Design and Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-002"],
+          "blocking": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001", "TASK-MIG-001"],
+          "estimatedTime": "12 hours",
+          "notes": "Core API implementation. Many tasks depend on this being complete."
+        },
+        {
+          "taskId": "TASK-API-004",
+          "title": "Customer Management and Promotion Automation API",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-004"],
+          "blocking": ["TASK-FEAT-023", "TASK-FEAT-024", "TASK-OPS-006"],
+          "estimatedTime": "16 hours",
+          "notes": "API for customer management and promotion automation. Required before dashboard UI and email/SMS integration."
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Infrastructure & Quality",
+      "description": "Set up infrastructure, testing, and security. These can be done in parallel after API is complete.",
+      "tasks": [
+        {
+          "taskId": "TASK-OPS-004",
+          "title": "Docker Containerization and Orchestration",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-001"],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Can be done in parallel with TEST-001 and SEC-001. Enhances Docker setup for production."
+        },
+        {
+          "taskId": "TASK-TEST-001",
+          "title": "Backend Testing Infrastructure and Unit Tests",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-001"],
+          "blocking": ["TASK-MIG-001"],
+          "estimatedTime": "10 hours",
+          "notes": "Can be done in parallel with OPS-004 and SEC-001. Required before migration."
+        },
+        {
+          "taskId": "TASK-SEC-001",
+          "title": "Security Implementation and Best Practices",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-001"],
+          "blocking": [],
+          "estimatedTime": "8 hours",
+          "notes": "Can be done in parallel with OPS-004 and TEST-001. Implements security measures."
+        },
+        {
+          "taskId": "TASK-OPS-006",
+          "title": "Email and SMS Service Integration Setup",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-004"],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Email and SMS service provider integration for promotion delivery. Can be done in parallel with dashboard UI tasks."
+        }
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "Client Integration",
+      "description": "Migrate client to use backend API instead of constants.",
+      "tasks": [
+        {
+          "taskId": "TASK-MIG-001",
+          "title": "Client Migration from Constants to Backend API",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-001", "TASK-TEST-001"],
+          "blocking": ["TASK-DOC-001"],
+          "estimatedTime": "6 hours",
+          "notes": "Migrates client from mock data to real API. Requires API and tests to be complete."
+        },
+        {
+          "taskId": "TASK-FEAT-023",
+          "title": "Dashboard - Customer Management UI",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-004"],
+          "blocking": ["TASK-FEAT-024"],
+          "estimatedTime": "12 hours",
+          "notes": "Dashboard UI for customer management. Required before promotion automation UI."
+        },
+        {
+          "taskId": "TASK-FEAT-024",
+          "title": "Dashboard - Promotion Automation Configuration UI",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-004", "TASK-FEAT-023"],
+          "blocking": ["TASK-TEST-006", "TASK-DOC-005"],
+          "estimatedTime": "16 hours",
+          "notes": "Dashboard UI for promotion automation configuration. Depends on customer management UI."
+        }
+      ]
+    },
+    {
+      "phase": 6,
+      "name": "Documentation",
+      "description": "Final documentation tasks. Should be done after all implementation is complete.",
+      "tasks": [
+        {
+          "taskId": "TASK-DOC-001",
+          "title": "Backend Documentation and API Documentation",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-001", "TASK-MIG-001"],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Final documentation task. Should be done after migration is complete."
+        },
+        {
+          "taskId": "TASK-TEST-006",
+          "title": "Customer and Promotion System Testing",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-004", "TASK-FEAT-023", "TASK-FEAT-024"],
+          "blocking": ["TASK-DOC-005"],
+          "estimatedTime": "12 hours",
+          "notes": "Comprehensive testing for customer and promotion system. Should be done after UI implementation."
+        },
+        {
+          "taskId": "TASK-DOC-005",
+          "title": "Customer and Promotion System Documentation",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-004", "TASK-FEAT-023", "TASK-FEAT-024", "TASK-TEST-006"],
+          "blocking": [],
+          "estimatedTime": "4 hours",
+          "notes": "Documentation for customer and promotion system. Should be done after testing is complete."
+        }
+      ]
+    }
+  ],
+  "nextTaskRecommendation": {
+    "algorithm": "Find the first task in the earliest phase where canStart is true or all dependencies are completed",
+    "currentPhase": 1,
+    "suggestedTask": "TASK-ARCH-001",
+    "reason": "Foundation task with no dependencies. Must be completed before all other backend tasks."
+  },
+  "parallelization": {
+    "phase4": {
+      "description": "Tasks in Phase 4 can be done in parallel",
+      "tasks": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001"],
+      "note": "These tasks all depend on TASK-API-001 but not on each other, so they can be worked on simultaneously."
+    }
+  },
+  "criticalPath": [
+    "TASK-ARCH-001",
+    "TASK-DB-000",
+    "TASK-DB-001",
+    "TASK-DB-002",
+    "TASK-API-001",
+    "TASK-TEST-001",
+    "TASK-MIG-001",
+    "TASK-DOC-001"
+  ],
+  "notes": {
+    "executionStrategy": "Work through phases sequentially. Within each phase, check dependencies. If all dependencies are met, the task can start.",
+    "parallelWork": "Tasks in Phase 4 (OPS-004, TEST-001, SEC-001) can be done in parallel as they only depend on API-001.",
+    "blockingTasks": "Pay attention to 'blocking' field - these tasks cannot start until the current task is complete.",
+    "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible."
+  }
+}
+

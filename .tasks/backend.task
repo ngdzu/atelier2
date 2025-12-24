@@ -1,0 +1,1527 @@
+# Backend Architecture and Implementation Tasks
+
+## TASK-DB-000: Database Schema Design and Documentation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-ARCH-001
+
+### Description
+
+Design and document the complete database schema for the LuxeNail nail salon application. This task focuses on analyzing all existing data structures, designing normalized database tables, creating Entity Relationship Diagrams (ERD), and documenting all relationships, constraints, and data requirements. This is primarily a documentation and design task that will serve as the foundation for database implementation.
+
+### Requirements / What to Do
+
+#### Step 1: Data Analysis and Inventory
+- [ ] Analyze all data structures from `client/types.ts`:
+  - User interface (base for Customer and Employee)
+  - Customer interface
+  - Employee interface
+  - Service interface
+  - Appointment interface
+  - GalleryImage interface (if applicable)
+- [ ] Analyze all data from `client/constants.tsx`:
+  - SERVICES array - all service definitions
+  - EMPLOYEES array - all employee data
+  - MOCK_CUSTOMERS array - customer data structure
+  - MOCK_APPOINTMENTS array - appointment data structure
+- [ ] Document all fields, data types, and constraints
+- [ ] Identify computed/derived fields vs stored fields
+- [ ] Document business rules and data requirements
+- [ ] Create data inventory document: `server/doc/DATA_INVENTORY.md`
+
+#### Step 2: Entity Relationship Design
+- [ ] Design normalized database schema:
+  - **users** table (base table for customers and employees)
+    - id (UUID or serial)
+    - name (string)
+    - email (string, unique)
+    - phone (string)
+    - role (enum: ADMIN, OWNER, EMPLOYEE, CUSTOMER)
+    - avatar (string, nullable)
+    - created_at (timestamp)
+    - updated_at (timestamp)
+    - deleted_at (timestamp, nullable, for soft deletes)
+  
+  - **customers** table (extends users)
+    - id (foreign key to users.id, primary key)
+    - last_visit (date, nullable)
+    - total_spent (decimal)
+    - notes (text, nullable)
+    - Additional customer-specific fields
+  
+  - **employees** table (extends users)
+    - id (foreign key to users.id, primary key)
+    - specialties (array or JSON)
+    - color (string, for calendar identification)
+    - Additional employee-specific fields
+  
+  - **services** table
+    - id (string, primary key)
+    - name (string)
+    - duration (integer, minutes)
+    - price (decimal)
+    - points_earned (integer, nullable)
+    - points_price (integer, nullable)
+    - description (text, nullable)
+    - category (string)
+    - type (enum: MAIN, ADDON)
+    - created_at (timestamp)
+    - updated_at (timestamp)
+    - is_active (boolean, default true)
+  
+  - **appointments** table
+    - id (UUID or serial, primary key)
+    - customer_id (foreign key to customers.id)
+    - employee_id (foreign key to employees.id)
+    - service_id (foreign key to services.id, main service)
+    - start_time (timestamp)
+    - end_time (timestamp)
+    - status (enum: SCHEDULED, COMPLETED, CANCELLED)
+    - notes (text, nullable)
+    - created_at (timestamp)
+    - updated_at (timestamp)
+    - deleted_at (timestamp, nullable, for soft deletes)
+  
+  - **appointment_services** table (junction table for addon services)
+    - id (serial, primary key)
+    - appointment_id (foreign key to appointments.id)
+    - service_id (foreign key to services.id)
+    - created_at (timestamp)
+  
+  - **gallery_images** table (if needed)
+    - id (UUID or serial, primary key)
+    - url (string)
+    - category (string)
+    - title (string)
+    - alt (string)
+    - uploaded_at (timestamp)
+    - created_at (timestamp)
+    - updated_at (timestamp)
+
+- [ ] Document all relationships:
+  - users → customers (one-to-one)
+  - users → employees (one-to-one)
+  - customers → appointments (one-to-many)
+  - employees → appointments (one-to-many)
+  - services → appointments (one-to-many, main service)
+  - appointments → services (many-to-many via appointment_services, for addons)
+- [ ] Document cardinality and constraints
+- [ ] Document foreign key relationships and cascades
+
+#### Step 3: Database Schema Diagram Creation
+- [ ] Create Entity Relationship Diagram (ERD) using tool of choice:
+  - Option 1: Draw.io / diagrams.net
+  - Option 2: dbdiagram.io
+  - Option 3: Mermaid diagrams
+  - Option 4: PostgreSQL ERD tools
+- [ ] Include all tables with:
+  - Table names
+  - All columns with data types
+  - Primary keys (PK)
+  - Foreign keys (FK)
+  - Indexes
+  - Constraints (unique, not null, check)
+- [ ] Show all relationships with:
+  - Relationship lines
+  - Cardinality indicators (1:1, 1:N, N:M)
+  - Foreign key annotations
+- [ ] Create multiple diagram views if needed:
+  - High-level overview diagram
+  - Detailed schema diagram
+  - Relationship focus diagram
+- [ ] Save diagrams in multiple formats:
+  - Source file (draw.io XML, dbdiagram.io code, Mermaid, etc.)
+  - PNG/SVG export for documentation
+- [ ] File to create: `server/doc/diagrams/database-schema.drawio` (or appropriate format)
+- [ ] File to create: `server/doc/diagrams/database-schema.png` (export)
+
+#### Step 4: Schema Documentation
+- [ ] Create comprehensive schema documentation: `server/doc/DATABASE_SCHEMA.md`
+- [ ] Document each table with:
+  - Purpose and description
+  - All columns with:
+    - Name
+    - Data type
+    - Constraints (nullable, unique, default, etc.)
+    - Description/purpose
+  - Primary key
+  - Foreign keys
+  - Indexes
+  - Business rules
+- [ ] Document all relationships:
+  - Relationship type (one-to-one, one-to-many, many-to-many)
+  - Foreign key columns
+  - Cascade rules (on delete, on update)
+  - Relationship description
+- [ ] Document constraints:
+  - Check constraints
+  - Unique constraints
+  - Not null constraints
+  - Default values
+- [ ] Document indexes:
+  - Primary key indexes
+  - Foreign key indexes
+  - Performance indexes (frequently queried fields)
+  - Composite indexes
+- [ ] Document data types and their justifications
+- [ ] Document normalization decisions (why normalized vs denormalized)
+
+#### Step 5: Data Migration Plan
+- [ ] Document data migration from constants:
+  - Map SERVICES array to services table
+  - Map EMPLOYEES array to employees and users tables
+  - Map MOCK_CUSTOMERS to customers and users tables
+  - Map MOCK_APPOINTMENTS to appointments table
+  - Map appointment addons to appointment_services table
+- [ ] Create migration mapping document: `server/doc/DATA_MIGRATION.md`
+- [ ] Document data transformation rules
+- [ ] Identify any data cleanup needed
+- [ ] Document seed data requirements
+
+#### Step 6: Business Rules Documentation
+- [ ] Document business rules:
+  - Appointment scheduling rules
+  - Service pricing rules
+  - Points system rules
+  - Customer/Employee relationship rules
+  - Status transition rules (appointment statuses)
+- [ ] Document validation rules:
+  - Email format validation
+  - Phone number validation
+  - Date/time validation
+  - Price validation
+  - Duration validation
+- [ ] Document constraints that enforce business rules
+- [ ] Create business rules document: `server/doc/BUSINESS_RULES.md`
+
+#### Step 7: Performance Considerations
+- [ ] Identify frequently queried fields
+- [ ] Design indexes for:
+  - Foreign keys
+  - Frequently filtered fields (status, dates, categories)
+  - Search fields (name, email)
+  - Composite queries
+- [ ] Document query patterns
+- [ ] Document partitioning strategy (if needed)
+- [ ] Document archiving strategy (old appointments, etc.)
+- [ ] Create performance design document: `server/doc/DATABASE_PERFORMANCE.md`
+
+#### Step 8: Schema Review and Validation
+- [ ] Review schema for:
+  - Normalization (3NF minimum)
+  - Data integrity
+  - Scalability
+  - Extensibility
+  - Performance
+- [ ] Validate all relationships are correct
+- [ ] Verify all data from constants can be stored
+- [ ] Check for missing fields or relationships
+- [ ] Get stakeholder review and feedback
+- [ ] Update schema based on feedback
+
+### Definition of Done (DoD)
+
+- [ ] Complete data inventory documented
+- [ ] Database schema designed with all tables
+- [ ] ERD diagrams created (high-level and detailed)
+- [ ] Schema documentation complete
+- [ ] All relationships documented
+- [ ] All constraints documented
+- [ ] Indexes designed and documented
+- [ ] Data migration plan documented
+- [ ] Business rules documented
+- [ ] Performance considerations documented
+- [ ] Schema reviewed and validated
+- [ ] All documentation files created
+
+### Verification Steps
+
+1. **Schema Completeness:**
+   - Verify all data from constants can be stored
+   - Check all relationships are defined
+   - Verify all business rules are captured
+   - Check for missing fields
+
+2. **Diagram Review:**
+   - Review ERD for clarity
+   - Verify all tables are shown
+   - Check relationships are correctly represented
+   - Verify diagram is readable and professional
+
+3. **Documentation Review:**
+   - Review schema documentation for completeness
+   - Check all tables are documented
+   - Verify relationships are explained
+   - Check examples are clear
+
+4. **Stakeholder Review:**
+   - Present schema to team/stakeholders
+   - Gather feedback
+   - Incorporate changes
+   - Finalize schema design
+
+### Acceptance Criteria
+
+- ✅ Complete database schema designed
+- ✅ ERD diagrams created and exported
+- ✅ All tables, columns, and relationships documented
+- ✅ All data from constants can be stored in schema
+- ✅ Business rules captured in schema design
+- ✅ Performance considerations addressed
+- ✅ Schema is normalized and follows best practices
+- ✅ Documentation is complete and clear
+
+### Technical Details
+
+**Files to Create:**
+- `server/doc/DATA_INVENTORY.md`
+- `server/doc/DATABASE_SCHEMA.md`
+- `server/doc/diagrams/database-schema.drawio` (or dbdiagram.io code, Mermaid, etc.)
+- `server/doc/diagrams/database-schema.png` (exported image)
+- `server/doc/DATA_MIGRATION.md`
+- `server/doc/BUSINESS_RULES.md`
+- `server/doc/DATABASE_PERFORMANCE.md`
+
+**Tools Recommended:**
+- **ERD Tools:**
+  - dbdiagram.io (free, web-based, exports to SQL)
+  - Draw.io / diagrams.net (free, versatile)
+  - Mermaid (text-based, version control friendly)
+  - pgAdmin ERD Tool (PostgreSQL specific)
+  - DBDiagram (CLI tool)
+
+**Diagram Format Options:**
+1. **dbdiagram.io** (Recommended):
+   ```dbml
+   Table users {
+     id uuid [primary key]
+     name varchar
+     email varchar [unique]
+     ...
+   }
+   ```
+2. **Mermaid** (Version control friendly):
+   ```mermaid
+   erDiagram
+     USERS ||--o{ CUSTOMERS : extends
+     USERS ||--o{ EMPLOYEES : extends
+     ...
+   ```
+3. **Draw.io** (Visual, flexible)
+
+**Data Sources to Analyze:**
+- `client/types.ts` - TypeScript interfaces
+- `client/constants.tsx` - All constant data arrays
+- `client/services/dataService.ts` - Data usage patterns
+
+**Key Relationships to Document:**
+- User inheritance (users → customers, users → employees)
+- Customer → Appointments (1:N)
+- Employee → Appointments (1:N)
+- Service → Appointments (1:N for main service)
+- Appointment ↔ Services (N:M for addon services via junction table)
+
+**Notes:**
+- Consider using single table inheritance or table per hierarchy for User/Customer/Employee
+- Use soft deletes for appointments and users
+- Add audit fields (created_at, updated_at) to all tables
+- Consider timezone handling for timestamps
+- Plan for future features (loyalty points, reviews, etc.)
+
+---
+
+## TASK-ARCH-001: Backend Architecture Design and Documentation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 8 hours
+**Dependencies:** none
+
+### Description
+
+Design and document the complete backend architecture for the LuxeNail nail salon website. This includes defining the system architecture, component relationships, data flow, API design patterns, and technology decisions. The architecture should follow industry best practices for microservices, RESTful APIs, and database design.
+
+### Requirements / What to Do
+
+#### Step 1: System Architecture Design
+- [ ] Create architecture diagram showing all components (client, API server, database, containers)
+- [ ] Define service boundaries and responsibilities
+- [ ] Document communication patterns between services
+- [ ] Design API gateway pattern (if needed) or direct client-to-API communication
+- [ ] Define data flow from client → API → Database
+- [ ] Document error handling and logging strategy
+- [ ] File to create: `doc/ARCHITECTURE.md` or `server/doc/ARCHITECTURE.md`
+
+#### Step 2: Technology Stack Decisions
+- [ ] Document chosen tech stack with justifications:
+  - Backend Framework: Express.js + TypeScript (already chosen)
+  - ORM: TypeORM (already chosen)
+  - Database: PostgreSQL (already chosen)
+  - Authentication: JWT or session-based (decide)
+  - Validation: class-validator or zod (decide)
+  - Testing: Jest or Vitest (decide)
+  - API Documentation: Swagger/OpenAPI or alternative
+- [ ] Document version requirements and compatibility
+- [ ] Create tech stack decision document: `server/doc/TECH_STACK.md`
+
+#### Step 3: Project Structure Design
+- [ ] Design folder structure following industry standards:
+  ```
+  server/
+  ├── src/
+  │   ├── config/          # Configuration files
+  │   ├── database/        # Database setup, migrations
+  │   ├── entities/        # TypeORM entities
+  │   ├── controllers/     # Route handlers
+  │   ├── services/        # Business logic
+  │   ├── repositories/    # Data access layer
+  │   ├── middleware/      # Custom middleware
+  │   ├── validators/      # Input validation
+  │   ├── utils/           # Utility functions
+  │   ├── types/           # TypeScript types
+  │   └── index.ts         # Entry point
+  ├── tests/               # Test files
+  ├── migrations/          # Database migrations
+  └── docs/                # Documentation
+  ```
+- [ ] Document structure decisions and rationale
+- [ ] Create structure guide: `server/doc/STRUCTURE.md`
+
+#### Step 4: API Design Patterns
+- [ ] Define RESTful API conventions:
+  - URL naming conventions
+  - HTTP method usage (GET, POST, PUT, PATCH, DELETE)
+  - Response format standards
+  - Error response format
+  - Pagination strategy
+  - Filtering and sorting conventions
+- [ ] Design API versioning strategy (if needed)
+- [ ] Document authentication/authorization approach
+- [ ] Create API design guide: `server/doc/API_DESIGN.md`
+
+### Definition of Done (DoD)
+
+- [ ] Architecture diagram created and documented
+- [ ] Tech stack decisions documented with justifications
+- [ ] Project structure designed and documented
+- [ ] API design patterns documented
+- [ ] All documentation files created and reviewed
+- [ ] Architecture reviewed for scalability and maintainability
+
+### Verification Steps
+
+1. **Documentation Review:**
+   - Review architecture diagram for completeness
+   - Verify tech stack decisions are justified
+   - Check project structure follows industry standards
+   - Validate API design patterns are consistent
+
+2. **Stakeholder Review:**
+   - Present architecture to team/stakeholders
+   - Gather feedback and incorporate changes
+   - Finalize architecture decisions
+
+### Acceptance Criteria
+
+- ✅ Complete architecture documentation exists
+- ✅ Tech stack decisions are documented with rationale
+- ✅ Project structure follows industry best practices
+- ✅ API design patterns are clearly defined
+- ✅ Architecture supports current and future requirements
+
+### Technical Details
+
+**Files to Create:**
+- `server/doc/ARCHITECTURE.md`
+- `server/doc/TECH_STACK.md`
+- `server/doc/STRUCTURE.md`
+- `server/doc/API_DESIGN.md`
+
+**References:**
+- Node.js best practices
+- RESTful API design principles
+- Microservices architecture patterns
+- TypeORM documentation
+
+---
+
+## TASK-DB-001: Database Schema Design and Entity Models
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-DB-000, TASK-ARCH-001
+
+### Description
+
+Design the complete database schema for the nail salon application, including all entities, relationships, indexes, and constraints. Create TypeORM entity models that map to the database schema. The schema should support all current features (services, employees, customers, appointments) and be extensible for future requirements.
+
+### Requirements / What to Do
+
+#### Step 1: Entity Analysis
+- [ ] Analyze current data structures from `client/types.ts`:
+  - User (base for Customer and Employee)
+  - Customer
+  - Employee
+  - Service
+  - Appointment
+  - GalleryImage (if needed)
+- [ ] Identify relationships:
+  - Customer → Appointments (one-to-many)
+  - Employee → Appointments (one-to-many)
+  - Service → Appointments (many-to-many via junction)
+  - Appointment → Services (many-to-many for addons)
+- [ ] Document entity relationships and cardinality
+
+#### Step 2: Database Schema Design
+- [ ] Design tables with proper normalization:
+  - `users` table (base for customers and employees)
+  - `customers` table (extends users)
+  - `employees` table (extends users)
+  - `services` table
+  - `appointments` table
+  - `appointment_services` junction table (for addons)
+- [ ] Define primary keys, foreign keys, and constraints
+- [ ] Design indexes for performance (foreign keys, frequently queried fields)
+- [ ] Add audit fields (created_at, updated_at, deleted_at for soft deletes)
+- [ ] Create schema diagram: `server/doc/DATABASE_SCHEMA.md`
+
+#### Step 3: TypeORM Entity Implementation
+- [ ] Create base User entity: `server/src/entities/User.entity.ts`
+- [ ] Create Customer entity: `server/src/entities/Customer.entity.ts`
+- [ ] Create Employee entity: `server/src/entities/Employee.entity.ts`
+- [ ] Create Service entity: `server/src/entities/Service.entity.ts`
+- [ ] Create Appointment entity: `server/src/entities/Appointment.entity.ts`
+- [ ] Create AppointmentService junction entity: `server/src/entities/AppointmentService.entity.ts`
+- [ ] Implement proper TypeORM decorators (@Entity, @Column, @ManyToOne, @ManyToMany, etc.)
+- [ ] Add validation decorators (class-validator)
+- [ ] Configure relationships and cascades
+
+#### Step 4: Database Configuration
+- [ ] Update `server/src/database/data-source.ts` to include all entities
+- [ ] Configure entity paths in DataSource
+- [ ] Set up migration configuration
+- [ ] Configure connection pooling settings
+- [ ] Add database connection retry logic
+
+### Definition of Done (DoD)
+
+- [ ] Database schema designed and documented
+- [ ] All TypeORM entities created with proper relationships
+- [ ] Entities include validation decorators
+- [ ] Database configuration updated with entities
+- [ ] Schema diagram created
+- [ ] Relationships tested and verified
+- [ ] No TypeScript errors
+
+### Verification Steps
+
+1. **Schema Validation:**
+   - Review schema design for normalization
+   - Verify all relationships are correctly defined
+   - Check indexes are appropriate
+   - Validate constraints and foreign keys
+
+2. **Entity Testing:**
+   - Create test script to verify entity relationships
+   - Test entity creation and relationships
+   - Verify validation decorators work
+   - Check TypeORM can load all entities
+
+3. **Code Quality:**
+   ```bash
+   cd server
+   npm run lint
+   npm run build
+   ```
+
+### Acceptance Criteria
+
+- ✅ Complete database schema designed
+- ✅ All TypeORM entities implemented
+- ✅ Relationships properly configured
+- ✅ Validation decorators added
+- ✅ Schema supports all current features
+- ✅ Schema is extensible for future needs
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/entities/User.entity.ts`
+- `server/src/entities/Customer.entity.ts`
+- `server/src/entities/Employee.entity.ts`
+- `server/src/entities/Service.entity.ts`
+- `server/src/entities/Appointment.entity.ts`
+- `server/src/entities/AppointmentService.entity.ts`
+- `server/doc/DATABASE_SCHEMA.md`
+
+**Files to Modify:**
+- `server/src/database/data-source.ts`
+
+**Dependencies:**
+- TypeORM entities
+- class-validator for validation
+- reflect-metadata
+
+**Notes:**
+- Use single table inheritance or table per hierarchy for User/Customer/Employee
+- Consider soft deletes for appointments
+- Add indexes on frequently queried fields (dates, status, etc.)
+
+---
+
+## TASK-DB-002: Database Migrations Setup and Initial Migration
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 4 hours
+**Dependencies:** TASK-DB-001
+
+### Description
+
+Set up TypeORM migration system and create the initial database migration that creates all tables, indexes, and constraints. Migrations should be version-controlled and reversible. Include seed data migration for initial services, employees, and test data.
+
+### Requirements / What to Do
+
+#### Step 1: Migration Configuration
+- [ ] Configure TypeORM migrations in `data-source.ts`
+- [ ] Set up migration directory: `server/migrations/`
+- [ ] Configure migration naming convention
+- [ ] Add migration scripts to `package.json`:
+  - `db:migrate` - Run pending migrations
+  - `db:migrate:revert` - Revert last migration
+  - `db:migration:generate` - Generate migration from entities
+  - `db:migration:create` - Create empty migration
+
+#### Step 2: Initial Migration Creation
+- [ ] Generate initial migration from entities: `server/migrations/0001-initial-schema.ts`
+- [ ] Review and adjust migration SQL if needed
+- [ ] Ensure migration creates:
+  - All tables (users, customers, employees, services, appointments, appointment_services)
+  - All indexes
+  - All foreign key constraints
+  - Audit fields (created_at, updated_at)
+- [ ] Test migration up and down (reversible)
+
+#### Step 3: Seed Data Migration
+- [ ] Create seed migration: `server/migrations/0002-seed-initial-data.ts`
+- [ ] Migrate data from `client/constants.tsx`:
+  - Services (SERVICES array)
+  - Employees (EMPLOYEES array)
+  - Sample customers (MOCK_CUSTOMERS)
+  - Sample appointments (MOCK_APPOINTMENTS)
+- [ ] Ensure seed data is idempotent (can run multiple times safely)
+- [ ] Document seed data sources
+
+#### Step 4: Migration Testing
+- [ ] Test migration on fresh database
+- [ ] Test migration rollback
+- [ ] Verify seed data is correct
+- [ ] Test migration on existing database (if applicable)
+- [ ] Document migration process
+
+### Definition of Done (DoD)
+
+- [ ] Migration system configured
+- [ ] Initial schema migration created and tested
+- [ ] Seed data migration created
+- [ ] Migrations are reversible
+- [ ] Migration scripts added to package.json
+- [ ] Migration process documented
+- [ ] All migrations tested successfully
+
+### Verification Steps
+
+1. **Migration Testing:**
+   ```bash
+   cd server
+   # Test on fresh database
+   npm run db:migrate
+   # Verify tables created
+   # Test rollback
+   npm run db:migrate:revert
+   # Test migration again
+   npm run db:migrate
+   ```
+
+2. **Data Verification:**
+   - Connect to database and verify all tables exist
+   - Check seed data is populated correctly
+   - Verify relationships work
+   - Check indexes are created
+
+3. **Documentation:**
+   - Review migration documentation
+   - Verify migration commands are documented
+
+### Acceptance Criteria
+
+- ✅ Migration system fully functional
+- ✅ Initial schema migration creates all tables
+- ✅ Seed data migration populates initial data
+- ✅ Migrations are reversible
+- ✅ Migration process is documented
+
+### Technical Details
+
+**Files to Create:**
+- `server/migrations/0001-initial-schema.ts`
+- `server/migrations/0002-seed-initial-data.ts`
+- `server/doc/MIGRATIONS.md`
+
+**Files to Modify:**
+- `server/src/database/data-source.ts`
+- `server/package.json` (add migration scripts)
+
+**Dependencies:**
+- TypeORM migrations
+- PostgreSQL database
+
+**Notes:**
+- Use timestamp-based migration names for ordering
+- Keep migrations small and focused
+- Never modify existing migrations (create new ones)
+
+---
+
+## TASK-API-001: RESTful API Endpoints Design and Implementation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 12 hours
+**Dependencies:** TASK-DB-002
+
+### Description
+
+Design and implement all RESTful API endpoints for the nail salon application. This includes endpoints for services, employees, customers, appointments, and analytics. Follow RESTful conventions, implement proper error handling, validation, and response formatting.
+
+### Requirements / What to Do
+
+#### Step 1: API Endpoint Design
+- [ ] Design endpoint structure:
+  - `GET /api/services` - Get all services
+  - `GET /api/services/:id` - Get service by ID
+  - `GET /api/employees` - Get all employees
+  - `GET /api/employees/:id` - Get employee by ID
+  - `GET /api/customers` - Get all customers (admin only)
+  - `GET /api/customers/:id` - Get customer by ID
+  - `POST /api/customers` - Create new customer
+  - `GET /api/appointments` - Get appointments (with filters)
+  - `GET /api/appointments/:id` - Get appointment by ID
+  - `POST /api/appointments` - Create new appointment
+  - `PUT /api/appointments/:id` - Update appointment
+  - `PATCH /api/appointments/:id/status` - Update appointment status
+  - `DELETE /api/appointments/:id` - Cancel appointment (soft delete)
+  - `GET /api/analytics/daily-stats` - Get daily statistics
+  - `GET /api/analytics/revenue` - Get revenue analytics
+- [ ] Document request/response formats
+- [ ] Define query parameters for filtering, sorting, pagination
+- [ ] Create API specification: `server/doc/API_SPEC.md`
+
+#### Step 2: Repository Layer Implementation
+- [ ] Create base repository interface: `server/src/repositories/IRepository.ts`
+- [ ] Create ServiceRepository: `server/src/repositories/ServiceRepository.ts`
+- [ ] Create EmployeeRepository: `server/src/repositories/EmployeeRepository.ts`
+- [ ] Create CustomerRepository: `server/src/repositories/CustomerRepository.ts`
+- [ ] Create AppointmentRepository: `server/src/repositories/AppointmentRepository.ts`
+- [ ] Implement CRUD operations for each repository
+- [ ] Add query methods (findBy, filter, etc.)
+- [ ] Implement proper error handling
+
+#### Step 3: Service Layer Implementation
+- [ ] Create ServiceService: `server/src/services/ServiceService.ts`
+- [ ] Create EmployeeService: `server/src/services/EmployeeService.ts`
+- [ ] Create CustomerService: `server/src/services/CustomerService.ts`
+- [ ] Create AppointmentService: `server/src/services/AppointmentService.ts`
+- [ ] Create AnalyticsService: `server/src/services/AnalyticsService.ts`
+- [ ] Implement business logic in services
+- [ ] Add validation and error handling
+- [ ] Handle transactions for complex operations
+
+#### Step 4: Controller Layer Implementation
+- [ ] Create ServiceController: `server/src/controllers/ServiceController.ts`
+- [ ] Create EmployeeController: `server/src/controllers/EmployeeController.ts`
+- [ ] Create CustomerController: `server/src/controllers/CustomerController.ts`
+- [ ] Create AppointmentController: `server/src/controllers/AppointmentController.ts`
+- [ ] Create AnalyticsController: `server/src/controllers/AnalyticsController.ts`
+- [ ] Implement route handlers
+- [ ] Add input validation
+- [ ] Format responses consistently
+- [ ] Handle errors and return appropriate status codes
+
+#### Step 5: Route Configuration
+- [ ] Create route files: `server/src/routes/`
+  - `services.routes.ts`
+  - `employees.routes.ts`
+  - `customers.routes.ts`
+  - `appointments.routes.ts`
+  - `analytics.routes.ts`
+- [ ] Configure routes in main `index.ts`
+- [ ] Add route prefix `/api`
+- [ ] Set up route middleware (validation, auth if needed)
+
+#### Step 6: Input Validation
+- [ ] Create DTOs (Data Transfer Objects) for requests:
+  - `CreateAppointmentDto`
+  - `UpdateAppointmentDto`
+  - `CreateCustomerDto`
+  - etc.
+- [ ] Add validation decorators (class-validator)
+- [ ] Create validation middleware
+- [ ] Add validation error handling
+
+#### Step 7: Error Handling
+- [ ] Create custom error classes: `server/src/utils/errors/`
+- [ ] Create error handling middleware
+- [ ] Standardize error response format
+- [ ] Add proper HTTP status codes
+- [ ] Log errors appropriately
+
+### Definition of Done (DoD)
+
+- [ ] All API endpoints implemented
+- [ ] Repository layer complete
+- [ ] Service layer complete
+- [ ] Controller layer complete
+- [ ] Routes configured
+- [ ] Input validation implemented
+- [ ] Error handling standardized
+- [ ] API documentation created
+- [ ] All endpoints tested manually
+- [ ] No TypeScript/linter errors
+
+### Verification Steps
+
+1. **Manual API Testing:**
+   ```bash
+   # Start server
+   cd server
+   npm run dev
+   
+   # Test endpoints with curl or Postman
+   curl http://localhost:3000/api/services
+   curl http://localhost:3000/api/employees
+   curl -X POST http://localhost:3000/api/appointments -H "Content-Type: application/json" -d '{...}'
+   ```
+
+2. **Code Quality:**
+   ```bash
+   npm run lint
+   npm run build
+   ```
+
+3. **Integration Testing:**
+   - Test all CRUD operations
+   - Test error scenarios
+   - Test validation
+   - Test relationships
+
+### Acceptance Criteria
+
+- ✅ All required endpoints implemented
+- ✅ RESTful conventions followed
+- ✅ Proper error handling
+- ✅ Input validation working
+- ✅ Responses are consistent
+- ✅ API documentation complete
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/repositories/IRepository.ts`
+- `server/src/repositories/ServiceRepository.ts`
+- `server/src/repositories/EmployeeRepository.ts`
+- `server/src/repositories/CustomerRepository.ts`
+- `server/src/repositories/AppointmentRepository.ts`
+- `server/src/services/ServiceService.ts`
+- `server/src/services/EmployeeService.ts`
+- `server/src/services/CustomerService.ts`
+- `server/src/services/AppointmentService.ts`
+- `server/src/services/AnalyticsService.ts`
+- `server/src/controllers/ServiceController.ts`
+- `server/src/controllers/EmployeeController.ts`
+- `server/src/controllers/CustomerController.ts`
+- `server/src/controllers/AppointmentController.ts`
+- `server/src/controllers/AnalyticsController.ts`
+- `server/src/routes/services.routes.ts`
+- `server/src/routes/employees.routes.ts`
+- `server/src/routes/customers.routes.ts`
+- `server/src/routes/appointments.routes.ts`
+- `server/src/routes/analytics.routes.ts`
+- `server/src/types/dtos.ts` (DTOs)
+- `server/src/utils/errors/` (error classes)
+- `server/src/middleware/validation.ts`
+- `server/src/middleware/errorHandler.ts`
+- `server/doc/API_SPEC.md`
+
+**Files to Modify:**
+- `server/src/index.ts` (add routes)
+
+**Dependencies:**
+- Express.js
+- TypeORM
+- class-validator
+- class-transformer
+
+---
+
+## TASK-OPS-004: Docker Containerization and Orchestration
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-API-001
+
+### Description
+
+Enhance Docker setup for production-ready containerization. Ensure all services (client, server, database) are properly containerized with optimized Dockerfiles, health checks, proper networking, and production configurations. Follow Docker best practices for multi-stage builds, security, and performance.
+
+### Requirements / What to Do
+
+#### Step 1: Server Dockerfile Optimization
+- [ ] Review current `server/Dockerfile` and `server/Dockerfile.dev`
+- [ ] Implement multi-stage build for production:
+  - Build stage: Install dependencies and build TypeScript
+  - Production stage: Copy only necessary files, use node:alpine
+- [ ] Optimize layer caching
+- [ ] Add .dockerignore file
+- [ ] Set proper working directory
+- [ ] Configure non-root user for security
+- [ ] Add health check
+- [ ] Set proper environment variables
+
+#### Step 2: Database Container Configuration
+- [ ] Review PostgreSQL container configuration in `docker-compose.yml`
+- [ ] Add health check for database
+- [ ] Configure proper volume mounts
+- [ ] Set up initialization scripts (if needed)
+- [ ] Configure connection pooling
+- [ ] Add backup volume configuration
+- [ ] Document database connection settings
+
+#### Step 3: Docker Compose Enhancement
+- [ ] Review and enhance `docker-compose.yml`:
+  - Add health checks for all services
+  - Configure proper depends_on with health conditions
+  - Set up restart policies
+  - Configure resource limits
+  - Add proper networking
+  - Set up volumes for persistence
+- [ ] Create production `docker-compose.prod.yml`:
+  - Remove volume mounts for code (use built images)
+  - Configure production environment variables
+  - Set up reverse proxy/nginx (if needed)
+  - Configure SSL/TLS (if needed)
+  - Set up logging configuration
+
+#### Step 4: Environment Configuration
+- [ ] Create `.env.example` files for each service
+- [ ] Document all required environment variables
+- [ ] Set up environment variable validation
+- [ ] Configure different environments (dev, staging, prod)
+- [ ] Add secrets management strategy
+
+#### Step 5: Container Health and Monitoring
+- [ ] Add health check endpoints to server
+- [ ] Configure health checks in Docker
+- [ ] Set up logging configuration
+- [ ] Add container monitoring (optional)
+- [ ] Document container management commands
+
+### Definition of Done (DoD)
+
+- [ ] Production Dockerfiles optimized
+- [ ] Development Dockerfiles functional
+- [ ] Docker Compose configured for dev and prod
+- [ ] Health checks implemented
+- [ ] Environment variables documented
+- [ ] Container security best practices followed
+- [ ] All containers start successfully
+- [ ] Documentation updated
+
+### Verification Steps
+
+1. **Development Environment:**
+   ```bash
+   docker-compose build
+   docker-compose up
+   # Verify all services start
+   # Check health endpoints
+   # Test API endpoints
+   ```
+
+2. **Production Build:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml build
+   docker-compose -f docker-compose.prod.yml up -d
+   # Verify production containers
+   # Check logs
+   # Test API endpoints
+   ```
+
+3. **Health Checks:**
+   - Verify health check endpoints respond
+   - Check Docker health status
+   - Test container restart scenarios
+
+### Acceptance Criteria
+
+- ✅ All services containerized
+- ✅ Production Dockerfiles optimized
+- ✅ Docker Compose works for dev and prod
+- ✅ Health checks implemented
+- ✅ Security best practices followed
+- ✅ Documentation complete
+
+### Technical Details
+
+**Files to Modify:**
+- `server/Dockerfile`
+- `server/Dockerfile.dev`
+- `docker-compose.yml`
+- `docker-compose.prod.yml`
+- `server/.dockerignore`
+
+**Files to Create:**
+- `server/.env.example`
+- `server/doc/DOCKER.md`
+
+**References:**
+- Docker best practices
+- Multi-stage builds
+- Container security guidelines
+
+---
+
+## TASK-TEST-001: Backend Testing Infrastructure and Unit Tests
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 10 hours
+**Dependencies:** TASK-API-001
+
+### Description
+
+Set up comprehensive testing infrastructure for the backend, including unit tests, integration tests, and test utilities. Implement tests for repositories, services, controllers, and API endpoints. Achieve high test coverage for critical business logic.
+
+### Requirements / What to Do
+
+#### Step 1: Testing Framework Setup
+- [ ] Choose testing framework (Jest recommended)
+- [ ] Install testing dependencies:
+  - jest
+  - @types/jest
+  - ts-jest
+  - supertest (for API testing)
+  - @types/supertest
+- [ ] Configure Jest in `server/jest.config.js`
+- [ ] Set up test scripts in `package.json`:
+  - `test` - Run all tests
+  - `test:watch` - Watch mode
+  - `test:coverage` - Coverage report
+- [ ] Configure test database (separate from dev/prod)
+- [ ] Set up test environment variables
+
+#### Step 2: Test Utilities and Helpers
+- [ ] Create test database setup/teardown utilities
+- [ ] Create test data factories/fixtures
+- [ ] Create mock data generators
+- [ ] Set up test helpers: `server/tests/helpers/`
+- [ ] Create API test helpers (authenticated requests, etc.)
+
+#### Step 3: Repository Tests
+- [ ] Create tests for ServiceRepository
+- [ ] Create tests for EmployeeRepository
+- [ ] Create tests for CustomerRepository
+- [ ] Create tests for AppointmentRepository
+- [ ] Test CRUD operations
+- [ ] Test query methods
+- [ ] Test error scenarios
+- [ ] Test relationships
+
+#### Step 4: Service Tests
+- [ ] Create tests for ServiceService
+- [ ] Create tests for EmployeeService
+- [ ] Create tests for CustomerService
+- [ ] Create tests for AppointmentService
+- [ ] Create tests for AnalyticsService
+- [ ] Test business logic
+- [ ] Test validation
+- [ ] Test error handling
+- [ ] Mock repository dependencies
+
+#### Step 5: Controller/API Tests
+- [ ] Create integration tests for API endpoints
+- [ ] Test all GET endpoints
+- [ ] Test all POST endpoints
+- [ ] Test all PUT/PATCH endpoints
+- [ ] Test all DELETE endpoints
+- [ ] Test error responses
+- [ ] Test validation
+- [ ] Test authentication (if implemented)
+
+#### Step 6: Test Coverage
+- [ ] Aim for >80% code coverage
+- [ ] Focus on business logic coverage
+- [ ] Document coverage goals
+- [ ] Set up coverage reporting
+- [ ] Add coverage to CI/CD (if applicable)
+
+### Definition of Done (DoD)
+
+- [ ] Testing framework configured
+- [ ] Test utilities created
+- [ ] Repository tests implemented
+- [ ] Service tests implemented
+- [ ] API/Controller tests implemented
+- [ ] Test coverage >80%
+- [ ] All tests passing
+- [ ] Test documentation created
+
+### Verification Steps
+
+1. **Run Tests:**
+   ```bash
+   cd server
+   npm test
+   npm run test:coverage
+   ```
+
+2. **Test Coverage:**
+   - Review coverage report
+   - Identify gaps
+   - Add tests for uncovered code
+
+3. **Test Quality:**
+   - Review test cases
+   - Ensure edge cases covered
+   - Verify error scenarios tested
+
+### Acceptance Criteria
+
+- ✅ Testing infrastructure complete
+- ✅ All critical paths tested
+- ✅ Test coverage >80%
+- ✅ All tests passing
+- ✅ Tests are maintainable and well-documented
+
+### Technical Details
+
+**Files to Create:**
+- `server/jest.config.js`
+- `server/tests/helpers/setup.ts`
+- `server/tests/helpers/fixtures.ts`
+- `server/tests/repositories/ServiceRepository.test.ts`
+- `server/tests/repositories/EmployeeRepository.test.ts`
+- `server/tests/repositories/CustomerRepository.test.ts`
+- `server/tests/repositories/AppointmentRepository.test.ts`
+- `server/tests/services/ServiceService.test.ts`
+- `server/tests/services/EmployeeService.test.ts`
+- `server/tests/services/CustomerService.test.ts`
+- `server/tests/services/AppointmentService.test.ts`
+- `server/tests/services/AnalyticsService.test.ts`
+- `server/tests/controllers/ServiceController.test.ts`
+- `server/tests/controllers/EmployeeController.test.ts`
+- `server/tests/controllers/CustomerController.test.ts`
+- `server/tests/controllers/AppointmentController.test.ts`
+- `server/tests/api/appointments.test.ts`
+- `server/tests/api/services.test.ts`
+- `server/tests/api/employees.test.ts`
+
+**Files to Modify:**
+- `server/package.json` (add test scripts and dependencies)
+
+**Dependencies:**
+- Jest
+- supertest
+- Test database
+
+---
+
+## TASK-SEC-001: Security Implementation and Best Practices
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-API-001
+
+### Description
+
+Implement security best practices for the backend API, including input validation, SQL injection prevention, XSS protection, CORS configuration, rate limiting, and security headers. Document security measures and create security guidelines.
+
+### Requirements / What to Do
+
+#### Step 1: Input Validation and Sanitization
+- [ ] Ensure all inputs are validated (already using class-validator)
+- [ ] Add input sanitization where needed
+- [ ] Validate file uploads (if applicable)
+- [ ] Implement parameterized queries (TypeORM handles this)
+- [ ] Add request size limits
+- [ ] Validate data types and formats
+
+#### Step 2: Security Headers
+- [ ] Review Helmet configuration (already installed)
+- [ ] Configure security headers:
+  - Content-Security-Policy
+  - X-Frame-Options
+  - X-Content-Type-Options
+  - Strict-Transport-Security (if HTTPS)
+- [ ] Test security headers
+
+#### Step 3: CORS Configuration
+- [ ] Review current CORS setup
+- [ ] Configure allowed origins properly
+- [ ] Set up CORS for production
+- [ ] Document CORS policy
+- [ ] Test CORS from client
+
+#### Step 4: Rate Limiting
+- [ ] Install rate limiting library (express-rate-limit)
+- [ ] Configure rate limits for API endpoints
+- [ ] Set different limits for different endpoints
+- [ ] Add rate limit headers
+- [ ] Document rate limiting policy
+
+#### Step 5: Error Handling Security
+- [ ] Ensure error messages don't leak sensitive information
+- [ ] Standardize error responses
+- [ ] Log errors securely (no sensitive data)
+- [ ] Implement proper error handling
+
+#### Step 6: Database Security
+- [ ] Use parameterized queries (TypeORM default)
+- [ ] Validate database inputs
+- [ ] Use connection pooling securely
+- [ ] Secure database credentials
+- [ ] Document database security practices
+
+#### Step 7: Security Documentation
+- [ ] Create security guidelines: `server/doc/SECURITY.md`
+- [ ] Document security measures
+- [ ] Document security best practices
+- [ ] Create security checklist
+
+### Definition of Done (DoD)
+
+- [ ] Input validation implemented
+- [ ] Security headers configured
+- [ ] CORS properly configured
+- [ ] Rate limiting implemented
+- [ ] Error handling secure
+- [ ] Database security measures in place
+- [ ] Security documentation complete
+- [ ] Security review completed
+
+### Verification Steps
+
+1. **Security Testing:**
+   - Test input validation
+   - Test security headers
+   - Test CORS
+   - Test rate limiting
+   - Test error handling
+
+2. **Security Audit:**
+   - Review security measures
+   - Check for common vulnerabilities
+   - Verify best practices followed
+
+### Acceptance Criteria
+
+- ✅ Security best practices implemented
+- ✅ Input validation working
+- ✅ Security headers configured
+- ✅ Rate limiting active
+- ✅ Security documentation complete
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/middleware/rateLimiter.ts`
+- `server/doc/SECURITY.md`
+
+**Files to Modify:**
+- `server/src/index.ts` (add rate limiting, enhance security)
+- `server/src/config/env.ts` (add security config)
+
+**Dependencies:**
+- express-rate-limit
+- helmet (already installed)
+- cors (already installed)
+
+---
+
+## TASK-MIG-001: Client Migration from Constants to Backend API
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-API-001, TASK-TEST-001
+
+### Description
+
+Migrate the client application from using mock data in constants to consuming the real backend API. Update the dataService to use the DatabaseDataProvider that makes HTTP requests to the backend API. Ensure backward compatibility and graceful error handling.
+
+### Requirements / What to Do
+
+#### Step 1: API Client Setup
+- [ ] Create API client utility: `client/services/apiClient.ts`
+- [ ] Implement base fetch wrapper with:
+  - Base URL configuration
+  - Error handling
+  - Request/response interceptors
+  - Timeout handling
+- [ ] Add environment variable for API URL
+- [ ] Configure API URL in Vite config
+
+#### Step 2: DatabaseDataProvider Implementation
+- [ ] Update `DatabaseDataProvider` in `client/services/dataService.ts`
+- [ ] Implement `getServices()` - GET /api/services
+- [ ] Implement `getEmployees()` - GET /api/employees
+- [ ] Implement `getCustomers()` - GET /api/customers
+- [ ] Implement `getAppointments()` - GET /api/appointments
+- [ ] Implement `addAppointment()` - POST /api/appointments
+- [ ] Implement `getDailyStats()` - GET /api/analytics/daily-stats
+- [ ] Add proper error handling
+- [ ] Add loading states
+- [ ] Handle network errors gracefully
+
+#### Step 3: Data Service Switch
+- [ ] Update dataService export to use DatabaseDataProvider
+- [ ] Keep MockDataProvider for fallback/development
+- [ ] Add environment-based provider selection
+- [ ] Document provider switching
+
+#### Step 4: Error Handling
+- [ ] Implement error handling in API client
+- [ ] Handle network errors
+- [ ] Handle API errors (4xx, 5xx)
+- [ ] Show user-friendly error messages
+- [ ] Add retry logic for transient errors (optional)
+
+#### Step 5: Testing Migration
+- [ ] Test all data fetching operations
+- [ ] Test error scenarios
+- [ ] Test loading states
+- [ ] Verify data format matches expected types
+- [ ] Test appointment creation
+- [ ] Test all pages that use dataService
+
+#### Step 6: Cleanup
+- [ ] Remove or archive old constants data (keep for reference)
+- [ ] Update documentation
+- [ ] Update README with API setup instructions
+
+### Definition of Done (DoD)
+
+- [ ] API client implemented
+- [ ] DatabaseDataProvider fully implemented
+- [ ] Client switched to use backend API
+- [ ] Error handling implemented
+- [ ] All features working with backend
+- [ ] Testing completed
+- [ ] Documentation updated
+
+### Verification Steps
+
+1. **Integration Testing:**
+   - Start backend server
+   - Start client application
+   - Test all pages and features
+   - Verify data loads from API
+   - Test appointment creation
+   - Test error scenarios
+
+2. **Data Verification:**
+   - Verify data matches expected format
+   - Check all CRUD operations work
+   - Verify relationships work correctly
+
+### Acceptance Criteria
+
+- ✅ Client successfully uses backend API
+- ✅ All features work with real data
+- ✅ Error handling works properly
+- ✅ Loading states implemented
+- ✅ No regressions introduced
+
+### Technical Details
+
+**Files to Create:**
+- `client/services/apiClient.ts`
+
+**Files to Modify:**
+- `client/services/dataService.ts`
+- `client/vite.config.ts` (add API URL config)
+- `client/.env.example` (add API URL)
+
+**Dependencies:**
+- Backend API running
+- Network requests (fetch API)
+
+---
+
+## TASK-DOC-001: Backend Documentation and API Documentation
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-20
+**Updated:** 2025-01-20
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-API-001, TASK-MIG-001
+
+### Description
+
+Create comprehensive documentation for the backend, including API documentation, setup guides, development workflow, deployment instructions, and architecture documentation. Set up API documentation using Swagger/OpenAPI if possible.
+
+### Requirements / What to Do
+
+#### Step 1: API Documentation
+- [ ] Set up Swagger/OpenAPI (swagger-jsdoc, swagger-ui-express)
+- [ ] Document all API endpoints
+- [ ] Add request/response examples
+- [ ] Document error responses
+- [ ] Add authentication documentation (if applicable)
+- [ ] Create interactive API docs at `/api-docs`
+
+#### Step 2: Setup Documentation
+- [ ] Update `server/README.md` with:
+  - Prerequisites
+  - Installation steps
+  - Environment setup
+  - Database setup
+  - Running locally
+  - Running with Docker
+- [ ] Create setup guide: `server/doc/SETUP.md`
+
+#### Step 3: Development Documentation
+- [ ] Document development workflow
+- [ ] Document code structure
+- [ ] Document testing approach
+- [ ] Document contribution guidelines
+- [ ] Create development guide: `server/doc/DEVELOPMENT.md`
+
+#### Step 4: Deployment Documentation
+- [ ] Document deployment process
+- [ ] Document Docker deployment
+- [ ] Document environment variables
+- [ ] Document database migrations
+- [ ] Create deployment guide: `server/doc/DEPLOYMENT.md`
+
+#### Step 5: Architecture Documentation
+- [ ] Document system architecture
+- [ ] Document database schema
+- [ ] Document API design
+- [ ] Document security measures
+- [ ] Create architecture overview
+
+### Definition of Done (DoD)
+
+- [ ] API documentation complete and accessible
+- [ ] Setup documentation complete
+- [ ] Development documentation complete
+- [ ] Deployment documentation complete
+- [ ] Architecture documentation complete
+- [ ] All documentation reviewed
+
+### Verification Steps
+
+1. **Documentation Review:**
+   - Review all documentation for completeness
+   - Check for accuracy
+   - Verify examples work
+   - Test setup instructions
+
+2. **API Documentation:**
+   - Access Swagger UI
+   - Verify all endpoints documented
+   - Test API examples
+
+### Acceptance Criteria
+
+- ✅ Complete API documentation
+- ✅ Setup instructions work
+- ✅ Development guide complete
+- ✅ Deployment guide complete
+- ✅ Architecture documented
+
+### Technical Details
+
+**Files to Create/Update:**
+- `server/README.md` (update)
+- `server/doc/API_SPEC.md`
+- `server/doc/SETUP.md`
+- `server/doc/DEVELOPMENT.md`
+- `server/doc/DEPLOYMENT.md`
+- `server/doc/ARCHITECTURE.md` (if not created in TASK-ARCH-001)
+
+**Dependencies:**
+- swagger-jsdoc
+- swagger-ui-express
+
+---
+
+## Summary
+
+This task file outlines a comprehensive backend implementation plan covering:
+
+1. **Architecture & Design** - System design, tech stack, structure
+2. **Database** - Schema design, entities, migrations
+3. **API Implementation** - RESTful endpoints, repositories, services, controllers
+4. **Docker** - Containerization and orchestration
+5. **Testing** - Unit, integration, and API tests
+6. **Security** - Best practices and security measures
+7. **Client Migration** - Moving from constants to API
+8. **Documentation** - Comprehensive docs and API specs
+
+**Total Estimated Time:** ~60 hours
+
+**Priority Order:**
+1. TASK-ARCH-001 (Architecture)
+2. TASK-DB-001, TASK-DB-002 (Database)
+3. TASK-API-001 (API Implementation)
+4. TASK-OPS-001 (Docker)
+5. TASK-TEST-001 (Testing)
+6. TASK-SEC-001 (Security)
+7. TASK-MIG-001 (Client Migration)
+8. TASK-DOC-001 (Documentation)
+
+**Next Steps:**
+1. Review and prioritize tasks
+2. Assign tasks to team members
+3. Begin with architecture design
+4. Proceed with database and API implementation
+5. Complete testing and security
+6. Migrate client to use backend
+7. Finalize documentation
+

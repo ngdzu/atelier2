@@ -1,0 +1,2321 @@
+# Dashboard Management System Tasks
+
+## TASK-DOC-002: Dashboard Requirements Analysis and Documentation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 4 hours
+**Dependencies:** none
+**Related Tasks:** TASK-FEAT-014
+
+### Description
+
+Conduct comprehensive requirements analysis for the dashboard management system. Document user stories, functional requirements, non-functional requirements, and create detailed specifications for metrics, promotions, website editing, and image upload features. This analysis will inform architecture and design decisions.
+
+### Requirements / What to Do
+
+#### Step 1: Stakeholder Analysis
+- [ ] Identify all user roles and their needs:
+  - Owner: Full access, business insights, financial metrics
+  - Manager: Operational metrics, staff management, customer insights
+  - Admin: System management, configuration, limited metrics
+  - Employee: Limited view (if applicable)
+- [ ] Document role-based access requirements
+- [ ] Define permission matrix for each feature
+
+#### Step 2: Metrics and Analytics Requirements
+- [ ] Define business metrics to track:
+  - Revenue metrics (daily, weekly, monthly, yearly trends)
+  - Appointment metrics (bookings, cancellations, no-shows, completion rates)
+  - Customer metrics (new customers, returning customers, customer lifetime value, retention rate)
+  - Employee performance metrics (productivity, revenue per employee, customer ratings)
+  - Service popularity metrics (most booked services, revenue by service category)
+  - Time-based analytics (peak hours, best days, seasonal trends)
+  - Financial metrics (revenue vs. expenses, profit margins, average transaction value)
+- [ ] Define visualization requirements (charts, graphs, tables, KPIs)
+- [ ] Specify date range filtering capabilities
+- [ ] Document export capabilities (CSV, PDF reports)
+
+#### Step 3: Promotions Management Requirements
+- [ ] Define promotion types:
+  - Discount campaigns (percentage off, dollar off)
+  - Service-specific promotions
+  - Seasonal campaigns
+  - Customer segment targeting (new customers, VIP, inactive customers)
+- [ ] Document promotion creation workflow
+- [ ] Define distribution channels (SMS, Email, In-app notifications)
+- [ ] Specify promotion tracking (open rates, redemption rates, revenue impact)
+- [ ] Document scheduling capabilities (send immediately, schedule for future)
+- [ ] Define promotion templates and AI-assisted generation requirements
+
+#### Step 4: Website Editing Requirements
+- [ ] Identify editable content sections:
+  - Landing page hero section (headlines, descriptions, CTA buttons)
+  - Service descriptions and pricing
+  - About page content
+  - Contact information (phone, email, address, hours)
+  - Business information (store name, tagline)
+  - Social media links
+  - Terms and conditions, privacy policy
+- [ ] Define content management interface requirements
+- [ ] Specify preview capabilities (preview before publishing)
+- [ ] Document versioning/history requirements
+- [ ] Define role-based editing permissions
+
+#### Step 5: Image Upload and Gallery Management Requirements
+- [ ] Define image upload specifications:
+  - Supported formats (JPEG, PNG, WebP)
+  - File size limits
+  - Image dimensions and aspect ratios
+  - Compression requirements
+- [ ] Document service categorization (Manicure, Pedicure, Eyelash, etc.)
+- [ ] Define image metadata (title, description, alt text, category)
+- [ ] Specify image organization and sorting
+- [ ] Document bulk upload capabilities
+- [ ] Define image editing capabilities (crop, resize, filters)
+- [ ] Specify deletion and archival requirements
+
+#### Step 6: Non-Functional Requirements
+- [ ] Performance requirements (page load times, API response times)
+- [ ] Security requirements (authentication, authorization, data encryption)
+- [ ] Scalability requirements (number of users, data volume)
+- [ ] Accessibility requirements (WCAG compliance)
+- [ ] Browser compatibility requirements
+- [ ] Mobile responsiveness requirements
+
+#### Step 7: Create Requirements Document
+- [ ] Create `doc/DASHBOARD_REQUIREMENTS.md`
+- [ ] Document all findings from steps 1-6
+- [ ] Include user stories with acceptance criteria
+- [ ] Create use case diagrams (if helpful)
+- [ ] Document assumptions and constraints
+- [ ] Include glossary of terms
+
+### Definition of Done (DoD)
+
+- [ ] All user roles identified and documented
+- [ ] Complete metrics requirements documented
+- [ ] Promotion management requirements fully specified
+- [ ] Website editing requirements documented
+- [ ] Image upload requirements specified
+- [ ] Non-functional requirements defined
+- [ ] Requirements document created and reviewed
+- [ ] User stories written with acceptance criteria
+- [ ] Stakeholder approval (if applicable)
+
+### Verification Steps
+
+1. **Requirements Review:**
+   - Review requirements document for completeness
+   - Verify all user roles are covered
+   - Check that metrics align with business needs
+   - Ensure technical feasibility
+
+2. **Stakeholder Validation:**
+   - Present requirements to stakeholders
+   - Gather feedback and incorporate changes
+   - Get sign-off on requirements document
+
+3. **Documentation Quality:**
+   - Verify document is clear and actionable
+   - Check that requirements are testable
+   - Ensure terminology is consistent
+
+### Acceptance Criteria
+
+- ✅ Complete requirements document exists
+- ✅ All user roles and permissions defined
+- ✅ Metrics requirements comprehensive and specific
+- ✅ Promotion, website editing, and image upload requirements detailed
+- ✅ Non-functional requirements specified
+- ✅ Requirements are testable and measurable
+
+### Technical Details
+
+**Files to Create:**
+- `doc/DASHBOARD_REQUIREMENTS.md`
+
+**Sections to Include:**
+- Executive Summary
+- User Roles and Permissions
+- Functional Requirements
+- Non-Functional Requirements
+- User Stories
+- Use Cases
+- Glossary
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-014: Dashboard Architecture and Design
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-DOC-002
+**Related Tasks:** TASK-DB-003, TASK-API-002, TASK-FEAT-015
+
+### Description
+
+Design the complete architecture for the dashboard management system including system architecture, database schema, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.
+
+### Requirements / What to Do
+
+#### Step 1: System Architecture Design
+- [ ] Design overall system architecture:
+  - Client-server architecture (React frontend + Express backend)
+  - Database layer (PostgreSQL with TypeORM)
+  - API layer (RESTful endpoints)
+  - Authentication and authorization layer
+  - File storage for images (local filesystem or cloud storage)
+- [ ] Document data flow between layers
+- [ ] Define service boundaries and responsibilities
+- [ ] Plan for future scalability
+
+#### Step 2: Database Schema Design
+- [ ] Design database entities and relationships:
+  - **Users** (extends existing): authentication, roles, permissions
+  - **BusinessMetrics**: daily/weekly/monthly aggregated metrics
+  - **Promotions**: promotion campaigns, schedules, templates
+  - **PromotionRecipients**: customer targeting and delivery tracking
+  - **WebsiteContent**: editable website content with versions
+  - **GalleryImages**: image metadata, categories, upload tracking
+  - **AnalyticsEvents**: user actions, promotion opens/clicks, conversions
+- [ ] Create Entity Relationship Diagram (ERD)
+- [ ] Define indexes for performance
+- [ ] Document relationships (foreign keys, cascades)
+- [ ] Plan for data retention and archival
+
+#### Step 3: API Design
+- [ ] Design RESTful API endpoints:
+  - **Metrics API**: `/api/dashboard/metrics/*`
+    - `GET /api/dashboard/metrics/summary` - Overall KPIs
+    - `GET /api/dashboard/metrics/revenue` - Revenue analytics
+    - `GET /api/dashboard/metrics/appointments` - Appointment analytics
+    - `GET /api/dashboard/metrics/customers` - Customer analytics
+    - `GET /api/dashboard/metrics/employees` - Employee performance
+    - `GET /api/dashboard/metrics/services` - Service popularity
+  - **Promotions API**: `/api/promotions/*`
+    - `GET /api/promotions` - List promotions
+    - `POST /api/promotions` - Create promotion
+    - `PUT /api/promotions/:id` - Update promotion
+    - `DELETE /api/promotions/:id` - Delete promotion
+    - `POST /api/promotions/:id/send` - Send promotion
+    - `GET /api/promotions/:id/analytics` - Promotion analytics
+  - **Content API**: `/api/content/*`
+    - `GET /api/content/sections` - Get all content sections
+    - `GET /api/content/sections/:section` - Get specific section
+    - `PUT /api/content/sections/:section` - Update content section
+    - `GET /api/content/sections/:section/history` - Get content history
+  - **Gallery API**: `/api/gallery/*`
+    - `GET /api/gallery/images` - List images with filters
+    - `POST /api/gallery/images` - Upload image(s)
+    - `PUT /api/gallery/images/:id` - Update image metadata
+    - `DELETE /api/gallery/images/:id` - Delete image
+    - `POST /api/gallery/images/upload` - Bulk upload
+- [ ] Document request/response schemas
+- [ ] Define authentication requirements for each endpoint
+- [ ] Specify error handling and status codes
+- [ ] Document pagination and filtering
+
+#### Step 4: Frontend Component Architecture
+- [ ] Design component hierarchy:
+  - **Dashboard Layout**: Main dashboard container with navigation
+  - **Metrics Dashboard**: Metrics overview and KPIs
+  - **Metrics Charts**: Reusable chart components (RevenueChart, AppointmentChart, etc.)
+  - **Promotions Manager**: Promotion CRUD interface
+  - **Promotion Creator**: Form for creating/editing promotions
+  - **Content Editor**: WYSIWYG/content editor for website content
+  - **Gallery Manager**: Image upload and management interface
+  - **Image Uploader**: Drag-and-drop image upload component
+- [ ] Define component props and state management
+- [ ] Plan for shared components (modals, forms, tables)
+- [ ] Design routing structure for dashboard sections
+
+#### Step 5: State Management Design
+- [ ] Design state management approach:
+  - Local component state (useState) for UI state
+  - Context API for user authentication and permissions
+  - React Query or SWR for server state (metrics, data fetching)
+  - Form state management (React Hook Form)
+- [ ] Define data fetching strategies (caching, refetching)
+- [ ] Plan for optimistic updates
+
+#### Step 6: Security Architecture
+- [ ] Design authentication flow (JWT tokens)
+- [ ] Define authorization rules (role-based access control)
+- [ ] Plan for API security (rate limiting, CORS, input validation)
+- [ ] Design file upload security (file type validation, size limits, virus scanning)
+- [ ] Plan for data encryption at rest and in transit
+
+#### Step 7: Create Architecture Documentation
+- [ ] Create `doc/DASHBOARD_ARCHITECTURE.md`
+- [ ] Include system architecture diagram
+- [ ] Include database schema diagram (ERD)
+- [ ] Document API endpoints with examples
+- [ ] Include component architecture diagram
+- [ ] Document data flow diagrams
+- [ ] Create sequence diagrams for key workflows
+
+### Definition of Done (DoD)
+
+- [ ] System architecture designed and documented
+- [ ] Database schema designed with ERD
+- [ ] API endpoints fully specified
+- [ ] Frontend component architecture designed
+- [ ] State management approach defined
+- [ ] Security architecture planned
+- [ ] Architecture documentation created
+- [ ] Diagrams created (architecture, ERD, component hierarchy, data flow)
+- [ ] API documentation with request/response examples
+
+### Verification Steps
+
+1. **Architecture Review:**
+   - Review architecture for completeness
+   - Verify database schema supports all requirements
+   - Check API design follows RESTful principles
+   - Ensure component architecture is maintainable
+
+2. **Design Validation:**
+   - Validate database schema relationships
+   - Verify API endpoints cover all use cases
+   - Check component structure aligns with requirements
+   - Ensure security considerations are addressed
+
+3. **Documentation Quality:**
+   - Verify all diagrams are clear and accurate
+   - Check API documentation is complete
+   - Ensure architecture document is comprehensive
+
+### Acceptance Criteria
+
+- ✅ Complete architecture documentation exists
+- ✅ Database schema designed with all required entities
+- ✅ API endpoints fully specified with schemas
+- ✅ Component architecture supports all features
+- ✅ Security architecture addresses all concerns
+- ✅ Diagrams clearly illustrate system design
+
+### Technical Details
+
+**Files to Create:**
+- `doc/DASHBOARD_ARCHITECTURE.md`
+- `doc/diagrams/dashboard-architecture.mmd` (Mermaid diagram)
+- `doc/diagrams/dashboard-architecture.svg` (rendered SVG)
+- `doc/diagrams/dashboard-erd.mmd` (ERD Mermaid diagram)
+- `doc/diagrams/dashboard-erd.svg` (rendered SVG)
+- `doc/diagrams/dashboard-component-hierarchy.mmd` (Component diagram)
+- `doc/diagrams/dashboard-component-hierarchy.svg` (rendered SVG)
+
+**Tools:**
+- Mermaid for diagrams
+- TypeORM for database ORM
+- Express.js for API
+- React + TypeScript for frontend
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-DB-003: Database Schema for Dashboard System
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-FEAT-014
+**Related Tasks:** TASK-API-002
+
+### Description
+
+Implement the complete database schema for the dashboard management system including all entities, relationships, migrations, and seed data. This includes tables for metrics aggregation, promotions, website content, gallery images, and analytics tracking.
+
+### Requirements / What to Do
+
+#### Step 1: Create TypeORM Entities
+- [ ] Create `server/src/entities/User.entity.ts`:
+  - Extend base user entity with authentication fields
+  - Add role field (ADMIN, OWNER, MANAGER, EMPLOYEE, CUSTOMER)
+  - Add password hash field (for authentication)
+  - Add last login timestamp
+  - Add status (ACTIVE, INACTIVE, SUSPENDED)
+- [ ] Create `server/src/entities/BusinessMetric.entity.ts`:
+  - date (Date, unique per day)
+  - revenue (decimal)
+  - appointments_count (integer)
+  - appointments_completed (integer)
+  - appointments_cancelled (integer)
+  - new_customers (integer)
+  - returning_customers (integer)
+  - average_transaction_value (decimal)
+  - employee_revenue (JSON for per-employee breakdown)
+  - service_revenue (JSON for per-service breakdown)
+  - created_at, updated_at timestamps
+- [ ] Create `server/src/entities/Promotion.entity.ts`:
+  - id (UUID)
+  - name (string)
+  - description (text)
+  - type (ENUM: PERCENTAGE_OFF, DOLLAR_OFF, FREE_SERVICE, BOGO)
+  - discount_value (decimal)
+  - target_service_ids (JSON array)
+  - target_customer_segment (ENUM: ALL, NEW, RETURNING, VIP, INACTIVE)
+  - status (ENUM: DRAFT, SCHEDULED, SENT, COMPLETED, CANCELLED)
+  - scheduled_send_at (timestamp, nullable)
+  - sent_at (timestamp, nullable)
+  - expires_at (timestamp)
+  - created_by (foreign key to User)
+  - created_at, updated_at timestamps
+- [ ] Create `server/src/entities/PromotionRecipient.entity.ts`:
+  - id (UUID)
+  - promotion_id (foreign key to Promotion)
+  - customer_id (foreign key to User/Customer)
+  - delivery_method (ENUM: SMS, EMAIL, IN_APP)
+  - delivery_status (ENUM: PENDING, SENT, DELIVERED, FAILED, OPENED, CLICKED, REDEEMED)
+  - sent_at (timestamp, nullable)
+  - opened_at (timestamp, nullable)
+  - clicked_at (timestamp, nullable)
+  - redeemed_at (timestamp, nullable)
+  - error_message (text, nullable)
+  - created_at, updated_at timestamps
+- [ ] Create `server/src/entities/WebsiteContent.entity.ts`:
+  - id (UUID)
+  - section (string, unique) - e.g., 'landing_hero', 'about_content', 'contact_info'
+  - content (JSON) - flexible content structure
+  - version (integer) - for versioning
+  - status (ENUM: DRAFT, PUBLISHED, ARCHIVED)
+  - published_at (timestamp, nullable)
+  - published_by (foreign key to User, nullable)
+  - created_by (foreign key to User)
+  - created_at, updated_at timestamps
+- [ ] Create `server/src/entities/ContentHistory.entity.ts`:
+  - id (UUID)
+  - content_id (foreign key to WebsiteContent)
+  - version (integer)
+  - content_snapshot (JSON)
+  - changed_by (foreign key to User)
+  - change_note (text, nullable)
+  - created_at timestamp
+- [ ] Create `server/src/entities/GalleryImage.entity.ts`:
+  - id (UUID)
+  - filename (string)
+  - original_filename (string)
+  - file_path (string)
+  - file_size (integer) - in bytes
+  - mime_type (string)
+  - width (integer)
+  - height (integer)
+  - category (string) - e.g., 'manicure', 'pedicure', 'eyelash'
+  - title (string, nullable)
+  - description (text, nullable)
+  - alt_text (string, nullable)
+  - display_order (integer, default 0)
+  - status (ENUM: ACTIVE, HIDDEN, ARCHIVED)
+  - uploaded_by (foreign key to User)
+  - created_at, updated_at timestamps
+
+#### Step 2: Create Entity Relationships
+- [ ] Define foreign key relationships:
+  - Promotion.created_by → User.id
+  - PromotionRecipient.promotion_id → Promotion.id (CASCADE DELETE)
+  - PromotionRecipient.customer_id → User.id
+  - WebsiteContent.created_by → User.id
+  - WebsiteContent.published_by → User.id
+  - ContentHistory.content_id → WebsiteContent.id (CASCADE DELETE)
+  - ContentHistory.changed_by → User.id
+  - GalleryImage.uploaded_by → User.id
+- [ ] Set up cascade delete policies appropriately
+- [ ] Add indexes for performance:
+  - BusinessMetric.date (unique index)
+  - Promotion.status, Promotion.scheduled_send_at
+  - PromotionRecipient.promotion_id, PromotionRecipient.customer_id
+  - WebsiteContent.section (unique index)
+  - GalleryImage.category, GalleryImage.status
+
+#### Step 3: Create Database Migrations
+- [ ] Create migration for User entity enhancements
+  - Add authentication fields if not existing
+  - Add role field with enum
+  - Add indexes
+- [ ] Create migration for BusinessMetric table
+  - Create table with all columns
+  - Add unique constraint on date
+  - Add indexes
+- [ ] Create migration for Promotion tables
+  - Create Promotion table
+  - Create PromotionRecipient table
+  - Add foreign keys and indexes
+- [ ] Create migration for WebsiteContent tables
+  - Create WebsiteContent table
+  - Create ContentHistory table
+  - Add foreign keys and indexes
+- [ ] Create migration for GalleryImage table
+  - Create table with all columns
+  - Add foreign keys and indexes
+- [ ] Test migrations (up and down)
+
+#### Step 4: Create Seed Data (Optional)
+- [ ] Create seed script for initial admin user (if needed)
+- [ ] Create seed script for sample website content sections
+- [ ] Document seed data creation process
+
+#### Step 5: Update Database Configuration
+- [ ] Ensure TypeORM configuration in `server/src/database/data-source.ts` includes all entities
+- [ ] Configure connection pooling appropriately
+- [ ] Set up migration configuration
+- [ ] Configure entity metadata properly
+
+#### Step 6: Create Repository Pattern (Optional but Recommended)
+- [ ] Create repository interfaces for complex queries
+- [ ] Implement repositories for:
+  - MetricsRepository (aggregation queries)
+  - PromotionRepository (complex promotion queries)
+  - ContentRepository (content versioning logic)
+  - GalleryRepository (image queries with filters)
+
+### Definition of Done (DoD)
+
+- [ ] All TypeORM entities created with proper types
+- [ ] All relationships defined correctly
+- [ ] Indexes created for performance
+- [ ] Migrations created and tested
+- [ ] Migrations can run up and down successfully
+- [ ] Database schema matches architecture design
+- [ ] Foreign key constraints properly set
+- [ ] Seed data scripts created (if applicable)
+- [ ] Repository pattern implemented (if applicable)
+- [ ] TypeScript types compile without errors
+
+### Verification Steps
+
+1. **Schema Verification:**
+   ```bash
+   # Run migrations
+   cd server
+   npm run migration:run
+   
+   # Verify tables created
+   # Connect to database and check table structure
+   
+   # Test rollback
+   npm run migration:revert
+   npm run migration:run
+   ```
+
+2. **Entity Verification:**
+   - Verify all entities can be instantiated
+   - Check relationships load correctly
+   - Test cascade delete behavior
+   - Verify indexes are created
+
+3. **Data Integrity:**
+   - Test foreign key constraints
+   - Verify unique constraints work
+   - Test enum values are enforced
+   - Check nullable fields behave correctly
+
+4. **Performance:**
+   - Verify indexes are used in query plans
+   - Test query performance with sample data
+   - Check connection pooling works
+
+### Acceptance Criteria
+
+- ✅ All database entities created and match architecture design
+- ✅ Relationships properly defined with foreign keys
+- ✅ Migrations run successfully without errors
+- ✅ Indexes created for optimal query performance
+- ✅ Schema supports all dashboard features (metrics, promotions, content, gallery)
+- ✅ Database can handle expected data volumes
+- ✅ TypeScript types align with database schema
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/entities/User.entity.ts`
+- `server/src/entities/BusinessMetric.entity.ts`
+- `server/src/entities/Promotion.entity.ts`
+- `server/src/entities/PromotionRecipient.entity.ts`
+- `server/src/entities/WebsiteContent.entity.ts`
+- `server/src/entities/ContentHistory.entity.ts`
+- `server/src/entities/GalleryImage.entity.ts`
+- `server/src/database/migrations/[timestamp]-create-dashboard-entities.ts`
+- `server/src/repositories/MetricsRepository.ts` (optional)
+- `server/src/repositories/PromotionRepository.ts` (optional)
+- `server/src/repositories/ContentRepository.ts` (optional)
+- `server/src/repositories/GalleryRepository.ts` (optional)
+
+**Dependencies:**
+- TypeORM
+- PostgreSQL
+- UUID generation library
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-API-002: Dashboard Backend API Implementation
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 16 hours
+**Dependencies:** TASK-DB-003
+**Related Tasks:** TASK-SEC-002, TASK-FEAT-015
+
+### Description
+
+Implement the complete backend API for the dashboard management system including endpoints for metrics, promotions, website content management, and gallery image management. Include authentication middleware, request validation, error handling, and comprehensive documentation.
+
+### Requirements / What to Do
+
+#### Step 1: Set Up Authentication and Authorization Middleware
+- [ ] Create `server/src/middleware/auth.middleware.ts`:
+  - JWT token verification
+  - Extract user from token
+  - Attach user to request object
+- [ ] Create `server/src/middleware/authorize.middleware.ts`:
+  - Role-based access control
+  - Check user permissions
+  - Return 403 for unauthorized access
+- [ ] Create `server/src/services/auth.service.ts`:
+  - User registration
+  - User login (JWT token generation)
+  - Password hashing (bcrypt)
+  - Token refresh logic
+
+#### Step 2: Implement Metrics API Endpoints
+- [ ] Create `server/src/routes/metrics.routes.ts`:
+  - `GET /api/dashboard/metrics/summary`
+    - Calculate overall KPIs (total revenue, appointments, customers)
+    - Date range filtering (query params: startDate, endDate)
+    - Aggregation logic
+    - Response: { totalRevenue, totalAppointments, newCustomers, avgTransactionValue, trends }
+  - `GET /api/dashboard/metrics/revenue`
+    - Revenue analytics with time series data
+    - Grouping by day/week/month/year
+    - Compare periods (vs previous period)
+    - Response: { period, current, previous, growth, data: [...] }
+  - `GET /api/dashboard/metrics/appointments`
+    - Appointment statistics
+    - Bookings, completions, cancellations, no-shows
+    - Time series data
+    - Employee breakdown
+    - Response: { total, completed, cancelled, noShow, byEmployee: [...], trends: [...] }
+  - `GET /api/dashboard/metrics/customers`
+    - Customer analytics
+    - New vs returning customers
+    - Customer lifetime value
+    - Retention rates
+    - Response: { newCustomers, returningCustomers, totalCustomers, retentionRate, clv }
+  - `GET /api/dashboard/metrics/employees`
+    - Employee performance metrics
+    - Revenue per employee
+    - Appointments per employee
+    - Average rating (if applicable)
+    - Response: { employees: [{ id, name, revenue, appointments, avgRating }] }
+  - `GET /api/dashboard/metrics/services`
+    - Service popularity analytics
+    - Revenue by service
+    - Booking frequency
+    - Response: { services: [{ id, name, revenue, bookings, avgPrice }] }
+- [ ] Create `server/src/services/metrics.service.ts`:
+  - Business logic for metrics calculations
+  - Database queries using repositories
+  - Data aggregation logic
+  - Caching strategy (optional)
+
+#### Step 3: Implement Promotions API Endpoints
+- [ ] Create `server/src/routes/promotions.routes.ts`:
+  - `GET /api/promotions`
+    - List all promotions with filtering
+    - Query params: status, type, date range
+    - Pagination support
+    - Response: { promotions: [...], total, page, limit }
+  - `GET /api/promotions/:id`
+    - Get single promotion with recipient details
+    - Include analytics (open rate, click rate, redemption rate)
+    - Response: { promotion, recipients: [...], analytics: {...} }
+  - `POST /api/promotions`
+    - Create new promotion
+    - Request validation
+    - Save to database
+    - Response: { promotion: {...} }
+  - `PUT /api/promotions/:id`
+    - Update promotion (only DRAFT status allowed)
+    - Request validation
+    - Response: { promotion: {...} }
+  - `DELETE /api/promotions/:id`
+    - Soft delete or hard delete (based on status)
+    - Response: { success: true }
+  - `POST /api/promotions/:id/send`
+    - Send promotion to recipients
+    - Determine recipients based on targeting
+    - Queue for delivery (SMS, Email, or both)
+    - Update promotion status
+    - Create PromotionRecipient records
+    - Response: { sent: true, recipientCount: number }
+  - `GET /api/promotions/:id/analytics`
+    - Get promotion performance metrics
+    - Delivery rates, open rates, click rates, redemption rates
+    - Revenue generated from promotion
+    - Response: { analytics: {...} }
+- [ ] Create `server/src/services/promotion.service.ts`:
+  - Promotion CRUD logic
+  - Recipient targeting logic
+  - Promotion sending logic (integrate with email/SMS services)
+  - Analytics calculation
+
+#### Step 4: Implement Content Management API Endpoints
+- [ ] Create `server/src/routes/content.routes.ts`:
+  - `GET /api/content/sections`
+    - Get all content sections
+    - Response: { sections: [{ section, content, status, publishedAt }] }
+  - `GET /api/content/sections/:section`
+    - Get specific content section
+    - Include published version
+    - Response: { section, content, status, publishedAt }
+  - `PUT /api/content/sections/:section`
+    - Update content section
+    - Save as DRAFT or PUBLISH directly
+    - Create content history entry
+    - Response: { section, content, status, version }
+  - `GET /api/content/sections/:section/history`
+    - Get content version history
+    - Response: { history: [{ version, content, changedBy, createdAt }] }
+  - `POST /api/content/sections/:section/publish`
+    - Publish draft content
+    - Update published_at timestamp
+    - Response: { section, content, publishedAt }
+  - `POST /api/content/sections/:section/revert/:version`
+    - Revert to previous version
+    - Create new version from history
+    - Response: { section, content, version }
+- [ ] Create `server/src/services/content.service.ts`:
+  - Content CRUD logic
+  - Versioning logic
+  - Publish/unpublish logic
+  - History management
+
+#### Step 5: Implement Gallery API Endpoints
+- [ ] Create `server/src/routes/gallery.routes.ts`:
+  - `GET /api/gallery/images`
+    - List gallery images with filtering
+    - Query params: category, status, limit, offset
+    - Sorting support
+    - Response: { images: [...], total, limit, offset }
+  - `GET /api/gallery/images/:id`
+    - Get single image with metadata
+    - Response: { image: {...} }
+  - `POST /api/gallery/images`
+    - Upload single image
+    - File validation (type, size)
+    - Image processing (resize, optimize)
+    - Save metadata to database
+    - Save file to storage
+    - Response: { image: {...} }
+  - `POST /api/gallery/images/upload`
+    - Bulk image upload
+    - Process multiple files
+    - Response: { images: [...], errors: [...] }
+  - `PUT /api/gallery/images/:id`
+    - Update image metadata
+    - Update title, description, alt_text, category, display_order
+    - Response: { image: {...} }
+  - `DELETE /api/gallery/images/:id`
+    - Delete image
+    - Delete file from storage
+    - Soft delete from database
+    - Response: { success: true }
+- [ ] Create `server/src/services/gallery.service.ts`:
+  - Image upload handling
+  - File storage logic (local filesystem or cloud)
+  - Image processing (resize, compression)
+  - Metadata management
+  - File deletion logic
+- [ ] Create `server/src/middleware/upload.middleware.ts`:
+  - Multer configuration for file uploads
+  - File type validation
+  - File size limits
+  - Error handling
+
+#### Step 6: Request Validation and Error Handling
+- [ ] Create validation schemas using Zod or class-validator:
+  - Promotion creation/update schema
+  - Content update schema
+  - Image upload validation
+- [ ] Create `server/src/middleware/validation.middleware.ts`:
+  - Validate request bodies
+  - Return 400 with validation errors
+- [ ] Create `server/src/middleware/error.middleware.ts`:
+  - Global error handler
+  - Format error responses
+  - Log errors appropriately
+  - Handle different error types (validation, not found, unauthorized, server errors)
+
+#### Step 7: API Documentation
+- [ ] Create `server/src/docs/api-docs.md`:
+  - Document all endpoints
+  - Include request/response examples
+  - Document authentication requirements
+  - Include error codes and messages
+- [ ] Add JSDoc comments to all route handlers
+- [ ] Consider adding Swagger/OpenAPI documentation
+
+#### Step 8: Testing Infrastructure
+- [ ] Set up test database
+- [ ] Create test utilities (test user creation, authentication helpers)
+- [ ] Write integration tests for key endpoints
+- [ ] Test error scenarios
+
+### Definition of Done (DoD)
+
+- [ ] All API endpoints implemented
+- [ ] Authentication and authorization middleware working
+- [ ] Request validation implemented
+- [ ] Error handling comprehensive
+- [ ] All endpoints return proper status codes
+- [ ] API documentation created
+- [ ] Integration tests written for endpoints
+- [ ] File upload functionality working
+- [ ] Image processing implemented
+- [ ] CORS configured correctly
+- [ ] Rate limiting implemented (if needed)
+- [ ] TypeScript compiles without errors
+
+### Verification Steps
+
+1. **API Testing:**
+   ```bash
+   # Start server
+   cd server
+   npm run dev
+   
+   # Test endpoints with curl or Postman
+   # Test authentication
+   curl -X POST http://localhost:3000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "admin@example.com", "password": "password"}'
+   
+   # Test metrics endpoint (with auth token)
+   curl -X GET http://localhost:3000/api/dashboard/metrics/summary \
+     -H "Authorization: Bearer <token>"
+   ```
+
+2. **Integration Testing:**
+   ```bash
+   npm run test
+   # Run integration tests
+   ```
+
+3. **Manual Testing:**
+   - Test all CRUD operations
+   - Test authentication flow
+   - Test file upload
+   - Test error scenarios
+   - Test pagination and filtering
+
+### Acceptance Criteria
+
+- ✅ All API endpoints implemented and functional
+- ✅ Authentication and authorization working correctly
+- ✅ Request validation prevents invalid data
+- ✅ Error handling returns appropriate responses
+- ✅ File upload and image processing working
+- ✅ API documentation complete and accurate
+- ✅ Integration tests passing
+- ✅ API performance acceptable (< 200ms for most endpoints)
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/middleware/auth.middleware.ts`
+- `server/src/middleware/authorize.middleware.ts`
+- `server/src/middleware/validation.middleware.ts`
+- `server/src/middleware/error.middleware.ts`
+- `server/src/middleware/upload.middleware.ts`
+- `server/src/services/auth.service.ts`
+- `server/src/services/metrics.service.ts`
+- `server/src/services/promotion.service.ts`
+- `server/src/services/content.service.ts`
+- `server/src/services/gallery.service.ts`
+- `server/src/routes/metrics.routes.ts`
+- `server/src/routes/promotions.routes.ts`
+- `server/src/routes/content.routes.ts`
+- `server/src/routes/gallery.routes.ts`
+- `server/src/routes/auth.routes.ts`
+- `server/src/validators/promotion.validator.ts`
+- `server/src/validators/content.validator.ts`
+- `server/src/docs/api-docs.md`
+
+**Dependencies:**
+- Express.js
+- TypeORM
+- JWT (jsonwebtoken)
+- bcrypt
+- Multer (file uploads)
+- Sharp (image processing)
+- Zod or class-validator (validation)
+- dotenv
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-015: Dashboard Frontend Implementation - Metrics and Analytics
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 12 hours
+**Dependencies:** TASK-API-002
+**Related Tasks:** TASK-FEAT-016, TASK-FEAT-017, TASK-FEAT-018
+
+### Description
+
+Implement the frontend dashboard interface for metrics and analytics. Create sophisticated data visualizations, KPIs, charts, and interactive components that help business owners and managers understand their business performance at a glance.
+
+### Requirements / What to Do
+
+#### Step 1: Set Up API Service Layer
+- [ ] Create `client/services/dashboardService.ts`:
+  - `getMetricsSummary(dateRange)`: Fetch overall KPIs
+  - `getRevenueMetrics(period, startDate, endDate)`: Fetch revenue analytics
+  - `getAppointmentMetrics(period, startDate, endDate)`: Fetch appointment stats
+  - `getCustomerMetrics(period, startDate, endDate)`: Fetch customer analytics
+  - `getEmployeeMetrics(period, startDate, endDate)`: Fetch employee performance
+  - `getServiceMetrics(period, startDate, endDate)`: Fetch service popularity
+  - Error handling for all API calls
+  - Type definitions for all responses
+- [ ] Update `client/services/dataService.ts` to use real API (if not already)
+
+#### Step 2: Create Metrics Dashboard Layout
+- [ ] Update `client/components/PerformanceDashboard.tsx`:
+  - Create main dashboard layout with sections
+  - Add date range picker component
+  - Add period selector (Day, Week, Month, Year, Custom)
+  - Implement responsive grid layout
+  - Add loading states
+  - Add error states with retry functionality
+
+#### Step 3: Implement KPI Cards Component
+- [ ] Create `client/components/dashboard/KPICard.tsx`:
+  - Display metric value with label
+  - Show trend indicator (up/down arrow with percentage)
+  - Support different metric types (revenue, count, percentage)
+  - Animate value changes
+  - Support click to drill down
+  - Props: { label, value, trend, trendValue, icon, onClick?, color? }
+- [ ] Create KPI cards for:
+  - Total Revenue (with trend vs previous period)
+  - Total Appointments
+  - New Customers
+  - Average Transaction Value
+  - Customer Retention Rate
+  - Employee Productivity
+
+#### Step 4: Implement Revenue Analytics Charts
+- [ ] Create `client/components/dashboard/RevenueChart.tsx`:
+  - Line or area chart showing revenue over time
+  - Compare current period vs previous period
+  - Show growth percentage
+  - Interactive tooltips
+  - Responsive design
+  - Use Recharts or Chart.js library
+- [ ] Create `client/components/dashboard/RevenueBreakdown.tsx`:
+  - Pie or donut chart showing revenue by service category
+  - Show percentage breakdown
+  - Interactive legend
+
+#### Step 5: Implement Appointment Analytics
+- [ ] Create `client/components/dashboard/AppointmentChart.tsx`:
+  - Bar chart showing appointments over time
+  - Stacked bars for status (scheduled, completed, cancelled)
+  - Show appointment volume trends
+- [ ] Create `client/components/dashboard/AppointmentStatusPie.tsx`:
+  - Pie chart showing appointment status distribution
+  - Show completion rate percentage
+
+#### Step 6: Implement Customer Analytics
+- [ ] Create `client/components/dashboard/CustomerGrowthChart.tsx`:
+  - Line chart showing new vs returning customers over time
+  - Show customer acquisition trends
+- [ ] Create `client/components/dashboard/CustomerMetrics.tsx`:
+  - Display customer retention rate
+  - Show customer lifetime value
+  - Display top customers by spending
+
+#### Step 7: Implement Employee Performance Table
+- [ ] Create `client/components/dashboard/EmployeePerformanceTable.tsx`:
+  - Table showing employee metrics
+  - Columns: Name, Revenue, Appointments, Avg Transaction, Performance Score
+  - Sortable columns
+  - Filterable by date range
+  - Show ranking/position
+
+#### Step 8: Implement Service Analytics
+- [ ] Create `client/components/dashboard/ServicePopularityChart.tsx`:
+  - Bar chart showing most popular services
+  - Sort by bookings or revenue
+  - Show booking count and revenue per service
+
+#### Step 9: Add Date Range and Filtering
+- [ ] Create `client/components/dashboard/DateRangePicker.tsx`:
+  - Date range selection component
+  - Preset options (Last 7 days, Last 30 days, This Month, Last Month, etc.)
+  - Custom date range picker
+  - Emit changes to parent component
+- [ ] Integrate date range filtering with all metrics components
+- [ ] Add URL query params for sharing dashboard state
+
+#### Step 10: Add Export Functionality
+- [ ] Create export button component
+- [ ] Implement CSV export for metrics data
+- [ ] Implement PDF export (optional, using jsPDF)
+- [ ] Allow exporting specific metric views
+
+#### Step 11: Performance Optimization
+- [ ] Implement data caching using React Query or SWR
+- [ ] Add debouncing for date range changes
+- [ ] Lazy load charts
+- [ ] Optimize re-renders with React.memo where appropriate
+
+### Definition of Done (DoD)
+
+- [ ] All metrics API endpoints integrated
+- [ ] KPI cards displaying correct data with trends
+- [ ] All charts rendering correctly with data
+- [ ] Date range filtering working for all metrics
+- [ ] Loading and error states implemented
+- [ ] Responsive design working on all screen sizes
+- [ ] Export functionality working
+- [ ] Performance optimized (no unnecessary re-renders)
+- [ ] TypeScript types correct
+- [ ] No console errors
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Navigate to dashboard
+   - Verify all KPIs display correctly
+   - Test date range filtering
+   - Verify charts update with date range changes
+   - Test on mobile and desktop
+   - Check loading states
+   - Test error scenarios (API failures)
+
+2. **Data Validation:**
+   - Verify metrics match expected values
+   - Check trend calculations are correct
+   - Verify chart data is accurate
+
+3. **Performance Testing:**
+   - Check page load time
+   - Verify charts render smoothly
+   - Check for memory leaks
+
+### Acceptance Criteria
+
+- ✅ Dashboard displays comprehensive business metrics
+- ✅ All KPIs show correct values with trend indicators
+- ✅ Charts visualize data accurately and clearly
+- ✅ Date range filtering works across all metrics
+- ✅ Dashboard is responsive and works on mobile
+- ✅ Export functionality allows data export
+- ✅ Performance is acceptable (page loads < 2 seconds)
+- ✅ User can easily understand business performance
+
+### Technical Details
+
+**Files to Create:**
+- `client/services/dashboardService.ts`
+- `client/components/dashboard/KPICard.tsx`
+- `client/components/dashboard/RevenueChart.tsx`
+- `client/components/dashboard/RevenueBreakdown.tsx`
+- `client/components/dashboard/AppointmentChart.tsx`
+- `client/components/dashboard/AppointmentStatusPie.tsx`
+- `client/components/dashboard/CustomerGrowthChart.tsx`
+- `client/components/dashboard/CustomerMetrics.tsx`
+- `client/components/dashboard/EmployeePerformanceTable.tsx`
+- `client/components/dashboard/ServicePopularityChart.tsx`
+- `client/components/dashboard/DateRangePicker.tsx`
+
+**Files to Modify:**
+- `client/components/PerformanceDashboard.tsx` (enhance existing)
+- `client/services/dataService.ts` (integrate real API)
+
+**Dependencies:**
+- Recharts or Chart.js for charts
+- date-fns for date manipulation
+- React Query or SWR for data fetching
+- jsPDF for PDF export (optional)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-016: Dashboard Frontend Implementation - Promotions Management
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 10 hours
+**Dependencies:** TASK-API-002
+**Related Tasks:** TASK-FEAT-015
+
+### Description
+
+Implement the frontend interface for managing promotions including creation, editing, sending, tracking, and analytics. Integrate with the existing MarketingCenter component and enhance it with full promotion lifecycle management.
+
+### Requirements / What to Do
+
+#### Step 1: Create Promotion Service
+- [ ] Create `client/services/promotionService.ts`:
+  - `getPromotions(filters)`: List promotions with filtering
+  - `getPromotion(id)`: Get single promotion
+  - `createPromotion(promotionData)`: Create new promotion
+  - `updatePromotion(id, promotionData)`: Update promotion
+  - `deletePromotion(id)`: Delete promotion
+  - `sendPromotion(id)`: Send promotion to recipients
+  - `getPromotionAnalytics(id)`: Get promotion performance metrics
+  - Error handling and TypeScript types
+
+#### Step 2: Enhance MarketingCenter Component
+- [ ] Update `client/components/MarketingCenter.tsx`:
+  - Add promotions list view
+  - Add promotion creation form
+  - Add promotion editing capability
+  - Integrate with promotionService
+  - Add promotion status indicators
+  - Add action buttons (Edit, Send, Delete, View Analytics)
+
+#### Step 3: Create Promotion List Component
+- [ ] Create `client/components/promotions/PromotionList.tsx`:
+  - Display list of promotions in table or card view
+  - Columns/Cards: Name, Type, Status, Scheduled Date, Sent Date, Recipients, Actions
+  - Filter by status (Draft, Scheduled, Sent, Completed, Cancelled)
+  - Search functionality
+  - Pagination
+  - Sort by date, status, etc.
+  - Click to view details
+
+#### Step 4: Create Promotion Form Component
+- [ ] Create `client/components/promotions/PromotionForm.tsx`:
+  - Form fields:
+    - Name (required)
+    - Description (textarea)
+    - Promotion Type (dropdown: Percentage Off, Dollar Off, Free Service, BOGO)
+    - Discount Value (number input, conditional on type)
+    - Target Services (multi-select)
+    - Target Customer Segment (radio: All, New, Returning, VIP, Inactive)
+    - Expiration Date (date picker)
+    - Schedule Send Date (optional, datetime picker)
+    - Delivery Methods (checkboxes: SMS, Email, In-App)
+  - Form validation
+  - Save as Draft or Schedule
+  - Edit existing promotion
+  - Use React Hook Form for form management
+
+#### Step 5: Create Promotion Creator/Editor Modal
+- [ ] Create `client/components/promotions/PromotionModal.tsx`:
+  - Modal component wrapping PromotionForm
+  - Support create and edit modes
+  - Handle form submission
+  - Show loading states
+  - Handle errors
+  - Close on success
+
+#### Step 6: Integrate AI Promotion Generation
+- [ ] Enhance existing AI promotion generation:
+  - Keep existing Gemini integration
+  - Pre-fill PromotionForm with AI-generated content
+  - Allow editing after generation
+  - Save generated promotions
+
+#### Step 7: Create Promotion Details View
+- [ ] Create `client/components/promotions/PromotionDetails.tsx`:
+  - Display full promotion information
+  - Show recipient list with delivery status
+  - Show analytics (if sent)
+  - Action buttons (Edit, Send, Delete, Duplicate)
+  - Timeline view of promotion lifecycle
+
+#### Step 8: Implement Promotion Sending
+- [ ] Create send promotion confirmation dialog
+- [ ] Show recipient count before sending
+- [ ] Handle send action
+- [ ] Update promotion status after sending
+- [ ] Show success/error feedback
+
+#### Step 9: Create Promotion Analytics Component
+- [ ] Create `client/components/promotions/PromotionAnalytics.tsx`:
+  - Display promotion performance metrics:
+    - Delivery rate
+    - Open rate (for email)
+    - Click rate
+    - Redemption rate
+    - Revenue generated
+  - Charts for metrics visualization
+  - Time series data for opens/clicks
+  - Recipient breakdown
+
+#### Step 10: Add Promotion Status Management
+- [ ] Implement status transitions:
+  - Draft → Scheduled (when schedule date set)
+  - Draft/Scheduled → Sent (when sent)
+  - Sent → Completed (when expired)
+  - Any → Cancelled
+- [ ] Show status badges with appropriate colors
+- [ ] Disable actions based on status (e.g., can't edit sent promotions)
+
+#### Step 11: Add Bulk Actions
+- [ ] Implement bulk selection in PromotionList
+- [ ] Add bulk actions (Delete, Cancel)
+- [ ] Show confirmation for bulk actions
+
+### Definition of Done (DoD)
+
+- [ ] Promotion CRUD operations working
+- [ ] Promotion list displays all promotions with filtering
+- [ ] Promotion form validates input correctly
+- [ ] AI generation integrated with promotion creation
+- [ ] Promotion sending functionality working
+- [ ] Promotion analytics displaying correctly
+- [ ] Status management working correctly
+- [ ] All API endpoints integrated
+- [ ] Loading and error states handled
+- [ ] Responsive design implemented
+- [ ] TypeScript types correct
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Create a new promotion
+   - Edit an existing promotion
+   - Send a promotion
+   - View promotion analytics
+   - Test filtering and searching
+   - Test status transitions
+   - Test AI generation integration
+
+2. **Integration Testing:**
+   - Verify API calls are made correctly
+   - Check data flows correctly
+   - Verify error handling works
+
+### Acceptance Criteria
+
+- ✅ Users can create, edit, and delete promotions
+- ✅ Promotions can be scheduled and sent
+- ✅ Promotion analytics are displayed accurately
+- ✅ AI generation assists in promotion creation
+- ✅ Promotion list is searchable and filterable
+- ✅ All promotion statuses are handled correctly
+- ✅ User experience is intuitive and efficient
+
+### Technical Details
+
+**Files to Create:**
+- `client/services/promotionService.ts`
+- `client/components/promotions/PromotionList.tsx`
+- `client/components/promotions/PromotionForm.tsx`
+- `client/components/promotions/PromotionModal.tsx`
+- `client/components/promotions/PromotionDetails.tsx`
+- `client/components/promotions/PromotionAnalytics.tsx`
+
+**Files to Modify:**
+- `client/components/MarketingCenter.tsx` (enhance existing)
+
+**Dependencies:**
+- React Hook Form
+- date-fns
+- React Query or SWR
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-017: Dashboard Frontend Implementation - Website Content Editor
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 10 hours
+**Dependencies:** TASK-API-002
+**Related Tasks:** TASK-FEAT-015
+
+### Description
+
+Implement the frontend interface for editing website content including a content management interface, WYSIWYG editor, preview functionality, and version history. Allow owners and managers to update website content without developer intervention.
+
+### Requirements / What to Do
+
+#### Step 1: Create Content Service
+- [ ] Create `client/services/contentService.ts`:
+  - `getContentSections()`: Get all content sections
+  - `getContentSection(section)`: Get specific section
+  - `updateContentSection(section, content)`: Update section
+  - `publishContentSection(section)`: Publish draft
+  - `getContentHistory(section)`: Get version history
+  - `revertContentSection(section, version)`: Revert to version
+  - Error handling and TypeScript types
+
+#### Step 2: Create Content Editor Page
+- [ ] Create `client/components/content/ContentEditor.tsx`:
+  - Main content editor interface
+  - List of editable sections
+  - Section selector/navigation
+  - Edit and preview modes
+  - Save draft and publish buttons
+  - Status indicators (Draft, Published)
+
+#### Step 3: Implement Section List Component
+- [ ] Create `client/components/content/ContentSectionList.tsx`:
+  - Display list of all content sections
+  - Show section name, status, last updated
+  - Click to edit section
+  - Visual indicators for published vs draft
+  - Search/filter sections
+
+#### Step 4: Create Content Editor Component
+- [ ] Create `client/components/content/ContentSectionEditor.tsx`:
+  - WYSIWYG editor or structured form (depending on section type)
+  - Support different content types:
+    - Text/HTML content (WYSIWYG editor like TinyMCE or Tiptap)
+    - Structured data (form fields for specific sections)
+  - Live preview toggle
+  - Save as draft functionality
+  - Publish functionality
+  - Validation
+  - Auto-save (optional)
+
+#### Step 5: Implement Content Section Types
+- [ ] Create editors for specific sections:
+  - **Landing Hero**: Headline, subheadline, CTA button text, background image
+  - **About Content**: Rich text editor for about page content
+  - **Contact Info**: Form with phone, email, address, hours
+  - **Service Descriptions**: List of services with editable descriptions and prices
+  - **Business Info**: Store name, tagline, social media links
+  - **Legal Pages**: Terms, Privacy Policy (rich text)
+- [ ] Create `client/components/content/sections/LandingHeroEditor.tsx`
+- [ ] Create `client/components/content/sections/AboutContentEditor.tsx`
+- [ ] Create `client/components/content/sections/ContactInfoEditor.tsx`
+- [ ] Create `client/components/content/sections/ServiceDescriptionsEditor.tsx`
+- [ ] Create `client/components/content/sections/BusinessInfoEditor.tsx`
+
+#### Step 6: Implement Preview Functionality
+- [ ] Create `client/components/content/ContentPreview.tsx`:
+  - Preview content as it will appear on website
+  - Toggle between edit and preview modes
+  - Show published version vs draft version
+  - Responsive preview (desktop, tablet, mobile views)
+
+#### Step 7: Implement Version History
+- [ ] Create `client/components/content/ContentHistory.tsx`:
+  - Display version history list
+  - Show version number, changed by, date, change note
+  - View version content
+  - Revert to version functionality
+  - Compare versions (optional)
+
+#### Step 8: Add Content Validation
+- [ ] Implement validation rules for each section type
+- [ ] Show validation errors
+- [ ] Prevent publishing invalid content
+- [ ] Required field validation
+
+#### Step 9: Add Image Upload for Content
+- [ ] Integrate image upload for sections that need images (hero background, etc.)
+- [ ] Use existing gallery upload functionality
+- [ ] Allow selecting from existing gallery images
+- [ ] Upload new images inline
+
+#### Step 10: Add Confirmation Dialogs
+- [ ] Confirm before publishing
+- [ ] Confirm before reverting to old version
+- [ ] Warn about unsaved changes
+
+#### Step 11: Add Content Status Indicators
+- [ ] Show draft vs published status clearly
+- [ ] Show last published date
+- [ ] Show who published it
+- [ ] Visual indicators (badges, colors)
+
+### Definition of Done (DoD)
+
+- [ ] All content sections can be edited
+- [ ] WYSIWYG editor working for text content
+- [ ] Structured forms working for specific sections
+- [ ] Preview functionality working
+- [ ] Version history displaying correctly
+- [ ] Revert to version working
+- [ ] Save draft and publish working
+- [ ] Validation preventing invalid content
+- [ ] Image upload integrated
+- [ ] All API endpoints integrated
+- [ ] Responsive design implemented
+- [ ] TypeScript types correct
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Edit each content section type
+   - Save as draft
+   - Publish content
+   - View preview
+   - View version history
+   - Revert to previous version
+   - Upload images
+   - Test validation
+
+2. **Integration Testing:**
+   - Verify content updates appear on public website
+   - Check version history is saved correctly
+   - Verify draft vs published states
+
+### Acceptance Criteria
+
+- ✅ Users can edit all website content sections
+- ✅ Content can be saved as draft and published
+- ✅ Preview shows how content will appear
+- ✅ Version history allows reverting changes
+- ✅ Content validation prevents errors
+- ✅ Image upload works for content sections
+- ✅ User experience is intuitive
+
+### Technical Details
+
+**Files to Create:**
+- `client/services/contentService.ts`
+- `client/components/content/ContentEditor.tsx`
+- `client/components/content/ContentSectionList.tsx`
+- `client/components/content/ContentSectionEditor.tsx`
+- `client/components/content/ContentPreview.tsx`
+- `client/components/content/ContentHistory.tsx`
+- `client/components/content/sections/LandingHeroEditor.tsx`
+- `client/components/content/sections/AboutContentEditor.tsx`
+- `client/components/content/sections/ContactInfoEditor.tsx`
+- `client/components/content/sections/ServiceDescriptionsEditor.tsx`
+- `client/components/content/sections/BusinessInfoEditor.tsx`
+
+**Dependencies:**
+- TinyMCE, Tiptap, or similar WYSIWYG editor
+- React Hook Form
+- date-fns
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-FEAT-018: Dashboard Frontend Implementation - Gallery Image Management
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-API-002
+**Related Tasks:** TASK-FEAT-015
+
+### Description
+
+Implement the frontend interface for managing gallery images including upload, editing metadata, categorization, organization, and deletion. Allow owners and managers to manage the service images displayed in the gallery.
+
+### Requirements / What to Do
+
+#### Step 1: Create Gallery Service
+- [ ] Create `client/services/galleryService.ts`:
+  - `getGalleryImages(filters)`: List images with filtering
+  - `getGalleryImage(id)`: Get single image
+  - `uploadImage(file, metadata)`: Upload single image
+  - `uploadImages(files, metadata)`: Bulk upload
+  - `updateImage(id, metadata)`: Update image metadata
+  - `deleteImage(id)`: Delete image
+  - Error handling and TypeScript types
+
+#### Step 2: Create Gallery Manager Page
+- [ ] Create `client/components/gallery/GalleryManager.tsx`:
+  - Main gallery management interface
+  - Image grid view
+  - Upload area
+  - Filters and search
+  - Bulk actions
+  - Category management
+
+#### Step 3: Implement Image Upload Component
+- [ ] Create `client/components/gallery/ImageUploader.tsx`:
+  - Drag-and-drop upload area
+  - File input for selecting files
+  - Support multiple file selection
+  - Show upload progress
+  - Preview images before upload
+  - Validate file types and sizes
+  - Show upload errors
+  - Allow setting metadata during upload (category, title)
+
+#### Step 4: Implement Image Grid Component
+- [ ] Create `client/components/gallery/ImageGrid.tsx`:
+  - Display images in grid layout (similar to gallery page)
+  - Show image thumbnail
+  - Show image metadata overlay (category, title)
+  - Click to view/edit
+  - Selection checkbox for bulk actions
+  - Loading states
+  - Empty state
+
+#### Step 5: Implement Image Editor Modal
+- [ ] Create `client/components/gallery/ImageEditor.tsx`:
+  - Modal for editing image metadata
+  - Form fields:
+    - Title
+    - Description
+    - Alt text
+    - Category (dropdown)
+    - Display order (number input)
+    - Status (Active, Hidden, Archived)
+  - Image preview
+  - Save and Cancel buttons
+  - Delete button
+  - Use React Hook Form
+
+#### Step 6: Implement Image Viewer
+- [ ] Create `client/components/gallery/ImageViewer.tsx`:
+  - Full-size image view
+  - Navigation (previous/next)
+  - Image metadata display
+  - Edit button
+  - Delete button
+  - Close button
+
+#### Step 7: Add Filtering and Search
+- [ ] Create `client/components/gallery/GalleryFilters.tsx`:
+  - Filter by category (dropdown)
+  - Filter by status (dropdown)
+  - Search by title/description
+  - Clear filters button
+  - Active filter indicators
+
+#### Step 8: Implement Bulk Actions
+- [ ] Add checkbox selection to ImageGrid
+- [ ] Create bulk actions toolbar:
+  - Select all / Deselect all
+  - Bulk delete
+  - Bulk category change
+  - Bulk status change
+- [ ] Show confirmation for bulk actions
+
+#### Step 9: Add Image Organization
+- [ ] Implement drag-and-drop reordering (optional)
+- [ ] Allow changing display order via form
+- [ ] Sort by: Upload date, Display order, Category, Title
+
+#### Step 10: Integrate with Gallery Page
+- [ ] Ensure uploaded images appear in public gallery
+- [ ] Filter by status (only Active images shown)
+- [ ] Respect display order
+
+#### Step 11: Add Image Preview in Gallery Manager
+- [ ] Show image preview on hover
+- [ ] Click to view full size
+- [ ] Show image dimensions and file size
+
+### Definition of Done (DoD)
+
+- [ ] Image upload working (single and bulk)
+- [ ] Image metadata editing working
+- [ ] Image deletion working
+- [ ] Filtering and search working
+- [ ] Bulk actions working
+- [ ] Image grid displaying correctly
+- [ ] Image viewer working
+- [ ] Categories properly managed
+- [ ] Display order working
+- [ ] All API endpoints integrated
+- [ ] Loading and error states handled
+- [ ] Responsive design implemented
+- [ ] TypeScript types correct
+
+### Verification Steps
+
+1. **Manual Testing:**
+   - Upload single image
+   - Upload multiple images
+   - Edit image metadata
+   - Delete image
+   - Filter by category
+   - Search images
+   - Bulk delete
+   - Change display order
+   - Verify images appear in public gallery
+
+2. **Integration Testing:**
+   - Verify API calls are made correctly
+   - Check file upload works
+   - Verify metadata updates
+   - Check image deletion removes files
+
+### Acceptance Criteria
+
+- ✅ Users can upload images (single and bulk)
+- ✅ Image metadata can be edited
+- ✅ Images can be organized by category
+- ✅ Images can be filtered and searched
+- ✅ Bulk actions work correctly
+- ✅ Images appear in public gallery when active
+- ✅ User experience is intuitive
+
+### Technical Details
+
+**Files to Create:**
+- `client/services/galleryService.ts`
+- `client/components/gallery/GalleryManager.tsx`
+- `client/components/gallery/ImageUploader.tsx`
+- `client/components/gallery/ImageGrid.tsx`
+- `client/components/gallery/ImageEditor.tsx`
+- `client/components/gallery/ImageViewer.tsx`
+- `client/components/gallery/GalleryFilters.tsx`
+
+**Files to Modify:**
+- `client/components/GalleryPage.tsx` (ensure it uses active images from API)
+
+**Dependencies:**
+- React Dropzone (for drag-and-drop)
+- React Hook Form
+- Image preview libraries
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-SEC-002: Dashboard Authentication and Authorization
+
+**Status:** PENDING
+**Priority:** CRITICAL
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-DB-003
+**Related Tasks:** TASK-API-002, TASK-FEAT-015
+
+### Description
+
+Implement comprehensive authentication and authorization system for the dashboard. This includes user authentication (login/logout), role-based access control, protected routes, and permission checks for all dashboard features.
+
+### Requirements / What to Do
+
+#### Step 1: Backend Authentication Implementation
+- [ ] Create `server/src/services/auth.service.ts`:
+  - User registration (for admin/owner creation)
+  - User login (email/password)
+  - Password hashing using bcrypt
+  - JWT token generation
+  - Token verification
+  - Password reset functionality (optional)
+- [ ] Create `server/src/controllers/auth.controller.ts`:
+  - POST `/api/auth/register` - Register new user
+  - POST `/api/auth/login` - Login user
+  - POST `/api/auth/logout` - Logout (token invalidation, optional)
+  - GET `/api/auth/me` - Get current user info
+  - POST `/api/auth/refresh` - Refresh JWT token (optional)
+- [ ] Create `server/src/middleware/auth.middleware.ts`:
+  - Verify JWT token
+  - Extract user from token
+  - Attach user to request object
+  - Handle token expiration
+  - Handle invalid tokens
+
+#### Step 2: Backend Authorization Implementation
+- [ ] Create `server/src/middleware/authorize.middleware.ts`:
+  - Role-based access control
+  - Check user role against required roles
+  - Permission-based checks (if needed beyond roles)
+  - Return 403 for unauthorized access
+- [ ] Create role permission matrix:
+  - OWNER: Full access to all features
+  - MANAGER: Access to metrics, promotions, content, gallery (no user management)
+  - ADMIN: Access to metrics, promotions, content, gallery (may include user management)
+  - EMPLOYEE: Limited access (view-only metrics, if applicable)
+- [ ] Apply authorization middleware to all protected routes
+- [ ] Create helper functions for checking permissions
+
+#### Step 3: Frontend Authentication Context
+- [ ] Create `client/contexts/AuthContext.tsx`:
+  - User state management
+  - Login function
+  - Logout function
+  - Check authentication status
+  - Get current user
+  - Token management (store in localStorage or httpOnly cookie)
+- [ ] Create `client/services/authService.ts`:
+  - `login(email, password)`: Call login API, store token
+  - `logout()`: Clear token, redirect to login
+  - `getCurrentUser()`: Get current user info
+  - `isAuthenticated()`: Check if user is logged in
+  - Token refresh logic (if implemented)
+
+#### Step 4: Create Login Page
+- [ ] Create `client/components/auth/LoginPage.tsx`:
+  - Login form (email, password)
+  - Form validation
+  - Error handling
+  - Loading state
+  - Redirect after successful login
+  - Remember me option (optional)
+
+#### Step 5: Implement Protected Routes
+- [ ] Create `client/components/auth/ProtectedRoute.tsx`:
+  - Check if user is authenticated
+  - Redirect to login if not authenticated
+  - Check user role/permissions
+  - Show access denied if unauthorized
+- [ ] Wrap all dashboard routes with ProtectedRoute
+- [ ] Apply role-based route protection
+
+#### Step 6: Add Role-Based UI Rendering
+- [ ] Create `client/components/auth/RequireRole.tsx`:
+  - Component that renders children only if user has required role
+  - Show nothing or access denied message if unauthorized
+- [ ] Use RequireRole to conditionally render dashboard sections
+- [ ] Hide/disable features based on user role
+
+#### Step 7: Add Navigation Based on Roles
+- [ ] Update `client/components/Layout.tsx`:
+  - Show navigation items based on user role
+  - Hide unauthorized sections
+  - Show user info and logout button
+- [ ] Add user profile dropdown/menu
+
+#### Step 8: Implement Token Management
+- [ ] Store JWT token securely (localStorage or httpOnly cookie)
+- [ ] Include token in API requests (Authorization header)
+- [ ] Handle token expiration (redirect to login)
+- [ ] Implement token refresh if needed
+- [ ] Clear token on logout
+
+#### Step 9: Add API Request Interceptor
+- [ ] Create `client/services/apiClient.ts` or update existing:
+  - Axios or fetch wrapper
+  - Add Authorization header to all requests
+  - Handle 401 responses (redirect to login)
+  - Handle 403 responses (show access denied)
+  - Handle token refresh
+
+#### Step 10: Security Best Practices
+- [ ] Implement password strength requirements
+- [ ] Add rate limiting for login attempts (backend)
+- [ ] Implement CSRF protection (if using cookies)
+- [ ] Sanitize user inputs
+- [ ] Validate all API inputs
+- [ ] Use HTTPS in production
+- [ ] Implement secure password reset (if needed)
+
+#### Step 11: Add Session Management
+- [ ] Track user sessions (optional)
+- [ ] Implement session timeout (optional)
+- [ ] Allow users to see active sessions (optional)
+- [ ] Implement logout from all devices (optional)
+
+### Definition of Done (DoD)
+
+- [ ] User authentication working (login/logout)
+- [ ] JWT tokens generated and verified correctly
+- [ ] Role-based access control implemented
+- [ ] Protected routes working
+- [ ] Role-based UI rendering working
+- [ ] Login page implemented
+- [ ] Token management working
+- [ ] API requests include authentication
+- [ ] 401/403 errors handled properly
+- [ ] Password security implemented
+- [ ] TypeScript types correct
+- [ ] Security best practices followed
+
+### Verification Steps
+
+1. **Authentication Testing:**
+   - Test login with valid credentials
+   - Test login with invalid credentials
+   - Test logout
+   - Test token expiration handling
+   - Test protected route access
+
+2. **Authorization Testing:**
+   - Test each role's access to different features
+   - Test unauthorized access attempts
+   - Verify UI elements hidden based on role
+   - Test API endpoint authorization
+
+3. **Security Testing:**
+   - Test password hashing
+   - Test JWT token validation
+   - Test rate limiting (if implemented)
+   - Test input validation
+   - Test CSRF protection (if implemented)
+
+### Acceptance Criteria
+
+- ✅ Users can log in and log out
+- ✅ Protected routes require authentication
+- ✅ Role-based access control restricts features appropriately
+- ✅ Unauthorized users see appropriate error messages
+- ✅ Security best practices are followed
+- ✅ Token management is secure
+- ✅ User experience is smooth and intuitive
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/services/auth.service.ts`
+- `server/src/controllers/auth.controller.ts`
+- `server/src/middleware/auth.middleware.ts`
+- `server/src/middleware/authorize.middleware.ts`
+- `client/contexts/AuthContext.tsx`
+- `client/services/authService.ts`
+- `client/components/auth/LoginPage.tsx`
+- `client/components/auth/ProtectedRoute.tsx`
+- `client/components/auth/RequireRole.tsx`
+
+**Files to Modify:**
+- `client/App.tsx` (add protected routes)
+- `client/components/Layout.tsx` (add role-based navigation)
+- `server/src/index.ts` (add auth routes)
+
+**Dependencies:**
+- jsonwebtoken (backend)
+- bcrypt (backend)
+- React Context API (frontend)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-TEST-002: Dashboard Testing Suite
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 16 hours
+**Dependencies:** TASK-FEAT-015, TASK-FEAT-016, TASK-FEAT-017, TASK-FEAT-018, TASK-API-002
+**Related Tasks:** TASK-SEC-002
+
+### Description
+
+Create comprehensive testing suite for the dashboard system including unit tests, integration tests, and end-to-end tests. Ensure high test coverage for critical functionality including metrics, promotions, content management, gallery, and authentication.
+
+### Requirements / What to Do
+
+#### Step 1: Backend Unit Tests
+- [ ] Test authentication service:
+  - User registration
+  - User login
+  - Password hashing
+  - Token generation
+  - Token verification
+- [ ] Test metrics service:
+  - Revenue calculations
+  - Appointment aggregations
+  - Customer analytics
+  - Employee performance calculations
+  - Service popularity calculations
+- [ ] Test promotion service:
+  - Promotion CRUD operations
+  - Recipient targeting logic
+  - Promotion sending logic
+  - Analytics calculations
+- [ ] Test content service:
+  - Content CRUD operations
+  - Versioning logic
+  - Publish/unpublish logic
+- [ ] Test gallery service:
+  - Image upload handling
+  - Metadata management
+  - File operations
+- [ ] Test authorization middleware:
+  - Role checking
+  - Permission verification
+
+#### Step 2: Backend Integration Tests
+- [ ] Test API endpoints:
+  - Authentication endpoints (login, register, logout)
+  - Metrics endpoints (all metric types)
+  - Promotion endpoints (CRUD, send, analytics)
+  - Content endpoints (CRUD, publish, history)
+  - Gallery endpoints (upload, update, delete)
+- [ ] Test database operations:
+  - Entity creation and relationships
+  - Query operations
+  - Transactions
+- [ ] Test error handling:
+  - Invalid inputs
+  - Unauthorized access
+  - Not found errors
+  - Server errors
+
+#### Step 3: Frontend Unit Tests
+- [ ] Test dashboard services:
+  - dashboardService methods
+  - promotionService methods
+  - contentService methods
+  - galleryService methods
+  - authService methods
+- [ ] Test utility functions:
+  - Date formatting
+  - Data transformation
+  - Validation functions
+- [ ] Test custom hooks:
+  - useMetrics
+  - usePromotions
+  - useContent
+  - useGallery
+  - useAuth
+
+#### Step 4: Frontend Component Tests
+- [ ] Test KPI components:
+  - KPICard rendering
+  - Trend calculations
+  - Value formatting
+- [ ] Test chart components:
+  - Chart rendering with data
+  - Empty states
+  - Error states
+- [ ] Test promotion components:
+  - PromotionList
+  - PromotionForm validation
+  - PromotionModal
+- [ ] Test content components:
+  - ContentEditor
+  - ContentSectionEditor
+  - ContentPreview
+- [ ] Test gallery components:
+  - ImageUploader
+  - ImageGrid
+  - ImageEditor
+- [ ] Test authentication components:
+  - LoginPage
+  - ProtectedRoute
+  - RequireRole
+
+#### Step 5: Integration Tests
+- [ ] Test complete user flows:
+  - Login → View Dashboard → View Metrics
+  - Create Promotion → Send Promotion → View Analytics
+  - Edit Content → Preview → Publish
+  - Upload Image → Edit Metadata → View in Gallery
+- [ ] Test API integration:
+  - Data fetching
+  - Data mutations
+  - Error handling
+  - Loading states
+
+#### Step 6: End-to-End Tests (Optional but Recommended)
+- [ ] Set up E2E testing framework (Playwright, Cypress, or similar)
+- [ ] Test critical user journeys:
+  - Complete login flow
+  - View metrics dashboard
+  - Create and send promotion
+  - Edit website content
+  - Upload and manage gallery images
+- [ ] Test role-based access:
+  - Owner access
+  - Manager access
+  - Admin access
+
+#### Step 7: Performance Tests
+- [ ] Test API response times
+- [ ] Test large data sets (many promotions, many images)
+- [ ] Test concurrent requests
+- [ ] Test file upload performance
+
+#### Step 8: Accessibility Tests
+- [ ] Test keyboard navigation
+- [ ] Test screen reader compatibility
+- [ ] Test ARIA labels
+- [ ] Test color contrast
+- [ ] Use automated a11y testing tools
+
+#### Step 9: Security Tests
+- [ ] Test authentication bypass attempts
+- [ ] Test authorization bypass attempts
+- [ ] Test SQL injection prevention
+- [ ] Test XSS prevention
+- [ ] Test CSRF protection (if implemented)
+- [ ] Test file upload security
+
+#### Step 10: Test Coverage
+- [ ] Set up test coverage reporting
+- [ ] Aim for >80% code coverage
+- [ ] Focus on critical paths (metrics calculations, authentication, promotions)
+- [ ] Document coverage goals
+
+#### Step 11: Test Documentation
+- [ ] Document testing strategy
+- [ ] Document how to run tests
+- [ ] Document test data setup
+- [ ] Create test data fixtures
+- [ ] Document mocking strategies
+
+### Definition of Done (DoD)
+
+- [ ] Unit tests written for all services
+- [ ] Integration tests for all API endpoints
+- [ ] Component tests for all major components
+- [ ] E2E tests for critical user flows (if implemented)
+- [ ] Test coverage >80%
+- [ ] All tests passing
+- [ ] Test documentation complete
+- [ ] CI/CD integration for tests (if applicable)
+- [ ] Performance tests passing
+- [ ] Security tests passing
+
+### Verification Steps
+
+1. **Run Test Suite:**
+   ```bash
+   # Backend tests
+   cd server
+   npm run test
+   npm run test:coverage
+   
+   # Frontend tests
+   cd client
+   npm run test
+   npm run test:coverage
+   
+   # E2E tests (if implemented)
+   npm run test:e2e
+   ```
+
+2. **Verify Coverage:**
+   - Check coverage reports
+   - Verify critical paths are covered
+   - Identify gaps in coverage
+
+3. **Manual Verification:**
+   - Run through critical user flows manually
+   - Verify tests match actual behavior
+   - Check for false positives/negatives
+
+### Acceptance Criteria
+
+- ✅ Comprehensive test suite covers all major functionality
+- ✅ Test coverage meets project standards (>80%)
+- ✅ All tests pass consistently
+- ✅ Tests are maintainable and well-organized
+- ✅ Critical user flows are tested
+- ✅ Security and performance are tested
+- ✅ Test documentation is complete
+
+### Technical Details
+
+**Files to Create:**
+- `server/src/__tests__/services/auth.service.test.ts`
+- `server/src/__tests__/services/metrics.service.test.ts`
+- `server/src/__tests__/services/promotion.service.test.ts`
+- `server/src/__tests__/services/content.service.test.ts`
+- `server/src/__tests__/services/gallery.service.test.ts`
+- `server/src/__tests__/routes/metrics.routes.test.ts`
+- `server/src/__tests__/routes/promotions.routes.test.ts`
+- `server/src/__tests__/routes/content.routes.test.ts`
+- `server/src/__tests__/routes/gallery.routes.test.ts`
+- `server/src/__tests__/routes/auth.routes.test.ts`
+- `client/src/__tests__/services/dashboardService.test.ts`
+- `client/src/__tests__/services/promotionService.test.ts`
+- `client/src/__tests__/services/contentService.test.ts`
+- `client/src/__tests__/services/galleryService.test.ts`
+- `client/src/__tests__/components/dashboard/*.test.tsx`
+- `client/src/__tests__/components/promotions/*.test.tsx`
+- `client/src/__tests__/components/content/*.test.tsx`
+- `client/src/__tests__/components/gallery/*.test.tsx`
+- `client/src/__tests__/components/auth/*.test.tsx`
+- `e2e/dashboard.spec.ts` (if E2E testing)
+
+**Testing Tools:**
+- Jest (backend and frontend unit tests)
+- Supertest (backend API tests)
+- React Testing Library (frontend component tests)
+- Playwright or Cypress (E2E tests)
+- Coverage: Istanbul/nyc
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
+---
+
+## TASK-TEST-003: Dashboard Quality Assurance and User Acceptance Testing
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-22
+**Updated:** 2025-01-22
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-TEST-002, TASK-FEAT-015, TASK-FEAT-016, TASK-FEAT-017, TASK-FEAT-018
+**Related Tasks:** none
+
+### Description
+
+Conduct comprehensive quality assurance testing including manual testing, user acceptance testing, usability testing, cross-browser testing, and performance validation. Create test plans, test cases, and bug tracking to ensure the dashboard meets quality standards and user expectations.
+
+### Requirements / What to Do
+
+#### Step 1: Create Test Plan
+- [ ] Create `doc/QA/DASHBOARD_TEST_PLAN.md`:
+  - Test objectives
+  - Test scope
+  - Test strategy
+  - Test environment setup
+  - Test schedule
+  - Risk assessment
+  - Success criteria
+
+#### Step 2: Create Test Cases
+- [ ] Create test cases for Metrics Dashboard:
+  - View metrics with different date ranges
+  - Filter metrics by period
+  - Export metrics data
+  - Verify metric calculations are correct
+  - Test with empty data
+  - Test with large datasets
+- [ ] Create test cases for Promotions:
+  - Create promotion
+  - Edit promotion
+  - Delete promotion
+  - Send promotion
+  - View promotion analytics
+  - Schedule promotion
+  - Test AI generation
+- [ ] Create test cases for Content Management:
+  - Edit each content section
+  - Save as draft
+  - Publish content
+  - View preview
+  - View version history
+  - Revert to previous version
+- [ ] Create test cases for Gallery:
+  - Upload single image
+  - Upload multiple images
+  - Edit image metadata
+  - Delete image
+  - Filter images
+  - Search images
+  - Bulk actions
+- [ ] Create test cases for Authentication:
+  - Login
+  - Logout
+  - Role-based access
+  - Protected routes
+  - Token expiration
+
+#### Step 3: Manual Functional Testing
+- [ ] Execute all test cases
+- [ ] Document test results
+- [ ] Log bugs found
+- [ ] Verify bug fixes
+- [ ] Retest after fixes
+
+#### Step 4: Usability Testing
+- [ ] Test user flows with actual users (if possible)
+  - First-time user experience
+  - Task completion rates
+  - User satisfaction
+  - Confusion points
+- [ ] Document usability issues
+- [ ] Create usability report
+
+#### Step 5: Cross-Browser Testing
+- [ ] Test on Chrome
+- [ ] Test on Firefox
+- [ ] Test on Safari
+- [ ] Test on Edge
+- [ ] Test on mobile browsers (iOS Safari, Chrome Mobile)
+- [ ] Document browser-specific issues
+
+#### Step 6: Responsive Design Testing
+- [ ] Test on desktop (1920x1080, 1366x768)
+- [ ] Test on tablet (iPad, Android tablets)
+- [ ] Test on mobile (iPhone, Android phones)
+- [ ] Verify all features work on all screen sizes
+- [ ] Test touch interactions on mobile
+
+#### Step 7: Performance Testing
+- [ ] Measure page load times
+- [ ] Test with slow network connections
+- [ ] Test API response times
+- [ ] Test large file uploads
+- [ ] Test with large datasets (many promotions, images)
+- [ ] Identify performance bottlenecks
+- [ ] Verify performance meets requirements (< 2s page load)
+
+#### Step 8: Accessibility Testing
+- [ ] Test with keyboard only (no mouse)
+- [ ] Test with screen reader (NVDA, JAWS, VoiceOver)
+- [ ] Test ARIA labels
+- [ ] Test color contrast
+- [ ] Test focus indicators
+- [ ] Use automated a11y tools (axe, Lighthouse)
+- [ ] Document accessibility issues
+
+#### Step 9: Security Testing
+- [ ] Test authentication security
+- [ ] Test authorization (try accessing unauthorized features)
+- [ ] Test input validation (try SQL injection, XSS)
+- [ ] Test file upload security (try uploading malicious files)
+- [ ] Test CSRF protection (if implemented)
+- [ ] Review security best practices
+
+#### Step 10: Data Integrity Testing
+- [ ] Verify data is saved correctly
+- [ ] Verify data is retrieved correctly
+- [ ] Test data relationships
+- [ ] Test data deletion and cascades
+- [ ] Verify version history accuracy
+
+#### Step 11: Integration Testing
+- [ ] Test integration with external services (email, SMS if applicable)
+- [ ] Test integration with payment systems (if applicable)
+- [ ] Test file storage integration
+- [ ] Verify all API integrations work
+
+#### Step 12: Create Bug Tracking
+- [ ] Set up bug tracking system (GitHub Issues, Jira, or similar)
+- [ ] Create bug report template
+- [ ] Log all bugs found during testing
+- [ ] Prioritize bugs (Critical, High, Medium, Low)
+- [ ] Track bug resolution
+
+#### Step 13: Create QA Report
+- [ ] Create `doc/QA/DASHBOARD_QA_REPORT.md`:
+  - Executive summary
+  - Test execution summary
+  - Bug summary
+  - Performance metrics
+  - Accessibility findings
+  - Security findings
+  - Recommendations
+  - Sign-off status
+
+### Definition of Done (DoD)
+
+- [ ] Test plan created
+- [ ] All test cases written and executed
+- [ ] Manual functional testing complete
+- [ ] Usability testing complete (if applicable)
+- [ ] Cross-browser testing complete
+- [ ] Responsive design testing complete
+- [ ] Performance testing complete and meets requirements
+- [ ] Accessibility testing complete
+- [ ] Security testing complete
+- [ ] All critical and high-priority bugs fixed
+- [ ] QA report created
+- [ ] Sign-off from stakeholders
+
+### Verification Steps
+
+1. **Test Execution:**
+   - Run through all test cases
+   - Document results
+   - Verify all critical paths work
+
+2. **Bug Verification:**
+   - Verify all critical bugs are fixed
+   - Retest fixed bugs
+   - Verify no regressions
+
+3. **Stakeholder Review:**
+   - Present QA report
+   - Get sign-off
+   - Address any concerns
+
+### Acceptance Criteria
+
+- ✅ All test cases executed and documented
+- ✅ All critical bugs fixed
+- ✅ Performance meets requirements
+- ✅ Accessibility requirements met
+- ✅ Security requirements met
+- ✅ Cross-browser compatibility verified
+- ✅ Responsive design works on all devices
+- ✅ QA report complete
+- ✅ Stakeholder sign-off obtained
+
+### Technical Details
+
+**Files to Create:**
+- `doc/QA/DASHBOARD_TEST_PLAN.md`
+- `doc/QA/DASHBOARD_TEST_CASES.md`
+- `doc/QA/DASHBOARD_QA_REPORT.md`
+- `doc/QA/USABILITY_REPORT.md` (if applicable)
+
+**Testing Tools:**
+- Browser DevTools for performance testing
+- Lighthouse for performance and accessibility
+- axe DevTools for accessibility
+- Postman/Insomnia for API testing
+- BrowserStack or similar for cross-browser testing (optional)
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
+
