@@ -1,9 +1,9 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-22T03:00:00.000Z",
-    "totalTasks": 51,
-    "lastSync": "2025-01-22T03:00:00.000Z"
+    "lastUpdated": "2025-12-24T00:00:00.000Z",
+    "totalTasks": 52,
+    "lastSync": "2025-12-24T00:00:00.000Z"
   },
   "categories": {
     "FEAT": {
@@ -38,8 +38,8 @@
       "name": "UI/UX",
       "code": "UI",
       "description": "User interface and user experience work",
-      "lastNumber": 1,
-      "nextAvailable": 2
+      "lastNumber": 2,
+      "nextAvailable": 3
     },
     "API": {
       "name": "API",
@@ -183,6 +183,38 @@
       "progress": {
         "completed": 0,
         "total": 36,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-UI-002",
+      "category": "UI",
+      "number": 2,
+      "title": "Re-style Task Portal Dashboard with Modern Analytics UI",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-12-24",
+      "updated": "2025-12-24",
+      "estimatedTime": "8-12 hours",
+      "dependencies": [],
+      "relatedTasks": [
+        "TASK-FEAT-001",
+        "TASK-FEAT-002",
+        "TASK-FEAT-003",
+        "TASK-FEAT-004"
+      ],
+      "file": "portal.task",
+      "filePath": ".tasks/portal.task",
+      "description": "Re-style the Task Portal dashboard to create a modern, visually appealing analytics interface with lively charts and diagrams. The design should be inspired by the dashboard wireframe while maintaining our current gradient violet-purple theme.",
+      "sections": {
+        "requirements": "Step 1: Analyze Wireframe and Current UI\nStep 2: Design Component Library\nStep 3: Select Chart Library\nStep 4: Implement Dashboard Layout\nStep 5: Implement Chart Components\nStep 6: Implement Metric Cards\nStep 7: Style Integration\nStep 8: Data Integration\nStep 9: Testing and Polish\nStep 10: Documentation",
+        "acceptanceCriteria": "- Dashboard has modern, professional appearance\n- Charts are lively and animated (not static images)\n- Violet-purple gradient theme maintained (no purple like wireframe)\n- At least 4 different chart types implemented\n- Metric cards display key statistics\n- Responsive on all screen sizes\n- Fast load time (<2 seconds)\n- Accessible to screen readers\n- Clean, maintainable code\n- Data updates when TASK_REGISTRY.json changes",
+        "technicalDetails": "**Design Reference:** .tasks/resources/dashboard_wireframe.png\n\n**Files to Create:**\n- task-portal/static-site/src/charts/pieChart.ts\n- task-portal/static-site/src/charts/areaChart.ts\n- task-portal/static-site/src/charts/barChart.ts\n- task-portal/static-site/src/charts/donutChart.ts\n- task-portal/static-site/src/components/MetricCard.ts\n- task-portal/static-site/src/utils/chartData.ts\n\n**Files to Modify:**\n- task-portal/static-site/public/index.html\n- task-portal/static-site/src/index.ts\n- task-portal/static-site/src/styles.css\n- task-portal/static-site/package.json\n- task-portal/static-site/README.md\n\n**Chart Library:** TBD (Chart.js, D3.js, or Apache ECharts)\n**Color Theme:** Violet-purple gradient (NOT purple like wireframe)\n**Charts:** Pie chart (category distribution), Area chart (trends), Bar chart (priority/status), Donut chart (progress)"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 10,
         "percentage": 0
       }
     },
@@ -1324,7 +1356,11 @@
       "updated": "2025-01-22",
       "estimatedTime": "6 hours",
       "dependencies": [],
-      "relatedTasks": ["TASK-DB-004", "TASK-API-004", "TASK-FEAT-023"],
+      "relatedTasks": [
+        "TASK-DB-004",
+        "TASK-API-004",
+        "TASK-FEAT-023"
+      ],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
       "description": "Conduct comprehensive requirements analysis for customer data management, promotion automation system, and email/SMS delivery infrastructure.",
@@ -1346,8 +1382,12 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "8 hours",
-      "dependencies": ["TASK-DOC-004"],
-      "relatedTasks": ["TASK-API-004"],
+      "dependencies": [
+        "TASK-DOC-004"
+      ],
+      "relatedTasks": [
+        "TASK-API-004"
+      ],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
       "description": "Design and implement database schema for customer data management and promotion automation system.",
@@ -1369,8 +1409,13 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "16 hours",
-      "dependencies": ["TASK-DB-004"],
-      "relatedTasks": ["TASK-FEAT-023", "TASK-FEAT-024"],
+      "dependencies": [
+        "TASK-DB-004"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-023",
+        "TASK-FEAT-024"
+      ],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
       "description": "Implement backend API endpoints for customer management, promotion template management, promotion automation rule configuration, and promotion sending.",
@@ -1392,8 +1437,12 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "12 hours",
-      "dependencies": ["TASK-API-004"],
-      "relatedTasks": ["TASK-FEAT-024"],
+      "dependencies": [
+        "TASK-API-004"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-024"
+      ],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
       "description": "Develop the customer management interface in the dashboard, allowing store managers and owners to view, create, edit, and manage customer data.",
@@ -1415,7 +1464,10 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "16 hours",
-      "dependencies": ["TASK-API-004", "TASK-FEAT-023"],
+      "dependencies": [
+        "TASK-API-004",
+        "TASK-FEAT-023"
+      ],
       "relatedTasks": [],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
@@ -1438,7 +1490,9 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "6 hours",
-      "dependencies": ["TASK-API-004"],
+      "dependencies": [
+        "TASK-API-004"
+      ],
       "relatedTasks": [],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
@@ -1461,7 +1515,11 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "12 hours",
-      "dependencies": ["TASK-API-004", "TASK-FEAT-023", "TASK-FEAT-024"],
+      "dependencies": [
+        "TASK-API-004",
+        "TASK-FEAT-023",
+        "TASK-FEAT-024"
+      ],
       "relatedTasks": [],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
@@ -1484,7 +1542,11 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "4 hours",
-      "dependencies": ["TASK-API-004", "TASK-FEAT-023", "TASK-FEAT-024"],
+      "dependencies": [
+        "TASK-API-004",
+        "TASK-FEAT-023",
+        "TASK-FEAT-024"
+      ],
       "relatedTasks": [],
       "file": "customer-promotions.task",
       "filePath": ".tasks/customer-promotions.task",
@@ -1507,8 +1569,14 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "6 hours",
-      "dependencies": ["TASK-ARCH-001"],
-      "relatedTasks": ["TASK-DB-005", "TASK-API-005", "TASK-SEC-003"],
+      "dependencies": [
+        "TASK-ARCH-001"
+      ],
+      "relatedTasks": [
+        "TASK-DB-005",
+        "TASK-API-005",
+        "TASK-SEC-003"
+      ],
       "file": "backend.task",
       "filePath": ".tasks/backend.task",
       "description": "Design comprehensive authentication and authorization system for the LuxeNail application. This includes defining user roles, permissions, authentication flows, authorization rules, and security requirements.",
@@ -1530,8 +1598,13 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "8 hours",
-      "dependencies": ["TASK-DOC-006", "TASK-DB-002"],
-      "relatedTasks": ["TASK-API-005"],
+      "dependencies": [
+        "TASK-DOC-006",
+        "TASK-DB-002"
+      ],
+      "relatedTasks": [
+        "TASK-API-005"
+      ],
       "file": "backend.task",
       "filePath": ".tasks/backend.task",
       "description": "Implement database schema for user authentication and authorization system. This includes extending the users table with authentication fields, creating roles and permissions tables, implementing password storage, and setting up authorization data structures.",
@@ -1553,8 +1626,12 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "16 hours",
-      "dependencies": ["TASK-DB-005"],
-      "relatedTasks": ["TASK-SEC-003"],
+      "dependencies": [
+        "TASK-DB-005"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-003"
+      ],
       "file": "backend.task",
       "filePath": ".tasks/backend.task",
       "description": "Implement complete authentication and authorization API endpoints and middleware for the LuxeNail application. This includes login, registration, password management, JWT token handling, role-based access control, and authorization middleware.",
@@ -1576,8 +1653,12 @@
       "created": "2025-01-22",
       "updated": "2025-01-22",
       "estimatedTime": "6 hours",
-      "dependencies": ["TASK-API-005"],
-      "relatedTasks": ["TASK-DOC-006"],
+      "dependencies": [
+        "TASK-API-005"
+      ],
+      "relatedTasks": [
+        "TASK-DOC-006"
+      ],
       "file": "backend.task",
       "filePath": ".tasks/backend.task",
       "description": "Implement additional security measures for the authentication system, including secure token handling, session management, security headers, and security monitoring.",

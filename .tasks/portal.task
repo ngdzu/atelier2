@@ -3183,3 +3183,267 @@ const PRIORITY_COLORS = {
 **Completion Date:** 
 **Completed By:** 
 **Notes:**
+
+---
+
+## TASK-UI-002: Re-style Task Portal Dashboard with Modern Analytics UI
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-12-24
+**Updated:** 2025-12-24
+**Estimated Time:** 8-12 hours
+**Dependencies:** none
+**Related Tasks:** TASK-FEAT-001, TASK-FEAT-002, TASK-FEAT-003, TASK-FEAT-004
+
+### Description
+
+Re-style the Task Portal dashboard to create a modern, visually appealing analytics interface with lively charts and diagrams. The design should be inspired by the dashboard wireframe (see `.tasks/resources/dashboard_wireframe.png`) while maintaining our current gradient violet-purple theme. The goal is to create an engaging, professional dashboard that provides clear insights into project progress and task metrics.
+
+**Design Reference:** [dashboard_wireframe.png](.tasks/resources/dashboard_wireframe.png)
+
+### Requirements / What to Do
+
+#### Step 1: Analyze Wireframe and Current UI
+- [ ] Review wireframe design at `.tasks/resources/dashboard_wireframe.png`
+- [ ] Identify key UI elements from wireframe (charts, cards, navigation)
+- [ ] Audit current task portal UI in `task-portal/static-site/`
+- [ ] Document differences and design gaps
+- [ ] Create list of components to add/modify
+
+#### Step 2: Design Component Library
+- [ ] Design chart components needed:
+  - [ ] Pie chart for task distribution by category
+  - [ ] Area/line chart for task completion trends
+  - [ ] Bar chart for priority/status metrics
+  - [ ] Donut chart for progress indicators
+- [ ] Design card components for metrics display
+- [ ] Design navigation/sidebar styling
+- [ ] Create color palette based on current violet-purple gradient theme
+- [ ] Define typography scale and spacing system
+
+#### Step 3: Select Chart Library
+- [ ] Evaluate chart libraries for static site:
+  - [ ] Chart.js (simple, lightweight)
+  - [ ] D3.js (powerful, flexible, requires more code)
+  - [ ] Apache ECharts (feature-rich)
+  - [ ] Recharts (React-specific if migrating to React)
+  - [ ] Victory (React-specific)
+- [ ] Make selection based on:
+  - Bundle size
+  - Ease of use
+  - Customization capabilities
+  - TypeScript support
+  - Animation support
+
+#### Step 4: Implement Dashboard Layout
+- [ ] Update `task-portal/static-site/public/index.html` structure
+- [ ] Implement responsive grid layout for dashboard cards
+- [ ] Add sidebar/navigation matching wireframe style
+- [ ] Implement header with branding and date/actions
+- [ ] Ensure mobile responsiveness
+
+#### Step 5: Implement Chart Components
+- [ ] Create task distribution pie chart
+  - Show tasks by category (FEAT, BUG, UI, API, etc.)
+  - Use gradient violet-purple color scheme
+- [ ] Create task status area chart
+  - Show task completion over time
+  - Display trend lines
+- [ ] Create priority bar chart
+  - Show tasks grouped by priority (HIGH, MEDIUM, LOW)
+  - Stacked or grouped bars
+- [ ] Create progress donut chart
+  - Show overall completion percentage
+  - Display in center of donut
+- [ ] Add smooth animations and transitions
+
+#### Step 6: Implement Metric Cards
+- [ ] Create card component for key metrics:
+  - Total tasks
+  - Completed tasks
+  - In-progress tasks
+  - Pending tasks
+  - Completion rate
+- [ ] Add icons to metric cards
+- [ ] Implement hover effects and animations
+
+#### Step 7: Style Integration
+- [ ] Update CSS in `task-portal/static-site/src/styles.css`
+- [ ] Implement violet-purple gradient theme:
+  - Primary: Current gradient (violet to purple)
+  - Accents: Complementary colors for charts
+  - Background: Clean, modern background
+  - Text: High contrast for readability
+- [ ] Add glassmorphism or modern card effects
+- [ ] Implement smooth transitions and hover states
+- [ ] Add responsive breakpoints
+
+#### Step 8: Data Integration
+- [ ] Update `task-portal/static-site/src/index.ts` to calculate metrics:
+  - Tasks by category
+  - Tasks by status
+  - Tasks by priority
+  - Completion trends over time
+- [ ] Generate chart data from TASK_REGISTRY.json
+- [ ] Implement real-time updates when registry changes
+
+#### Step 9: Testing and Polish
+- [ ] Test on different screen sizes (desktop, tablet, mobile)
+- [ ] Test with different task data scenarios:
+  - Empty state (no tasks)
+  - Few tasks
+  - Many tasks (current ~51 tasks)
+- [ ] Verify chart animations are smooth
+- [ ] Ensure accessibility (ARIA labels, keyboard navigation)
+- [ ] Test color contrast for readability
+- [ ] Optimize performance (lazy loading, efficient rendering)
+
+#### Step 10: Documentation
+- [ ] Update `task-portal/static-site/README.md` with:
+  - New dashboard features
+  - Chart library usage
+  - Customization guide
+- [ ] Document color theme variables
+- [ ] Add screenshots to documentation
+- [ ] Document responsive breakpoints
+
+### Definition of Done (DoD)
+
+- [ ] Dashboard layout matches wireframe inspiration (adapted to our needs)
+- [ ] All chart types implemented and displaying data correctly
+- [ ] Violet-purple gradient theme applied throughout
+- [ ] Metric cards showing accurate task statistics
+- [ ] Responsive design works on mobile, tablet, and desktop
+- [ ] Smooth animations and transitions implemented
+- [ ] High accessibility scores (WCAG AA minimum)
+- [ ] No console errors or warnings
+- [ ] Build process completes successfully
+- [ ] Documentation updated with new features
+- [ ] Screenshots added to README
+
+### Acceptance Criteria
+
+- ✅ Dashboard has modern, professional appearance
+- ✅ Charts are lively and animated (not static images)
+- ✅ Violet-purple gradient theme maintained (no purple like wireframe)
+- ✅ At least 4 different chart types implemented
+- ✅ Metric cards display key statistics
+- ✅ Responsive on all screen sizes
+- ✅ Fast load time (<2 seconds)
+- ✅ Accessible to screen readers
+- ✅ Clean, maintainable code
+- ✅ Data updates when TASK_REGISTRY.json changes
+
+### Technical Details
+
+**Files to Create:**
+- `task-portal/static-site/src/charts/pieChart.ts` (or use library)
+- `task-portal/static-site/src/charts/areaChart.ts`
+- `task-portal/static-site/src/charts/barChart.ts`
+- `task-portal/static-site/src/charts/donutChart.ts`
+- `task-portal/static-site/src/components/MetricCard.ts`
+- `task-portal/static-site/src/utils/chartData.ts` (data transformers)
+
+**Files to Modify:**
+- `task-portal/static-site/public/index.html` (layout structure)
+- `task-portal/static-site/src/index.ts` (dashboard logic)
+- `task-portal/static-site/src/styles.css` (styling)
+- `task-portal/static-site/package.json` (add chart library)
+- `task-portal/static-site/README.md` (documentation)
+
+**Dependencies to Add:**
+- Chart library (Chart.js, D3.js, ECharts, etc.) - TBD based on evaluation
+- Icon library (optional: Font Awesome, Feather Icons, etc.)
+- Animation library (optional: GSAP, Anime.js, or CSS animations)
+
+**Color Theme:**
+- Base gradient: Current violet-purple gradient
+- Chart colors: Variations of violet/purple with accents
+- Background: Light (white/gray) or dark mode option
+- Text: High contrast for accessibility
+- Borders/dividers: Subtle, modern
+
+**Chart Data Sources (from TASK_REGISTRY.json):**
+- Task distribution: `tasks.length` by `category`
+- Task status: Count by `status` (PENDING, IN_PROGRESS, COMPLETED)
+- Task priority: Count by `priority` (HIGH, MEDIUM, LOW)
+- Completion trend: Tasks by `created` and `updated` dates
+- Category breakdown: Group by `categories` object
+
+**Design Principles:**
+- Clean and modern
+- Data-driven insights
+- Visual hierarchy
+- Consistent spacing
+- Smooth interactions
+- Accessible and inclusive
+
+### Wireframe Analysis
+
+**Key Elements from Wireframe to Adapt:**
+1. **Charts:**
+   - Pie chart (upper left) → Task category distribution
+   - Area chart (upper right) → Task completion trend
+   - Bar chart (lower left) → Priority/status metrics
+   - Donut chart (lower right) → Overall progress
+
+2. **Layout:**
+   - Navigation sidebar (left) → Keep current or enhance
+   - Header with date and actions (top) → Add chat/notification icons
+   - Grid layout for charts (2x2) → Responsive grid
+   - "View more" buttons → Navigation to detailed views
+
+3. **Style Elements to Avoid:**
+   - Purple color scheme → Keep our violet-purple gradient instead
+   - Caption text style → Use our typography
+
+4. **Style Elements to Adopt:**
+   - Card-based layout with shadows
+   - Clean, modern spacing
+   - Chart labeling style
+   - Responsive grid system
+
+### Notes
+
+- The wireframe uses purple as primary color, but we'll maintain our existing violet-purple gradient theme
+- We may not need all exact chart types from wireframe - adapt based on our task data
+- Focus on data that provides actionable insights (not just pretty charts)
+- Ensure charts are interactive where appropriate (tooltips, legends, click handlers)
+- Consider adding filters to interact with charts (date range, category, etc.)
+
+### Testing Checklist
+
+- [ ] Dashboard loads without errors
+- [ ] All charts render correctly
+- [ ] Charts display accurate data from TASK_REGISTRY.json
+- [ ] Metric cards show correct statistics
+- [ ] Responsive layout works on:
+  - [ ] Mobile (320px-768px)
+  - [ ] Tablet (768px-1024px)
+  - [ ] Desktop (1024px+)
+- [ ] Animations are smooth (60fps)
+- [ ] Color contrast meets WCAG AA
+- [ ] Keyboard navigation works
+- [ ] Screen reader announces elements correctly
+- [ ] Works in major browsers (Chrome, Firefox, Safari, Edge)
+- [ ] Build completes without warnings
+- [ ] No console errors
+
+### Future Enhancements
+
+- [ ] Add dark mode toggle
+- [ ] Implement real-time updates (websockets or polling)
+- [ ] Add export functionality (PDF, PNG, CSV)
+- [ ] Implement custom date range filters
+- [ ] Add drill-down capabilities (click chart to see details)
+- [ ] Implement dashboard customization (drag-drop widgets)
+- [ ] Add comparison views (current vs previous period)
+- [ ] Implement team/assignee filtering
+
+---
+
+**Completion Date:** 
+**Completed By:** 
+**Notes:**
