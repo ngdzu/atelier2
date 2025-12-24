@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const CategoryCodes = [
     'FEAT', 'BUG', 'ENH', 'REF', 'UI', 'API',
     'DB', 'TEST', 'DOC', 'OPS', 'SEC', 'PERF',
-    'A11Y', 'CONFIG'
+    'A11Y', 'CONFIG', 'ARCH', 'MIG'
 ] as const;
 
 export type CategoryCode = typeof CategoryCodes[number];
@@ -150,4 +150,6 @@ export const CATEGORY_INFO: Record<CategoryCode, { name: string; description: st
     PERF: { name: 'Performance', description: 'Performance optimization' },
     A11Y: { name: 'Accessibility', description: 'Accessibility improvements' },
     CONFIG: { name: 'Configuration', description: 'Configuration and setup' },
+    ARCH: { name: 'Architecture', description: 'System architecture and design' },
+    MIG: { name: 'Migration', description: 'Data or system migration tasks' },
 };

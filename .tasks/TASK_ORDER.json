@@ -12,12 +12,12 @@
       "description": "Establish system architecture and design foundation. These tasks must be completed before any implementation begins.",
       "tasks": [
         {
-          "taskId": "TASK-ARCH-001",
+          "taskId": "TASK-DOC-007",
           "title": "Backend Architecture Design and Documentation",
           "priority": "HIGH",
           "canStart": true,
           "blocking": [
-            "TASK-DB-000"
+            "TASK-DB-006"
           ],
           "estimatedTime": "8 hours",
           "notes": "Foundation task - must be completed first. All other backend tasks depend on this."
@@ -28,10 +28,10 @@
           "priority": "HIGH",
           "canStart": true,
           "blocking": [
-            "TASK-DB-004"
+            "TASK-DB-006"
           ],
           "estimatedTime": "6 hours",
-          "notes": "Requirements analysis for customer data management and promotion automation system. Can be done in parallel with TASK-ARCH-001."
+          "notes": "Requirements analysis for customer data management and promotion automation system. Can be done in parallel with TASK-DOC-007."
         },
         {
           "taskId": "TASK-DOC-002",
@@ -42,7 +42,7 @@
             "TASK-FEAT-014"
           ],
           "estimatedTime": "4 hours",
-          "notes": "Requirements analysis for dashboard management system. Can be done in parallel with TASK-ARCH-001 and TASK-DOC-004."
+          "notes": "Requirements analysis for dashboard management system. Can be done in parallel with TASK-DOC-007 and TASK-DOC-004."
         },
         {
           "taskId": "TASK-DOC-006",
@@ -50,7 +50,7 @@
           "priority": "HIGH",
           "canStart": false,
           "dependsOn": [
-            "TASK-ARCH-001"
+            "TASK-DOC-007"
           ],
           "blocking": [
             "TASK-DB-005"
@@ -66,12 +66,12 @@
       "description": "Design and document database schema. These tasks establish the data model.",
       "tasks": [
         {
-          "taskId": "TASK-DB-000",
+          "taskId": "TASK-DB-006",
           "title": "Database Schema Design and Documentation",
           "priority": "HIGH",
           "canStart": false,
           "dependsOn": [
-            "TASK-ARCH-001"
+            "TASK-DOC-007"
           ],
           "blocking": [
             "TASK-DB-001"
@@ -85,14 +85,14 @@
           "priority": "HIGH",
           "canStart": false,
           "dependsOn": [
-            "TASK-DB-000",
-            "TASK-ARCH-001"
+            "TASK-DB-006",
+            "TASK-DOC-007"
           ],
           "blocking": [
             "TASK-DB-002"
           ],
           "estimatedTime": "6 hours",
-          "notes": "Implements TypeORM entities based on schema design from TASK-DB-000."
+          "notes": "Implements TypeORM entities based on schema design from TASK-DB-006."
         },
         {
           "taskId": "TASK-DB-002",
@@ -185,7 +185,7 @@
             "TASK-OPS-004",
             "TASK-TEST-001",
             "TASK-SEC-001",
-            "TASK-MIG-001"
+            "TASK-REF-002"
           ],
           "estimatedTime": "12 hours",
           "notes": "Core API implementation. Many tasks depend on this being complete."
@@ -266,7 +266,7 @@
             "TASK-API-001"
           ],
           "blocking": [
-            "TASK-MIG-001"
+            "TASK-REF-002"
           ],
           "estimatedTime": "10 hours",
           "notes": "Can be done in parallel with OPS-004 and SEC-001. Required before migration."
@@ -333,7 +333,7 @@
       "description": "Migrate client to use backend API instead of constants.",
       "tasks": [
         {
-          "taskId": "TASK-MIG-001",
+          "taskId": "TASK-REF-002",
           "title": "Client Migration from Constants to Backend API",
           "priority": "HIGH",
           "canStart": false,
@@ -461,7 +461,7 @@
           "canStart": false,
           "dependsOn": [
             "TASK-API-001",
-            "TASK-MIG-001"
+            "TASK-REF-002"
           ],
           "blocking": [],
           "estimatedTime": "6 hours",
@@ -538,14 +538,14 @@
   "nextTaskRecommendation": {
     "algorithm": "Find the first task in the earliest phase where canStart is true or all dependencies are completed",
     "currentPhase": 1,
-    "suggestedTask": "TASK-ARCH-001",
+    "suggestedTask": "TASK-DOC-007",
     "reason": "Foundation task with no dependencies. Must be completed before all other backend tasks."
   },
   "parallelization": {
     "phase1": {
       "description": "Foundation tasks in Phase 1 can be done in parallel",
       "tasks": [
-        "TASK-ARCH-001",
+        "TASK-DOC-007",
         "TASK-DOC-004",
         "TASK-DOC-002"
       ],
@@ -557,7 +557,7 @@
         "TASK-DB-001",
         "TASK-DB-003"
       ],
-      "note": "TASK-DB-001 and TASK-DB-003 can be done in parallel as they depend on different parent tasks (DB-000 vs FEAT-014)."
+      "note": "TASK-DB-001 and TASK-DB-003 can be done in parallel as they depend on different parent tasks (DB-006 vs FEAT-014)."
     },
     "phase3": {
       "description": "Some API tasks can be done in parallel, but TASK-API-005 (auth) should be completed before TASK-API-002 (dashboard API)",
@@ -589,13 +589,13 @@
     }
   },
   "criticalPath": [
-    "TASK-ARCH-001",
-    "TASK-DB-000",
+    "TASK-DOC-007",
+    "TASK-DB-006",
     "TASK-DB-001",
     "TASK-DB-002",
     "TASK-API-001",
     "TASK-TEST-001",
-    "TASK-MIG-001",
+    "TASK-REF-002",
     "TASK-DOC-001"
   ],
   "authenticationCriticalPath": [

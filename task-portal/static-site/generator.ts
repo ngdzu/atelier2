@@ -24,7 +24,8 @@ function calculateStats(tasks: any[]) {
     byCategory: {} as Record<string, number>,
     byPriority: {} as Record<string, number>,
     completionRate: 0,
-    totalCompleted: 0
+    totalCompleted: 0,
+    completionsByWeek: [] as { week: string; count: number }[]
   };
 
   tasks.forEach(task => {
@@ -46,6 +47,32 @@ function calculateStats(tasks: any[]) {
   });
 
   stats.completionRate = stats.total > 0 ? Math.round((stats.totalCompleted / stats.total) * 100) : 0;
+
+  // Compute completions per week for last 8 weeks (ISO week label like '2025-W52')
+  const now = new Date();
+  const weekBuckets = new Map<string, number>();
+  function isoWeek(date: Date) {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+    const yr = d.getUTCFullYear();
+    return `${yr}-W${String(weekNo).padStart(2, '0')}`;
+  }
+  const last8WeeksLabels: string[] = [];
+  for (let i = 7; i >= 0; i--) {
+    const dt = new Date(now);
+    dt.setDate(now.getDate() - i * 7);
+    last8WeeksLabels.push(isoWeek(dt));
+  }
+  tasks
+    .filter(t => t.status === 'COMPLETED' && t.updated)
+    .forEach(t => {
+      const w = isoWeek(new Date(t.updated));
+      weekBuckets.set(w, (weekBuckets.get(w) || 0) + 1);
+    });
+  stats.completionsByWeek = last8WeeksLabels.map(w => ({ week: w, count: weekBuckets.get(w) || 0 }));
 
   return stats;
 }
@@ -368,9 +395,17 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       margin-bottom: 2rem;
     }
 
-    .stat-card {
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Shared surface for stat and chart cards */
+    .card-surface {
       background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      padding: 2rem;
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.6);
@@ -380,13 +415,13 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .stat-card:hover {
+    .card-surface:hover {
       transform: translateY(-8px);
       box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
       border-color: rgba(255, 255, 255, 0.8);
     }
 
-    .stat-card::before {
+    .card-surface::before {
       content: '';
       position: absolute;
       top: 0;
@@ -395,6 +430,82 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       height: 4px;
       background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
       border-radius: 20px 20px 0 0;
+    }
+
+    .chart-card {
+      padding: 1.5rem;
+    }
+
+    .chart-stats {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .chart-title {
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chart {
+      width: 100%;
+      height: 240px;
+    }
+
+    .chart-legend {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.5rem 1rem;
+    }
+
+    .chart-legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .chart-legend-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .chart-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .chart-tooltip {
+      position: fixed;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(17, 24, 39, 0.95);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 9999;
+      white-space: nowrap;
+      transition: opacity 150ms ease;
+    }
+
+    .chart-tooltip.visible {
+      opacity: 1;
+    }
+
+    .stat-card {
+      padding: 2rem;
     }
 
     .stat-card-icon {
@@ -586,6 +697,15 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
+    @keyframes fillProgress {
+      from {
+        width: 0%;
+      }
+      to {
+        width: var(--progress-width, 0%);
+      }
+    }
+
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
@@ -594,6 +714,7 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
       border-radius: 12px;
       box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
       overflow: hidden;
+      animation: fillProgress 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     .progress-fill::after {
@@ -794,7 +915,7 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
         display: none;
       }
 
-      .stat-card, .table-container {
+      .card-surface, .table-container {
         box-shadow: none;
         border: 1px solid #e5e7eb;
       }
@@ -806,6 +927,9 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
     <header>
       <h1>${metadata?.projectName || 'Task Portal'}</h1>
       <p class="subtitle">Project Task Management Dashboard</p>
+      <p class="subtitle" style="margin-top: 0.5rem;">
+        Design reference: <a href="../../.tasks/resources/dashboard_wireframe.png" style="color:#8B5CF6; text-decoration:underline;">dashboard_wireframe.png</a>
+      </p>
     </header>
 
     <div class="controls">
@@ -857,13 +981,13 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
     </div>
 
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-card-icon">📋</div>
+      <div class="stat-card card-surface">
+        <div class="stat-card-icon">🎯</div>
         <div class="stat-label">Total Tasks</div>
         <div class="stat-value">${stats.total}</div>
         <div class="stat-subtitle">Tasks tracked in project</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card card-surface">
         <div class="stat-card-icon">✓</div>
         <div class="stat-label">Completion Rate</div>
         <div class="stat-value">${stats.completionRate}%</div>
@@ -872,41 +996,23 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
         </div>
         <div class="stat-subtitle">${stats.totalCompleted} of ${stats.total} completed</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card card-surface">
         <div class="stat-card-icon">📊</div>
-        <div class="stat-label">By Status</div>
-        <div class="stat-breakdown">
-          ${Object.entries(stats.byStatus).map(([status, count]) => {
-    const colors = { 'PENDING': '#3B82F6', 'IN_PROGRESS': '#F59E0B', 'BLOCKED': '#EF4444', 'COMPLETED': '#10B981', 'CANCELLED': '#6B7280' };
-    return `<div class="stat-breakdown-item">
-              <span>${status}</span>
-              <span style="color: ${colors[status as keyof typeof colors] || '#6B7280'}; font-weight: 700;">${count}</span>
-            </div>`;
-  }).join('')}
-        </div>
+        <div class="stat-label chart-title">Tasks by Status</div>
+        <svg id="barChartStatus" class="chart" viewBox="0 0 400 240"></svg>
       </div>
-      <div class="stat-card">
-        <div class="stat-card-icon">🏷️</div>
-        <div class="stat-label">By Category</div>
-        <div class="stat-breakdown" id="category-breakdown">
-          ${Object.entries(stats.byCategory).slice(0, 5).map(([category, count]) =>
-    `<div class="stat-breakdown-item">
-              <span>${category}</span>
-              <span style="color: #8B5CF6; font-weight: 700;">${count}</span>
-            </div>`
-  ).join('')}
-        </div>
-        ${Object.keys(stats.byCategory).length > 5 ? `
-          <div class="stat-breakdown" id="category-breakdown-hidden" style="display: none;">
-            ${Object.entries(stats.byCategory).slice(5).map(([category, count]) =>
-    `<div class="stat-breakdown-item">
-                <span>${category}</span>
-                <span style="color: #8B5CF6; font-weight: 700;">${count}</span>
-              </div>`
-  ).join('')}
-          </div>
-          <button class="expand-btn" onclick="toggleCategories()">+ ${Object.keys(stats.byCategory).length - 5} more categories</button>
-        ` : ''}
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+      <div class="chart-card card-surface">
+        <div class="stat-label chart-title">Completions by Week</div>
+        <svg id="areaChart" class="chart" viewBox="0 0 400 240"></svg>
+      </div>
+      <div class="chart-card card-surface">
+        <div class="stat-label chart-title">Task categories</div>
+        <svg id="pieChart" class="chart" viewBox="0 0 200 200"></svg>
+        <div id="pieLegend" class="chart-legend"></div>
       </div>
     </div>
 
@@ -972,6 +1078,7 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
   <script>
     // Task data for modal
     const tasksData = ${JSON.stringify(tasks, null, 2)};
+    const statsData = ${JSON.stringify(stats, null, 2)};
 
     // Modal functions
     function openTaskModal(taskId) {
@@ -1295,9 +1402,203 @@ function generateHTML(tasks: any[], stats: any, metadata: any): string {
         sortedRows.forEach(row => tbody.appendChild(row));
       });
     });
-  </script>
-</body>
-</html>`;
+
+    // ===== Lightweight SVG Charts =====
+
+    // Animate progress bars on load
+    window.addEventListener('load', () => {
+      const progressFills = document.querySelectorAll('.progress-fill');
+      progressFills.forEach(fill => {
+        const width = fill.style.width;
+        fill.style.setProperty('--progress-width', width);
+        // Force reflow to restart animation
+        fill.style.width = '0%';
+        setTimeout(() => {
+          fill.style.width = width;
+        }, 10);
+      });
+    });
+
+    function renderBarChart(elId, series, colorMap) {
+      const el = document.getElementById(elId);
+      const width = 400, height = 240, padding = { left: 40, right: 10, top: 10, bottom: 30 };
+      const barAreaW = width - padding.left - padding.right;
+      const barAreaH = height - padding.top - padding.bottom;
+      const keys = Object.keys(series);
+      const vals = Object.values(series);
+      const max = Math.max(1, ...vals);
+      const barW = Math.max(10, (barAreaW / keys.length) * 0.6);
+      const gap = (barAreaW - barW * keys.length) / Math.max(1, keys.length - 1);
+      let x = padding.left;
+      let svg = '<rect x="0" y="0" width="' + width + '" height="' + height + '" fill="transparent"/>';
+      keys.forEach((k) => {
+        const h = (series[k] / max) * barAreaH;
+        const y = height - padding.bottom - h;
+        const color = (colorMap && colorMap[k]) || '#8B5CF6';
+        svg += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + h + '" rx="6" fill="' + color + '" opacity="0.85">' +
+               '<animate attributeName="height" from="0" to="' + h + '" dur="0.7s" fill="freeze" />' +
+               '<animate attributeName="y" from="' + (height - padding.bottom) + '" to="' + y + '" dur="0.7s" fill="freeze" />' +
+               '</rect>';
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (height - 8) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + k + '</text>';
+        svg += '<text x="' + (x + barW / 2) + '" y="' + (y - 6) + '" text-anchor="middle" font-size="12" fill="#374151" font-weight="700">' + series[k] + '</text>';
+        x += barW + gap;
+      });
+      el.innerHTML = svg;
+    }
+
+function renderAreaChart(elId, points) {
+  const el = document.getElementById(elId);
+  const width = 400, height = 240, padding = { left: 40, right: 10, top: 30, bottom: 30 };
+  const areaW = width - padding.left - padding.right;
+  const areaH = height - padding.top - padding.bottom;
+  const max = Math.max(1, ...points.map(p => p.count));
+  const stepX = areaW / Math.max(1, points.length - 1);
+  const total = points.reduce((s, p) => s + p.count, 0);
+  const avg = Math.round(total / points.length);
+  
+  // Grid lines
+  let svg = '';
+  for (let i = 0; i <= 4; i++) {
+    const gridY = padding.top + (areaH / 4) * i;
+    const val = Math.round(max - (max / 4) * i);
+    svg += '<line x1="' + padding.left + '" y1="' + gridY + '" x2="' + (width - padding.right) + '" y2="' + gridY + '" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>';
+    svg += '<text x="' + (padding.left - 8) + '" y="' + (gridY + 3) + '" text-anchor="end" font-size="9" fill="#9ca3af">' + val + '</text>';
+  }
+  
+  let path = '';
+  points.forEach((p, i) => {
+    const x = padding.left + i * stepX;
+    const y = height - padding.bottom - (p.count / max) * areaH;
+    path += (i === 0 ? 'M' : 'L') + x + ' ' + y + ' ';
+  });
+  const baseline = padding.left + ' ' + (height - padding.bottom) + ' L ' + (padding.left + (points.length - 1) * stepX) + ' ' + (height - padding.bottom);
+  
+  // Area fill with gradient
+  svg += '<defs><linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.3" /><stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:0.05" /></linearGradient></defs>';
+  svg += '<path d="' + path + 'L ' + baseline + ' Z" fill="url(#areaGrad)"></path>';
+  
+  // Animated line
+  svg += '<path d="' + path + '" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linejoin="round">' +
+         '<animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="0.8s" fill="freeze" />' +
+         '</path>';
+  
+  // Data points with tooltips
+  points.forEach((p, i) => {
+    const x = padding.left + i * stepX;
+    const y = height - padding.bottom - (p.count / max) * areaH;
+    svg += '<circle cx="' + x + '" cy="' + y + '" r="4" fill="#8B5CF6" opacity="0.7" style="cursor:pointer;">' +
+           '<title>' + p.week + ': ' + p.count + ' completed</title>' +
+           '</circle>';
+  });
+  
+  // Week labels
+  const labels = points.map((p, i) => {
+    const x = padding.left + i * stepX;
+    return '<text x="' + x + '" y="' + (height - 8) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + p.week.slice(6) + '</text>';
+  }).join('');
+  
+  svg += labels;
+  el.innerHTML = svg;
+  
+  // Add summary stats below chart
+  const card = el.closest('.chart-card');
+  if (card) {
+    let statsDiv = card.querySelector('.chart-stats');
+    if (!statsDiv) {
+      statsDiv = document.createElement('div');
+      statsDiv.className = 'chart-stats';
+      card.appendChild(statsDiv);
+    }
+    statsDiv.innerHTML = '<div style="display:flex; gap:1.5rem; margin-top:1rem; padding-top:1rem; border-top:1px solid #e5e7eb; font-size:0.875rem;">' +
+                         '<div><span style="color:#6b7280;">Total:</span> <span style="font-weight:700; color:#8B5CF6;">' + total + '</span></div>' +
+                         '<div><span style="color:#6b7280;">Weekly Avg:</span> <span style="font-weight:700; color:#8B5CF6;">' + avg + '</span></div>' +
+                         '<div><span style="color:#6b7280;">Peak:</span> <span style="font-weight:700; color:#8B5CF6;">' + max + '</span></div>' +
+                         '</div>';
+  }
+}
+
+function renderPieChart(elId, entries, legendElId) {
+  const el = document.getElementById(elId);
+  const radius = 80;
+  const center = 100;
+  const total = entries.reduce((s, e) => s + e[1], 0) || 1;
+  let startAngle = 0;
+  const palette = ['#8B5CF6', '#3B82F6', '#EC4899', '#F59E0B', '#10B981', '#6B7280', '#22C55E'];
+  let svg = '';
+  entries.forEach(([label, value], idx) => {
+    const angle = (value / total) * Math.PI * 2;
+    const endAngle = startAngle + angle;
+    const x1 = center + radius * Math.cos(startAngle);
+    const y1 = center + radius * Math.sin(startAngle);
+    const x2 = center + radius * Math.cos(endAngle);
+    const y2 = center + radius * Math.sin(endAngle);
+    const largeArc = angle > Math.PI ? 1 : 0;
+    const color = palette[idx % palette.length];
+        svg += '<path d="M ' + center + ' ' + center + ' L ' + x1 + ' ' + y1 + ' A ' + radius + ' ' + radius + ' 0 ' + largeArc + ' 1 ' + x2 + ' ' + y2 + ' Z" fill="' + color + '" opacity="0.9">' +
+          '<title>' + label + ' (' + value + ')</title>' +
+          '<animate attributeName="opacity" from="0" to="0.9" dur="0.6s" fill="freeze" />' +
+          '</path>';
+    startAngle = endAngle;
+  });
+  el.innerHTML = svg;
+
+  // Add tooltip on hover
+  let tooltip = document.getElementById('chartTooltip');
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.id = 'chartTooltip';
+    tooltip.className = 'chart-tooltip';
+    document.body.appendChild(tooltip);
+  }
+
+  const paths = el.querySelectorAll('path');
+  paths.forEach((path, idx) => {
+    const [label, value] = entries[idx];
+    if (!label) return;
+    path.style.cursor = 'pointer';
+    path.addEventListener('mouseenter', (evt) => {
+      tooltip.textContent = label + ' (' + value + ')';
+      tooltip.classList.add('visible');
+    });
+    path.addEventListener('mousemove', (evt) => {
+      tooltip.style.left = (evt.clientX + 10) + 'px';
+      tooltip.style.top = (evt.clientY - 30) + 'px';
+    });
+    path.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+  });
+
+
+  if (legendElId) {
+    const legend = document.getElementById(legendElId);
+    if (legend) {
+      const legendHtml = entries.map(([label, value], idx) => {
+        const color = palette[idx % palette.length];
+        return '<div class="chart-legend-item">' +
+                 '<div class="chart-legend-left">' +
+                   '<span class="chart-legend-dot" style="background:' + color + ';"></span>' +
+                   '<span>' + label + '</span>' +
+                 '</div>' +
+                 '<span style="font-weight:700; color:#111827;">' + value + '</span>' +
+               '</div>';
+      }).join('');
+      legend.innerHTML = legendHtml;
+    }
+  }
+}
+
+// Render charts with current stats
+renderAreaChart('areaChart', statsData.completionsByWeek);
+renderBarChart('barChartStatus', statsData.byStatus, {
+  PENDING: '#3B82F6', IN_PROGRESS: '#F59E0B', BLOCKED: '#EF4444', COMPLETED: '#10B981', CANCELLED: '#6B7280'
+});
+// All categories
+const allCategories = Object.entries(statsData.byCategory).sort((a, b) => b[1] - a[1]);
+renderPieChart('pieChart', allCategories, 'pieLegend');
+</script>
+  </body>
+  </html>`;
 }
 
 // Main execution
