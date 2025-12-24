@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-22T00:00:00.000Z",
+    "lastUpdated": "2025-01-22T01:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -28,6 +28,15 @@
           "blocking": ["TASK-DB-004"],
           "estimatedTime": "6 hours",
           "notes": "Requirements analysis for customer data management and promotion automation system. Can be done in parallel with TASK-ARCH-001."
+        },
+        {
+          "taskId": "TASK-DOC-002",
+          "title": "Dashboard Requirements Analysis and Documentation",
+          "priority": "HIGH",
+          "canStart": true,
+          "blocking": ["TASK-FEAT-014"],
+          "estimatedTime": "4 hours",
+          "notes": "Requirements analysis for dashboard management system. Can be done in parallel with TASK-ARCH-001 and TASK-DOC-004."
         }
       ]
     },
@@ -75,6 +84,26 @@
           "blocking": ["TASK-API-004"],
           "estimatedTime": "8 hours",
           "notes": "Database schema for customer management and promotion automation. Depends on requirements analysis."
+        },
+        {
+          "taskId": "TASK-FEAT-014",
+          "title": "Dashboard Architecture and Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DOC-002"],
+          "blocking": ["TASK-DB-003"],
+          "estimatedTime": "6 hours",
+          "notes": "Architecture design for dashboard management system. Required before database schema implementation."
+        },
+        {
+          "taskId": "TASK-DB-003",
+          "title": "Database Schema for Dashboard System",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-FEAT-014"],
+          "blocking": ["TASK-API-002", "TASK-SEC-002"],
+          "estimatedTime": "8 hours",
+          "notes": "Database schema for dashboard management system. Required before API and security implementation."
         }
       ]
     },
@@ -102,6 +131,16 @@
           "blocking": ["TASK-FEAT-023", "TASK-FEAT-024", "TASK-OPS-006"],
           "estimatedTime": "16 hours",
           "notes": "API for customer management and promotion automation. Required before dashboard UI and email/SMS integration."
+        },
+        {
+          "taskId": "TASK-API-002",
+          "title": "Dashboard Backend API Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-003"],
+          "blocking": ["TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
+          "estimatedTime": "16 hours",
+          "notes": "Backend API for dashboard management system. Required before all dashboard frontend implementations."
         }
       ]
     },
@@ -149,6 +188,16 @@
           "blocking": [],
           "estimatedTime": "6 hours",
           "notes": "Email and SMS service provider integration for promotion delivery. Can be done in parallel with dashboard UI tasks."
+        },
+        {
+          "taskId": "TASK-SEC-002",
+          "title": "Dashboard Authentication and Authorization",
+          "priority": "CRITICAL",
+          "canStart": false,
+          "dependsOn": ["TASK-DB-003"],
+          "blocking": [],
+          "estimatedTime": "8 hours",
+          "notes": "Authentication and authorization for dashboard system. Can be done in parallel with TASK-API-002 as it depends only on database schema."
         }
       ]
     },
@@ -186,6 +235,46 @@
           "blocking": ["TASK-TEST-006", "TASK-DOC-005"],
           "estimatedTime": "16 hours",
           "notes": "Dashboard UI for promotion automation configuration. Depends on customer management UI."
+        },
+        {
+          "taskId": "TASK-FEAT-015",
+          "title": "Dashboard Frontend Implementation - Metrics and Analytics",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-002"],
+          "blocking": ["TASK-TEST-002"],
+          "estimatedTime": "12 hours",
+          "notes": "Dashboard frontend for metrics and analytics. Can be done in parallel with other dashboard frontend tasks (FEAT-016, 017, 018)."
+        },
+        {
+          "taskId": "TASK-FEAT-016",
+          "title": "Dashboard Frontend Implementation - Promotions Management",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-002"],
+          "blocking": ["TASK-TEST-002"],
+          "estimatedTime": "10 hours",
+          "notes": "Dashboard frontend for promotions management. Can be done in parallel with FEAT-015, 017, 018."
+        },
+        {
+          "taskId": "TASK-FEAT-017",
+          "title": "Dashboard Frontend Implementation - Website Content Editor",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-002"],
+          "blocking": ["TASK-TEST-002"],
+          "estimatedTime": "10 hours",
+          "notes": "Dashboard frontend for website content editing. Can be done in parallel with FEAT-015, 016, 018."
+        },
+        {
+          "taskId": "TASK-FEAT-018",
+          "title": "Dashboard Frontend Implementation - Gallery Image Management",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": ["TASK-API-002"],
+          "blocking": ["TASK-TEST-002"],
+          "estimatedTime": "8 hours",
+          "notes": "Dashboard frontend for gallery image management. Can be done in parallel with FEAT-015, 016, 017."
         }
       ]
     },
@@ -223,6 +312,26 @@
           "blocking": [],
           "estimatedTime": "4 hours",
           "notes": "Documentation for customer and promotion system. Should be done after testing is complete."
+        },
+        {
+          "taskId": "TASK-TEST-002",
+          "title": "Dashboard Testing Suite",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-API-002", "TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
+          "blocking": ["TASK-TEST-003"],
+          "estimatedTime": "16 hours",
+          "notes": "Comprehensive testing suite for dashboard system. Should be done after all dashboard frontend tasks are complete."
+        },
+        {
+          "taskId": "TASK-TEST-003",
+          "title": "Dashboard Quality Assurance and User Acceptance Testing",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": ["TASK-TEST-002", "TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
+          "blocking": [],
+          "estimatedTime": "8 hours",
+          "notes": "Quality assurance and user acceptance testing for dashboard system. Should be done after testing suite is complete."
         }
       ]
     }
@@ -234,10 +343,30 @@
     "reason": "Foundation task with no dependencies. Must be completed before all other backend tasks."
   },
   "parallelization": {
+    "phase1": {
+      "description": "Foundation tasks in Phase 1 can be done in parallel",
+      "tasks": ["TASK-ARCH-001", "TASK-DOC-004", "TASK-DOC-002"],
+      "note": "These foundation tasks have no dependencies and can be started simultaneously."
+    },
+    "phase2": {
+      "description": "Some database design tasks can be done in parallel after their dependencies",
+      "tasks": ["TASK-DB-001", "TASK-DB-003"],
+      "note": "TASK-DB-001 and TASK-DB-003 can be done in parallel as they depend on different parent tasks (DB-000 vs FEAT-014)."
+    },
+    "phase3": {
+      "description": "Some API tasks can be done in parallel",
+      "tasks": ["TASK-API-001", "TASK-API-002", "TASK-API-004"],
+      "note": "These API tasks depend on different database schemas and can be worked on independently once their respective DB tasks complete."
+    },
     "phase4": {
-      "description": "Tasks in Phase 4 can be done in parallel",
-      "tasks": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001"],
-      "note": "These tasks all depend on TASK-API-001 but not on each other, so they can be worked on simultaneously."
+      "description": "Infrastructure and quality tasks in Phase 4 can be done in parallel",
+      "tasks": ["TASK-OPS-004", "TASK-TEST-001", "TASK-SEC-001", "TASK-SEC-002"],
+      "note": "These tasks all depend on their respective API tasks but not on each other, so they can be worked on simultaneously."
+    },
+    "phase5": {
+      "description": "Dashboard frontend tasks can be done in parallel",
+      "tasks": ["TASK-FEAT-015", "TASK-FEAT-016", "TASK-FEAT-017", "TASK-FEAT-018"],
+      "note": "All dashboard frontend tasks depend on TASK-API-002 but not on each other, so they can be worked on simultaneously."
     }
   },
   "criticalPath": [
@@ -250,11 +379,31 @@
     "TASK-MIG-001",
     "TASK-DOC-001"
   ],
+  "dashboardCriticalPath": [
+    "TASK-DOC-002",
+    "TASK-FEAT-014",
+    "TASK-DB-003",
+    "TASK-API-002",
+    "TASK-FEAT-015",
+    "TASK-TEST-002",
+    "TASK-TEST-003"
+  ],
+  "customerPromotionsCriticalPath": [
+    "TASK-DOC-004",
+    "TASK-DB-004",
+    "TASK-API-004",
+    "TASK-FEAT-023",
+    "TASK-FEAT-024",
+    "TASK-TEST-006",
+    "TASK-DOC-005"
+  ],
   "notes": {
     "executionStrategy": "Work through phases sequentially. Within each phase, check dependencies. If all dependencies are met, the task can start.",
-    "parallelWork": "Tasks in Phase 4 (OPS-004, TEST-001, SEC-001) can be done in parallel as they only depend on API-001.",
+    "parallelWork": "Multiple task groups can be worked on in parallel. See 'parallelization' section for details. Dashboard and customer-promotions features can be developed in parallel after foundation tasks.",
     "blockingTasks": "Pay attention to 'blocking' field - these tasks cannot start until the current task is complete.",
-    "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible."
+    "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible.",
+    "featureParallelism": "Dashboard system (TASK-DOC-002 → FEAT-014 → DB-003 → API-002) and Customer Promotions (TASK-DOC-004 → DB-004 → API-004) can be developed in parallel as they are independent feature sets.",
+    "criticalPaths": "There are three main critical paths: (1) Core backend infrastructure, (2) Dashboard system, and (3) Customer Promotions system. These can progress independently after Phase 1."
   }
 }
 
