@@ -24,6 +24,10 @@ export const COLORS = {
 // Snow Effect Toggle - Set to true to enable snow effect, false to disable
 export const ENABLE_SNOW_EFFECT = true;
 
+// Snow Intensity - Scale from 1 (lightest) to 10 (heaviest)
+// Controls the density, speed, and visibility of snowflakes
+export const SNOW_INTENSITY = 8;
+
 export const SERVICES: Service[] = [
   // MANICURE
   { 
