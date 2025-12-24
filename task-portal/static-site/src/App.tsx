@@ -71,7 +71,7 @@ function App() {
 
             <StatsCards stats={stats} />
 
-            <Charts stats={stats} />
+            <Charts stats={stats} tasks={tasks} />
 
             <Filters
                 stats={stats}

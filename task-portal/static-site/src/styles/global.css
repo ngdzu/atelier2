@@ -504,6 +504,46 @@
     padding-top: 1.75rem;
   }
 
+  /* Chart period toggle */
+  .chart-toggle {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .chart-toggle-btn {
+    appearance: none;
+    border: 1.5px solid #D1D5DB;
+    color: #374151;
+    background: #FFFFFF;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    border-radius: 9999px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+
+  .chart-toggle-btn:hover {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+    color: #111827;
+  }
+
+  .chart-toggle-btn.active {
+    border-color: #3B82F6;
+    color: #1F2937;
+    background: #EFF6FF;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  }
+
+  .chart-toggle-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    border-color: #2563EB;
+  }
+
   .task-table {
     width: 100%;
     border-collapse: collapse;

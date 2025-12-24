@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 
 interface AreaChartProps {
-    data: Array<{ week: string; count: number }>;
+    data: Array<{ label: string; count: number }>;
 }
 
 export function AreaChart({ data }: AreaChartProps) {
@@ -52,14 +52,19 @@ export function AreaChart({ data }: AreaChartProps) {
             const x = padding.left + i * stepX;
             const y = height - padding.bottom - (p.count / max) * areaH;
             svg += `<circle cx="${x}" cy="${y}" r="4" fill="#8B5CF6" opacity="0.7" style="cursor:pointer;">` +
-                `<title>${p.week}: ${p.count} completed</title>` +
+                `<title>${p.label}: ${p.count} completed</title>` +
                 `</circle>`;
         });
 
-        // Labels
+        // Labels with spacing to avoid overlap
+        const approxLabelWidth = 40; // px
+        const maxLabels = Math.max(2, Math.floor(areaW / approxLabelWidth));
+        const stepLabel = Math.max(1, Math.ceil(data.length / maxLabels));
         data.forEach((p, i) => {
+            const shouldShow = i === 0 || i === data.length - 1 || i % stepLabel === 0;
+            if (!shouldShow) return;
             const x = padding.left + i * stepX;
-            svg += `<text x="${x}" y="${height - 8}" text-anchor="middle" font-size="10" fill="#6b7280">${p.week.slice(6)}</text>`;
+            svg += `<text x="${x}" y="${height - 8}" text-anchor="middle" font-size="10" fill="#6b7280">${p.label}</text>`;
         });
 
         svgRef.current.innerHTML = svg;
