@@ -28,7 +28,7 @@ Design the Domain-Driven Design (DDD) architecture for the LuxeNail application.
   - Ubiquitous language (domain terms)
   - Integration points with other contexts
 - [ ] Create context mapping diagram showing relationships between contexts
-- [ ] File to create: `doc/DDD_ARCHITECTURE.md` (already created as draft)
+- [ ] File location: `.cursor/rules/ddd.mdc` (already created as draft - moved from doc/)
 
 #### Step 2: Design Domain Model for Dashboard Context
 - [ ] Identify core aggregates and their boundaries:
@@ -228,7 +228,7 @@ Design the Domain-Driven Design (DDD) architecture for the LuxeNail application.
   - Repository tests
 
 #### Step 12: Create Architecture Documentation
-- [ ] Complete `doc/DDD_ARCHITECTURE.md` with all sections:
+- [ ] Complete `.cursor/rules/ddd.mdc` with all sections:
   - Overview and key concepts
   - Bounded contexts documentation
   - Domain model design
@@ -310,7 +310,7 @@ Design the Domain-Driven Design (DDD) architecture for the LuxeNail application.
 ### Technical Details
 
 **Files to Create/Update:**
-- `doc/DDD_ARCHITECTURE.md` (complete the draft)
+- `.cursor/rules/ddd.mdc` (complete the draft)
 - `doc/diagrams/ddd-bounded-contexts.mmd` (and .svg)
 - `doc/diagrams/ddd-layered-architecture.mmd` (and .svg)
 - `doc/diagrams/ddd-aggregates.mmd` (and .svg)

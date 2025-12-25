@@ -2560,3 +2560,474 @@ Create comprehensive user-facing documentation for the dashboard management syst
 **Notes:**
 
 ---
+
+## TASK-DOC-010: Dashboard Detailed Design (Class/Component Design)
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-24
+**Updated:** 2025-01-24
+**Estimated Time:** 8 hours
+**Dependencies:** TASK-FEAT-014
+**Related Tasks:** TASK-DB-003, TASK-API-002
+
+### Description
+
+Design the detailed structure of code components, classes, and modules for the dashboard system following DDD principles. This includes designing domain entities, value objects, application services, repository interfaces, API controllers, and React components with their interfaces, props, and interactions.
+
+### Requirements / What to Do
+
+#### Step 1: Domain Layer Detailed Design
+- [ ] Design domain entity classes:
+  - **Promotion Entity**: Properties, business methods, invariants
+  - **Metric Entity**: Data structure, calculation methods
+  - **ContentVersion Entity**: Versioning logic, publishing rules
+  - **GalleryImage Entity**: Metadata management, validation
+  - **Employee Entity**: Account management, specialty handling
+  - **DashboardUser Entity**: Authentication, authorization
+- [ ] Design value objects with validation:
+  - Money, Email, PhoneNumber, DateTimeRange, Percentage
+  - PromotionName, PromotionDescription
+  - MetricType, TimeGranularity
+  - ContentSection, ContentStatus
+  - GalleryCategory, ImageStatus
+- [ ] Define aggregate boundaries and root entities
+- [ ] Design domain service interfaces:
+  - IPromotionDeliveryService
+  - IMetricCalculationService
+  - IContentVersioningService
+  - IEmployeePerformanceService
+- [ ] Design repository interfaces:
+  - IPromotionRepository
+  - IMetricRepository
+  - IContentRepository
+  - IGalleryRepository
+  - IEmployeeRepository
+- [ ] Document domain events:
+  - PromotionSentEvent
+  - ContentPublishedEvent
+  - EmployeeCreatedEvent
+  - MetricCalculatedEvent
+
+#### Step 2: Application Layer Detailed Design
+- [ ] Design use cases/application services:
+  - **Metrics Use Cases**: GetRevenueMetrics, GetEmployeePerformance, ExportMetrics
+  - **Promotions Use Cases**: CreatePromotion, SendPromotion, SchedulePromotion, TrackPromotionPerformance
+  - **Content Use Cases**: EditContent, PublishContent, RevertContentVersion
+  - **Gallery Use Cases**: UploadImage, UpdateImageMetadata, DeleteImage
+  - **Employee Use Cases**: CreateEmployee, UpdateEmployee, DeactivateEmployee
+- [ ] Design DTOs (Data Transfer Objects):
+  - MetricDto, PromotionDto, ContentDto, GalleryImageDto, EmployeeDto
+  - Request DTOs: CreatePromotionRequest, UpdateContentRequest, etc.
+  - Response DTOs: MetricResponse, PromotionResponse, etc.
+- [ ] Design command/query objects (if using CQRS):
+  - CreatePromotionCommand, SendPromotionCommand
+  - GetMetricsQuery, GetPromotionAnalyticsQuery
+- [ ] Design mappers between layers:
+  - Domain entity to DTO mappers
+  - DTO to domain entity mappers
+
+#### Step 3: Infrastructure Layer Detailed Design
+- [ ] Design repository implementations:
+  - PromotionRepository (TypeORM implementation)
+  - MetricRepository (TypeORM implementation)
+  - ContentRepository (TypeORM implementation)
+  - GalleryRepository (TypeORM implementation)
+  - EmployeeRepository (TypeORM implementation)
+- [ ] Design database entities (TypeORM):
+  - PromotionEntity, MetricEntity, ContentVersionEntity
+  - GalleryImageEntity, EmployeeEntity, DashboardUserEntity
+- [ ] Design domain entity <-> DB entity mappers
+- [ ] Design external service integrations:
+  - EmailService interface and implementation
+  - SmsService interface and implementation
+  - FileStorageService interface and implementation
+  - GeminiService integration (for AI features)
+
+#### Step 4: Presentation Layer Detailed Design
+- [ ] Design API controllers:
+  - MetricsController: methods, request/response handling
+  - PromotionsController: CRUD operations, send/schedule actions
+  - ContentController: content editing, versioning, publishing
+  - GalleryController: upload, update, delete operations
+  - EmployeesController: employee management operations
+- [ ] Design API routes structure:
+  - Route definitions with middleware
+  - Authentication/authorization middleware placement
+  - Validation middleware
+  - Error handling middleware
+- [ ] Design request/response DTOs:
+  - Request validation schemas (class-validator or zod)
+  - Response format standardization
+  - Error response format
+- [ ] Design API middleware:
+  - Authentication middleware
+  - Authorization middleware (role-based)
+  - Request validation middleware
+  - Error handling middleware
+
+#### Step 5: Frontend Component Detailed Design
+- [ ] Design React component structure:
+  - **Layout Components**: DashboardLayout, Sidebar, Header, Navigation
+  - **Metrics Components**: MetricsDashboard, RevenueChart, AppointmentChart, KPICard
+  - **Promotions Components**: PromotionsList, PromotionForm, PromotionAnalytics
+  - **Content Components**: ContentEditor, ContentPreview, ContentHistory
+  - **Gallery Components**: GalleryManager, ImageUploader, ImageGrid, ImageEditor
+  - **Employee Components**: EmployeeList, EmployeeForm, EmployeeDetails
+- [ ] Design component props interfaces:
+  - Define TypeScript interfaces for all component props
+  - Document required vs optional props
+  - Define prop types and validation
+- [ ] Design component state management:
+  - Local state (useState) for UI state
+  - Context API for global state (auth, user)
+  - React Query for server state
+  - Form state (React Hook Form)
+- [ ] Design custom hooks:
+  - useMetrics, usePromotions, useContent, useGallery, useEmployees
+  - useAuth, usePermissions
+  - useApiClient
+- [ ] Design routing structure:
+  - Route definitions
+  - Protected routes
+  - Route guards based on roles
+
+#### Step 6: Data Flow Design
+- [ ] Design data flow diagrams:
+  - User action → API request → Application service → Domain → Repository → Database
+  - Response flow: Database → Repository → Domain → Application → DTO → API → Frontend
+- [ ] Design error handling flow:
+  - Domain errors → Application errors → API errors → Frontend error handling
+- [ ] Design validation flow:
+  - Frontend validation → API validation → Domain validation
+
+#### Step 7: Create Detailed Design Documentation
+- [ ] Create `doc/DASHBOARD_DETAILED_DESIGN.md`
+- [ ] Document all domain entities with class diagrams
+- [ ] Document all value objects with properties and validation rules
+- [ ] Document all use cases with input/output specifications
+- [ ] Document all API endpoints with request/response schemas
+- [ ] Document all React components with props interfaces
+- [ ] Include data flow diagrams
+- [ ] Include sequence diagrams for key workflows
+- [ ] Document design patterns used
+- [ ] Document design decisions and rationale
+
+### Definition of Done (DoD)
+
+- [ ] All domain entities designed with properties and methods
+- [ ] All value objects designed with validation rules
+- [ ] All repository interfaces defined
+- [ ] All use cases designed with input/output specifications
+- [ ] All DTOs designed
+- [ ] All API controllers and routes designed
+- [ ] All React components designed with props interfaces
+- [ ] All custom hooks designed
+- [ ] Data flow diagrams created
+- [ ] Detailed design documentation complete
+- [ ] Design reviewed for DDD compliance
+- [ ] Design aligns with architecture from TASK-FEAT-014
+
+### Verification Steps
+
+1. **Design Review:**
+   - Review all entity designs for completeness
+   - Verify value objects are immutable and validated
+   - Check repository interfaces are properly abstracted
+   - Ensure use cases follow application service pattern
+   - Validate component props interfaces are complete
+
+2. **DDD Compliance:**
+   - Verify domain layer has no infrastructure dependencies
+   - Check aggregates maintain invariants
+   - Validate repository pattern abstraction
+   - Ensure ubiquitous language is used consistently
+
+3. **Documentation Review:**
+   - Verify all classes/components are documented
+   - Check diagrams are clear and accurate
+   - Validate interfaces are complete
+   - Ensure design decisions are documented
+
+### Acceptance Criteria
+
+- ✅ Complete detailed design documentation exists
+- ✅ All domain entities and value objects designed
+- ✅ All use cases designed with clear specifications
+- ✅ All API endpoints designed with request/response schemas
+- ✅ All React components designed with props interfaces
+- ✅ Data flow diagrams created
+- ✅ Design follows DDD principles
+- ✅ Design aligns with architecture
+- ✅ Design is ready for implementation
+
+### Technical Details
+
+**Files to Create:**
+- `doc/DASHBOARD_DETAILED_DESIGN.md`
+- `doc/diagrams/dashboard-class-diagram.mmd` (and .svg)
+- `doc/diagrams/dashboard-component-hierarchy.mmd` (and .svg)
+- `doc/diagrams/dashboard-data-flow.mmd` (and .svg)
+- `doc/diagrams/dashboard-sequence-diagrams.mmd` (and .svg)
+
+**Key Design Decisions to Document:**
+- Entity vs value object decisions
+- Aggregate boundaries
+- Repository method signatures
+- Use case input/output structures
+- Component prop interfaces
+- State management approach
+- Error handling strategy
+
+**Related Documents:**
+- [Dashboard Requirements](doc/DASHBOARD_REQUIREMENTS.md) - Requirements reference
+- [Dashboard Architecture](doc/DASHBOARD_ARCHITECTURE.md) - Architecture reference (from TASK-FEAT-014)
+- [DDD Architecture](.cursor/rules/ddd.mdc) - DDD principles reference
+
+**Completion Date:**
+**Completed By:**
+**Notes:**
+
+---
+
+## TASK-OPS-007: Dashboard Deployment
+
+**Status:** PENDING
+**Priority:** HIGH
+**Assignee:** unassigned
+**Created:** 2025-01-24
+**Updated:** 2025-01-24
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-TEST-002, TASK-TEST-003
+**Related Tasks:** TASK-OPS-004, TASK-SEC-001
+
+### Description
+
+Deploy the dashboard system to production environment. This includes building production artifacts, running deployment checks, deploying to staging and production, performing smoke tests, and setting up monitoring. Follow deployment best practices and ensure zero-downtime deployment where possible.
+
+### Requirements / What to Do
+
+#### Step 1: Pre-Deployment Preparation
+- [ ] Build production artifacts:
+  - Build backend server (TypeScript compilation)
+  - Build frontend client (Vite production build)
+  - Optimize assets (minification, compression)
+  - Generate source maps (for debugging)
+- [ ] Run full test suite:
+  - Unit tests
+  - Integration tests
+  - E2E tests
+  - All tests must pass
+- [ ] Security audit:
+  - Dependency vulnerability scan
+  - Code security review
+  - Environment variable security check
+  - API security validation
+- [ ] Performance testing:
+  - Load testing (if applicable)
+  - API response time validation
+  - Frontend performance audit (Lighthouse)
+- [ ] Database migration planning:
+  - Review pending migrations
+  - Plan migration execution order
+  - Create rollback plan for migrations
+  - Backup database before migration
+- [ ] Backup strategy:
+  - Database backup
+  - File storage backup (if applicable)
+  - Configuration backup
+- [ ] Rollback plan:
+  - Document rollback procedure
+  - Test rollback process in staging
+  - Prepare rollback scripts
+
+#### Step 2: Staging Deployment
+- [ ] Deploy to staging environment:
+  - Deploy backend API to staging
+  - Deploy frontend to staging
+  - Run database migrations on staging
+  - Configure staging environment variables
+- [ ] Smoke testing in staging:
+  - Test authentication flow
+  - Test key features (metrics, promotions, content, gallery)
+  - Test API endpoints
+  - Test file uploads
+  - Verify database connections
+- [ ] Performance validation in staging:
+  - Check API response times
+  - Verify frontend load times
+  - Test with realistic data volumes
+- [ ] Security validation in staging:
+  - Test authentication/authorization
+  - Verify HTTPS/TLS
+  - Test input validation
+  - Verify file upload security
+
+#### Step 3: Production Deployment
+- [ ] Final pre-deployment checks:
+  - Verify all staging tests passed
+  - Review deployment checklist
+  - Confirm team availability for deployment
+  - Notify stakeholders of deployment window
+- [ ] Deploy to production:
+  - Deploy backend API to production
+  - Deploy frontend to production (CDN if applicable)
+  - Run database migrations on production
+  - Configure production environment variables
+  - Update DNS/load balancer if needed
+- [ ] Monitor deployment:
+  - Watch deployment logs
+  - Monitor error rates
+  - Check system health metrics
+  - Verify database connections
+
+#### Step 4: Post-Deployment Verification
+- [ ] Smoke testing in production:
+  - Test authentication flow
+  - Test key dashboard features
+  - Verify API endpoints are accessible
+  - Test file uploads
+  - Check database queries
+- [ ] Functional verification:
+  - Test metrics dashboard
+  - Test promotions management
+  - Test content editing
+  - Test gallery management
+  - Test employee management
+- [ ] Performance verification:
+  - Check API response times
+  - Verify frontend load times
+  - Monitor resource usage
+- [ ] Security verification:
+  - Verify HTTPS is working
+  - Test authentication/authorization
+  - Check security headers
+
+#### Step 5: Monitoring and Alerting Setup
+- [ ] Set up application monitoring:
+  - Error tracking (Sentry or similar)
+  - Performance monitoring (APM)
+  - Log aggregation
+- [ ] Set up infrastructure monitoring:
+  - Server health monitoring
+  - Database monitoring
+  - Storage monitoring
+- [ ] Configure alerts:
+  - Error rate alerts
+  - Performance degradation alerts
+  - Resource usage alerts
+  - Security incident alerts
+- [ ] Set up dashboards:
+  - Application metrics dashboard
+  - Infrastructure metrics dashboard
+  - Error tracking dashboard
+
+#### Step 6: Documentation and Communication
+- [ ] Document deployment:
+  - Deployment date and time
+  - Deployment version/tag
+  - Changes deployed
+  - Known issues (if any)
+- [ ] Update deployment documentation:
+  - Update deployment procedures
+  - Document any issues encountered
+  - Update rollback procedures if needed
+- [ ] Communicate deployment status:
+  - Notify team of successful deployment
+  - Notify stakeholders if applicable
+  - Update project status
+
+#### Step 7: Post-Deployment Activities
+- [ ] Monitor system health:
+  - Monitor for 24-48 hours after deployment
+  - Watch for errors or performance issues
+  - Check user feedback
+- [ ] Collect metrics:
+  - Track error rates
+  - Monitor performance metrics
+  - Collect user activity metrics
+- [ ] Address any issues:
+  - Fix critical bugs immediately
+  - Plan fixes for non-critical issues
+  - Document issues for future reference
+- [ ] Plan next iteration:
+  - Review deployment learnings
+  - Plan improvements for next deployment
+  - Update deployment process if needed
+
+### Definition of Done (DoD)
+
+- [ ] Production artifacts built successfully
+- [ ] All tests passing
+- [ ] Security audit completed
+- [ ] Staging deployment successful
+- [ ] Staging smoke tests passing
+- [ ] Production deployment successful
+- [ ] Production smoke tests passing
+- [ ] Monitoring and alerting configured
+- [ ] Deployment documented
+- [ ] Team notified of deployment status
+- [ ] System monitoring in place
+
+### Verification Steps
+
+1. **Deployment Verification:**
+   - Verify all services are running
+   - Check application logs for errors
+   - Verify database connections
+   - Test key functionality
+
+2. **Performance Verification:**
+   - Check API response times
+   - Verify frontend load times
+   - Monitor resource usage
+   - Check for performance regressions
+
+3. **Security Verification:**
+   - Verify HTTPS/TLS
+   - Test authentication/authorization
+   - Check security headers
+   - Verify input validation
+
+### Acceptance Criteria
+
+- ✅ Dashboard successfully deployed to production
+- ✅ All smoke tests passing
+- ✅ All key features functional
+- ✅ Performance meets requirements
+- ✅ Security measures in place
+- ✅ Monitoring and alerting configured
+- ✅ Deployment documented
+- ✅ Zero critical issues in production
+
+### Technical Details
+
+**Files to Create/Update:**
+- `doc/DASHBOARD_DEPLOYMENT.md` - Deployment documentation
+- `scripts/deploy-staging.sh` - Staging deployment script
+- `scripts/deploy-production.sh` - Production deployment script
+- `scripts/rollback.sh` - Rollback script
+- `.github/workflows/deploy.yml` - CI/CD deployment workflow (if using GitHub Actions)
+
+**Deployment Checklist:**
+- [ ] Build artifacts created
+- [ ] Tests passing
+- [ ] Security audit passed
+- [ ] Database migrations reviewed
+- [ ] Backups created
+- [ ] Staging deployment successful
+- [ ] Staging tests passing
+- [ ] Production deployment successful
+- [ ] Production tests passing
+- [ ] Monitoring configured
+
+**Related Documents:**
+- [Docker Guidelines](.cursor/rules/docker_guidelines.mdc) - Docker deployment reference
+- [Backend Architecture](doc/ARCHITECTURE.md) - System architecture reference
+
+**Completion Date:**
+**Completed By:**
+**Notes:**
+
+---

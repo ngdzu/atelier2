@@ -1,0 +1,447 @@
+---
+alwaysApply: true
+---
+
+# Software Development Workflow
+
+This document outlines the recommended sequence of steps in software development, aligned with Domain-Driven Design (DDD) principles and industry best practices.
+
+## Table of Contents
+
+### Development Lifecycle Phases
+- [1. Requirements Analysis](#1-requirements-analysis)
+- [2. Architecture and Design](#2-architecture-and-design)
+- [3. Detailed Design (Class/Component Design)](#3-detailed-design-classcomponent-design)
+- [4. Database Schema Implementation](#4-database-schema-implementation)
+- [5. Implementation](#5-implementation)
+- [6. Testing](#6-testing)
+- [7. Documentation](#7-documentation)
+- [8. Deployment](#8-deployment)
+
+### Additional Topics
+- [Iterative Development Approach](#iterative-development-approach)
+- [DDD-Specific Workflow](#ddd-specific-workflow)
+- [Quality Gates](#quality-gates)
+- [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+- [Project-Specific Considerations](#project-specific-considerations)
+
+---
+
+## Development Lifecycle Phases
+
+### 1. Requirements Analysis
+
+**Purpose:** Understand what needs to be built and why.
+
+**Activities:**
+- Gather requirements from stakeholders
+- Identify user roles and their needs
+- Document functional requirements
+- Document non-functional requirements (performance, security, scalability)
+- Create user stories with acceptance criteria
+- Identify constraints and assumptions
+- Define success criteria
+
+**Deliverables:**
+- Requirements documentation (e.g., `DASHBOARD_REQUIREMENTS.md`)
+- User stories and use cases
+- Glossary and domain terminology (Ubiquitous Language)
+- Requirements diagrams (use case diagrams, user flow diagrams)
+
+**When to Complete:** Before starting architecture and design work.
+
+---
+
+### 2. Architecture and Design
+
+**Purpose:** Design the overall system structure and how components interact.
+
+**Activities:**
+- **Domain-Driven Design (DDD):**
+  - Identify bounded contexts
+  - Design domain model (entities, value objects, aggregates)
+  - Define domain services and repositories
+  - Create context mapping
+- **System Architecture:**
+  - Design system architecture (layered architecture, microservices, etc.)
+  - Define technology stack and justify decisions
+  - Design API structure and patterns
+  - Define integration patterns between systems
+- **Database Schema Design:**
+  - Design database schema and data model
+  - Design tables, relationships, and constraints
+  - Design indexes for performance
+  - Create Entity Relationship Diagrams (ERD)
+  - Document data requirements and business rules
+  - Plan data migration strategy (if applicable)
+- **Architecture Documentation:**
+  - Create architecture diagrams
+  - Document design decisions and rationale
+  - Document patterns and conventions
+
+**Deliverables:**
+- Architecture documentation (e.g., `.cursor/rules/ddd.mdc`, `ARCHITECTURE.md`)
+- Architecture diagrams (bounded contexts, layers, component diagrams)
+- Technology stack documentation
+- API design documentation
+- Database schema design
+
+**When to Complete:** After requirements analysis, before detailed design and implementation.
+
+**Note:** Architecture may evolve, but a solid foundation should be established before implementation begins.
+
+---
+
+### 3. Detailed Design (Class/Component Design)
+
+**Purpose:** Design the detailed structure of code components, classes, and modules.
+
+**Activities:**
+- **Domain Layer Design (DDD):**
+  - Design entity classes with business logic
+  - Design value objects (immutable, validated)
+  - Define aggregate boundaries and invariants
+  - Design domain service interfaces
+  - Design repository interfaces
+- **Application Layer Design:**
+  - Design use cases/application services
+  - Design DTOs (Data Transfer Objects)
+  - Design command/query handlers (if using CQRS)
+  - Design mappers between layers
+- **Infrastructure Layer Design:**
+  - Design repository implementations
+  - Design database entities (TypeORM/Prisma)
+  - Design external service integrations
+- **Presentation Layer Design:**
+  - Design API controllers and routes
+  - Design request/response DTOs
+  - Design validation schemas
+  - Design React components (if frontend)
+
+**Deliverables:**
+- Class diagrams (optional but helpful)
+- Component design documentation
+- Interface definitions
+- Data flow diagrams
+- Design patterns documentation
+
+**When to Complete:** After architecture design, before implementation. Can be done incrementally as you implement features.
+
+---
+
+### 4. Database Schema Implementation
+
+**Purpose:** Implement the data persistence layer.
+
+**Activities:**
+- Create database entities/models
+- Define relationships and constraints
+- Create database migrations
+- Set up database indexes
+- Seed initial data (if needed)
+- Test database schema
+
+**Deliverables:**
+- Database entities (TypeORM/Prisma models)
+- Migration files
+- Database documentation
+- Seed scripts
+
+**When to Complete:** After detailed design, before API implementation (since APIs depend on data models).
+
+---
+
+### 5. Implementation
+
+**Purpose:** Write the actual code following the design.
+
+**Implementation Order (Recommended):**
+
+1. **Domain Layer (DDD):**
+   - Implement value objects (testable, no dependencies)
+   - Implement domain entities with business logic
+   - Implement domain services
+   - Write unit tests for domain logic
+
+2. **Infrastructure Layer:**
+   - Implement repository interfaces
+   - Implement database access layer
+   - Implement external service integrations
+   - Write integration tests
+
+3. **Application Layer:**
+   - Implement use cases/application services
+   - Implement DTOs and mappers
+   - Write unit tests for use cases
+
+4. **Presentation Layer:**
+   - Implement API controllers and routes
+   - Implement request/response handling
+   - Implement authentication/authorization middleware
+   - Write API integration tests
+
+5. **Frontend (if applicable):**
+   - Implement React components
+   - Implement API client services
+   - Implement state management
+   - Write component tests
+
+**Best Practices During Implementation:**
+- Write tests as you code (TDD approach recommended)
+- Follow SOLID principles
+- Keep functions small and focused
+- Use meaningful names (Ubiquitous Language)
+- Add comments for complex logic
+- Refactor as needed (but don't over-engineer)
+- Commit frequently with clear messages
+
+**Deliverables:**
+- Source code
+- Unit tests
+- Integration tests
+- API tests
+
+**When to Complete:** Ongoing, following the implementation order above.
+
+---
+
+### 6. Testing
+
+**Purpose:** Ensure the code works correctly and meets requirements.
+
+**Testing Levels (from small to large scope):**
+
+1. **Unit Tests:**
+   - Test individual functions, methods, classes
+   - Test domain logic thoroughly
+   - Fast, isolated tests
+   - Mock external dependencies
+
+2. **Integration Tests:**
+   - Test component interactions
+   - Test repository implementations with test database
+   - Test use cases with mocked dependencies
+   - Test API endpoints with test server
+
+3. **End-to-End (E2E) Tests:**
+   - Test complete user flows
+   - Test critical paths through the system
+   - Use real or closely simulated environments
+
+4. **Manual Testing:**
+   - User acceptance testing (UAT)
+   - Exploratory testing
+   - Usability testing
+
+**Testing Strategy:**
+- Write tests alongside implementation (TDD or test-alongside)
+- Aim for high coverage on domain logic (80%+)
+- Focus on testing behavior, not implementation details
+- Test edge cases and error scenarios
+- Test performance and security where applicable
+
+**Deliverables:**
+- Test suites (unit, integration, E2E)
+- Test documentation
+- Test coverage reports
+- Bug reports and fixes
+
+**When to Complete:** 
+- Unit tests: During implementation
+- Integration tests: After component implementation
+- E2E tests: After feature completion
+- Manual testing: Before deployment
+
+---
+
+### 7. Documentation
+
+**Purpose:** Document how the system works for developers, users, and maintainers.
+
+**Documentation Types:**
+
+1. **Code Documentation:**
+   - JSDoc/TSDoc comments for public APIs
+   - README files for each module/package
+   - Code examples and usage guides
+
+2. **API Documentation:**
+   - API endpoint specifications
+   - Request/response examples
+   - Authentication requirements
+   - Error codes and messages
+
+3. **Architecture Documentation:**
+   - Update architecture diagrams
+   - Document design decisions
+   - Document patterns used
+
+4. **User Documentation:**
+   - User guides and tutorials
+   - FAQ
+   - Feature documentation
+
+**When to Complete:** 
+- Code documentation: During implementation
+- API documentation: After API implementation
+- User documentation: Before or after deployment
+- Architecture documentation: Update as architecture evolves
+
+---
+
+### 8. Deployment
+
+**Purpose:** Make the software available to users.
+
+**Pre-Deployment Activities:**
+- Build production artifacts
+- Run full test suite
+- Security audit
+- Performance testing
+- Database migration planning
+- Backup strategy
+- Rollback plan
+
+**Deployment Activities:**
+- Deploy to staging environment
+- Smoke testing in staging
+- Deploy to production
+- Monitor deployment
+- Verify functionality in production
+- Monitor logs and metrics
+
+**Post-Deployment Activities:**
+- Monitor system health
+- Collect user feedback
+- Address any issues quickly
+- Document deployment notes
+- Plan next iteration
+
+**Deliverables:**
+- Deployment scripts
+- Deployment documentation
+- Production environment configuration
+- Monitoring and alerting setup
+
+**When to Complete:** After testing is complete and all quality gates are passed.
+
+---
+
+## Iterative Development Approach
+
+While the phases above are sequential, modern development typically follows an **iterative approach**:
+
+1. **Plan a small feature or iteration**
+2. **Follow phases 1-6 for that feature** (requirements → architecture → design → implementation → testing)
+3. **Deploy incrementally** (feature flags, canary deployments)
+4. **Gather feedback and iterate**
+
+This allows for:
+- Early feedback
+- Continuous delivery
+- Risk mitigation
+- Adaptability to changing requirements
+
+---
+
+## DDD-Specific Workflow
+
+For Domain-Driven Design projects, follow this order within each iteration:
+
+1. **Domain Layer First:**
+   - Start with value objects (no dependencies)
+   - Implement entities with business logic
+   - Define repository interfaces
+   - Write comprehensive domain tests
+
+2. **Application Layer:**
+   - Implement use cases that orchestrate domain objects
+   - Keep application layer thin (no business logic)
+
+3. **Infrastructure Layer:**
+   - Implement repository interfaces
+   - Integrate external services
+
+4. **Presentation Layer:**
+   - Implement API endpoints
+   - Implement frontend components
+
+**Why this order?**
+- Domain layer has no dependencies, so it's easiest to test
+- Application layer depends on domain, so implement after domain
+- Infrastructure and presentation depend on domain and application
+- This order ensures dependencies flow correctly
+
+---
+
+## Quality Gates
+
+Before moving to the next phase, ensure:
+
+**After Requirements Analysis:**
+- ✅ All requirements documented and reviewed
+- ✅ User stories have acceptance criteria
+- ✅ Stakeholder sign-off
+
+**After Architecture and Design:**
+- ✅ Architecture reviewed by team
+- ✅ Design decisions documented
+- ✅ Diagrams created and validated
+- ✅ Technology stack chosen and justified
+
+**After Detailed Design:**
+- ✅ Interfaces defined
+- ✅ Data models designed
+- ✅ Design patterns chosen
+- ✅ Team alignment on design
+
+**After Implementation:**
+- ✅ Code follows project conventions
+- ✅ Tests written and passing
+- ✅ Code review completed
+- ✅ Linting and formatting checks pass
+
+**After Testing:**
+- ✅ All tests passing
+- ✅ Coverage thresholds met
+- ✅ Performance requirements met
+- ✅ Security requirements met
+
+**After Deployment:**
+- ✅ Production deployment successful
+- ✅ Smoke tests passing
+- ✅ Monitoring in place
+- ✅ Documentation updated
+
+---
+
+## Common Pitfalls to Avoid
+
+❌ **Skipping Requirements Analysis:** Leads to building the wrong thing
+
+❌ **Implementing Before Design:** Leads to refactoring and technical debt
+
+❌ **Writing Tests After Implementation:** Miss edge cases and makes refactoring harder
+
+❌ **Deploying Without Testing:** Risky and can cause production issues
+
+❌ **Ignoring Documentation:** Makes maintenance difficult
+
+✅ **Best Practice:** Follow the sequence, but be flexible. Small iterations allow for learning and adaptation.
+
+---
+
+## Project-Specific Considerations
+
+For this LuxeNail project:
+
+1. **Follow DDD Architecture:** Implement domain layer first
+2. **Use Task Order:** Reference `.tasks/TASK_ORDER.json` for task dependencies
+3. **Document Everything:** Update documentation as you implement (see `documentation_guidelines.mdc`)
+4. **Test Domain Logic Thoroughly:** Domain layer should have high test coverage
+5. **API-First Approach:** Design API before frontend implementation
+6. **Incremental Deployment:** Deploy features incrementally when possible
+
+---
+
+**Remember:** The goal is to build quality software efficiently. The sequence helps ensure nothing is missed, but adapt it to your project's needs and constraints.

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T21:00:00.000Z",
+    "lastUpdated": "2025-01-24T22:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -157,10 +157,24 @@
             "TASK-ARCH-003"
           ],
           "blocking": [
-            "TASK-DB-003"
+            "TASK-DOC-010"
           ],
           "estimatedTime": "6 hours",
-          "notes": "Architecture design for dashboard management system. Required before database schema implementation. Should follow DDD architecture principles from TASK-ARCH-003."
+          "notes": "Architecture design for dashboard management system. Required before detailed design. Should follow DDD architecture principles from TASK-ARCH-003."
+        },
+        {
+          "taskId": "TASK-DOC-010",
+          "title": "Dashboard Detailed Design (Class/Component Design)",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-014"
+          ],
+          "blocking": [
+            "TASK-DB-003"
+          ],
+          "estimatedTime": "8 hours",
+          "notes": "Detailed design of classes, components, and modules for dashboard system following DDD principles. Required before database schema implementation and API implementation."
         },
         {
           "taskId": "TASK-DB-003",
@@ -168,7 +182,7 @@
           "priority": "HIGH",
           "canStart": false,
           "dependsOn": [
-            "TASK-FEAT-014"
+            "TASK-DOC-010"
           ],
           "blocking": [
             "TASK-API-002",
@@ -574,6 +588,26 @@
           "notes": "Create comprehensive user-facing documentation for dashboard system including role-specific guides, feature tutorials, FAQ, and troubleshooting. Should be done after all frontend implementation tasks are complete."
         }
       ]
+    },
+    {
+      "phase": 7,
+      "name": "Deployment",
+      "description": "Deploy dashboard system to production. Should be done after all testing is complete.",
+      "tasks": [
+        {
+          "taskId": "TASK-OPS-007",
+          "title": "Dashboard Deployment",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-TEST-002",
+            "TASK-TEST-003"
+          ],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Deploy dashboard system to production environment. Includes staging deployment, production deployment, smoke tests, and monitoring setup. Should be done after all testing is complete."
+        }
+      ]
     }
   ],
   "nextTaskRecommendation": {
@@ -651,6 +685,7 @@
     "TASK-DOC-002",
     "TASK-ARCH-003",
     "TASK-FEAT-014",
+    "TASK-DOC-010",
     "TASK-DB-003",
     "TASK-DOC-006",
     "TASK-DB-005",
@@ -659,7 +694,8 @@
     "TASK-SEC-002",
     "TASK-FEAT-015",
     "TASK-TEST-002",
-    "TASK-TEST-003"
+    "TASK-TEST-003",
+    "TASK-OPS-007"
   ],
   "customerPromotionsCriticalPath": [
     "TASK-DOC-004",
