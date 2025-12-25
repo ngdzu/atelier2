@@ -14,6 +14,10 @@ This is a React + TypeScript website for a nail salon business (LuxeNail) built 
 
 ```
 /
+├── .tasks/            # Task files (.task) organized by feature/functional requirement
+│   ├── *.task         # Task files for each feature/requirement
+│   ├── TASK_REGISTRY.json  # Central task registry
+│   └── TASK_ORDER.json     # Task ordering and dependencies
 ├── components/          # React components organized by feature/page
 │   ├── AboutPage.tsx
 │   ├── AppointmentCalendar.tsx
@@ -288,11 +292,25 @@ export const dataService: IDataProvider = {
 
 ## Task Management
 
+### Task File Location
+
+**All `.task` files must be placed in the `.tasks/` folder** at the project root. This keeps task files organized and separate from source code.
+
+**Task File Naming:**
+- Use descriptive names: `metrics-and-analytics.task`, `promotions-management.task`
+- Use kebab-case for file names
+- Group related tasks in the same file when appropriate
+
 ### Adding New Tasks
 
 When adding new tasks to the project, you **must** update both the task registry and task order files:
 
-1. **Update `.tasks/TASK_REGISTRY.json`:**
+1. **Create or update task file in `.tasks/` folder:**
+   - Create new `.task` file in `.tasks/` folder (e.g., `.tasks/metrics-and-analytics.task`)
+   - Or add task to existing `.task` file if related
+   - Follow task file format guidelines (see task_guidelines.mdc)
+
+2. **Update `.tasks/TASK_REGISTRY.json`:**
    - Add the new task entry to the `tasks` array with all required fields
    - Update the category metadata: increment `lastNumber` and `nextAvailable` for the task's category
    - Update the metadata section:
@@ -300,25 +318,26 @@ When adding new tasks to the project, you **must** update both the task registry
      - Update `lastUpdated` timestamp to current date
      - Update `lastSync` timestamp to current date
 
-2. **Update `.tasks/TASK_ORDER.json`:**
+3. **Update `.tasks/TASK_ORDER.json`:**
    - Add the task to the appropriate phase in the `phases` array
    - Include task metadata: `taskId`, `title`, `priority`, `canStart`, `dependsOn`, `blocking`, `estimatedTime`, `notes`
    - If the task can be done in parallel with others, add it to the `parallelization` section for that phase
    - Update the `metadata.lastUpdated` timestamp
 
 **Example workflow:**
-- Create task in `.task` file (e.g., `requirements.task`)
-- Add task to `TASK_REGISTRY.json` tasks array
+- Create task in `.tasks/` folder (e.g., `.tasks/metrics-and-analytics.task`)
+- Add task to `.tasks/TASK_REGISTRY.json` tasks array
 - Update category counters (e.g., `DOC.lastNumber: 8`, `DOC.nextAvailable: 9`)
 - Update registry metadata (`totalTasks`, `lastUpdated`, `lastSync`)
-- Add task to appropriate phase in `TASK_ORDER.json`
-- Update `TASK_ORDER.json` metadata (`lastUpdated`)
+- Add task to appropriate phase in `.tasks/TASK_ORDER.json`
+- Update `.tasks/TASK_ORDER.json` metadata (`lastUpdated`)
 
 **Why this matters:**
 - Keeps task tracking accurate and up-to-date
 - Ensures task ordering and dependencies are correctly maintained
 - Prevents duplicate task numbers
 - Maintains a single source of truth for task status
+- Keeps project root clean by organizing task files in dedicated folder
 
 ## Business Logic Specific to Nail Salon
 
