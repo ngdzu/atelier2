@@ -1,0 +1,45 @@
+%% Dashboard Management System - Feature Overview Diagram
+%% Generated for DASHBOARD_REQUIREMENTS.md
+
+graph LR
+    Dashboard[Dashboard Management System]
+    
+    subgraph Features["Core Features"]
+        Metrics[Metrics & Analytics<br/>- Revenue Metrics<br/>- Appointment Metrics<br/>- Customer Metrics<br/>- Employee Performance<br/>- Service Analytics]
+        
+        Promotions[Promotions Management<br/>- Create Campaigns<br/>- Schedule Sending<br/>- Track Performance<br/>- AI Generation]
+        
+        Content[Content Management<br/>- Edit Website Content<br/>- Version Control<br/>- Preview & Publish<br/>- WYSIWYG Editor]
+        
+        Gallery[Gallery Management<br/>- Upload Images<br/>- Organize by Category<br/>- Edit Metadata<br/>- Bulk Operations]
+    end
+    
+    subgraph Support["Supporting Features"]
+        Auth[Authentication<br/>& Authorization]
+        Export[Data Export<br/>CSV & PDF]
+        Search[Search & Filter]
+        Notifications[Notifications]
+    end
+    
+    Dashboard --> Metrics
+    Dashboard --> Promotions
+    Dashboard --> Content
+    Dashboard --> Gallery
+    
+    Metrics --> Export
+    Promotions --> Export
+    Gallery --> Search
+    Content --> Search
+    
+    Dashboard --> Auth
+    Dashboard --> Notifications
+    
+    %% Styling
+    classDef dashboard fill:#4a148c,stroke:#1a237e,stroke-width:3px,color:#ffffff
+    classDef feature fill:#e3f2fd,stroke:#0d47a1,stroke-width:2px,color:#000000
+    classDef support fill:#f1f8e9,stroke:#33691e,stroke-width:2px,color:#000000
+    
+    class Dashboard dashboard
+    class Metrics,Promotions,Content,Gallery feature
+    class Auth,Export,Search,Notifications support
+

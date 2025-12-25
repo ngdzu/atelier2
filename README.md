@@ -35,6 +35,7 @@ See [DOCKER.md](DOCKER.md) for running client, server, and Postgres together.
 ## Scripts (top-level)
 
 - Docker: use root `docker-compose.yml` for development, `docker-compose.prod.yml` for production.
+- Mermaid Diagrams: use `node scripts/generateMermaidSvgs.js` to generate SVG files from `.mmd` files (see [Mermaid Guidelines](.cursor/rules/mermaid.mdc))
 
 ## Task Registry
 

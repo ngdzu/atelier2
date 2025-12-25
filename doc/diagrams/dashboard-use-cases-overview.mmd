@@ -1,0 +1,46 @@
+%% Dashboard Management System - Use Case Overview Diagram
+%% High-level view showing main modules and actors
+
+graph TB
+    %% Actors
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    Employee[Employee]
+    
+    %% Main Modules
+    Metrics[Metrics & Analytics<br/>Module]
+    Promotions[Promotions Management<br/>Module]
+    Content[Content Management<br/>Module]
+    Gallery[Gallery Management<br/>Module]
+    System[System Management<br/>Module]
+    
+    %% Owner access
+    Owner --> Metrics
+    Owner --> Promotions
+    Owner --> Content
+    Owner --> Gallery
+    Owner --> System
+    
+    %% Manager access
+    Manager --> Metrics
+    Manager --> Promotions
+    Manager --> Content
+    Manager --> Gallery
+    
+    %% Admin access
+    Admin --> Promotions
+    Admin --> Content
+    Admin --> Gallery
+    Admin --> System
+    
+    %% Employee access (limited)
+    Employee --> Metrics
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef module fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000
+    
+    class Owner,Manager,Admin,Employee actor
+    class Metrics,Promotions,Content,Gallery,System module
+

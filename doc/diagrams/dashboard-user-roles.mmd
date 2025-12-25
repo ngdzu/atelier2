@@ -1,0 +1,69 @@
+%% Dashboard Management System - User Roles and Permissions Diagram
+%% Generated for DASHBOARD_REQUIREMENTS.md
+
+graph TB
+    %% User Roles Hierarchy
+    Employee[Employee<br/>Read-Only Access]
+    Admin[Admin<br/>System Management]
+    Manager[Manager<br/>Operational Management]
+    Owner[Owner<br/>Full Access]
+    
+    %% Permission Groups
+    subgraph Permissions["Permission Groups"]
+        P1[View Financial Metrics]
+        P2[View Operational Metrics]
+        P3[Create/Edit Promotions]
+        P4[Send Promotions]
+        P5[Edit Website Content]
+        P6[Upload Gallery Images]
+        P7[Manage Users]
+        P8[System Settings]
+        P9[Export Data]
+    end
+    
+    %% Owner has all permissions
+    Owner --> P1
+    Owner --> P2
+    Owner --> P3
+    Owner --> P4
+    Owner --> P5
+    Owner --> P6
+    Owner --> P7
+    Owner --> P8
+    Owner --> P9
+    
+    %% Manager permissions
+    Manager --> P1
+    Manager --> P2
+    Manager --> P3
+    Manager --> P4
+    Manager --> P5
+    Manager --> P6
+    Manager --> P9
+    
+    %% Admin permissions
+    Admin --> P2
+    Admin --> P3
+    Admin --> P4
+    Admin --> P5
+    Admin --> P6
+    Admin --> P7
+    Admin --> P8
+    Admin --> P9
+    
+    %% Employee permissions (limited)
+    Employee --> P2
+    
+    %% Styling
+    classDef owner fill:#4caf50,stroke:#2e7d32,stroke-width:3px,color:#ffffff
+    classDef manager fill:#2196f3,stroke:#1565c0,stroke-width:2px,color:#ffffff
+    classDef admin fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#ffffff
+    classDef employee fill:#9e9e9e,stroke:#424242,stroke-width:2px,color:#ffffff
+    classDef permission fill:#e1f5ff,stroke:#01579b,stroke-width:1px,color:#000000
+    
+    class Owner owner
+    class Manager manager
+    class Admin admin
+    class Employee employee
+    class P1,P2,P3,P4,P5,P6,P7,P8,P9 permission
+

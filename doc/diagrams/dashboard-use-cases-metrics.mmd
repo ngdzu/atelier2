@@ -1,0 +1,49 @@
+%% Dashboard Management System - Metrics & Analytics Use Cases
+%% Detailed use cases for Metrics module
+
+graph TB
+    %% Actors (rectangles)
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    Employee[Employee]
+    
+    %% Use Cases (rounded rectangles - closest to UML ellipses)
+    UC1(View Business Metrics<br/>KPIs and Overview)
+    UC2(Analyze Revenue Trends<br/>Time Series Analysis)
+    UC3(Track Employee Performance<br/>Productivity Metrics)
+    UC4(Export Metrics Data<br/>CSV & PDF Reports)
+    UC5(View Service Analytics<br/>Popularity & Revenue)
+    UC6(View Customer Analytics<br/>Retention & CLV)
+    
+    %% Owner relationships
+    Owner --> UC1
+    Owner --> UC2
+    Owner --> UC3
+    Owner --> UC4
+    Owner --> UC5
+    Owner --> UC6
+    
+    %% Manager relationships
+    Manager --> UC1
+    Manager --> UC2
+    Manager --> UC3
+    Manager --> UC4
+    Manager --> UC5
+    Manager --> UC6
+    
+    %% Admin relationships (limited metrics)
+    Admin --> UC5
+    Admin --> UC6
+    
+    %% Employee relationships (read-only, limited)
+    Employee --> UC5
+    Employee --> UC6
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef usecase fill:#e8f5e9,stroke:#1b5e20,stroke-width:1px,color:#000000
+    
+    class Owner,Manager,Admin,Employee actor
+    class UC1,UC2,UC3,UC4,UC5,UC6 usecase
+

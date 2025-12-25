@@ -1,0 +1,29 @@
+%% Dashboard Management System - System Management Use Cases
+%% Detailed use cases for System Management module
+
+graph TB
+    %% Actors (rectangles)
+    Owner[Owner]
+    Admin[Admin]
+    
+    %% Use Cases (rounded rectangles - closest to UML ellipses)
+    UC1(Manage Users<br/>Create, Edit, Delete)
+    UC2(Configure Settings<br/>System Configuration)
+    UC3(View System Logs<br/>Audit & Activity)
+    
+    %% Owner relationships
+    Owner --> UC1
+    Owner --> UC2
+    Owner --> UC3
+    
+    %% Admin relationships
+    Admin --> UC1
+    Admin --> UC2
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef usecase fill:#f1f8e9,stroke:#33691e,stroke-width:1px,color:#000000
+    
+    class Owner,Admin actor
+    class UC1,UC2,UC3 usecase
+

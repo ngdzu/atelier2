@@ -2,11 +2,11 @@
 
 ## TASK-DOC-002: Dashboard Requirements Analysis and Documentation
 
-**Status:** PENDING
+**Status:** COMPLETED
 **Priority:** HIGH
 **Assignee:** unassigned
 **Created:** 2025-01-22
-**Updated:** 2025-01-22
+**Updated:** 2025-01-24
 **Estimated Time:** 4 hours
 **Dependencies:** none
 **Related Tasks:** TASK-FEAT-014
@@ -149,9 +149,17 @@ Conduct comprehensive requirements analysis for the dashboard management system.
 
 ---
 
-**Completion Date:** 
-**Completed By:** 
-**Notes:**
+**Completion Date:** 2025-01-24
+**Completed By:** AI Assistant
+**Notes:** Comprehensive requirements document created at `doc/DASHBOARD_REQUIREMENTS.md` with all required sections including stakeholder analysis, metrics requirements, promotions management, website editing, gallery management, non-functional requirements, user stories, use cases, assumptions, constraints, and glossary. All acceptance criteria met.
+
+**Diagram Enhancements (2025-01-24):** 
+- Generated SVG files from all Mermaid diagram source files (.mmd) for better compatibility across Markdown viewers
+- Updated documentation to reference SVG files instead of embedding Mermaid code blocks
+- Made all diagram images clickable links to their source .mmd files for easy editing
+- Improved use case diagram styling: used rounded rectangles for use cases (approximating UML ellipses) and rectangles for actors, since Mermaid doesn't support true UML use case diagrams
+- Added documentation note explaining Mermaid's limitations and the workaround approach
+- All 9 diagrams now have corresponding SVG files: use case overview, 5 module-specific use case diagrams, user roles, system context, and feature overview
 
 ---
 
@@ -2311,3 +2319,244 @@ Conduct comprehensive quality assurance testing including manual testing, user a
 **Completed By:** 
 **Notes:**
 
+---
+
+## TASK-DOC-009: Dashboard User Guide and Documentation
+
+**Status:** PENDING
+**Priority:** MEDIUM
+**Assignee:** unassigned
+**Created:** 2025-01-24
+**Updated:** 2025-01-24
+**Estimated Time:** 6 hours
+**Dependencies:** TASK-FEAT-015, TASK-FEAT-016, TASK-FEAT-017, TASK-FEAT-018
+**Related Tasks:** TASK-DOC-002
+
+### Description
+
+Create comprehensive user-facing documentation for the dashboard management system. This includes user guides for each role (Owner, Manager, Admin, Employee), step-by-step tutorials, FAQ sections, and troubleshooting guides. The documentation should enable users to effectively use all dashboard features without requiring technical support.
+
+### Requirements / What to Do
+
+#### Step 1: Create User Guide Structure
+- [ ] Create `doc/DASHBOARD_USER_GUIDE.md` as main guide
+- [ ] Create role-specific guides:
+  - `doc/DASHBOARD_USER_GUIDE_OWNER.md`
+  - `doc/DASHBOARD_USER_GUIDE_MANAGER.md`
+  - `doc/DASHBOARD_USER_GUIDE_ADMIN.md`
+  - `doc/DASHBOARD_USER_GUIDE_EMPLOYEE.md`
+- [ ] Create feature-specific guides:
+  - `doc/DASHBOARD_GUIDE_METRICS.md`
+  - `doc/DASHBOARD_GUIDE_PROMOTIONS.md`
+  - `doc/DASHBOARD_GUIDE_CONTENT_EDITING.md`
+  - `doc/DASHBOARD_GUIDE_GALLERY.md`
+- [ ] Create `doc/DASHBOARD_FAQ.md` for common questions
+- [ ] Create `doc/DASHBOARD_TROUBLESHOOTING.md` for common issues
+
+#### Step 2: Document Getting Started
+- [ ] Dashboard login process
+- [ ] First-time user setup
+- [ ] Navigation overview
+- [ ] Dashboard layout explanation
+- [ ] Role-based access explanation
+- [ ] Profile settings and preferences
+
+#### Step 3: Metrics and Analytics Guide
+- [ ] How to view metrics dashboard
+- [ ] Understanding KPI cards
+- [ ] Reading and interpreting charts
+- [ ] Using date range filters
+- [ ] Comparing time periods
+- [ ] Exporting metrics data (CSV, PDF)
+- [ ] Understanding revenue metrics
+- [ ] Understanding appointment metrics
+- [ ] Understanding customer metrics
+- [ ] Understanding employee performance metrics
+- [ ] Understanding service popularity metrics
+- [ ] Interpreting trends and growth percentages
+
+#### Step 4: Promotions Management Guide
+- [ ] Creating a new promotion
+- [ ] Promotion types explained (Percentage Off, Dollar Off, Free Service, BOGO)
+- [ ] Setting promotion details (name, description, discount value)
+- [ ] Targeting customer segments
+- [ ] Selecting target services
+- [ ] Using AI-assisted promotion generation
+- [ ] Scheduling promotions for future sending
+- [ ] Sending promotions immediately
+- [ ] Viewing promotion analytics
+- [ ] Understanding delivery, open, click, and redemption rates
+- [ ] Managing promotion status (Draft, Scheduled, Sent, Completed, Cancelled)
+- [ ] Editing and deleting promotions
+- [ ] Using promotion templates
+
+#### Step 5: Website Content Editing Guide
+- [ ] Accessing content editor
+- [ ] Understanding content sections
+- [ ] Editing landing page hero section
+- [ ] Updating service descriptions and pricing
+- [ ] Editing about page content
+- [ ] Updating contact information
+- [ ] Modifying business information
+- [ ] Editing legal pages (Terms, Privacy Policy)
+- [ ] Using WYSIWYG editor
+- [ ] Using structured forms
+- [ ] Previewing content changes
+- [ ] Saving content as draft
+- [ ] Publishing content
+- [ ] Viewing version history
+- [ ] Reverting to previous versions
+- [ ] Understanding content status (Draft, Published, Archived)
+
+#### Step 6: Gallery Image Management Guide
+- [ ] Accessing gallery manager
+- [ ] Uploading single images
+- [ ] Uploading multiple images (bulk upload)
+- [ ] Drag-and-drop upload
+- [ ] Supported image formats and sizes
+- [ ] Adding image metadata (title, description, alt text)
+- [ ] Categorizing images (Manicure, Pedicure, Eyelash, etc.)
+- [ ] Setting display order
+- [ ] Editing image metadata
+- [ ] Filtering and searching images
+- [ ] Organizing images by category
+- [ ] Changing image status (Active, Hidden, Archived)
+- [ ] Deleting images
+- [ ] Understanding image requirements and best practices
+
+#### Step 7: Role-Specific Guides
+- [ ] **Owner Guide:**
+  - Full feature access overview
+  - Financial metrics interpretation
+  - Strategic decision-making using metrics
+  - User management
+  - System configuration
+- [ ] **Manager Guide:**
+  - Operational metrics focus
+  - Promotion campaign management
+  - Service and pricing updates
+  - Employee performance review
+- [ ] **Admin Guide:**
+  - User account management
+  - System settings configuration
+  - Content management responsibilities
+  - Limited metrics access explanation
+- [ ] **Employee Guide:**
+  - View-only access explanation
+  - Understanding appointment schedules
+  - Viewing service popularity
+  - Understanding current promotions
+
+#### Step 8: Create FAQ Section
+- [ ] Common questions about metrics
+- [ ] Common questions about promotions
+- [ ] Common questions about content editing
+- [ ] Common questions about gallery management
+- [ ] Questions about permissions and access
+- [ ] Questions about data export
+- [ ] Questions about scheduling
+- [ ] Questions about version history
+
+#### Step 9: Create Troubleshooting Guide
+- [ ] Login issues
+- [ ] Permission denied errors
+- [ ] Metrics not loading
+- [ ] Promotion sending failures
+- [ ] Content not publishing
+- [ ] Image upload errors
+- [ ] Export functionality issues
+- [ ] Browser compatibility issues
+- [ ] Performance issues
+- [ ] Data not appearing correctly
+
+#### Step 10: Add Visual Aids
+- [ ] Screenshots for key workflows
+- [ ] Annotated screenshots showing UI elements
+- [ ] Step-by-step visual guides
+- [ ] Video tutorials (optional, link to external)
+- [ ] Diagrams for complex workflows
+
+#### Step 11: Create Quick Reference Guides
+- [ ] Keyboard shortcuts (if applicable)
+- [ ] Common tasks cheat sheet
+- [ ] Feature comparison table (by role)
+- [ ] Terminology glossary
+
+### Definition of Done (DoD)
+
+- [ ] Main user guide created with table of contents
+- [ ] Role-specific guides created for all four roles
+- [ ] Feature-specific guides created for all major features
+- [ ] FAQ section with at least 20 common questions
+- [ ] Troubleshooting guide with solutions for common issues
+- [ ] Getting started guide for new users
+- [ ] Visual aids (screenshots) included where helpful
+- [ ] Quick reference guides created
+- [ ] All guides reviewed for accuracy and completeness
+- [ ] Documentation follows project documentation standards
+- [ ] Links between related guides work correctly
+- [ ] Documentation is accessible and easy to navigate
+
+### Verification Steps
+
+1. **Content Review:**
+   - Review all guides for completeness
+   - Verify accuracy against actual dashboard features
+   - Check that all features from requirements are documented
+   - Ensure role-specific information is correct
+
+2. **User Testing:**
+   - Have a new user follow the getting started guide
+   - Test that users can complete common tasks using only the guides
+   - Gather feedback on clarity and usefulness
+   - Update documentation based on feedback
+
+3. **Technical Review:**
+   - Verify all file paths and links are correct
+   - Check that screenshots are up-to-date
+   - Ensure documentation follows markdown standards
+   - Verify cross-references work correctly
+
+### Acceptance Criteria
+
+- ✅ Complete user guide exists for dashboard system
+- ✅ All user roles have dedicated guides
+- ✅ All major features are documented with step-by-step instructions
+- ✅ FAQ section addresses common questions
+- ✅ Troubleshooting guide helps resolve common issues
+- ✅ Documentation is clear, accurate, and easy to follow
+- ✅ New users can successfully use dashboard features by following guides
+- ✅ Documentation is well-organized and navigable
+
+### Technical Details
+
+**Files to Create:**
+- `doc/DASHBOARD_USER_GUIDE.md` (main guide with table of contents)
+- `doc/DASHBOARD_USER_GUIDE_OWNER.md`
+- `doc/DASHBOARD_USER_GUIDE_MANAGER.md`
+- `doc/DASHBOARD_USER_GUIDE_ADMIN.md`
+- `doc/DASHBOARD_USER_GUIDE_EMPLOYEE.md`
+- `doc/DASHBOARD_GUIDE_METRICS.md`
+- `doc/DASHBOARD_GUIDE_PROMOTIONS.md`
+- `doc/DASHBOARD_GUIDE_CONTENT_EDITING.md`
+- `doc/DASHBOARD_GUIDE_GALLERY.md`
+- `doc/DASHBOARD_FAQ.md`
+- `doc/DASHBOARD_TROUBLESHOOTING.md`
+
+**Files to Reference:**
+- `doc/DASHBOARD_REQUIREMENTS.md` (for feature specifications)
+- `doc/DASHBOARD_ARCHITECTURE.md` (for technical context, if available)
+
+**Documentation Standards:**
+- Use Markdown format
+- Follow documentation guidelines from `.cursor/rules/documentation_guidelines.mdc`
+- Use clear section headings
+- Include screenshots where helpful
+- Use consistent terminology from requirements document
+- Link to related documentation
+
+**Completion Date:**
+**Completed By:**
+**Notes:**
+
+---

@@ -1,0 +1,52 @@
+%% Dashboard Management System - Promotions Management Use Cases
+%% Detailed use cases for Promotions module
+
+graph TB
+    %% Actors (rectangles)
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    
+    %% Use Cases (rounded rectangles - closest to UML ellipses)
+    UC1(Create Promotion<br/>Campaign Creation)
+    UC2(Send Promotion<br/>Immediate Delivery)
+    UC3(Schedule Promotion<br/>Future Delivery)
+    UC4(View Promotion Analytics<br/>Performance Metrics)
+    UC5(Edit Promotion<br/>Update Campaign)
+    UC6(Delete Promotion<br/>Remove Campaign)
+    UC7(Use AI Generation<br/>AI-Assisted Content)
+    
+    %% Owner relationships
+    Owner --> UC1
+    Owner --> UC2
+    Owner --> UC3
+    Owner --> UC4
+    Owner --> UC5
+    Owner --> UC6
+    Owner --> UC7
+    
+    %% Manager relationships
+    Manager --> UC1
+    Manager --> UC2
+    Manager --> UC3
+    Manager --> UC4
+    Manager --> UC5
+    Manager --> UC6
+    Manager --> UC7
+    
+    %% Admin relationships
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef usecase fill:#fff3e0,stroke:#e65100,stroke-width:1px,color:#000000
+    
+    class Owner,Manager,Admin actor
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7 usecase
+

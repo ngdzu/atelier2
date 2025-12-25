@@ -1,0 +1,61 @@
+%% Dashboard Management System - System Context Diagram
+%% Generated for DASHBOARD_REQUIREMENTS.md
+
+graph TB
+    %% External Actors
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    Employee[Employee]
+    Customer[Customer<br/>via Website]
+    
+    %% Dashboard System
+    Dashboard[Dashboard Management System]
+    
+    %% External Systems
+    subgraph External["External Systems"]
+        EmailService[Email Service<br/>SendGrid/Twilio]
+        SMSService[SMS Service<br/>Twilio]
+        AIService[AI Service<br/>Google Gemini]
+        BookingSystem[Booking System<br/>Existing]
+    end
+    
+    %% Database
+    Database[(PostgreSQL<br/>Database)]
+    
+    %% File Storage
+    FileStorage[File Storage<br/>Images & Assets]
+    
+    %% Relationships - Users to Dashboard
+    Owner -->|Login & Manage| Dashboard
+    Manager -->|Login & Manage| Dashboard
+    Admin -->|Login & Manage| Dashboard
+    Employee -->|Login & View| Dashboard
+    
+    %% Dashboard to External Systems
+    Dashboard -->|Send Promotions| EmailService
+    Dashboard -->|Send Promotions| SMSService
+    Dashboard -->|Generate Content| AIService
+    Dashboard -->|Read Appointment Data| BookingSystem
+    Dashboard -->|Read Customer Data| BookingSystem
+    
+    %% Dashboard to Storage
+    Dashboard -->|Store & Retrieve| Database
+    Dashboard -->|Upload & Serve| FileStorage
+    
+    %% Customer to Website (for context)
+    Customer -->|Views Content| BookingSystem
+    Customer -->|Receives Promotions| EmailService
+    Customer -->|Receives Promotions| SMSService
+    
+    %% Styling
+    classDef user fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef system fill:#f3e5f5,stroke:#4a148c,stroke-width:3px,color:#000000
+    classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000000
+    classDef storage fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#000000
+    
+    class Owner,Manager,Admin,Employee,Customer user
+    class Dashboard system
+    class EmailService,SMSService,AIService,BookingSystem external
+    class Database,FileStorage storage
+

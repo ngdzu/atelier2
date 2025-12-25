@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T00:00:00.000Z",
+    "lastUpdated": "2025-01-24T13:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -540,6 +540,21 @@
           "blocking": [],
           "estimatedTime": "8 hours",
           "notes": "Quality assurance and user acceptance testing for dashboard system. Should be done after testing suite is complete."
+        },
+        {
+          "taskId": "TASK-DOC-009",
+          "title": "Dashboard User Guide and Documentation",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-015",
+            "TASK-FEAT-016",
+            "TASK-FEAT-017",
+            "TASK-FEAT-018"
+          ],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Create comprehensive user-facing documentation for dashboard system including role-specific guides, feature tutorials, FAQ, and troubleshooting. Should be done after all frontend implementation tasks are complete."
         }
       ]
     }
