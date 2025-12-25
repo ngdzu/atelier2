@@ -1,9 +1,9 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T13:00:00.000Z",
-    "totalTasks": 64,
-    "lastSync": "2025-01-24T13:00:00.000Z"
+    "lastUpdated": "2025-01-24T21:00:00.000Z",
+    "totalTasks": 65,
+    "lastSync": "2025-01-24T21:00:00.000Z"
   },
   "categories": {
     "FEAT": {
@@ -108,8 +108,8 @@
       "name": "Architecture",
       "code": "ARCH",
       "description": "System architecture and design",
-      "lastNumber": 2,
-      "nextAvailable": 3
+      "lastNumber": 3,
+      "nextAvailable": 4
     },
     "MIG": {
       "name": "Migration",
@@ -1598,6 +1598,42 @@
       "progress": {
         "completed": 0,
         "total": 55,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-ARCH-003",
+      "category": "ARCH",
+      "number": 3,
+      "title": "Domain-Driven Design (DDD) Architecture Design",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "10 hours",
+      "dependencies": [
+        "TASK-DOC-002",
+        "TASK-ARCH-001"
+      ],
+      "relatedTasks": [
+        "TASK-DB-006",
+        "TASK-API-001"
+      ],
+      "file": "architect.task",
+      "filePath": ".tasks/architect.task",
+      "description": "Design the Domain-Driven Design (DDD) architecture for the LuxeNail application. This includes identifying bounded contexts, designing domain models, defining aggregates, establishing layered architecture, and creating a project structure that follows DDD principles. The goal is to organize the codebase around business domains rather than technical layers, making the system more maintainable and aligned with business logic.",
+      "sections": {
+        "description": "Design the Domain-Driven Design (DDD) architecture for the LuxeNail application. This includes identifying bounded contexts, designing domain models, defining aggregates, establishing layered architecture, and creating a project structure that follows DDD principles. The goal is to organize the codebase around business domains rather than technical layers, making the system more maintainable and aligned with business logic.",
+        "requirements": "Step 1: Identify Bounded Contexts\n- [ ] Analyze the application scope and identify distinct bounded contexts:\n  - **Dashboard Management Context**: Administrative interface (metrics, promotions, content, gallery, employees)\n  - **Booking Context**: Customer-facing appointment booking system (existing)\n  - **Shared Kernel**: Common types and infrastructure (User, Service, authentication)\n- [ ] Document each bounded context:\n  - Scope and responsibilities\n  - Domain entities and aggregates\n  - Ubiquitous language (domain terms)\n  - Integration points with other contexts\n- [ ] Create context mapping diagram showing relationships between contexts\n- [ ] File to create: `doc/DDD_ARCHITECTURE.md` (already created as draft)\nStep 2: Design Domain Model for Dashboard Context\n- [ ] Identify core aggregates and their boundaries:\n  - **Promotion Aggregate**: Campaign management, discount logic, targeting\n  - **Metric Aggregate**: Business metrics, analytics, calculations\n  - **ContentVersion Aggregate**: Website content, versioning, publishing\n  - **GalleryImage Aggregate**: Image metadata, organization, categorization\n  - **Employee Aggregate**: Employee accounts, specialties, calendar integration\n  - **DashboardUser Aggregate**: Authentication, authorization, roles\n- [ ] Design aggregate roots (entities with identity):\n  - Define entity properties and business logic\n  - Identify value objects (immutable, no identity)\n  - Define aggregate boundaries and invariants\n  - Document entity relationships\n- [ ] Design value objects:\n  - Money (amount, currency)\n  - Email (validation, immutability)\n  - PhoneNumber (validation, formatting)\n  - DateTimeRange (start, end, validation)\n  - Percentage (value, validation)\n  - PromotionName, PromotionDescription\n  - MetricType, DateRange\n- [ ] Document domain events:\n  - PromotionSentEvent\n  - ContentPublishedEvent\n  - EmployeeCreatedEvent\n  - MetricCalculatedEvent\n- [ ] Create domain model diagrams (aggregates, entities, value objects)\nStep 3: Design Layered Architecture\n- [ ] Define four layers with clear responsibilities:\n  - **Domain Layer**: Entities, value objects, domain services, repository interfaces\n    - No dependencies on infrastructure or application layers\n    - Contains all business logic\n  - **Application Layer**: Use cases, DTOs, application services, command/query handlers\n    - Orchestrates domain objects\n    - No business logic (delegates to domain)\n  - **Infrastructure Layer**: Repository implementations, database, external services\n    - Implements interfaces from domain layer\n    - Handles all technical concerns\n  - **Presentation Layer**: API controllers, routes, middleware, React frontend\n    - Thin controllers, delegates to application services\n    - Input validation and transformation\n- [ ] Define dependency rules:\n  - Inner layers don't depend on outer layers\n  - Domain layer has no dependencies\n  - Application depends on domain only\n  - Infrastructure implements domain interfaces\n  - Presentation depends on application and infrastructure\n- [ ] Create layer dependency diagram\nStep 4: Design Project Structure\n- [ ] Design server-side structure following DDD:\n- [ ] Design client-side structure (React frontend):\n  - Keep feature-based organization\n  - Services layer for API communication\n  - Separate concerns from domain logic\n- [ ] Document structure decisions and rationale\n- [ ] Create directory structure guide\nStep 5: Design Aggregates and Invariants\n- [ ] Define aggregate roots and boundaries\n- [ ] Define aggregate invariants (rules that must always be true)\n- [ ] Design aggregate access patterns\n- [ ] Document aggregate design decisions\nStep 6: Design Domain Services\n- [ ] Identify operations that don't fit in entities\n- [ ] Design domain service interfaces and implementations\n- [ ] Document when to use domain services vs. entities\nStep 7: Design Repository Pattern\n- [ ] Define repository interfaces in domain layer\n- [ ] Design repository methods\n- [ ] Plan repository implementations in infrastructure layer\n- [ ] Document repository pattern usage\nStep 8: Design Application Services (Use Cases)\n- [ ] Design use cases for dashboard features\n- [ ] Design use case structure\n- [ ] Document use case patterns and conventions\n- [ ] Optional: Design CQRS pattern for complex read/write separation\nStep 9: Design Value Objects\n- [ ] Design core value objects with validation\n- [ ] Design domain-specific value objects\n- [ ] Document value object design principles\nStep 10: Design Context Mapping and Integration\n- [ ] Map relationships between bounded contexts\n- [ ] Design integration patterns\n- [ ] Design shared kernel boundaries\n- [ ] Create context mapping diagram\nStep 11: Create Implementation Guidelines\n- [ ] Document DDD implementation patterns\n- [ ] Create code examples and templates\n- [ ] Document migration strategy from existing code\n- [ ] Document testing strategy\nStep 12: Create Architecture Documentation\n- [ ] Complete `doc/DDD_ARCHITECTURE.md` with all sections\n- [ ] Create architecture diagrams\n- [ ] Document DDD principles and practices",
+        "definitionOfDone": "- [ ] All bounded contexts identified and documented\n- [ ] Domain model designed for dashboard context\n- [ ] Aggregates defined with clear boundaries\n- [ ] Layered architecture designed and documented\n- [ ] Project structure following DDD principles designed\n- [ ] Repository pattern designed\n- [ ] Application services (use cases) designed\n- [ ] Value objects designed\n- [ ] Context mapping completed\n- [ ] Implementation guidelines created\n- [ ] Architecture documentation complete with diagrams\n- [ ] Code examples and templates provided\n- [ ] Migration strategy documented\n- [ ] Architecture reviewed for DDD best practices",
+        "verificationSteps": "1. **Architecture Review:**\n   - Review bounded context identification\n   - Verify domain model aligns with business requirements\n   - Check aggregate boundaries are appropriate\n   - Validate layer dependencies follow DDD principles\n   - Ensure project structure supports DDD\n\n2. **DDD Principles Validation:**\n   - Verify domain layer has no infrastructure dependencies\n   - Check aggregates maintain invariants\n   - Validate repository pattern abstraction\n   - Ensure ubiquitous language is used consistently\n   - Review aggregate size and complexity\n\n3. **Documentation Review:**\n   - Verify all sections are complete\n   - Check diagrams are clear and accurate\n   - Validate code examples are correct\n   - Ensure implementation guidelines are actionable",
+        "acceptanceCriteria": "- ✅ Complete DDD architecture documentation exists\n- ✅ Bounded contexts are clearly identified and documented\n- ✅ Domain model reflects business domain accurately\n- ✅ Aggregates are properly designed with clear boundaries\n- ✅ Layered architecture follows DDD principles\n- ✅ Project structure supports DDD implementation\n- ✅ Repository pattern is properly abstracted\n- ✅ Use cases are designed following application service pattern\n- ✅ Value objects are designed with validation and immutability\n- ✅ Context mapping shows clear relationships\n- ✅ Implementation guidelines are clear and actionable\n- ✅ Architecture is maintainable and scalable",
+        "technicalDetails": "**Files to Create/Update:**\n- `doc/DDD_ARCHITECTURE.md` (complete the draft)\n- `doc/diagrams/ddd-bounded-contexts.mmd` (and .svg)\n- `doc/diagrams/ddd-layered-architecture.mmd` (and .svg)\n- `doc/diagrams/ddd-aggregates.mmd` (and .svg)\n- `doc/diagrams/ddd-context-mapping.mmd` (and .svg)\n- `doc/diagrams/ddd-domain-model.mmd` (and .svg)\n\n**Key Design Decisions to Document:**\n- Bounded context boundaries and rationale\n- Aggregate design decisions\n- Layer separation strategy\n- Repository pattern approach\n- Value object vs entity decisions\n- Integration patterns between contexts\n\n**Related Documents:**\n- [Dashboard Requirements](doc/DASHBOARD_REQUIREMENTS.md)\n- [Backend Architecture](doc/ARCHITECTURE.md) - *To be created in TASK-ARCH-001*\n- [Database Design](doc/DATABASE_DESIGN.md) - *To be created in TASK-DB-006*"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 60,
         "percentage": 0
       }
     },

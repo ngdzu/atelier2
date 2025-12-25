@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T13:00:00.000Z",
+    "lastUpdated": "2025-01-24T21:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -39,10 +39,26 @@
           "priority": "HIGH",
           "canStart": true,
           "blocking": [
+            "TASK-ARCH-003",
             "TASK-FEAT-014"
           ],
           "estimatedTime": "4 hours",
           "notes": "Requirements analysis for dashboard management system. Can be done in parallel with TASK-DOC-007 and TASK-DOC-004."
+        },
+        {
+          "taskId": "TASK-ARCH-003",
+          "title": "Domain-Driven Design (DDD) Architecture Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-002",
+            "TASK-ARCH-001"
+          ],
+          "blocking": [
+            "TASK-FEAT-014"
+          ],
+          "estimatedTime": "10 hours",
+          "notes": "DDD architecture design for the application. Should be completed before dashboard architecture (TASK-FEAT-014) as DDD design informs the overall system architecture. Depends on dashboard requirements (TASK-DOC-002) and backend architecture (TASK-ARCH-001)."
         },
         {
           "taskId": "TASK-DOC-008",
@@ -137,13 +153,14 @@
           "priority": "HIGH",
           "canStart": false,
           "dependsOn": [
-            "TASK-DOC-002"
+            "TASK-DOC-002",
+            "TASK-ARCH-003"
           ],
           "blocking": [
             "TASK-DB-003"
           ],
           "estimatedTime": "6 hours",
-          "notes": "Architecture design for dashboard management system. Required before database schema implementation."
+          "notes": "Architecture design for dashboard management system. Required before database schema implementation. Should follow DDD architecture principles from TASK-ARCH-003."
         },
         {
           "taskId": "TASK-DB-003",
@@ -567,14 +584,15 @@
   },
   "parallelization": {
     "phase1": {
-      "description": "Foundation tasks in Phase 1 can be done in parallel",
+      "description": "Foundation tasks in Phase 1. TASK-DOC-007, TASK-DOC-004, TASK-DOC-002, and TASK-DOC-008 can be done in parallel. TASK-ARCH-003 depends on TASK-DOC-002 and TASK-ARCH-001.",
       "tasks": [
         "TASK-DOC-007",
         "TASK-DOC-004",
         "TASK-DOC-002",
-        "TASK-DOC-008"
+        "TASK-DOC-008",
+        "TASK-ARCH-003"
       ],
-      "note": "These foundation tasks have no dependencies and can be started simultaneously."
+      "note": "TASK-DOC-007, TASK-DOC-004, TASK-DOC-002, and TASK-DOC-008 have no dependencies and can be started simultaneously. TASK-ARCH-003 (DDD architecture) should be completed before TASK-FEAT-014 (Dashboard Architecture) as it informs the overall system design."
     },
     "phase2": {
       "description": "Some database design tasks can be done in parallel after their dependencies",
@@ -631,6 +649,7 @@
   ],
   "dashboardCriticalPath": [
     "TASK-DOC-002",
+    "TASK-ARCH-003",
     "TASK-FEAT-014",
     "TASK-DB-003",
     "TASK-DOC-006",
