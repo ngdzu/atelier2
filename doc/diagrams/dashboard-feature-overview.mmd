@@ -12,6 +12,10 @@ graph LR
         Content[Content Management<br/>- Edit Website Content<br/>- Version Control<br/>- Preview & Publish<br/>- WYSIWYG Editor]
         
         Gallery[Gallery Management<br/>- Upload Images<br/>- Organize by Category<br/>- Edit Metadata<br/>- Bulk Operations]
+        
+        Employees[Employee Management<br/>- Create & Edit Employees<br/>- Assign Specialties<br/>- Manage Roles<br/>- Calendar Colors]
+        
+        Calendar[Calendar & Appointments<br/>- View Appointments<br/>- Create/Edit Appointments<br/>- Filter by Employee<br/>- Status Management]
     end
     
     subgraph Support["Supporting Features"]
@@ -25,11 +29,15 @@ graph LR
     Dashboard --> Promotions
     Dashboard --> Content
     Dashboard --> Gallery
+    Dashboard --> Employees
+    Dashboard --> Calendar
     
     Metrics --> Export
     Promotions --> Export
     Gallery --> Search
     Content --> Search
+    Calendar --> Employees
+    Employees --> Calendar
     
     Dashboard --> Auth
     Dashboard --> Notifications
@@ -40,6 +48,6 @@ graph LR
     classDef support fill:#f1f8e9,stroke:#33691e,stroke-width:2px,color:#000000
     
     class Dashboard dashboard
-    class Metrics,Promotions,Content,Gallery feature
+    class Metrics,Promotions,Content,Gallery,Employees,Calendar feature
     class Auth,Export,Search,Notifications support
 

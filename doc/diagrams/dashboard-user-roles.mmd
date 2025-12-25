@@ -16,9 +16,12 @@ graph TB
         P4[Send Promotions]
         P5[Edit Website Content]
         P6[Upload Gallery Images]
-        P7[Manage Users]
-        P8[System Settings]
-        P9[Export Data]
+        P7[Manage Employees]
+        P8[View Calendar/Appointments]
+        P9[Manage Appointments]
+        P10[Manage Users]
+        P11[System Settings]
+        P12[Export Data]
     end
     
     %% Owner has all permissions
@@ -31,6 +34,9 @@ graph TB
     Owner --> P7
     Owner --> P8
     Owner --> P9
+    Owner --> P10
+    Owner --> P11
+    Owner --> P12
     
     %% Manager permissions
     Manager --> P1
@@ -39,7 +45,10 @@ graph TB
     Manager --> P4
     Manager --> P5
     Manager --> P6
+    Manager --> P7
+    Manager --> P8
     Manager --> P9
+    Manager --> P12
     
     %% Admin permissions
     Admin --> P2
@@ -50,9 +59,13 @@ graph TB
     Admin --> P7
     Admin --> P8
     Admin --> P9
+    Admin --> P10
+    Admin --> P11
+    Admin --> P12
     
     %% Employee permissions (limited)
     Employee --> P2
+    Employee --> P8
     
     %% Styling
     classDef owner fill:#4caf50,stroke:#2e7d32,stroke-width:3px,color:#ffffff
@@ -65,5 +78,5 @@ graph TB
     class Manager manager
     class Admin admin
     class Employee employee
-    class P1,P2,P3,P4,P5,P6,P7,P8,P9 permission
+    class P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12 permission
 

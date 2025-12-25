@@ -13,6 +13,8 @@ graph TB
     Promotions[Promotions Management<br/>Module]
     Content[Content Management<br/>Module]
     Gallery[Gallery Management<br/>Module]
+    Employees[Employee Management<br/>Module]
+    Calendar[Calendar & Appointments<br/>Module]
     System[System Management<br/>Module]
     
     %% Owner access
@@ -20,6 +22,8 @@ graph TB
     Owner --> Promotions
     Owner --> Content
     Owner --> Gallery
+    Owner --> Employees
+    Owner --> Calendar
     Owner --> System
     
     %% Manager access
@@ -27,20 +31,25 @@ graph TB
     Manager --> Promotions
     Manager --> Content
     Manager --> Gallery
+    Manager --> Employees
+    Manager --> Calendar
     
     %% Admin access
     Admin --> Promotions
     Admin --> Content
     Admin --> Gallery
+    Admin --> Employees
+    Admin --> Calendar
     Admin --> System
     
     %% Employee access (limited)
     Employee --> Metrics
+    Employee --> Calendar
     
     %% Styling
     classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
     classDef module fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000
     
     class Owner,Manager,Admin,Employee actor
-    class Metrics,Promotions,Content,Gallery,System module
+    class Metrics,Promotions,Content,Gallery,Employees,Calendar,System module
 

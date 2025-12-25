@@ -1,0 +1,66 @@
+%% Dashboard Management System - Calendar & Appointment Viewing Use Cases
+%% Detailed use cases for Calendar module
+
+graph TB
+    %% Actors (rectangles)
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    Employee[Employee]
+    
+    %% Use Cases (rounded rectangles - closest to UML ellipses)
+    UC1(View Calendar<br/>Day/Week/Month View)
+    UC2(View Appointment Details<br/>Full Information)
+    UC3(Edit Appointment<br/>Update Details)
+    UC4(Create Appointment<br/>Manual Booking)
+    UC5(Cancel Appointment<br/>Remove Booking)
+    UC6(Filter by Employee<br/>Employee Schedule)
+    UC7(Update Status<br/>Completed/Cancelled)
+    UC8(Search Appointments<br/>Find by Customer)
+    UC9(Export Calendar<br/>PDF/CSV Export)
+    
+    %% Owner relationships
+    Owner --> UC1
+    Owner --> UC2
+    Owner --> UC3
+    Owner --> UC4
+    Owner --> UC5
+    Owner --> UC6
+    Owner --> UC7
+    Owner --> UC8
+    Owner --> UC9
+    
+    %% Manager relationships
+    Manager --> UC1
+    Manager --> UC2
+    Manager --> UC3
+    Manager --> UC4
+    Manager --> UC5
+    Manager --> UC6
+    Manager --> UC7
+    Manager --> UC8
+    Manager --> UC9
+    
+    %% Admin relationships
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    
+    %% Employee relationships (read-only, limited)
+    Employee --> UC1
+    Employee --> UC2
+    Employee --> UC6
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef usecase fill:#e0f2f1,stroke:#00695c,stroke-width:1px,color:#000000
+    
+    class Owner,Manager,Admin,Employee actor
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9 usecase
+

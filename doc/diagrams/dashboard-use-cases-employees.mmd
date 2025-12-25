@@ -1,0 +1,54 @@
+%% Dashboard Management System - Employee Management Use Cases
+%% Detailed use cases for Employee Management module
+
+graph TB
+    %% Actors (rectangles)
+    Owner[Owner]
+    Manager[Manager]
+    Admin[Admin]
+    
+    %% Use Cases (rounded rectangles - closest to UML ellipses)
+    UC1(Create Employee<br/>New Account Creation)
+    UC2(Edit Employee<br/>Update Information)
+    UC3(View Employee List<br/>Browse Employees)
+    UC4(View Employee Details<br/>Full Profile)
+    UC5(Delete Employee<br/>Remove Account)
+    UC6(Assign Specialties<br/>Service Categories)
+    UC7(Manage Status<br/>Active/Inactive)
+    UC8(Set Calendar Color<br/>Visual Identification)
+    
+    %% Owner relationships
+    Owner --> UC1
+    Owner --> UC2
+    Owner --> UC3
+    Owner --> UC4
+    Owner --> UC5
+    Owner --> UC6
+    Owner --> UC7
+    Owner --> UC8
+    
+    %% Manager relationships (limited editing)
+    Manager --> UC2
+    Manager --> UC3
+    Manager --> UC4
+    Manager --> UC6
+    Manager --> UC7
+    Manager --> UC8
+    
+    %% Admin relationships
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    
+    %% Styling
+    classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
+    classDef usecase fill:#fff9c4,stroke:#f57f17,stroke-width:1px,color:#000000
+    
+    class Owner,Manager,Admin actor
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8 usecase
+

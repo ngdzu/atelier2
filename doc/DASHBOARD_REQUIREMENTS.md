@@ -1,8 +1,9 @@
 # Dashboard Requirements Analysis and Documentation
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Date:** 2025-01-24  
 **Status:** Draft  
+**Last Updated:** 2025-01-24  
 **Related Tasks:** TASK-DOC-002, TASK-FEAT-014
 
 ## Table of Contents
@@ -15,6 +16,8 @@
    - [Promotions Management Use Cases](#promotions-management-use-cases)
    - [Content Management Use Cases](#content-management-use-cases)
    - [Gallery Management Use Cases](#gallery-management-use-cases)
+   - [Employee Management Use Cases](#employee-management-use-cases)
+   - [Calendar & Appointment Viewing Use Cases](#calendar--appointment-viewing-use-cases)
    - [System Management Use Cases](#system-management-use-cases)
    - [User Roles and Permissions Diagram](#user-roles-and-permissions-diagram)
    - [System Context Diagram](#system-context-diagram)
@@ -24,6 +27,8 @@
    - [Promotions Management](#promotions-management)
    - [Website Content Editing](#website-content-editing)
    - [Gallery Image Management](#gallery-image-management)
+   - [Employee Management](#employee-management)
+   - [Calendar and Appointment Viewing](#calendar-and-appointment-viewing)
 5. [Non-Functional Requirements](#non-functional-requirements)
 6. [User Stories](#user-stories)
 7. [Use Cases](#use-cases)
@@ -44,6 +49,8 @@ This document defines the functional and non-functional requirements for the Das
 - **Marketing Automation**: Creation, scheduling, and tracking of promotional campaigns
 - **Content Management**: Editing and publishing of website content with version control
 - **Gallery Management**: Upload, organization, and management of service images
+- **Employee Management**: Create, edit, and manage employee accounts and information
+- **Calendar and Appointment Viewing**: View and manage appointments in a calendar interface
 
 ### Scope
 
@@ -53,6 +60,8 @@ The dashboard system includes:
 - Promotion management and automation
 - Website content editor with preview and versioning
 - Gallery image upload and management interface
+- Employee management (create, edit, view, delete employees)
+- Calendar and appointment viewing interface
 - Role-based access control and authentication
 
 ### Out of Scope
@@ -61,9 +70,10 @@ The following are explicitly out of scope for this phase:
 
 - Customer-facing booking system (already implemented)
 - Payment processing integration
-- Employee scheduling system
+- Complex employee scheduling/availability management (basic calendar viewing is included)
 - Inventory management
 - Point-of-sale (POS) integration
+- Automated shift scheduling or availability management
 
 ---
 
@@ -84,6 +94,8 @@ The dashboard system supports four primary user roles with distinct access level
 - Create, edit, delete, and send promotions
 - Edit all website content sections
 - Upload, edit, and delete gallery images
+- Manage employee accounts (create, edit, delete, view)
+- View and manage appointments in calendar
 - Manage user accounts and roles
 - Access financial reports and business insights
 - Export data in all formats
@@ -93,6 +105,8 @@ The dashboard system supports four primary user roles with distinct access level
 - Review business performance and financial metrics
 - Create strategic marketing campaigns
 - Update business information and branding
+- Manage employee accounts and information
+- View and manage appointments in calendar
 - Manage team access and permissions
 
 #### 2. Manager
@@ -106,6 +120,8 @@ The dashboard system supports four primary user roles with distinct access level
 - Create, edit, delete, and send promotions
 - Edit website content (except legal pages and system settings)
 - Upload, edit, and delete gallery images
+- View and edit employee information (limited)
+- View and manage appointments in calendar
 - View employee performance metrics
 - Export operational data (CSV, PDF)
 - Cannot manage user accounts or system settings
@@ -115,6 +131,8 @@ The dashboard system supports four primary user roles with distinct access level
 - Create and manage promotional campaigns
 - Update service descriptions and pricing
 - Manage gallery images for services
+- View and manage appointments in calendar
+- Review and update employee information
 - Review staff performance
 
 #### 3. Admin
@@ -128,12 +146,16 @@ The dashboard system supports four primary user roles with distinct access level
 - Create and manage promotions
 - Edit all website content sections
 - Upload, edit, and delete gallery images
+- Manage employee accounts (create, edit, delete, view)
+- View and manage appointments in calendar
 - Manage user accounts and roles
 - Configure system settings
 - Cannot view detailed financial reports or owner-level insights
 
 **Use Cases:**
 - Manage user accounts and permissions
+- Manage employee accounts and information
+- View and manage appointments in calendar
 - Update website content and structure
 - Configure system settings
 - Manage gallery content
@@ -164,6 +186,9 @@ The dashboard system supports four primary user roles with distinct access level
 | Send Promotions | ✅ | ✅ | ✅ | ❌ |
 | Edit Website Content | ✅ | ✅ (Limited) | ✅ | ❌ |
 | Upload Gallery Images | ✅ | ✅ | ✅ | ❌ |
+| Manage Employees | ✅ | ✅ (Limited) | ✅ | ❌ |
+| View Calendar/Appointments | ✅ | ✅ | ✅ | ✅ (Limited) |
+| Manage Appointments | ✅ | ✅ | ✅ | ❌ |
 | Manage Users | ✅ | ❌ | ✅ | ❌ |
 | System Settings | ✅ | ❌ | ✅ | ❌ |
 | Export Data | ✅ | ✅ | ✅ | ❌ |
@@ -219,6 +244,22 @@ Detailed use cases for the Gallery Management module.
 **Source:** [`doc/diagrams/dashboard-use-cases-gallery.mmd`](diagrams/dashboard-use-cases-gallery.mmd)
 
 [![Gallery Management Use Cases Diagram](diagrams/dashboard-use-cases-gallery.svg)](diagrams/dashboard-use-cases-gallery.mmd)
+
+### Employee Management Use Cases
+
+Detailed use cases for the Employee Management module.
+
+**Source:** [`doc/diagrams/dashboard-use-cases-employees.mmd`](diagrams/dashboard-use-cases-employees.mmd)
+
+[![Employee Management Use Cases Diagram](diagrams/dashboard-use-cases-employees.svg)](diagrams/dashboard-use-cases-employees.mmd)
+
+### Calendar & Appointment Viewing Use Cases
+
+Detailed use cases for the Calendar & Appointment Viewing module.
+
+**Source:** [`doc/diagrams/dashboard-use-cases-calendar.mmd`](diagrams/dashboard-use-cases-calendar.mmd)
+
+[![Calendar & Appointment Viewing Use Cases Diagram](diagrams/dashboard-use-cases-calendar.svg)](diagrams/dashboard-use-cases-calendar.mmd)
 
 ### System Management Use Cases
 
@@ -684,6 +725,262 @@ This diagram provides a high-level overview of the dashboard's core features and
 
 ---
 
+### Employee Management
+
+#### Employee Account Management
+
+**REQ-EMP-001: Employee List View**
+- Display list of all employees in table or card format
+- Columns/Cards: Name, Email, Phone, Role, Status, Specialties, Color (for calendar), Actions
+- Search functionality (by name, email, phone)
+- Filter by role, status, or specialty
+- Sort by name, role, or status
+- Pagination for large employee lists
+
+**REQ-EMP-002: Create Employee**
+- Create new employee account
+- Required fields:
+  - Name (required, max 100 characters)
+  - Email (required, valid email format, unique)
+  - Phone (optional, valid phone format)
+  - Role (required, dropdown: EMPLOYEE, MANAGER, ADMIN, OWNER)
+  - Password (required, minimum 8 characters, complexity requirements)
+- Optional fields:
+  - Specialties (multi-select: Manicure, Pedicure, Eyelash, Waxing, etc.)
+  - Color (for calendar display, color picker)
+  - Notes (text area, max 500 characters)
+  - Status (ACTIVE, INACTIVE, SUSPENDED)
+- Form validation before submission
+- Email notification to new employee (optional)
+
+**REQ-EMP-003: Edit Employee**
+- Edit existing employee information
+- Update all fields except email (email changes require special process)
+- Change employee role (with proper authorization)
+- Update specialties and calendar color
+- Update status (activate, deactivate, suspend)
+- Change password (with current password verification)
+- Form validation
+- Audit log of changes
+
+**REQ-EMP-004: View Employee Details**
+- View complete employee profile
+- Display employee information:
+  - Basic information (name, email, phone, role)
+  - Specialties and calendar color
+  - Status and account creation date
+  - Performance metrics (if applicable)
+  - Recent appointments (if applicable)
+  - Notes
+- Edit button (if user has permission)
+- Delete button (if user has permission)
+
+**REQ-EMP-005: Delete Employee**
+- Soft delete (mark as inactive) or hard delete
+- Confirmation dialog before deletion
+- Check for dependencies (appointments, assigned services)
+- Cascade handling (what happens to appointments if employee deleted)
+- Cannot delete currently logged-in employee
+- Cannot delete last owner/admin
+
+**REQ-EMP-006: Employee Status Management**
+- Status options: ACTIVE, INACTIVE, SUSPENDED
+- Active employees can log in and appear in calendar
+- Inactive employees cannot log in but data is preserved
+- Suspended employees cannot log in (temporary restriction)
+- Bulk status updates
+- Status change notifications (optional)
+
+**REQ-EMP-007: Employee Specialties**
+- Assign specialties to employees (Manicure, Pedicure, Eyelash, Waxing, etc.)
+- Multi-select specialty assignment
+- Specialties used for:
+  - Filtering in booking flow
+  - Calendar display
+  - Service assignment
+- Bulk specialty updates
+
+**REQ-EMP-008: Employee Calendar Color**
+- Assign unique color to each employee for calendar display
+- Color picker interface
+- Default color assignment if not specified
+- Color used in calendar view to distinguish employees
+- Preview color in employee list
+
+#### Employee Data and Integration
+
+**REQ-EMP-009: Employee Performance Integration**
+- Link employee accounts to performance metrics
+- Display employee performance in employee details view
+- Show revenue, appointments, and productivity metrics
+- Historical performance data
+
+**REQ-EMP-010: Employee-Appointment Integration**
+- Employees appear in appointment calendar
+- Filter appointments by employee
+- View employee's scheduled appointments
+- Assign appointments to employees
+- Employee availability (basic, not complex scheduling)
+
+**REQ-EMP-011: Employee-Service Integration**
+- Link employees to services they can perform
+- Filter services by employee specialty
+- Display employee's available services
+- Service-employee assignment in booking flow
+
+---
+
+### Calendar and Appointment Viewing
+
+#### Calendar Interface
+
+**REQ-CAL-001: Calendar View**
+- Display appointments in calendar format
+- Multiple view options:
+  - Day view (hourly time slots)
+  - Week view (daily columns)
+  - Month view (calendar grid)
+- Navigate between dates (previous/next day/week/month)
+- Jump to today's date
+- Date picker for quick navigation
+- Current date/time indicator
+
+**REQ-CAL-002: Employee-Based Calendar**
+- Filter calendar by employee
+- View single employee's schedule
+- View all employees' schedules (multi-employee view)
+- Employee color coding in calendar
+- Switch between employees
+- Employee selector/dropdown
+
+**REQ-CAL-003: Time Slot Display**
+- Display time slots (e.g., 9:00 AM - 7:00 PM)
+- 15-minute or 30-minute increments
+- Show available vs. booked time slots
+- Visual distinction for different appointment statuses
+- Hover tooltips with appointment details
+
+**REQ-CAL-004: Appointment Display**
+- Display appointment information in calendar:
+  - Customer name
+  - Service name
+  - Time (start and end)
+  - Status (Scheduled, Completed, Cancelled, No-Show)
+  - Notes (if any)
+- Color coding by status or service type
+- Click appointment to view/edit details
+
+#### Appointment Management
+
+**REQ-CAL-005: View Appointment Details**
+- Click appointment to view full details
+- Display complete appointment information:
+  - Customer information (name, phone, email)
+  - Employee assigned
+  - Service(s) booked
+  - Date and time
+  - Duration
+  - Status
+  - Notes
+  - Booking date
+- Edit button (if user has permission)
+- Cancel/Delete button (if user has permission)
+
+**REQ-CAL-006: Edit Appointment**
+- Update appointment details:
+  - Change employee assignment
+  - Change service(s)
+  - Change date and time
+  - Update status
+  - Add/edit notes
+- Validation:
+  - Check employee availability
+  - Check time slot availability
+  - Validate service duration
+- Confirmation before saving changes
+- Update customer notification (optional)
+
+**REQ-CAL-007: Create Appointment (Manual)**
+- Create appointment directly from calendar
+- Click on available time slot to create appointment
+- Appointment creation form:
+  - Select customer (search/select from list)
+  - Select employee
+  - Select service(s)
+  - Date and time (pre-filled from selected slot)
+  - Add notes (optional)
+- Validation and conflict checking
+- Save and notify customer (optional)
+
+**REQ-CAL-008: Cancel/Delete Appointment**
+- Cancel appointment (soft delete, status change)
+- Delete appointment (hard delete, remove from system)
+- Confirmation dialog before cancellation/deletion
+- Reason for cancellation (optional)
+- Customer notification (optional)
+- Refund handling (if applicable, out of scope for payment processing)
+
+**REQ-CAL-009: Appointment Status Management**
+- Update appointment status:
+  - SCHEDULED: Appointment is booked
+  - COMPLETED: Service was completed
+  - CANCELLED: Appointment was cancelled
+  - NO_SHOW: Customer did not show up
+- Status change workflow
+- Status change history/audit log
+- Bulk status updates
+
+#### Calendar Filtering and Search
+
+**REQ-CAL-010: Filter Appointments**
+- Filter by:
+  - Employee
+  - Service type/category
+  - Status (Scheduled, Completed, Cancelled, No-Show)
+  - Date range
+  - Customer (search by name)
+- Multiple filters can be applied simultaneously
+- Clear filters button
+- Active filter indicators
+
+**REQ-CAL-011: Search Appointments**
+- Search by customer name
+- Search by service name
+- Search by appointment ID
+- Real-time search results
+- Highlight search matches
+
+#### Calendar Integration
+
+**REQ-CAL-012: Integration with Booking System**
+- Display appointments from customer booking system
+- Real-time updates when new appointments are booked
+- Sync with booking system data
+- Handle appointment conflicts
+
+**REQ-CAL-013: Integration with Employee Management**
+- Display employee information in calendar
+- Link to employee details from calendar
+- Show employee availability (basic)
+- Employee color coding
+
+**REQ-CAL-014: Integration with Metrics**
+- Calendar data feeds into metrics calculations
+- Appointment counts for metrics
+- Employee performance tracking
+- Service popularity tracking
+
+#### Calendar Export and Printing
+
+**REQ-CAL-015: Export Calendar**
+- Export calendar view to PDF
+- Export appointments to CSV
+- Include date range in export
+- Include employee filter in export
+- Printable calendar view
+
+---
+
 ## Non-Functional Requirements
 
 ### Performance Requirements
@@ -1027,6 +1324,120 @@ This diagram provides a high-level overview of the dashboard's core features and
 - Deleted images are removed from public gallery
 - Option to archive instead of delete (soft delete)
 
+### Employee Management
+
+**US-EMP-001: Create Employee Account**
+- **As a** business owner
+- **I want to** create new employee accounts
+- **So that** employees can access the system and appear in the calendar
+
+**Acceptance Criteria:**
+- Employee creation form includes all required fields
+- Form validates input before submission
+- New employee can log in with provided credentials
+- Employee appears in calendar and employee lists
+- Email notification sent to new employee (optional)
+
+**US-EMP-002: Edit Employee Information**
+- **As a** manager
+- **I want to** update employee information
+- **So that** employee details are accurate and up-to-date
+
+**Acceptance Criteria:**
+- Employee edit form pre-fills with current information
+- All fields can be updated (except email)
+- Changes are saved and reflected immediately
+- Employee can see updated information after login
+
+**US-EMP-003: View Employee List**
+- **As a** manager
+- **I want to** view a list of all employees
+- **So that** I can see who is in the system and manage them
+
+**Acceptance Criteria:**
+- Employee list displays all active employees
+- List is searchable and filterable
+- Employee status and role are clearly displayed
+- Click to view employee details
+
+**US-EMP-004: Assign Employee Specialties**
+- **As a** manager
+- **I want to** assign specialties to employees
+- **So that** they appear correctly in booking and calendar views
+
+**Acceptance Criteria:**
+- Specialties can be assigned during employee creation or editing
+- Multiple specialties can be assigned per employee
+- Specialties appear in employee profile
+- Employees filter correctly by specialty in booking flow
+
+### Calendar and Appointment Viewing
+
+**US-CAL-001: View Calendar**
+- **As a** manager
+- **I want to** view appointments in a calendar interface
+- **So that** I can see the schedule at a glance
+
+**Acceptance Criteria:**
+- Calendar displays appointments for selected date range
+- Appointments show customer name, service, and time
+- Calendar can be filtered by employee
+- Calendar supports day, week, and month views
+
+**US-CAL-002: View Appointment Details**
+- **As a** manager
+- **I want to** view detailed information about an appointment
+- **So that** I can see all relevant appointment information
+
+**Acceptance Criteria:**
+- Clicking an appointment shows full details
+- Details include customer, employee, service, time, status, and notes
+- Appointment can be edited or cancelled from details view
+
+**US-CAL-003: Edit Appointment**
+- **As a** manager
+- **I want to** edit appointment details
+- **So that** I can update appointments when needed
+
+**Acceptance Criteria:**
+- Appointment edit form pre-fills with current information
+- Can change employee, service, date, time, and status
+- System validates changes (availability, conflicts)
+- Changes are saved and reflected in calendar
+
+**US-CAL-004: Create Appointment Manually**
+- **As a** manager
+- **I want to** create appointments directly from the calendar
+- **So that** I can book appointments over the phone or in person
+
+**Acceptance Criteria:**
+- Can click on available time slot to create appointment
+- Appointment creation form includes all required fields
+- System checks for conflicts before saving
+- New appointment appears in calendar immediately
+
+**US-CAL-005: Filter Calendar by Employee**
+- **As a** manager
+- **I want to** filter the calendar to show only one employee's appointments
+- **So that** I can focus on a specific employee's schedule
+
+**Acceptance Criteria:**
+- Employee dropdown/filter available in calendar
+- Selecting an employee shows only their appointments
+- Can switch between employees or view all
+- Filter persists when navigating dates
+
+**US-CAL-006: Update Appointment Status**
+- **As a** manager
+- **I want to** update appointment status (completed, cancelled, no-show)
+- **So that** appointment records are accurate
+
+**Acceptance Criteria:**
+- Can change appointment status from appointment details
+- Status options are: Scheduled, Completed, Cancelled, No-Show
+- Status change is saved immediately
+- Status is reflected in calendar view
+
 ---
 
 ## Use Cases
@@ -1159,6 +1570,118 @@ This diagram provides a high-level overview of the dashboard's core features and
 - Images are visible in public gallery
 - Image metadata is saved
 
+### UC-005: Owner Creates Employee Account
+
+**Actor:** Owner
+
+**Preconditions:**
+- Owner is logged into dashboard
+- Owner has permission to manage employees
+
+**Main Flow:**
+1. Owner navigates to Employee Management section
+2. Owner clicks "Create Employee" button
+3. Owner fills out employee form:
+   - Name: "Sarah Johnson"
+   - Email: "sarah@luxenail.com"
+   - Phone: "555-0123"
+   - Role: Selects "EMPLOYEE"
+   - Password: Sets secure password
+   - Specialties: Selects "Manicure" and "Pedicure"
+   - Color: Selects blue for calendar
+4. Owner clicks "Create Employee"
+5. System validates form data
+6. System creates employee account
+7. System sends welcome email to new employee (optional)
+8. Employee appears in employee list
+9. Employee can now log in and appears in calendar
+
+**Alternative Flows:**
+- 5a. If validation fails, system shows errors and prevents creation
+- 5b. If email already exists, system shows error and prevents creation
+
+**Postconditions:**
+- New employee account has been created
+- Employee appears in employee list and calendar
+- Employee can log in with provided credentials
+
+### UC-006: Manager Views and Edits Appointment in Calendar
+
+**Actor:** Manager
+
+**Preconditions:**
+- Manager is logged into dashboard
+- Appointments exist in the system
+
+**Main Flow:**
+1. Manager navigates to Calendar view
+2. Manager selects date (e.g., today)
+3. Calendar displays appointments for selected date
+4. Manager filters calendar to show specific employee
+5. Manager sees appointment at 2:00 PM for customer "Jane Smith"
+6. Manager clicks on the appointment
+7. System displays appointment details:
+   - Customer: Jane Smith
+   - Service: Full Set Manicure
+   - Employee: Sarah Johnson
+   - Time: 2:00 PM - 3:00 PM
+   - Status: Scheduled
+8. Manager clicks "Edit" button
+9. Manager changes time from 2:00 PM to 2:30 PM
+10. Manager adds note: "Customer requested later time"
+11. Manager clicks "Save"
+12. System validates time change (checks availability)
+13. System updates appointment
+14. Calendar refreshes to show updated appointment time
+
+**Alternative Flows:**
+- 12a. If time slot is not available, system shows error and prevents save
+- 12b. Manager cancels edit and appointment remains unchanged
+- 8a. Manager clicks "Cancel Appointment" instead of edit
+
+**Postconditions:**
+- Appointment has been updated with new time
+- Calendar reflects the change
+- Customer can be notified of change (optional)
+
+### UC-007: Admin Creates Appointment Manually
+
+**Actor:** Admin
+
+**Preconditions:**
+- Admin is logged into dashboard
+- Customer exists in system
+- Employee and service are available
+
+**Main Flow:**
+1. Admin navigates to Calendar view
+2. Admin selects date (e.g., tomorrow)
+3. Admin filters calendar to show employee "Sarah Johnson"
+4. Admin sees available time slot at 10:00 AM
+5. Admin clicks on the available time slot
+6. System opens appointment creation form
+7. Admin fills out form:
+   - Customer: Selects "John Doe" from dropdown
+   - Service: Selects "Gel Manicure"
+   - Employee: Pre-filled as "Sarah Johnson"
+   - Date: Pre-filled as tomorrow
+   - Time: Pre-filled as 10:00 AM
+   - Notes: "First-time customer"
+8. Admin clicks "Create Appointment"
+9. System validates appointment (checks availability, service duration)
+10. System creates appointment
+11. Appointment appears in calendar at 10:00 AM
+12. Customer receives confirmation (optional)
+
+**Alternative Flows:**
+- 9a. If time slot becomes unavailable, system shows error and suggests alternatives
+- 7a. Admin searches for customer by name if not in dropdown
+
+**Postconditions:**
+- New appointment has been created
+- Appointment appears in calendar
+- Appointment is linked to customer, employee, and service
+
 ---
 
 ## Assumptions and Constraints
@@ -1169,6 +1692,8 @@ This diagram provides a high-level overview of the dashboard's core features and
 - Appointment, customer, and transaction data is available in the database
 - Historical data exists for metrics calculations
 - Customer contact information (email, phone) is available for promotions
+- Employee data is available in the database
+- Calendar/appointment viewing functionality already exists (AppointmentCalendar component)
 
 **ASSUMPTION-002: User Technical Skills**
 - Dashboard users have basic computer literacy
@@ -1225,6 +1750,10 @@ This diagram provides a high-level overview of the dashboard's core features and
 
 **Business Metric**: A quantifiable measure of business performance (e.g., revenue, appointment count).
 
+**Calendar View**: An interface displaying appointments in a calendar format, allowing users to view, create, edit, and manage appointments.
+
+**Employee Management**: The process of creating, editing, viewing, and deleting employee accounts, including assigning roles, specialties, and calendar colors.
+
 **CLV (Customer Lifetime Value)**: The total revenue expected from a customer over their relationship with the business.
 
 **Content Section**: A distinct area of the website that can be edited independently (e.g., landing hero, about page, contact info).
@@ -1258,6 +1787,7 @@ This diagram provides a high-level overview of the dashboard's core features and
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2025-01-24 | AI Assistant | Initial requirements document creation |
+| 1.1 | 2025-01-24 | AI Assistant | Added Employee Management and Calendar/Appointment Viewing requirements |
 
 ---
 
@@ -1279,6 +1809,8 @@ The following Mermaid diagram source files are available in the `doc/diagrams/` 
 - [`dashboard-use-cases-promotions.mmd`](diagrams/dashboard-use-cases-promotions.mmd) - Detailed Promotions Management use cases
 - [`dashboard-use-cases-content.mmd`](diagrams/dashboard-use-cases-content.mmd) - Detailed Content Management use cases
 - [`dashboard-use-cases-gallery.mmd`](diagrams/dashboard-use-cases-gallery.mmd) - Detailed Gallery Management use cases
+- [`dashboard-use-cases-employees.mmd`](diagrams/dashboard-use-cases-employees.mmd) - Detailed Employee Management use cases
+- [`dashboard-use-cases-calendar.mmd`](diagrams/dashboard-use-cases-calendar.mmd) - Detailed Calendar & Appointment Viewing use cases
 - [`dashboard-use-cases-system.mmd`](diagrams/dashboard-use-cases-system.mmd) - Detailed System Management use cases
 
 **Other Diagrams:**
@@ -1300,6 +1832,8 @@ mmdc -i dashboard-use-cases-metrics.mmd -o dashboard-use-cases-metrics.svg
 mmdc -i dashboard-use-cases-promotions.mmd -o dashboard-use-cases-promotions.svg
 mmdc -i dashboard-use-cases-content.mmd -o dashboard-use-cases-content.svg
 mmdc -i dashboard-use-cases-gallery.mmd -o dashboard-use-cases-gallery.svg
+mmdc -i dashboard-use-cases-employees.mmd -o dashboard-use-cases-employees.svg
+mmdc -i dashboard-use-cases-calendar.mmd -o dashboard-use-cases-calendar.svg
 mmdc -i dashboard-use-cases-system.mmd -o dashboard-use-cases-system.svg
 # Other diagrams
 mmdc -i dashboard-user-roles.mmd -o dashboard-user-roles.svg
@@ -1317,6 +1851,8 @@ npx @mermaid-js/mermaid-cli -i dashboard-use-cases-metrics.mmd -o dashboard-use-
 npx @mermaid-js/mermaid-cli -i dashboard-use-cases-promotions.mmd -o dashboard-use-cases-promotions.svg
 npx @mermaid-js/mermaid-cli -i dashboard-use-cases-content.mmd -o dashboard-use-cases-content.svg
 npx @mermaid-js/mermaid-cli -i dashboard-use-cases-gallery.mmd -o dashboard-use-cases-gallery.svg
+npx @mermaid-js/mermaid-cli -i dashboard-use-cases-employees.mmd -o dashboard-use-cases-employees.svg
+npx @mermaid-js/mermaid-cli -i dashboard-use-cases-calendar.mmd -o dashboard-use-cases-calendar.svg
 npx @mermaid-js/mermaid-cli -i dashboard-use-cases-system.mmd -o dashboard-use-cases-system.svg
 # Other diagrams
 npx @mermaid-js/mermaid-cli -i dashboard-user-roles.mmd -o dashboard-user-roles.svg
