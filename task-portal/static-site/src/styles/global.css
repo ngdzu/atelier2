@@ -25,10 +25,10 @@
   .header-navbar {
     margin-bottom: 2rem;
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+    background: linear-gradient(135deg, rgba(232, 244, 255, 0.92) 0%, rgba(240, 236, 255, 0.92) 50%, rgba(248, 250, 252, 0.94) 100%);
     border-radius: 16px;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.65);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
