@@ -1,17 +1,17 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T22:00:00.000Z",
-    "totalTasks": 67,
-    "lastSync": "2025-01-24T22:00:00.000Z"
+    "lastUpdated": "2025-01-24T23:00:00.000Z",
+    "totalTasks": 76,
+    "lastSync": "2025-01-24T23:00:00.000Z"
   },
   "categories": {
     "FEAT": {
       "name": "Feature",
       "code": "FEAT",
       "description": "New features or major functionality",
-      "lastNumber": 24,
-      "nextAvailable": 25
+      "lastNumber": 26,
+      "nextAvailable": 27
     },
     "BUG": {
       "name": "Bug Fix",
@@ -45,36 +45,36 @@
       "name": "API",
       "code": "API",
       "description": "Backend API development",
-      "lastNumber": 5,
-      "nextAvailable": 6
+      "lastNumber": 6,
+      "nextAvailable": 7
     },
     "DB": {
       "name": "Database",
       "code": "DB",
       "description": "Database schema, migrations, queries",
-      "lastNumber": 6,
-      "nextAvailable": 7
+      "lastNumber": 7,
+      "nextAvailable": 8
     },
     "TEST": {
       "name": "Testing",
       "code": "TEST",
       "description": "Unit, integration, or E2E tests",
-      "lastNumber": 6,
-      "nextAvailable": 7
+      "lastNumber": 7,
+      "nextAvailable": 8
     },
     "DOC": {
       "name": "Documentation",
       "code": "DOC",
       "description": "Documentation updates",
-      "lastNumber": 10,
-      "nextAvailable": 11
+      "lastNumber": 13,
+      "nextAvailable": 14
     },
     "OPS": {
       "name": "DevOps",
       "code": "OPS",
       "description": "Deployment, CI/CD, infrastructure",
-      "lastNumber": 7,
-      "nextAvailable": 8
+      "lastNumber": 8,
+      "nextAvailable": 9
     },
     "SEC": {
       "name": "Security",
@@ -2417,6 +2417,317 @@
       "progress": {
         "completed": 0,
         "total": 35,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-011",
+      "category": "DOC",
+      "number": 11,
+      "title": "Calendar and Appointment Viewing Requirements Analysis",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "3 hours",
+      "dependencies": [
+        "TASK-DOC-002"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-014"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Conduct detailed requirements analysis specifically for the Calendar and Appointment Viewing functionality. While high-level requirements exist in DASHBOARD_REQUIREMENTS.md, this task creates a focused requirements document that expands on calendar-specific needs, user workflows, integration points, and technical specifications.",
+      "sections": {
+        "description": "Conduct detailed requirements analysis specifically for the Calendar and Appointment Viewing functionality. While high-level requirements exist in DASHBOARD_REQUIREMENTS.md, this task creates a focused requirements document that expands on calendar-specific needs, user workflows, integration points, and technical specifications.",
+        "requirements": "Review existing requirements, expand calendar interface requirements, expand appointment management requirements, define integration requirements, define filtering and search requirements, define export and printing requirements, create requirements document.",
+        "definitionOfDone": "Calendar interface requirements fully documented, appointment management requirements fully documented, integration requirements clearly defined, filtering and search requirements specified, export and printing requirements documented, requirements document created and reviewed, all REQ-CAL requirements from DASHBOARD_REQUIREMENTS.md addressed",
+        "verificationSteps": "Requirements review, stakeholder validation",
+        "acceptanceCriteria": "Complete requirements document exists for calendar/appointment viewing, all calendar view types (day/week/month) fully specified, appointment management workflows clearly defined, integration requirements documented, export and printing requirements specified, requirements are testable and measurable",
+        "technicalDetails": "Files to Create: doc/CALENDAR_APPOINTMENT_REQUIREMENTS.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-FEAT-025",
+      "category": "FEAT",
+      "number": 25,
+      "title": "Calendar and Appointment Viewing Architecture and Design",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "6 hours",
+      "dependencies": [
+        "TASK-DOC-011",
+        "TASK-FEAT-014"
+      ],
+      "relatedTasks": [
+        "TASK-DB-007",
+        "TASK-API-006",
+        "TASK-FEAT-026"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Design the complete architecture for the Calendar and Appointment Viewing system including database schema extensions, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
+      "sections": {
+        "description": "Design the complete architecture for the Calendar and Appointment Viewing system including database schema extensions, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
+        "requirements": "Database schema design for calendar, API design for calendar and appointments, frontend component architecture, state management design, integration architecture, create architecture documentation",
+        "definitionOfDone": "Database schema designed with ERD, API endpoints fully specified, frontend component architecture designed, state management approach defined, integration architecture planned, architecture documentation created, diagrams created",
+        "verificationSteps": "Architecture review, design validation",
+        "acceptanceCriteria": "Complete architecture documentation exists, database schema designed with all required entities, API endpoints fully specified with schemas, component architecture supports all features, integration architecture addresses all integration points, diagrams clearly illustrate system design",
+        "technicalDetails": "Files to Create: doc/CALENDAR_APPOINTMENT_ARCHITECTURE.md, doc/diagrams/calendar-architecture.mmd (and .svg), doc/diagrams/calendar-erd.mmd (and .svg), doc/diagrams/calendar-component-hierarchy.mmd (and .svg), doc/diagrams/calendar-data-flow.mmd (and .svg), doc/diagrams/calendar-sequence-diagrams.mmd (and .svg)"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-012",
+      "category": "DOC",
+      "number": 12,
+      "title": "Calendar and Appointment Viewing Detailed Design",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "8 hours",
+      "dependencies": [
+        "TASK-FEAT-025"
+      ],
+      "relatedTasks": [
+        "TASK-DB-007",
+        "TASK-API-006"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Create detailed design documentation for Calendar and Appointment Viewing including domain layer design (entities, value objects), application layer design (use cases, DTOs), infrastructure layer design (repositories), and presentation layer design (React components, API controllers).",
+      "sections": {
+        "description": "Create detailed design documentation for Calendar and Appointment Viewing including domain layer design (entities, value objects), application layer design (use cases, DTOs), infrastructure layer design (repositories), and presentation layer design (React components, API controllers).",
+        "requirements": "Domain layer design, application layer design, infrastructure layer design, presentation layer design, data flow design, create detailed design document",
+        "definitionOfDone": "Domain entities and value objects designed, use cases and DTOs designed, repository interfaces designed, API controllers and routes designed, React components designed, data flow documented, detailed design document created",
+        "verificationSteps": "Design review, component validation",
+        "acceptanceCriteria": "Complete detailed design documentation exists, all layers designed with clear interfaces, component structure supports all features, data flow clearly documented, design follows DDD principles",
+        "technicalDetails": "Files to Create: doc/CALENDAR_APPOINTMENT_DETAILED_DESIGN.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DB-007",
+      "category": "DB",
+      "number": 7,
+      "title": "Calendar and Appointment Viewing Database Schema",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "4 hours",
+      "dependencies": [
+        "TASK-DOC-012",
+        "TASK-DB-003"
+      ],
+      "relatedTasks": [
+        "TASK-API-006"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Implement database schema extensions for Calendar and Appointment Viewing functionality. Extend the Appointment entity with additional fields if needed, create AppointmentStatusHistory entity for audit logging, create database migrations, and implement repository pattern for calendar data access.",
+      "sections": {
+        "description": "Implement database schema extensions for Calendar and Appointment Viewing functionality. Extend the Appointment entity with additional fields if needed, create AppointmentStatusHistory entity for audit logging, create database migrations, and implement repository pattern for calendar data access.",
+        "requirements": "Extend Appointment entity, create AppointmentStatusHistory entity, create database migrations, implement repository pattern, create indexes for calendar queries, test database schema",
+        "definitionOfDone": "Appointment entity extended with required fields, AppointmentStatusHistory entity created, migrations created and tested, repository interfaces implemented, indexes created for performance, schema tested and validated",
+        "verificationSteps": "Schema validation, migration testing, repository testing",
+        "acceptanceCriteria": "Database schema supports all calendar features, migrations are reversible, indexes improve query performance, repository pattern implemented correctly, schema follows best practices",
+        "technicalDetails": "Files to Create: server/src/entities/AppointmentStatusHistory.entity.ts, server/migrations/XXXX-calendar-schema.ts, server/src/repositories/AppointmentRepository.ts (extend if needed)"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-006",
+      "category": "API",
+      "number": 6,
+      "title": "Calendar and Appointment Viewing Backend API Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "12 hours",
+      "dependencies": [
+        "TASK-DB-007",
+        "TASK-API-005"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-002",
+        "TASK-FEAT-026"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Implement RESTful API endpoints for Calendar and Appointment Viewing functionality. This includes calendar API endpoints (list appointments with filters, get appointment details), appointment management endpoints (create, update, delete, status update), availability checking, and export endpoints.",
+      "sections": {
+        "description": "Implement RESTful API endpoints for Calendar and Appointment Viewing functionality. This includes calendar API endpoints (list appointments with filters, get appointment details), appointment management endpoints (create, update, delete, status update), availability checking, and export endpoints.",
+        "requirements": "Calendar API endpoints, appointment management endpoints, export endpoints, integration with booking system, error handling and validation, API documentation",
+        "definitionOfDone": "All calendar API endpoints implemented, appointment CRUD operations working, export functionality implemented, integration with booking system complete, error handling implemented, API documentation created, all endpoints tested",
+        "verificationSteps": "API endpoint testing, integration testing, error handling validation",
+        "acceptanceCriteria": "All required API endpoints implemented, RESTful conventions followed, proper error handling, input validation working, integration with booking system functional, export functionality working, API documentation complete",
+        "technicalDetails": "Files to Create: server/src/controllers/CalendarController.ts, server/src/services/CalendarService.ts, server/src/routes/calendar.routes.ts, server/src/types/calendar.dtos.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-FEAT-026",
+      "category": "FEAT",
+      "number": 26,
+      "title": "Calendar and Appointment Viewing Frontend Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "16 hours",
+      "dependencies": [
+        "TASK-API-006"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-015"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Implement the frontend React components for Calendar and Appointment Viewing. This includes calendar views (day/week/month), appointment management UI (view, edit, create, delete), filtering and search functionality, and export functionality.",
+      "sections": {
+        "description": "Implement the frontend React components for Calendar and Appointment Viewing. This includes calendar views (day/week/month), appointment management UI (view, edit, create, delete), filtering and search functionality, and export functionality.",
+        "requirements": "Calendar views implementation, appointment management UI, filtering and search, export functionality, state management, responsive design",
+        "definitionOfDone": "All calendar views implemented, appointment management UI complete, filtering and search working, export functionality implemented, state management properly configured, responsive design implemented, all components tested",
+        "verificationSteps": "Component testing, integration testing, UI/UX validation",
+        "acceptanceCriteria": "All calendar views functional, appointment management working, filtering and search operational, export functionality working, responsive design implemented, components follow design system, accessibility requirements met",
+        "technicalDetails": "Files to Create: client/components/CalendarLayout.tsx, client/components/CalendarView.tsx, client/components/DayView.tsx, client/components/WeekView.tsx, client/components/MonthView.tsx, client/components/AppointmentCard.tsx, client/components/AppointmentModal.tsx, client/components/AppointmentForm.tsx, client/components/CalendarFilters.tsx"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-TEST-007",
+      "category": "TEST",
+      "number": 7,
+      "title": "Calendar and Appointment Viewing Testing Suite",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "12 hours",
+      "dependencies": [
+        "TASK-FEAT-026",
+        "TASK-API-006"
+      ],
+      "relatedTasks": [
+        "TASK-TEST-002"
+      ],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Create comprehensive testing suite for Calendar and Appointment Viewing functionality including backend unit tests, backend integration tests, frontend component tests, E2E tests, and performance tests.",
+      "sections": {
+        "description": "Create comprehensive testing suite for Calendar and Appointment Viewing functionality including backend unit tests, backend integration tests, frontend component tests, E2E tests, and performance tests.",
+        "requirements": "Backend unit tests, backend integration tests, frontend component tests, E2E tests, performance tests, test coverage reporting",
+        "definitionOfDone": "Backend unit tests written and passing, backend integration tests written and passing, frontend component tests written and passing, E2E tests written and passing, performance tests completed, test coverage meets requirements, all tests documented",
+        "verificationSteps": "Run test suite, check test coverage, validate test quality",
+        "acceptanceCriteria": "All tests passing, test coverage meets requirements, tests are maintainable, E2E tests cover critical paths, performance tests validate requirements",
+        "technicalDetails": "Files to Create: server/tests/calendar.test.ts, server/tests/integration/calendar.integration.test.ts, client/components/__tests__/CalendarView.test.tsx, client/tests/e2e/calendar.e2e.test.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-013",
+      "category": "DOC",
+      "number": 13,
+      "title": "Calendar and Appointment Viewing User Guide",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "4 hours",
+      "dependencies": [
+        "TASK-FEAT-026"
+      ],
+      "relatedTasks": [],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Create comprehensive user-facing documentation for Calendar and Appointment Viewing functionality including user guides, feature tutorials, FAQ, and troubleshooting guide.",
+      "sections": {
+        "description": "Create comprehensive user-facing documentation for Calendar and Appointment Viewing functionality including user guides, feature tutorials, FAQ, and troubleshooting guide.",
+        "requirements": "User guide creation, feature tutorials, FAQ section, troubleshooting guide",
+        "definitionOfDone": "User guide created, feature tutorials written, FAQ section complete, troubleshooting guide written, documentation reviewed and validated",
+        "verificationSteps": "Documentation review, user validation",
+        "acceptanceCriteria": "User guide is clear and comprehensive, tutorials are easy to follow, FAQ addresses common questions, troubleshooting guide helps resolve issues, documentation is accessible",
+        "technicalDetails": "Files to Create: doc/CALENDAR_APPOINTMENT_USER_GUIDE.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 4,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-OPS-008",
+      "category": "OPS",
+      "number": 8,
+      "title": "Calendar and Appointment Viewing Deployment",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-24",
+      "updated": "2025-01-24",
+      "estimatedTime": "6 hours",
+      "dependencies": [
+        "TASK-TEST-007",
+        "TASK-OPS-007"
+      ],
+      "relatedTasks": [],
+      "file": "dashboad-calendar-and-appointment-viewing.task",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "description": "Deploy Calendar and Appointment Viewing functionality to production environment. This includes building production artifacts, deploying to staging and production, performing smoke tests, and verifying integration with booking system.",
+      "sections": {
+        "description": "Deploy Calendar and Appointment Viewing functionality to production environment. This includes building production artifacts, deploying to staging and production, performing smoke tests, and verifying integration with booking system.",
+        "requirements": "Pre-deployment preparation, staging deployment, production deployment, post-deployment verification, integration verification",
+        "definitionOfDone": "Production artifacts built successfully, staging deployment successful, staging smoke tests passing, production deployment successful, production smoke tests passing, integration verified, deployment documented",
+        "verificationSteps": "Deployment verification, integration verification, smoke test validation",
+        "acceptanceCriteria": "Calendar and appointment viewing successfully deployed to production, all smoke tests passing, integration with booking system verified, deployment documented, zero critical issues in production",
+        "technicalDetails": "Files to Create/Update: doc/CALENDAR_APPOINTMENT_DEPLOYMENT.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 5,
         "percentage": 0
       }
     }

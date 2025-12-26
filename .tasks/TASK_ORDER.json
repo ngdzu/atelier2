@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-01-24T22:00:00.000Z",
+    "lastUpdated": "2025-01-24T23:00:00.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -82,6 +82,20 @@
           ],
           "estimatedTime": "6 hours",
           "notes": "Design authentication and authorization system including user roles, permissions, and security requirements. Required before database schema implementation."
+        },
+        {
+          "taskId": "TASK-DOC-011",
+          "title": "Calendar and Appointment Viewing Requirements Analysis",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-002"
+          ],
+          "blocking": [
+            "TASK-FEAT-025"
+          ],
+          "estimatedTime": "3 hours",
+          "notes": "Detailed requirements analysis for Calendar and Appointment Viewing functionality. Expands on existing requirements in DASHBOARD_REQUIREMENTS.md. Required before architecture design."
         }
       ]
     },
@@ -205,6 +219,50 @@
           ],
           "estimatedTime": "8 hours",
           "notes": "Database schema for user authentication and authorization. Includes users table extensions, refresh tokens, password history, and login attempt tracking."
+        },
+        {
+          "taskId": "TASK-FEAT-025",
+          "title": "Calendar and Appointment Viewing Architecture and Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-011",
+            "TASK-FEAT-014"
+          ],
+          "blocking": [
+            "TASK-DOC-012"
+          ],
+          "estimatedTime": "6 hours",
+          "notes": "Architecture design for Calendar and Appointment Viewing system. Required before detailed design and database schema implementation."
+        },
+        {
+          "taskId": "TASK-DOC-012",
+          "title": "Calendar and Appointment Viewing Detailed Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-025"
+          ],
+          "blocking": [
+            "TASK-DB-007"
+          ],
+          "estimatedTime": "8 hours",
+          "notes": "Detailed design for Calendar and Appointment Viewing including domain layer, application layer, infrastructure layer, and presentation layer. Required before database schema and API implementation."
+        },
+        {
+          "taskId": "TASK-DB-007",
+          "title": "Calendar and Appointment Viewing Database Schema",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-012",
+            "TASK-DB-003"
+          ],
+          "blocking": [
+            "TASK-API-006"
+          ],
+          "estimatedTime": "4 hours",
+          "notes": "Database schema extensions for Calendar and Appointment Viewing. Extends Appointment entity and creates AppointmentStatusHistory entity. Required before API implementation."
         }
       ]
     },
@@ -277,6 +335,21 @@
           ],
           "estimatedTime": "16 hours",
           "notes": "Complete authentication and authorization API including login, registration, JWT tokens, password management, and role-based access control. Required before security enhancements."
+        },
+        {
+          "taskId": "TASK-API-006",
+          "title": "Calendar and Appointment Viewing Backend API Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DB-007",
+            "TASK-API-005"
+          ],
+          "blocking": [
+            "TASK-FEAT-026"
+          ],
+          "estimatedTime": "12 hours",
+          "notes": "Backend API for Calendar and Appointment Viewing. Includes calendar endpoints, appointment management, availability checking, and export. Required before frontend implementation."
         }
       ]
     },
@@ -478,6 +551,21 @@
           "notes": "Dashboard frontend for gallery image management. Requires authentication integration. Can be done in parallel with FEAT-015, 016, 017."
         },
         {
+          "taskId": "TASK-FEAT-026",
+          "title": "Calendar and Appointment Viewing Frontend Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-006",
+            "TASK-SEC-002"
+          ],
+          "blocking": [
+            "TASK-TEST-007"
+          ],
+          "estimatedTime": "16 hours",
+          "notes": "Frontend implementation for Calendar and Appointment Viewing. Includes calendar views (day/week/month), appointment management UI, filtering, and export. Requires API and authentication."
+        },
+        {
           "taskId": "TASK-UI-002",
           "title": "Re-style Task Portal Dashboard with Modern Analytics UI",
           "priority": "HIGH",
@@ -573,6 +661,33 @@
           "notes": "Quality assurance and user acceptance testing for dashboard system. Should be done after testing suite is complete."
         },
         {
+          "taskId": "TASK-TEST-007",
+          "title": "Calendar and Appointment Viewing Testing Suite",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-026",
+            "TASK-API-006"
+          ],
+          "blocking": [
+            "TASK-OPS-008"
+          ],
+          "estimatedTime": "12 hours",
+          "notes": "Comprehensive testing suite for Calendar and Appointment Viewing including backend unit tests, integration tests, frontend component tests, E2E tests, and performance tests. Required before deployment."
+        },
+        {
+          "taskId": "TASK-DOC-013",
+          "title": "Calendar and Appointment Viewing User Guide",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-026"
+          ],
+          "blocking": [],
+          "estimatedTime": "4 hours",
+          "notes": "User-facing documentation for Calendar and Appointment Viewing including user guides, feature tutorials, FAQ, and troubleshooting guide."
+        },
+        {
           "taskId": "TASK-DOC-009",
           "title": "Dashboard User Guide and Documentation",
           "priority": "MEDIUM",
@@ -606,6 +721,19 @@
           "blocking": [],
           "estimatedTime": "6 hours",
           "notes": "Deploy dashboard system to production environment. Includes staging deployment, production deployment, smoke tests, and monitoring setup. Should be done after all testing is complete."
+        },
+        {
+          "taskId": "TASK-OPS-008",
+          "title": "Calendar and Appointment Viewing Deployment",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-TEST-007",
+            "TASK-OPS-007"
+          ],
+          "blocking": [],
+          "estimatedTime": "6 hours",
+          "notes": "Deploy Calendar and Appointment Viewing functionality to production. Includes staging deployment, production deployment, smoke tests, and integration verification. Should be done after testing is complete."
         }
       ]
     }
