@@ -19,8 +19,8 @@
 6. [State Management Design](#state-management-design)
 7. [Integration Architecture](#integration-architecture)
 8. [Data Flow Diagrams](#data-flow-diagrams)
-9. [Design Decisions](#design-decisions)
-10. [Diagrams](#diagrams)
+9. [Sequence Diagrams](#sequence-diagrams)
+10. [Design Decisions](#design-decisions)
 
 ---
 
@@ -63,7 +63,7 @@ The Calendar and Appointment Viewing system consists of four main layers:
 
 ### System Components
 
-[![System Architecture Diagram](../../diagrams/calendar-system-architecture.svg)](../../diagrams/calendar-system-architecture.mmd)
+![System Architecture Diagram](../../diagrams/calendar-system-architecture.svg)
 
 *Figure 1: Calendar and Appointment Viewing System Architecture*  
 *Source: [calendar-system-architecture.mmd](../../diagrams/calendar-system-architecture.mmd)*
@@ -83,6 +83,15 @@ See [System Architecture Diagram](#system-architecture-diagram) section for deta
 ### Entity Relationship Overview
 
 The calendar system extends the existing appointment schema with additional entities for status tracking and audit logging.
+
+### Database Schema UML Diagram
+
+![Database ERD Diagram](../../diagrams/calendar-erd.svg)
+
+*Figure 1: Calendar and Appointment Viewing Database Schema (ERD)*  
+*Source: [calendar-erd.mmd](../../diagrams/calendar-erd.mmd)*
+
+The Entity Relationship Diagram above illustrates the database schema for the calendar system, showing the relationships between appointments, services, employees, users, and audit history tables.
 
 ### Core Entities
 
@@ -167,9 +176,15 @@ The calendar system extends the existing appointment schema with additional enti
 - Many-to-One: `appointment_status_history.appointment_id` → `appointments.id` (CASCADE DELETE)
 - Many-to-One: `appointment_status_history.changed_by` → `users.id`
 
-### Entity Relationship Diagram
+### Entity Relationship Summary
 
-See [Database ERD Diagram](#database-erd-diagram) for visual representation.
+The diagram above shows the complete database schema. Key relationships include:
+- **Appointments** are linked to **Users** (customers), **Employees**, and **Services**
+- **Appointment Services** junction table supports multiple services per appointment (main + add-ons)
+- **Appointment Status History** tracks all status changes for audit purposes
+- All entities include proper foreign key constraints and indexes for performance
+
+See [Database ERD Diagram](#database-erd-diagram) in the Diagrams section for the full visual representation.
 
 ### Database Migrations
 
@@ -580,81 +595,12 @@ All error responses follow this format:
 
 ### Component Hierarchy
 
-```
-CalendarLayout (Main Container)
-├── CalendarHeader
-│   ├── DateNavigation
-│   │   ├── PreviousButton
-│   │   ├── NextButton
-│   │   ├── TodayButton
-│   │   └── DatePicker
-│   ├── ViewSwitcher
-│   │   ├── DayViewButton
-│   │   ├── WeekViewButton
-│   │   └── MonthViewButton
-│   └── CalendarActions
-│       ├── ExportButton
-│       └── RefreshButton
-├── CalendarFilters (Collapsible Sidebar)
-│   ├── EmployeeFilter
-│   ├── StatusFilter
-│   ├── ServiceFilter
-│   ├── DateRangeFilter
-│   ├── DayOfWeekFilter (Receptionist)
-│   ├── HourOfDayFilter (Receptionist)
-│   ├── CustomerSearch
-│   └── ClearFiltersButton
-└── CalendarViewArea
-    ├── DayView (conditional)
-    │   ├── TimeSlotColumn
-    │   │   ├── TimeSlot (repeated)
-    │   │   └── AppointmentCard (positioned)
-    │   └── EmployeeColumns (if multi-employee)
-    ├── WeekView (conditional)
-    │   ├── DayColumn (repeated)
-    │   │   ├── DayHeader
-    │   │   ├── TimeSlotColumn
-    │   │   └── AppointmentCard (positioned)
-    │   └── EmployeeColumns (if multi-employee)
-    └── MonthView (conditional)
-        ├── MonthHeader
-        ├── WeekRow (repeated)
-        │   └── DayCell (repeated)
-        │       ├── DayNumber
-        │       └── AppointmentIndicators (dots)
-        └── AppointmentTooltip (on hover)
+![Component Hierarchy Diagram](../../diagrams/calendar-component-hierarchy.svg)
 
-AppointmentModal (Portal)
-├── AppointmentHeader
-│   ├── CustomerInfo
-│   ├── EmployeeInfo
-│   └── ServiceInfo
-├── AppointmentDetails
-│   ├── DateTimeDisplay
-│   ├── StatusDisplay
-│   └── NotesDisplay
-├── AppointmentActions
-│   ├── EditButton
-│   ├── StatusChangeDropdown
-│   ├── CancelButton
-│   └── DeleteButton
-└── CloseButton
+*Figure 3: Calendar Component Hierarchy*  
+*Source: [calendar-component-hierarchy.mmd](../../diagrams/calendar-component-hierarchy.mmd)*
 
-AppointmentForm (Modal)
-├── FormFields
-│   ├── CustomerSelector (with search)
-│   ├── EmployeeSelector
-│   ├── ServiceSelector (multi-select)
-│   ├── DateTimePicker
-│   └── NotesTextarea
-├── ConflictWarning (conditional)
-├── FormActions
-│   ├── SaveButton
-│   └── CancelButton
-└── ValidationErrors
-```
-
-See [Component Hierarchy Diagram](#component-hierarchy-diagram) for visual representation.
+The diagram above shows the complete React component hierarchy for the calendar system, including the main CalendarLayout container, view components (Day, Week, Month), filters, and modal components.
 
 ### Component Descriptions
 
@@ -1216,7 +1162,7 @@ Metrics Service (queries same table)
 
 ## Data Flow Diagrams
 
-[![Data Flow Diagram](../../diagrams/calendar-data-flow.svg)](../../diagrams/calendar-data-flow.mmd)
+![Data Flow Diagram](../../diagrams/calendar-data-flow.svg)
 
 *Figure 2: Calendar and Appointment Viewing Data Flow*  
 *Source: [calendar-data-flow.mmd](../../diagrams/calendar-data-flow.mmd)*
@@ -1241,7 +1187,20 @@ The diagram above illustrates the overall data flow through the system layers, s
 2. Conflict detection → Domain validation → Repository update
 3. Database update → Response → Cache invalidation → UI update
 
-See [Sequence Diagrams](#sequence-diagrams) for detailed step-by-step workflow visualizations.
+---
+
+## Sequence Diagrams
+
+![Sequence Diagrams](../../diagrams/calendar-sequence-diagrams.svg)
+
+*Figure 4: Calendar System Sequence Diagrams*  
+*Source: [calendar-sequence-diagrams.mmd](../../diagrams/calendar-sequence-diagrams.mmd)*
+
+The sequence diagrams above illustrate detailed step-by-step workflows for key operations:
+- **Create Appointment**: Complete flow from user action to database persistence
+- **View Calendar**: Data fetching and rendering workflow
+- **Drag-and-Drop Reschedule**: Appointment rescheduling with conflict detection
+- **Status Update**: Status change workflow with audit logging
 
 ---
 
@@ -1397,40 +1356,6 @@ See [Sequence Diagrams](#sequence-diagrams) for detailed step-by-step workflow v
 - More complex queries (filter out cancelled)
 - Storage overhead
 - Worth it for data preservation
-
----
-
-## Diagrams
-
-### System Architecture Diagram
-
-[![System Architecture Diagram](../../diagrams/calendar-system-architecture.svg)](../../diagrams/calendar-system-architecture.mmd)
-
-*Source: [calendar-system-architecture.mmd](../../diagrams/calendar-system-architecture.mmd)*
-
-### Database ERD Diagram
-
-[![Database ERD Diagram](../../diagrams/calendar-erd.svg)](../../diagrams/calendar-erd.mmd)
-
-*Source: [calendar-erd.mmd](../../diagrams/calendar-erd.mmd)*
-
-### Component Hierarchy Diagram
-
-[![Component Hierarchy Diagram](../../diagrams/calendar-component-hierarchy.svg)](../../diagrams/calendar-component-hierarchy.mmd)
-
-*Source: [calendar-component-hierarchy.mmd](../../diagrams/calendar-component-hierarchy.mmd)*
-
-### Data Flow Diagram
-
-[![Data Flow Diagram](../../diagrams/calendar-data-flow.svg)](../../diagrams/calendar-data-flow.mmd)
-
-*Source: [calendar-data-flow.mmd](../../diagrams/calendar-data-flow.mmd)*
-
-### Sequence Diagrams
-
-[![Sequence Diagrams](../../diagrams/calendar-sequence-diagrams.svg)](../../diagrams/calendar-sequence-diagrams.mmd)
-
-*Source: [calendar-sequence-diagrams.mmd](../../diagrams/calendar-sequence-diagrams.mmd)*
 
 ---
 
