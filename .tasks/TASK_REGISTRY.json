@@ -135,8 +135,8 @@
         "TASK-ARCH-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Design and document the complete database schema for the LuxeNail nail salon application. This task focuses on analyzing all existing data structures, designing normalized database tables, creating Entity Relationship Diagrams (ERD), and documenting all relationships, constraints, and data requirements. This is primarily a documentation and design task that will serve as the foundation for database implementation.",
       "sections": {
         "description": "Design and document the complete database schema for the LuxeNail nail salon application. This task focuses on analyzing all existing data structures, designing normalized database tables, creating Entity Relationship Diagrams (ERD), and documenting all relationships, constraints, and data requirements. This is primarily a documentation and design task that will serve as the foundation for database implementation.",
@@ -165,8 +165,8 @@
       "estimatedTime": "8 hours",
       "dependencies": [],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Design and document the complete backend architecture for the LuxeNail nail salon website. This includes defining the system architecture, component relationships, data flow, API design patterns, and technology decisions. The architecture should follow industry best practices for microservices, RESTful APIs, and database design.",
       "sections": {
         "description": "Design and document the complete backend architecture for the LuxeNail nail salon website. This includes defining the system architecture, component relationships, data flow, API design patterns, and technology decisions. The architecture should follow industry best practices for microservices, RESTful APIs, and database design.",
@@ -198,8 +198,8 @@
         "TASK-ARCH-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Design the complete database schema for the nail salon application, including all entities, relationships, indexes, and constraints. Create TypeORM entity models that map to the database schema. The schema should support all current features (services, employees, customers, appointments) and be extensible for future requirements.",
       "sections": {
         "description": "Design the complete database schema for the nail salon application, including all entities, relationships, indexes, and constraints. Create TypeORM entity models that map to the database schema. The schema should support all current features (services, employees, customers, appointments) and be extensible for future requirements.",
@@ -230,8 +230,8 @@
         "TASK-DB-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Set up TypeORM migration system and create the initial database migration that creates all tables, indexes, and constraints. Migrations should be version-controlled and reversible. Include seed data migration for initial services, employees, and test data.",
       "sections": {
         "description": "Set up TypeORM migration system and create the initial database migration that creates all tables, indexes, and constraints. Migrations should be version-controlled and reversible. Include seed data migration for initial services, employees, and test data.",
@@ -262,8 +262,8 @@
         "TASK-DB-002"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Design and implement all RESTful API endpoints for the nail salon application. This includes endpoints for services, employees, customers, appointments, and analytics. Follow RESTful conventions, implement proper error handling, validation, and response formatting.",
       "sections": {
         "description": "Design and implement all RESTful API endpoints for the nail salon application. This includes endpoints for services, employees, customers, appointments, and analytics. Follow RESTful conventions, implement proper error handling, validation, and response formatting.",
@@ -294,8 +294,8 @@
         "TASK-API-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Enhance Docker setup for production-ready containerization. Ensure all services (client, server, database) are properly containerized with optimized Dockerfiles, health checks, proper networking, and production configurations. Follow Docker best practices for multi-stage builds, security, and performance.",
       "sections": {
         "description": "Enhance Docker setup for production-ready containerization. Ensure all services (client, server, database) are properly containerized with optimized Dockerfiles, health checks, proper networking, and production configurations. Follow Docker best practices for multi-stage builds, security, and performance.",
@@ -326,8 +326,8 @@
         "TASK-OPS-001"
       ],
       "relatedTasks": [],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Research and establish a comprehensive testing strategy for the frontend (React/Vite) application. This includes evaluating testing frameworks, planning Page Object Model (POM) implementation for improved test maintainability, designing visual regression testing using pixel comparison and snapshots, and creating automation strategies for UI interaction simulation. This task focuses on planning and research only; implementation will follow in subsequent tasks.",
       "sections": {
         "description": "Research and establish a comprehensive testing strategy for the frontend (React/Vite) application. This includes evaluating testing frameworks, planning Page Object Model (POM) implementation for improved test maintainability, designing visual regression testing using pixel comparison and snapshots, and creating automation strategies for UI interaction simulation. This task focuses on planning and research only; implementation will follow in subsequent tasks.",
@@ -358,8 +358,8 @@
         "TASK-API-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Implement security best practices for the backend API, including input validation, SQL injection prevention, XSS protection, CORS configuration, rate limiting, and security headers. Document security measures and create security guidelines.",
       "sections": {
         "description": "Implement security best practices for the backend API, including input validation, SQL injection prevention, XSS protection, CORS configuration, rate limiting, and security headers. Document security measures and create security guidelines.",
@@ -391,8 +391,8 @@
         "TASK-TEST-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Migrate the client application from using mock data in constants to consuming the real backend API. Update the dataService to use the DatabaseDataProvider that makes HTTP requests to the backend API. Ensure backward compatibility and graceful error handling.",
       "sections": {
         "description": "Migrate the client application from using mock data in constants to consuming the real backend API. Update the dataService to use the DatabaseDataProvider that makes HTTP requests to the backend API. Ensure backward compatibility and graceful error handling.",
@@ -424,8 +424,8 @@
         "TASK-MIG-001"
       ],
       "relatedTasks": [],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Create comprehensive documentation for the backend, including API documentation, setup guides, development workflow, deployment instructions, and architecture documentation. Set up API documentation using Swagger/OpenAPI if possible.",
       "sections": {
         "description": "Create comprehensive documentation for the backend, including API documentation, setup guides, development workflow, deployment instructions, and architecture documentation. Set up API documentation using Swagger/OpenAPI if possible.",
@@ -460,8 +460,8 @@
         "TASK-API-005",
         "TASK-SEC-003"
       ],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Design comprehensive authentication and authorization system for the LuxeNail application. This includes defining user roles, permissions, authentication flows, authorization rules, and security requirements. This design will serve as the foundation for database schema, API implementation, and frontend authentication integration.",
       "sections": {
         "description": "Design comprehensive authentication and authorization system for the LuxeNail application. This includes defining user roles, permissions, authentication flows, authorization rules, and security requirements. This design will serve as the foundation for database schema, API implementation, and frontend authentication integration.",
@@ -494,8 +494,8 @@
         "TASK-DOC-004",
         "TASK-DOC-007"
       ],
-      "file": "requirements.task",
-      "filePath": ".tasks/requirements.task",
+      "file": "requirements.task.md",
+      "filePath": ".tasks/requirements.task.md",
       "description": "Conduct comprehensive requirements analysis for the entire LuxeNail nail salon website covering all aspects including frontend functionality, backend services, performance requirements, security requirements, accessibility, scalability, and non-functional requirements. This analysis will serve as the foundational requirements document for the entire system. This task focuses on documentation only - no implementation work.",
       "sections": {
         "description": "Conduct comprehensive requirements analysis for the entire LuxeNail nail salon website covering all aspects including frontend functionality, backend services, performance requirements, security requirements, accessibility, scalability, and non-functional requirements. This analysis will serve as the foundational requirements document for the entire system. This task focuses on documentation only - no implementation work.",
@@ -529,8 +529,8 @@
       "relatedTasks": [
         "TASK-API-005"
       ],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Implement database schema for user authentication and authorization system. This includes extending the users table with authentication fields, creating roles and permissions tables, implementing password storage, and setting up authorization data structures.",
       "sections": {
         "description": "Implement database schema for user authentication and authorization system. This includes extending the users table with authentication fields, creating roles and permissions tables, implementing password storage, and setting up authorization data structures.",
@@ -563,8 +563,8 @@
       "relatedTasks": [
         "TASK-SEC-003"
       ],
-      "file": "backend.task",
-      "filePath": ".tasks/backend.task",
+      "file": "backend.task.md",
+      "filePath": ".tasks/backend.task.md",
       "description": "Implement complete authentication and authorization API endpoints and middleware for the LuxeNail application. This includes login, registration, password management, JWT token handling, role-based access control, and authorization middleware.",
       "sections": {
         "description": "Implement complete authentication and authorization API endpoints and middleware for the LuxeNail application. This includes login, registration, password management, JWT token handling, role-based access control, and authorization middleware.",
@@ -598,8 +598,8 @@
       "relatedTasks": [
         "TASK-API-003"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Implement security best practices for the mobile application including secure token storage, biometric authentication, API security, data encryption, and secure photo handling. Ensure the mobile app follows security best practices for sensitive business data.",
       "sections": {
         "description": "Implement security best practices for the mobile application including secure token storage, biometric authentication, API security, data encryption, and secure photo handling. Ensure the mobile app follows security best practices for sensitive business data.",
@@ -632,8 +632,8 @@
         "TASK-API-004",
         "TASK-FEAT-023"
       ],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Conduct comprehensive requirements analysis for customer data management, promotion automation system, and email/SMS delivery infrastructure. Document all requirements categorized by functional areas, including customer data persistence, automated promotion rules, and communication delivery channels.",
       "sections": {
         "description": "Conduct comprehensive requirements analysis for customer data management, promotion automation system, and email/SMS delivery infrastructure. Document all requirements categorized by functional areas, including customer data persistence, automated promotion rules, and communication delivery channels.",
@@ -666,8 +666,8 @@
       "relatedTasks": [
         "TASK-API-004"
       ],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Design and implement database schema for customer data management and promotion automation system. This includes extending the Customer entity, creating promotion automation rules table, promotion templates table, communication preferences table, and promotion tracking tables.",
       "sections": {
         "description": "Design and implement database schema for customer data management and promotion automation system. This includes extending the Customer entity, creating promotion automation rules table, promotion templates table, communication preferences table, and promotion tracking tables.",
@@ -701,8 +701,8 @@
         "TASK-FEAT-023",
         "TASK-FEAT-024"
       ],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Implement backend API endpoints for customer management (CRUD operations), promotion template management, promotion automation rule configuration, promotion sending, and promotion analytics. Integrate with email and SMS service providers for communication delivery.",
       "sections": {
         "description": "Implement backend API endpoints for customer management (CRUD operations), promotion template management, promotion automation rule configuration, promotion sending, and promotion analytics. Integrate with email and SMS service providers for communication delivery.",
@@ -735,8 +735,8 @@
       "relatedTasks": [
         "TASK-FEAT-024"
       ],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Develop the customer management interface in the dashboard, allowing store managers and owners to view, create, edit, and manage customer data. This includes customer list view, customer detail view, customer creation/edit forms, and customer search/filtering capabilities.",
       "sections": {
         "description": "Develop the customer management interface in the dashboard, allowing store managers and owners to view, create, edit, and manage customer data. This includes customer list view, customer detail view, customer creation/edit forms, and customer search/filtering capabilities.",
@@ -768,8 +768,8 @@
         "TASK-FEAT-023"
       ],
       "relatedTasks": [],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Develop the promotion automation configuration interface in the dashboard, allowing store managers and owners to create and manage promotion templates, configure automation rules (especially birthday promotions), and monitor promotion performance. This includes promotion template editor, automation rule configuration, and promotion analytics dashboard.",
       "sections": {
         "description": "Develop the promotion automation configuration interface in the dashboard, allowing store managers and owners to create and manage promotion templates, configure automation rules (especially birthday promotions), and monitor promotion performance. This includes promotion template editor, automation rule configuration, and promotion analytics dashboard.",
@@ -800,8 +800,8 @@
         "TASK-API-004"
       ],
       "relatedTasks": [],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Set up and configure email and SMS service provider integrations, including account setup, API key configuration, webhook setup for delivery tracking, and testing the integration. This ensures reliable communication delivery for customer promotions.",
       "sections": {
         "description": "Set up and configure email and SMS service provider integrations, including account setup, API key configuration, webhook setup for delivery tracking, and testing the integration. This ensures reliable communication delivery for customer promotions.",
@@ -834,8 +834,8 @@
         "TASK-FEAT-024"
       ],
       "relatedTasks": [],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Create comprehensive testing suite for customer management and promotion automation system, including unit tests, integration tests, and end-to-end tests. Ensure all functionality is thoroughly tested including customer CRUD, promotion templates, automation rules, and email/SMS sending.",
       "sections": {
         "description": "Create comprehensive testing suite for customer management and promotion automation system, including unit tests, integration tests, and end-to-end tests. Ensure all functionality is thoroughly tested including customer CRUD, promotion templates, automation rules, and email/SMS sending.",
@@ -868,8 +868,8 @@
         "TASK-FEAT-024"
       ],
       "relatedTasks": [],
-      "file": "customer-promotions.task",
-      "filePath": ".tasks/customer-promotions.task",
+      "file": "customer-promotions.task.md",
+      "filePath": ".tasks/customer-promotions.task.md",
       "description": "Create comprehensive documentation for the customer management and promotion automation system, including API documentation, user guides for dashboard features, configuration guides, and troubleshooting documentation.",
       "sections": {
         "description": "Create comprehensive documentation for the customer management and promotion automation system, including API documentation, user guides for dashboard features, configuration guides, and troubleshooting documentation.",
@@ -900,8 +900,8 @@
       "relatedTasks": [
         "TASK-FEAT-014"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Conduct comprehensive requirements analysis for the dashboard management system. Document user stories, functional requirements, non-functional requirements, and create detailed specifications for metrics, promotions, website editing, and image upload features. This analysis will inform architecture and design decisions.",
       "sections": {
         "description": "Conduct comprehensive requirements analysis for the dashboard management system. Document user stories, functional requirements, non-functional requirements, and create detailed specifications for metrics, promotions, website editing, and image upload features. This analysis will inform architecture and design decisions.",
@@ -936,8 +936,8 @@
         "TASK-API-002",
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Design the complete architecture for the dashboard management system including system architecture, database schema, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
       "sections": {
         "description": "Design the complete architecture for the dashboard management system including system architecture, database schema, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
@@ -970,8 +970,8 @@
       "relatedTasks": [
         "TASK-API-002"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the complete database schema for the dashboard management system including all entities, relationships, migrations, and seed data. This includes tables for metrics aggregation, promotions, website content, gallery images, and analytics tracking.",
       "sections": {
         "description": "Implement the complete database schema for the dashboard management system including all entities, relationships, migrations, and seed data. This includes tables for metrics aggregation, promotions, website content, gallery images, and analytics tracking.",
@@ -1006,8 +1006,8 @@
         "TASK-SEC-002",
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the complete backend API for the dashboard management system including endpoints for metrics, promotions, website content management, and gallery image management. This task uses the authentication and authorization middleware already implemented in TASK-API-005 (Authentication and Authorization API). Include request validation, error handling, and comprehensive documentation.",
       "sections": {
         "description": "Implement the complete backend API for the dashboard management system including endpoints for metrics, promotions, website content management, and gallery image management. This task uses the authentication and authorization middleware already implemented in TASK-API-005 (Authentication and Authorization API). Include request validation, error handling, and comprehensive documentation.",
@@ -1042,8 +1042,8 @@
         "TASK-FEAT-017",
         "TASK-FEAT-018"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the frontend dashboard interface for metrics and analytics. Create sophisticated data visualizations, KPIs, charts, and interactive components that help business owners and managers understand their business performance at a glance.",
       "sections": {
         "description": "Implement the frontend dashboard interface for metrics and analytics. Create sophisticated data visualizations, KPIs, charts, and interactive components that help business owners and managers understand their business performance at a glance.",
@@ -1076,8 +1076,8 @@
       "relatedTasks": [
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the frontend interface for managing promotions including creation, editing, sending, tracking, and analytics. Integrate with the existing MarketingCenter component and enhance it with full promotion lifecycle management.",
       "sections": {
         "description": "Implement the frontend interface for managing promotions including creation, editing, sending, tracking, and analytics. Integrate with the existing MarketingCenter component and enhance it with full promotion lifecycle management.",
@@ -1110,8 +1110,8 @@
       "relatedTasks": [
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the frontend interface for editing website content including a content management interface, WYSIWYG editor, preview functionality, and version history. Allow owners and managers to update website content without developer intervention.",
       "sections": {
         "description": "Implement the frontend interface for editing website content including a content management interface, WYSIWYG editor, preview functionality, and version history. Allow owners and managers to update website content without developer intervention.",
@@ -1144,8 +1144,8 @@
       "relatedTasks": [
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement the frontend interface for managing gallery images including upload, editing metadata, categorization, organization, and deletion. Allow owners and managers to manage the service images displayed in the gallery.",
       "sections": {
         "description": "Implement the frontend interface for managing gallery images including upload, editing metadata, categorization, organization, and deletion. Allow owners and managers to manage the service images displayed in the gallery.",
@@ -1180,8 +1180,8 @@
         "TASK-API-002",
         "TASK-FEAT-015"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Implement dashboard frontend authentication integration. This task uses the general authentication API implemented in TASK-API-005 (Authentication and Authorization API). This task focuses on frontend integration: AuthContext, ProtectedRoute, LoginPage, role-based UI components, and dashboard-specific authorization logic. The backend authentication API (login, register, JWT, etc.) is already implemented in TASK-API-005.",
       "sections": {
         "description": "Implement dashboard frontend authentication integration. This task uses the general authentication API implemented in TASK-API-005 (Authentication and Authorization API). This task focuses on frontend integration: AuthContext, ProtectedRoute, LoginPage, role-based UI components, and dashboard-specific authorization logic. The backend authentication API (login, register, JWT, etc.) is already implemented in TASK-API-005.",
@@ -1218,8 +1218,8 @@
       "relatedTasks": [
         "TASK-SEC-002"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Create comprehensive testing suite for the dashboard system including unit tests, integration tests, and end-to-end tests. Ensure high test coverage for critical functionality including metrics, promotions, content management, gallery, and authentication.",
       "sections": {
         "description": "Create comprehensive testing suite for the dashboard system including unit tests, integration tests, and end-to-end tests. Ensure high test coverage for critical functionality including metrics, promotions, content management, gallery, and authentication.",
@@ -1254,8 +1254,8 @@
         "TASK-FEAT-018"
       ],
       "relatedTasks": [],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Conduct comprehensive quality assurance testing including manual testing, user acceptance testing, usability testing, cross-browser testing, and performance validation. Create test plans, test cases, and bug tracking to ensure the dashboard meets quality standards and user expectations.",
       "sections": {
         "description": "Conduct comprehensive quality assurance testing including manual testing, user acceptance testing, usability testing, cross-browser testing, and performance validation. Create test plans, test cases, and bug tracking to ensure the dashboard meets quality standards and user expectations.",
@@ -1288,8 +1288,8 @@
       "relatedTasks": [
         "TASK-PERF-001"
       ],
-      "file": "gallery.task",
-      "filePath": ".tasks/gallery.task",
+      "file": "gallery.task.md",
+      "filePath": ".tasks/gallery.task.md",
       "description": "Redesign the GalleryPage component to use an Instagram-style masonry grid layout with square photos, no gaps between images, and responsive column count that automatically adjusts based on screen width. This will create a modern, visually appealing gallery experience similar to Instagram's feed.",
       "sections": {
         "description": "Redesign the GalleryPage component to use an Instagram-style masonry grid layout with square photos, no gaps between images, and responsive column count that automatically adjusts based on screen width. This will create a modern, visually appealing gallery experience similar to Instagram's feed.",
@@ -1322,8 +1322,8 @@
       "relatedTasks": [
         "TASK-FEAT-013"
       ],
-      "file": "gallery.task",
-      "filePath": ".tasks/gallery.task",
+      "file": "gallery.task.md",
+      "filePath": ".tasks/gallery.task.md",
       "description": "Implement smooth scrolling with lazy loading and pre-loading of gallery images to optimize performance when displaying ~500 photos. Images should load as they enter the viewport (lazy loading) and pre-load images that are about to come into view (pre-loading) to ensure smooth scrolling experience.",
       "sections": {
         "description": "Implement smooth scrolling with lazy loading and pre-loading of gallery images to optimize performance when displaying ~500 photos. Images should load as they enter the viewport (lazy loading) and pre-load images that are about to come into view (pre-loading) to ensure smooth scrolling experience.",
@@ -1355,8 +1355,8 @@
         "TASK-UI-001",
         "TASK-PERF-001"
       ],
-      "file": "gallery.task",
-      "filePath": ".tasks/gallery.task",
+      "file": "gallery.task.md",
+      "filePath": ".tasks/gallery.task.md",
       "description": "Generate or curate approximately 500 high-quality photos for the gallery page. Organize photos with proper metadata (category, title, upload date) and ensure they are sorted by newest first. Photos should be relevant to nail salon services (manicures, pedicures, nail art, etc.).",
       "sections": {
         "description": "Generate or curate approximately 500 high-quality photos for the gallery page. Organize photos with proper metadata (category, title, upload date) and ensure they are sorted by newest first. Photos should be relevant to nail salon services (manicures, pedicures, nail art, etc.).",
@@ -1385,8 +1385,8 @@
       "estimatedTime": "6-8 hours",
       "dependencies": [],
       "relatedTasks": [],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Set up Docker infrastructure to containerize the client application (React/Vite frontend) and prepare for future microservices. The client should run in a separate container from other microservices, following Docker best practices for Node.js applications. This includes creating Dockerfiles, docker-compose configurations, and supporting files for both development and production environments.",
       "sections": {
         "description": "Set up Docker infrastructure to containerize the client application (React/Vite frontend) and prepare for future microservices. The client should run in a separate container from other microservices, following Docker best practices for Node.js applications. This includes creating Dockerfiles, docker-compose configurations, and supporting files for both development and production environments.",
@@ -1417,8 +1417,8 @@
       "estimatedTime": "8-10 hours",
       "dependencies": [],
       "relatedTasks": [],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Set up comprehensive testing infrastructure for the client application, including unit tests for all React components, test coverage reporting, pre-commit hooks to enforce linting and test passing, and CI/CD integration. The goal is to ensure code quality, prevent regressions, and maintain a minimum test coverage threshold of 80% before allowing commits.",
       "sections": {
         "description": "Set up comprehensive testing infrastructure for the client application, including unit tests for all React components, test coverage reporting, pre-commit hooks to enforce linting and test passing, and CI/CD integration. The goal is to ensure code quality, prevent regressions, and maintain a minimum test coverage threshold of 80% before allowing commits.",
@@ -1451,8 +1451,8 @@
         "TASK-OPS-001"
       ],
       "relatedTasks": [],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Create a backend Node.js/Express microservice to support the client (React/Vite frontend). The server will run in a separate container and communicate with the client application. Additionally, set up a database container to persist application data. This task includes creating server-side infrastructure, database configuration, and updating Docker Compose files to orchestrate all three services (client, server, database).",
       "sections": {
         "description": "Create a backend Node.js/Express microservice to support the client (React/Vite frontend). The server will run in a separate container and communicate with the client application. Additionally, set up a database container to persist application data. This task includes creating server-side infrastructure, database configuration, and updating Docker Compose files to orchestrate all three services (client, server, database).",
@@ -1483,8 +1483,8 @@
         "TASK-OPS-001"
       ],
       "relatedTasks": [],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Migrate the project from npm to pnpm package manager. pnpm offers improved performance, disk space efficiency (hard links), and stricter dependency management. This includes updating both client and server (when created) packages, updating CI/CD pipelines, development setup, and Docker configurations to use pnpm instead of npm.",
       "sections": {
         "description": "Migrate the project from npm to pnpm package manager. pnpm offers improved performance, disk space efficiency (hard links), and stricter dependency management. This includes updating both client and server (when created) packages, updating CI/CD pipelines, development setup, and Docker configurations to use pnpm instead of npm.",
@@ -1515,8 +1515,8 @@
       "relatedTasks": [
         "TASK-TEST-001"
       ],
-      "file": "infra.task",
-      "filePath": ".tasks/infra.task",
+      "file": "infra.task.md",
+      "filePath": ".tasks/infra.task.md",
       "description": "Refactor existing codebase to improve code quality, maintainability, and adherence to best practices. All refactoring will be verified to ensure existing tests continue to pass and no functionality is broken. This includes code structure improvements, component optimization, service layer enhancements, and removal of code smells while maintaining complete test coverage and functionality.",
       "sections": {
         "description": "Refactor existing codebase to improve code quality, maintainability, and adherence to best practices. All refactoring will be verified to ensure existing tests continue to pass and no functionality is broken. This includes code structure improvements, component optimization, service layer enhancements, and removal of code smells while maintaining complete test coverage and functionality.",
@@ -1549,8 +1549,8 @@
         "TASK-ARCH-002",
         "TASK-FEAT-019"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Conduct comprehensive requirements analysis for the mobile application. Document user stories, functional requirements, technical requirements, and platform-specific requirements. The mobile app serves as a companion to the web dashboard, focusing on employee earnings tracking and photo uploads for marketing purposes.",
       "sections": {
         "description": "Conduct comprehensive requirements analysis for the mobile application. Document user stories, functional requirements, technical requirements, and platform-specific requirements. The mobile app serves as a companion to the web dashboard, focusing on employee earnings tracking and photo uploads for marketing purposes.",
@@ -1584,8 +1584,8 @@
         "TASK-API-003",
         "TASK-FEAT-019"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Design the complete architecture for the mobile application including system architecture, component structure, data flow, state management, API integration, and platform-specific considerations. Create architecture diagrams and design documents to guide implementation.",
       "sections": {
         "description": "Design the complete architecture for the mobile application including system architecture, component structure, data flow, state management, API integration, and platform-specific considerations. Create architecture diagrams and design documents to guide implementation.",
@@ -1620,8 +1620,8 @@
         "TASK-DB-006",
         "TASK-API-001"
       ],
-      "file": "architect.task",
-      "filePath": ".tasks/architect.task",
+      "file": "architect.task.md",
+      "filePath": ".tasks/architect.task.md",
       "description": "Design the Domain-Driven Design (DDD) architecture for the LuxeNail application. This includes identifying bounded contexts, designing domain models, defining aggregates, establishing layered architecture, and creating a project structure that follows DDD principles. The goal is to organize the codebase around business domains rather than technical layers, making the system more maintainable and aligned with business logic.",
       "sections": {
         "description": "Design the Domain-Driven Design (DDD) architecture for the LuxeNail application. This includes identifying bounded contexts, designing domain models, defining aggregates, establishing layered architecture, and creating a project structure that follows DDD principles. The goal is to organize the codebase around business domains rather than technical layers, making the system more maintainable and aligned with business logic.",
@@ -1656,8 +1656,8 @@
         "TASK-FEAT-019",
         "TASK-SEC-002"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Extend the existing backend API to support mobile app requirements including employee earnings endpoints, mobile-optimized statistics endpoints, and enhanced photo upload endpoints. Ensure API design follows RESTful principles and maintains consistency with existing API patterns.",
       "sections": {
         "description": "Extend the existing backend API to support mobile app requirements including employee earnings endpoints, mobile-optimized statistics endpoints, and enhanced photo upload endpoints. Ensure API design follows RESTful principles and maintains consistency with existing API patterns.",
@@ -1692,8 +1692,8 @@
         "TASK-FEAT-020",
         "TASK-SEC-003"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Implement the core mobile application including project setup, authentication, navigation, and basic UI structure. This includes setting up the development environment, creating the app foundation, and implementing the core user interface components.",
       "sections": {
         "description": "Implement the core mobile application including project setup, authentication, navigation, and basic UI structure. This includes setting up the development environment, creating the app foundation, and implementing the core user interface components.",
@@ -1725,8 +1725,8 @@
         "TASK-API-003"
       ],
       "relatedTasks": [],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Implement the employee earnings tracking features including weekly earnings view, earnings history, earnings breakdown by service type, and date range filtering. This is a core feature that allows employees to view how much they've earned.",
       "sections": {
         "description": "Implement the employee earnings tracking features including weekly earnings view, earnings history, earnings breakdown by service type, and date range filtering. This is a core feature that allows employees to view how much they've earned.",
@@ -1760,8 +1760,8 @@
       "relatedTasks": [
         "TASK-FEAT-020"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Implement photo upload functionality including camera integration, gallery photo selection, photo preview, metadata entry, upload progress tracking, and upload queue management. This is a critical feature for employees and managers to upload photos of their work for marketing purposes.",
       "sections": {
         "description": "Implement photo upload functionality including camera integration, gallery photo selection, photo preview, metadata entry, upload progress tracking, and upload queue management. This is a critical feature for employees and managers to upload photos of their work for marketing purposes.",
@@ -1796,8 +1796,8 @@
         "TASK-FEAT-020",
         "TASK-FEAT-021"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Implement manager and owner statistics features including business metrics display, employee performance metrics, and mobile-optimized dashboard views. This provides managers and owners with key business insights on mobile devices.",
       "sections": {
         "description": "Implement manager and owner statistics features including business metrics display, employee performance metrics, and mobile-optimized dashboard views. This provides managers and owners with key business insights on mobile devices.",
@@ -1832,8 +1832,8 @@
       "relatedTasks": [
         "TASK-TEST-005"
       ],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Create comprehensive testing suite for the mobile application including unit tests, component tests, integration tests, and E2E tests. Ensure high test coverage for critical functionality including authentication, earnings, photo upload, and statistics features.",
       "sections": {
         "description": "Create comprehensive testing suite for the mobile application including unit tests, component tests, integration tests, and E2E tests. Ensure high test coverage for critical functionality including authentication, earnings, photo upload, and statistics features.",
@@ -1867,8 +1867,8 @@
         "TASK-FEAT-022"
       ],
       "relatedTasks": [],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Conduct comprehensive quality assurance testing including manual testing, user acceptance testing, usability testing, device compatibility testing, and performance validation. Ensure the mobile app meets quality standards and provides excellent user experience.",
       "sections": {
         "description": "Conduct comprehensive quality assurance testing including manual testing, user acceptance testing, usability testing, device compatibility testing, and performance validation. Ensure the mobile app meets quality standards and provides excellent user experience.",
@@ -1902,8 +1902,8 @@
         "TASK-FEAT-022"
       ],
       "relatedTasks": [],
-      "file": "mobileapp.task",
-      "filePath": ".tasks/mobileapp.task",
+      "file": "mobileapp.task.md",
+      "filePath": ".tasks/mobileapp.task.md",
       "description": "Set up build and deployment pipeline for the mobile application including app store preparation, signing configuration, CI/CD setup, and deployment to App Store and Google Play Store. Ensure the app can be built, signed, and distributed to users.",
       "sections": {
         "description": "Set up build and deployment pipeline for the mobile application including app store preparation, signing configuration, CI/CD setup, and deployment to App Store and Google Play Store. Ensure the app can be built, signed, and distributed to users.",
@@ -1936,8 +1936,8 @@
       "relatedTasks": [
         "TASK-FEAT-005"
       ],
-      "file": "portal-phase2.task",
-      "filePath": ".tasks/portal-phase2.task",
+      "file": "portal-phase2.task.md",
+      "filePath": ".tasks/portal-phase2.task.md",
       "description": "Set up the foundational structure for a VS Code extension that will host the task portal. This includes project scaffolding, extension entry point, command registration, task data provider, file system watcher for auto-sync, and basic extension functionality without UI components.",
       "sections": {
         "description": "Set up the foundational structure for a VS Code extension that will host the task portal. This includes project scaffolding, extension entry point, command registration, task data provider, file system watcher for auto-sync, and basic extension functionality without UI components.",
@@ -1972,8 +1972,8 @@
       "relatedTasks": [
         "TASK-FEAT-006"
       ],
-      "file": "portal-phase2.task",
-      "filePath": ".tasks/portal-phase2.task",
+      "file": "portal-phase2.task.md",
+      "filePath": ".tasks/portal-phase2.task.md",
       "description": "Build the React-based webview UI for the task portal that displays tasks in a list/table format with filtering, sorting, and search capabilities. Create the task details view and integrate with the extension's task provider. This is the core user interface that developers will interact with.",
       "sections": {
         "description": "Build the React-based webview UI for the task portal that displays tasks in a list/table format with filtering, sorting, and search capabilities. Create the task details view and integrate with the extension's task provider. This is the core user interface that developers will interact with.",
@@ -2008,8 +2008,8 @@
       "relatedTasks": [
         "TASK-FEAT-007"
       ],
-      "file": "portal-phase2.task",
-      "filePath": ".tasks/portal-phase2.task",
+      "file": "portal-phase2.task.md",
+      "filePath": ".tasks/portal-phase2.task.md",
       "description": "Add a statistics dashboard to the task portal that provides visual insights into task distribution, status breakdown, priority distribution, and overall project progress. Use charts and visualizations to make data easy to understand at a glance.",
       "sections": {
         "description": "Add a statistics dashboard to the task portal that provides visual insights into task distribution, status breakdown, priority distribution, and overall project progress. Use charts and visualizations to make data easy to understand at a glance.",
@@ -2044,8 +2044,8 @@
       "relatedTasks": [
         "TASK-FEAT-008"
       ],
-      "file": "portal-phase3-5.task",
-      "filePath": ".tasks/portal-phase3-5.task",
+      "file": "portal-phase3-5.task.md",
+      "filePath": ".tasks/portal-phase3-5.task.md",
       "description": "Implement a Kanban board view that visualizes tasks as cards organized by status columns. Add drag-and-drop functionality to move tasks between statuses, with swimlanes for grouping by category or assignee. This provides an alternative, more visual way to manage tasks.",
       "sections": {
         "description": "Implement a Kanban board view that visualizes tasks as cards organized by status columns. Add drag-and-drop functionality to move tasks between statuses, with swimlanes for grouping by category or assignee. This provides an alternative, more visual way to manage tasks.",
@@ -2080,8 +2080,8 @@
       "relatedTasks": [
         "TASK-FEAT-011"
       ],
-      "file": "portal-phase4.task",
-      "filePath": ".tasks/portal-phase4.task",
+      "file": "portal-phase4.task.md",
+      "filePath": ".tasks/portal-phase4.task.md",
       "description": "Create a static site generator that builds an HTML dashboard from TASK_REGISTRY.json for public/stakeholder viewing. The site should display task stats, lists, and basic filtering using client-side JavaScript. Set up GitHub Actions to auto-deploy to GitHub Pages on every push.",
       "sections": {
         "description": "Create a static site generator that builds an HTML dashboard from TASK_REGISTRY.json for public/stakeholder viewing. The site should display task stats, lists, and basic filtering using client-side JavaScript. Set up GitHub Actions to auto-deploy to GitHub Pages on every push.",
@@ -2116,8 +2116,8 @@
       "relatedTasks": [
         "TASK-FEAT-012"
       ],
-      "file": "portal-phase5.task",
-      "filePath": ".tasks/portal-phase5.task",
+      "file": "portal-phase5.task.md",
+      "filePath": ".tasks/portal-phase5.task.md",
       "description": "Implement a timeline/Gantt chart view that visualizes tasks along a time axis, shows task dependencies as connecting lines, and displays task duration based on estimated time. This provides a project management perspective on task scheduling and dependencies.\n**Implementation Approach:** Created a custom lightweight timeline component using React, CSS, and SVG instead of integrating a heavy Gantt chart library (DHTMLX, Frappe). This reduced complexity and development time from the estimated 10-14 hours to approximately 2 hours while still meeting the core requirements for timeline visualization and dependency tracking.",
       "sections": {
         "description": "Implement a timeline/Gantt chart view that visualizes tasks along a time axis, shows task dependencies as connecting lines, and displays task duration based on estimated time. This provides a project management perspective on task scheduling and dependencies.\n**Implementation Approach:** Created a custom lightweight timeline component using React, CSS, and SVG instead of integrating a heavy Gantt chart library (DHTMLX, Frappe). This reduced complexity and development time from the estimated 10-14 hours to approximately 2 hours while still meeting the core requirements for timeline visualization and dependency tracking.",
@@ -2150,8 +2150,8 @@
         "TASK-FEAT-011"
       ],
       "relatedTasks": [],
-      "file": "portal-phase5.task",
-      "filePath": ".tasks/portal-phase5.task",
+      "file": "portal-phase5.task.md",
+      "filePath": ".tasks/portal-phase5.task.md",
       "description": "Add advanced analytics and reporting features that track task velocity, identify bottlenecks, analyze team workload, and provide exportable reports. This enables data-driven project management and helps optimize team productivity.",
       "sections": {
         "description": "Add advanced analytics and reporting features that track task velocity, identify bottlenecks, analyze team workload, and provide exportable reports. This enables data-driven project management and helps optimize team productivity.",
@@ -2187,8 +2187,8 @@
         "TASK-FEAT-003",
         "TASK-FEAT-004"
       ],
-      "file": "portal.task",
-      "filePath": ".tasks/portal.task",
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
       "description": "Design and plan a comprehensive task portal system that allows developers to track, filter, sort, and manage tasks across the project. This task focuses on architectural decisions, data format selection, implementation approach, and feature planning before any code is written.",
       "sections": {
         "description": "Design and plan a comprehensive task portal system that allows developers to track, filter, sort, and manage tasks across the project. This task focuses on architectural decisions, data format selection, implementation approach, and feature planning before any code is written.",
@@ -2221,8 +2221,8 @@
       "relatedTasks": [
         "TASK-FEAT-003"
       ],
-      "file": "portal.task",
-      "filePath": ".tasks/portal.task",
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
       "description": "Design and implement a data abstraction layer that decouples the task portal from any specific data source (JSON, database, or other). This enables the task-portal package to be used with any project regardless of whether they store task data in JSON files, PostgreSQL, MongoDB, or other backends. The abstraction layer will provide a clean interface for data operations while allowing implementations to be swapped without changing the portal code.",
       "sections": {
         "description": "Design and implement a data abstraction layer that decouples the task portal from any specific data source (JSON, database, or other). This enables the task-portal package to be used with any project regardless of whether they store task data in JSON files, PostgreSQL, MongoDB, or other backends. The abstraction layer will provide a clean interface for data operations while allowing implementations to be swapped without changing the portal code.",
@@ -2258,8 +2258,8 @@
       "relatedTasks": [
         "TASK-FEAT-004"
       ],
-      "file": "portal.task",
-      "filePath": ".tasks/portal.task",
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
       "description": "Use the newly created task parser to generate the initial TASK_REGISTRY.json from existing .task files. Verify the accuracy of the generated data against the current TASK_REGISTRY.md, document any discrepancies, and update documentation to reflect the new JSON-based workflow.",
       "sections": {
         "description": "Use the newly created task parser to generate the initial TASK_REGISTRY.json from existing .task files. Verify the accuracy of the generated data against the current TASK_REGISTRY.md, document any discrepancies, and update documentation to reflect the new JSON-based workflow.",
@@ -2295,8 +2295,8 @@
         "TASK-FEAT-003",
         "TASK-FEAT-004"
       ],
-      "file": "portal.task",
-      "filePath": ".tasks/portal.task",
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
       "description": "Re-style the Task Portal dashboard to create a modern, visually appealing analytics interface with lively charts and diagrams. The design should be inspired by the dashboard wireframe (see `.tasks/resources/dashboard_wireframe.png`) while maintaining our current gradient violet-purple theme. The goal is to create an engaging, professional dashboard that provides clear insights into project progress and task metrics.\n**Design Reference:** dashboard_wireframe.png",
       "sections": {
         "description": "Re-style the Task Portal dashboard to create a modern, visually appealing analytics interface with lively charts and diagrams. The design should be inspired by the dashboard wireframe (see `.tasks/resources/dashboard_wireframe.png`) while maintaining our current gradient violet-purple theme. The goal is to create an engaging, professional dashboard that provides clear insights into project progress and task metrics.\n**Design Reference:** dashboard_wireframe.png",
@@ -2332,8 +2332,8 @@
       "relatedTasks": [
         "TASK-DOC-002"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Create comprehensive user-facing documentation for the dashboard management system. This includes user guides for each role (Owner, Manager, Admin, Employee), step-by-step tutorials, FAQ sections, and troubleshooting guides. The documentation should enable users to effectively use all dashboard features without requiring technical support.",
       "sections": {
         "description": "Create comprehensive user-facing documentation for the dashboard management system. This includes user guides for each role (Owner, Manager, Admin, Employee), step-by-step tutorials, FAQ sections, and troubleshooting guides. The documentation should enable users to effectively use all dashboard features without requiring technical support.",
@@ -2367,8 +2367,8 @@
         "TASK-DB-003",
         "TASK-API-002"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Design the detailed structure of code components, classes, and modules for the dashboard system following DDD principles. This includes designing domain entities, value objects, application services, repository interfaces, API controllers, and React components with their interfaces, props, and interactions.",
       "sections": {
         "description": "Design the detailed structure of code components, classes, and modules for the dashboard system following DDD principles. This includes designing domain entities, value objects, application services, repository interfaces, API controllers, and React components with their interfaces, props, and interactions.",
@@ -2403,8 +2403,8 @@
         "TASK-OPS-004",
         "TASK-SEC-001"
       ],
-      "file": "dashboard.task",
-      "filePath": ".tasks/dashboard.task",
+      "file": "dashboard.task.md",
+      "filePath": ".tasks/dashboard.task.md",
       "description": "Deploy the dashboard system to production environment. This includes building production artifacts, running deployment checks, deploying to staging and production, performing smoke tests, and setting up monitoring. Follow deployment best practices and ensure zero-downtime deployment where possible.",
       "sections": {
         "description": "Deploy the dashboard system to production environment. This includes building production artifacts, running deployment checks, deploying to staging and production, performing smoke tests, and setting up monitoring. Follow deployment best practices and ensure zero-downtime deployment where possible.",
@@ -2437,8 +2437,8 @@
       "relatedTasks": [
         "TASK-FEAT-014"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Conduct detailed requirements analysis specifically for the Calendar and Appointment Viewing functionality. While high-level requirements exist in DASHBOARD_REQUIREMENTS.md, this task creates a focused requirements document that expands on calendar-specific needs, user workflows, integration points, and technical specifications.",
       "sections": {
         "description": "Conduct detailed requirements analysis specifically for the Calendar and Appointment Viewing functionality. While high-level requirements exist in DASHBOARD_REQUIREMENTS.md, this task creates a focused requirements document that expands on calendar-specific needs, user workflows, integration points, and technical specifications.",
@@ -2474,8 +2474,8 @@
         "TASK-API-006",
         "TASK-FEAT-026"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Design the complete architecture for the Calendar and Appointment Viewing system including database schema extensions, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
       "sections": {
         "description": "Design the complete architecture for the Calendar and Appointment Viewing system including database schema extensions, API design, component structure, and data flow. Create architecture diagrams and design documents that will guide implementation.",
@@ -2509,8 +2509,8 @@
         "TASK-DB-007",
         "TASK-API-006"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Create detailed design documentation for Calendar and Appointment Viewing including domain layer design (entities, value objects), application layer design (use cases, DTOs), infrastructure layer design (repositories), and presentation layer design (React components, API controllers).",
       "sections": {
         "description": "Create detailed design documentation for Calendar and Appointment Viewing including domain layer design (entities, value objects), application layer design (use cases, DTOs), infrastructure layer design (repositories), and presentation layer design (React components, API controllers).",
@@ -2544,8 +2544,8 @@
       "relatedTasks": [
         "TASK-API-006"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Implement database schema extensions for Calendar and Appointment Viewing functionality. Extend the Appointment entity with additional fields if needed, create AppointmentStatusHistory entity for audit logging, create database migrations, and implement repository pattern for calendar data access.",
       "sections": {
         "description": "Implement database schema extensions for Calendar and Appointment Viewing functionality. Extend the Appointment entity with additional fields if needed, create AppointmentStatusHistory entity for audit logging, create database migrations, and implement repository pattern for calendar data access.",
@@ -2580,8 +2580,8 @@
         "TASK-SEC-002",
         "TASK-FEAT-026"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Implement RESTful API endpoints for Calendar and Appointment Viewing functionality. This includes calendar API endpoints (list appointments with filters, get appointment details), appointment management endpoints (create, update, delete, status update), availability checking, and export endpoints.",
       "sections": {
         "description": "Implement RESTful API endpoints for Calendar and Appointment Viewing functionality. This includes calendar API endpoints (list appointments with filters, get appointment details), appointment management endpoints (create, update, delete, status update), availability checking, and export endpoints.",
@@ -2614,8 +2614,8 @@
       "relatedTasks": [
         "TASK-FEAT-015"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Implement the frontend React components for Calendar and Appointment Viewing. This includes calendar views (day/week/month), appointment management UI (view, edit, create, delete), filtering and search functionality, and export functionality.",
       "sections": {
         "description": "Implement the frontend React components for Calendar and Appointment Viewing. This includes calendar views (day/week/month), appointment management UI (view, edit, create, delete), filtering and search functionality, and export functionality.",
@@ -2649,8 +2649,8 @@
       "relatedTasks": [
         "TASK-TEST-002"
       ],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Create comprehensive testing suite for Calendar and Appointment Viewing functionality including backend unit tests, backend integration tests, frontend component tests, E2E tests, and performance tests.",
       "sections": {
         "description": "Create comprehensive testing suite for Calendar and Appointment Viewing functionality including backend unit tests, backend integration tests, frontend component tests, E2E tests, and performance tests.",
@@ -2681,8 +2681,8 @@
         "TASK-FEAT-026"
       ],
       "relatedTasks": [],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Create comprehensive user-facing documentation for Calendar and Appointment Viewing functionality including user guides, feature tutorials, FAQ, and troubleshooting guide.",
       "sections": {
         "description": "Create comprehensive user-facing documentation for Calendar and Appointment Viewing functionality including user guides, feature tutorials, FAQ, and troubleshooting guide.",
@@ -2714,8 +2714,8 @@
         "TASK-OPS-007"
       ],
       "relatedTasks": [],
-      "file": "dashboad-calendar-and-appointment-viewing.task",
-      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task",
+      "file": "dashboad-calendar-and-appointment-viewing.task.md",
+      "filePath": ".tasks/dashboad-calendar-and-appointment-viewing.task.md",
       "description": "Deploy Calendar and Appointment Viewing functionality to production environment. This includes building production artifacts, deploying to staging and production, performing smoke tests, and verifying integration with booking system.",
       "sections": {
         "description": "Deploy Calendar and Appointment Viewing functionality to production environment. This includes building production artifacts, deploying to staging and production, performing smoke tests, and verifying integration with booking system.",
@@ -2750,8 +2750,8 @@
         "TASK-ARCH-004",
         "TASK-DOC-015"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Conduct comprehensive requirements analysis for the authorization system including user roles, permissions, access control requirements, security requirements, integration points with calendar, dashboard, and other modules.",
       "sections": {
         "description": "Conduct comprehensive requirements analysis for the authorization system including user roles, permissions, access control requirements, security requirements, integration points with calendar, dashboard, and other modules.",
@@ -2786,8 +2786,8 @@
         "TASK-DOC-015",
         "TASK-API-007"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Design the architecture for the authorization system following Domain-Driven Design (DDD) principles. This includes bounded context definition, domain model design, aggregate boundaries, repository interfaces, and integration architecture.",
       "sections": {
         "description": "Design the architecture for the authorization system following Domain-Driven Design (DDD) principles. This includes bounded context definition, domain model design, aggregate boundaries, repository interfaces, and integration architecture.",
@@ -2821,8 +2821,8 @@
         "TASK-DB-008",
         "TASK-API-007"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Create detailed design documentation for the authorization system including class/component design, interface definitions, data flow diagrams, API design, and integration design.",
       "sections": {
         "description": "Create detailed design documentation for the authorization system including class/component design, interface definitions, data flow diagrams, API design, and integration design.",
@@ -2857,8 +2857,8 @@
         "TASK-API-007",
         "TASK-API-009"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Design and implement the database schema for the authorization system including users, roles, permissions, sessions, and audit logs.",
       "sections": {
         "description": "Design and implement the database schema for the authorization system including users, roles, permissions, sessions, and audit logs.",
@@ -2893,8 +2893,8 @@
         "TASK-API-008",
         "TASK-API-009"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Implement the domain layer for the authorization system following DDD principles. This includes value objects, domain entities, domain services, and repository interfaces.",
       "sections": {
         "description": "Implement the domain layer for the authorization system following DDD principles. This includes value objects, domain entities, domain services, and repository interfaces.",
@@ -2928,8 +2928,8 @@
         "TASK-API-009",
         "TASK-SEC-004"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Implement the application layer for the authorization system including use cases, DTOs, commands, queries, and mappers.",
       "sections": {
         "description": "Implement the application layer for the authorization system including use cases, DTOs, commands, queries, and mappers.",
@@ -2963,8 +2963,8 @@
       "relatedTasks": [
         "TASK-SEC-004"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Implement the infrastructure layer for the authorization system including repository implementations, database entities, external service integrations, and mappers.",
       "sections": {
         "description": "Implement the infrastructure layer for the authorization system including repository implementations, database entities, external service integrations, and mappers.",
@@ -2998,8 +2998,8 @@
         "TASK-SEC-005",
         "TASK-SEC-006"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Implement the presentation layer for the authorization system including API controllers, routes, middleware, request/response DTOs, and validation.",
       "sections": {
         "description": "Implement the presentation layer for the authorization system including API controllers, routes, middleware, request/response DTOs, and validation.",
@@ -3033,8 +3033,8 @@
       "relatedTasks": [
         "TASK-SEC-006"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Integrate the authorization system with the Calendar module to enforce role-based access control for calendar views, appointment management, and data filtering.",
       "sections": {
         "description": "Integrate the authorization system with the Calendar module to enforce role-based access control for calendar views, appointment management, and data filtering.",
@@ -3068,8 +3068,8 @@
       "relatedTasks": [
         "TASK-SEC-005"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Integrate the authorization system with all Dashboard modules (Metrics, Promotions, Content Editor, Gallery, Employee Management) to enforce role-based access control.",
       "sections": {
         "description": "Integrate the authorization system with all Dashboard modules (Metrics, Promotions, Content Editor, Gallery, Employee Management) to enforce role-based access control.",
@@ -3103,8 +3103,8 @@
       "relatedTasks": [
         "TASK-DOC-016"
       ],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Create comprehensive testing suite for the authorization system including unit tests, integration tests, E2E tests, security tests, and performance tests.",
       "sections": {
         "description": "Create comprehensive testing suite for the authorization system including unit tests, integration tests, E2E tests, security tests, and performance tests.",
@@ -3135,8 +3135,8 @@
         "TASK-TEST-008"
       ],
       "relatedTasks": [],
-      "file": "authorization-system.task",
-      "filePath": ".tasks/authorization-system.task",
+      "file": "authorization-system.task.md",
+      "filePath": ".tasks/authorization-system.task.md",
       "description": "Create comprehensive documentation for the authorization system including API documentation, developer guides, user guides, security documentation, and integration guides.",
       "sections": {
         "description": "Create comprehensive documentation for the authorization system including API documentation, developer guides, user guides, security documentation, and integration guides.",

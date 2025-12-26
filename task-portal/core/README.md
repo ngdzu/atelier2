@@ -303,7 +303,7 @@ export class MongoProvider implements IDataProvider {
 ```typescript
 interface JsonFileProviderConfig {
   registryPath: string;        // Path to TASK_REGISTRY.json (required)
-  taskFilesPath?: string;      // Optional: Path to .task files directory
+  taskFilesPath?: string;      // Optional: Path to .task.md files directory
   cacheTTL?: number;           // Cache TTL in ms (default: 5000)
 }
 ```

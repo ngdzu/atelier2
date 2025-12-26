@@ -4,7 +4,7 @@ A TypeScript parser for `.task` Markdown files that generates a structured JSON 
 
 ## Features
 
-- 📝 Parse `.task` Markdown files
+- 📝 Parse `.task.md` Markdown files
 - ✅ Zod schema validation
 - 🔍 Detect duplicate IDs and circular dependencies
 - 📊 Progress calculation from checklists
@@ -24,7 +24,7 @@ npm run build
 
 ### CLI Commands
 
-**Sync all .task files:**
+**Sync all .task.md files:**
 
 ```bash
 npm run dev src/cli.ts sync .tasks TASK_REGISTRY.json
@@ -59,7 +59,7 @@ task-parser stats TASK_REGISTRY.json
 ```typescript
 import { parseTaskFiles, validateTaskRegistry } from '@task-portal/parser';
 
-// Parse all .task files
+// Parse all .task.md files
 const registry = await parseTaskFiles('.tasks');
 
 // Validate
@@ -267,8 +267,8 @@ The generated `TASK_REGISTRY.json` contains:
       "actualTime": "6 hours",
       "dependencies": [],
       "relatedTasks": [],
-      "file": "portal.task",
-      "filePath": ".tasks/portal.task",
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
       "description": "Plan the task portal system...",
       "sections": {
         "requirements": "...",

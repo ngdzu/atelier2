@@ -19,10 +19,10 @@ export class FileWatcher {
             return;
         }
 
-        // Watch .task files
+        // Watch .task.md and legacy .task files
         const taskFilesPattern = new vscode.RelativePattern(
             workspaceFolder,
-            '.tasks/**/*.task'
+            '.tasks/**/*.task*'
         );
 
         // Watch TASK_REGISTRY.json
@@ -52,7 +52,7 @@ export class FileWatcher {
             this.outputChannel.appendLine('TASK_REGISTRY.json updated externally, refreshed cache');
         });
 
-        this.outputChannel.appendLine('File watcher started for .task files');
+        this.outputChannel.appendLine('File watcher started for .task.md/.task files');
     }
 
     stop(): void {
@@ -79,7 +79,7 @@ export class FileWatcher {
     }
 
     private async onTaskFileChanged(): Promise<void> {
-        this.outputChannel.appendLine('.task file changed, triggering auto-sync...');
+        this.outputChannel.appendLine('Task file changed, triggering auto-sync...');
 
         try {
             // Notify user

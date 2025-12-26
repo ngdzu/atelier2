@@ -1,6 +1,6 @@
 ---
-description: Guidelines for writing and managing tasks in .task files
-globs: *.task
+description: Guidelines for writing and managing tasks in .task.md files
+globs: *.task.md
 alwaysApply: false
 ---
 
@@ -8,17 +8,17 @@ alwaysApply: false
 
 ## Overview
 
-Tasks are units of work that describe what needs to be done to accomplish a specific goal. Tasks are documented in `.task` files (Markdown format) and serve as a clear record of work items, their requirements, and completion criteria.
+Tasks are units of work that describe what needs to be done to accomplish a specific goal. Tasks are documented in `.task.md` files (Markdown format) and serve as a clear record of work items, their requirements, and completion criteria.
 
 ## Task File Format
 
-Tasks are written in Markdown files with the `.task` extension. Each file can contain one or more tasks, typically organized by feature, sprint, or category.
+Tasks are written in Markdown files with the `.task.md` extension. Each file can contain one or more tasks, typically organized by feature, sprint, or category.
 
 ### File Naming Convention
 
-- Use descriptive names: `booking-flow.task`, `auth-service.task`, `deployment.task`
-- Use kebab-case: `user-authentication.task`
-- Group related tasks: `api-endpoints.task`
+- Use descriptive names: `booking-flow.task.md`, `auth-service.task.md`, `deployment.task.md`
+- Use kebab-case: `user-authentication.task.md`
+- Group related tasks: `api-endpoints.task.md`
 
 ## Task Structure
 
@@ -364,11 +364,11 @@ When creating a task:
 ### 2. Task Assignment
 
 When starting work:
-1. Update status to IN_PROGRESS in the .task file
+1. Update status to IN_PROGRESS in the .task.md file
 2. Assign to team member
 3. Update "Updated" date
 4. Review dependencies are complete
-5. **Update TASK_REGISTRY.md** to reflect the new status (IN_PROGRESS)
+5. **Update TASK_REGISTRY.json** to reflect the new status (IN_PROGRESS)
 
 ### 3. Task Completion
 
@@ -376,28 +376,28 @@ Before marking complete:
 1. Complete all DoD checklist items
 2. Run all verification steps
 3. Update documentation
-4. Update status to COMPLETED in the .task file
+4. Update status to COMPLETED in the .task.md file
 5. Add completion date and notes
 6. Link to related PRs or commits
-7. **Update TASK_REGISTRY.md** to reflect COMPLETED status
+7. **Update TASK_REGISTRY.json** to reflect COMPLETED status
 
 ### 4. Task Blocking
 
 If blocked:
-1. Update status to BLOCKED in the .task file
+1. Update status to BLOCKED in the .task.md file
 2. Document blocking issue clearly
 3. Update dependencies if needed
 4. Notify team/stakeholders
-5. **Update TASK_REGISTRY.md** to reflect BLOCKED status
+5. **Update TASK_REGISTRY.json** to reflect BLOCKED status
 
 ### 5. Task Cancellation
 
 If cancelling:
-1. Update status to CANCELLED in the .task file
+1. Update status to CANCELLED in the .task.md file
 2. Document reason for cancellation
 3. Update any dependent tasks
 4. Archive task file if needed
-5. **Update TASK_REGISTRY.md** to reflect CANCELLED status (keep the task number reserved - do not reuse)
+5. **Update TASK_REGISTRY.json** to reflect CANCELLED status (keep the task number reserved - do not reuse)
 
 ## Examples
 
@@ -607,28 +607,29 @@ Before marking a task as complete, review:
 
 ### Regular Updates
 
-- Update task status regularly in both .task file and TASK_REGISTRY.md
+- Update task status regularly in both .task.md file and TASK_REGISTRY.json
 - Keep "Updated" date current
 - Add notes when blockers are resolved
 - Update dependencies as they complete
-- **Always sync TASK_REGISTRY.md** with .task file changes
+- **Always sync TASK_REGISTRY.json** with .task.md file changes
 
-### TASK_REGISTRY.md Synchronization
+### TASK_REGISTRY.json Synchronization
 
-The `.tasks/TASK_REGISTRY.md` file is the central tracking system for all tasks. It must be updated whenever:
+The `.tasks/TASK_REGISTRY.json` file is the central tracking system for all tasks. It must be updated whenever:
 
 - **Creating a new task**: Check for next available number, then update registry with new task entry
-- **Changing task status**: Update status in the "All Tasks Index" section
+- **Changing task status**: Update status in the tasks array
 - **Completing a task**: Mark as COMPLETED in the registry
 - **Cancelling a task**: Mark as CANCELLED (never reuse the task number)
 
-**Benefits of keeping TASK_REGISTRY.md updated:**
+**Benefits of keeping TASK_REGISTRY.json updated:**
 - Quick reference for next available task number in each category
 - Overview of all tasks and their current status across the project
 - Prevents task number conflicts and duplicates
 - Provides a single source of truth for task tracking
+- Machine-readable format for automation and tooling
 
-**Important:** Never skip updating TASK_REGISTRY.md. It only takes a moment and prevents confusion later.
+**Important:** Never skip updating TASK_REGISTRY.json. It only takes a moment and prevents confusion later.
 
 ### Task File Organization
 
@@ -639,28 +640,39 @@ The `.tasks/TASK_REGISTRY.md` file is the central tracking system for all tasks.
 
 ### Task Tracking
 
-Use the centralized `.tasks/TASK_REGISTRY.md` file for tracking all tasks:
-- **Task numbering reference**: Shows next available number for each category
-- **All tasks index**: Complete list of tasks organized by category
-- **Quick reference**: Overview of task counts and status
+Use the centralized `.tasks/TASK_REGISTRY.json` file for tracking all tasks:
+- **Task numbering reference**: Shows next available number for each category in the `categories` object
+- **All tasks index**: Complete list of tasks in the `tasks` array
+- **Quick reference**: Overview of task counts and status in the `metadata` object
 
-See `.tasks/TASK_REGISTRY.md` for the current task tracking system.
+See `.tasks/TASK_REGISTRY.json` for the current task tracking system.
 
 Example structure:
-```markdown
-# Task Registry
-
-## Task Numbering Reference
-| Category | Code | Last Number | Next Available |
-| -------- | ---- | ----------- | -------------- |
-| DevOps   | OPS  | 003         | 004            |
-| Feature  | FEAT | 001         | 002            |
-
-## All Tasks Index
-### DevOps (OPS)
-| Task ID      | Title                 | Status      | File       | Created    |
-| ------------ | --------------------- | ----------- | ---------- | ---------- |
-| TASK-OPS-001 | Docker Infrastructure | IN_PROGRESS | infra.task | 2025-01-20 |
+```json
+{
+  "metadata": {
+    "version": "1.0.0",
+    "totalTasks": 94,
+    "lastUpdated": "2025-12-26T07:25:56.000Z"
+  },
+  "categories": {
+    "OPS": {
+      "name": "DevOps",
+      "code": "OPS",
+      "lastNumber": 3,
+      "nextAvailable": 4
+    }
+  },
+  "tasks": [
+    {
+      "id": "TASK-OPS-001",
+      "title": "Docker Infrastructure",
+      "status": "IN_PROGRESS",
+      "file": "infra.task.md",
+      "created": "2025-01-20"
+    }
+  ]
+}
 ```
 
 ## Integration with Development Workflow

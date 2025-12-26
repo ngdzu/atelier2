@@ -1,7 +1,7 @@
 {
     "name": "task-portal",
     "displayName": "Task Portal",
-    "description": "Integrated task tracking and management portal for .task files",
+    "description": "Integrated task tracking and management portal for .task.md/.task files",
     "version": "0.1.0",
     "publisher": "task-portal",
     "license": "MIT",
@@ -13,7 +13,8 @@
     ],
     "activationEvents": [
         "onStartupFinished",
-        "workspaceContains:.tasks/*.task"
+        "workspaceContains:.tasks/*.task",
+        "workspaceContains:.tasks/*.task.md"
     ],
     "main": "./dist/extension.js",
     "contributes": {
@@ -44,7 +45,8 @@
                 {
                     "type": "webview",
                     "id": "taskPortal.portalView",
-                    "name": "Task Portal"
+                    "name": "Task Portal",
+                    "icon": "resources/icon.svg"
                 }
             ]
         }

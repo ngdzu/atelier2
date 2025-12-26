@@ -119,7 +119,7 @@ program
         // Initial sync
         await sync();
 
-        const watcher = chokidar.watch(path.join(tasksDir, '*.task'), {
+        const watcher = chokidar.watch([path.join(tasksDir, '*.task.md'), path.join(tasksDir, '*.task')], {
             persistent: true,
             ignoreInitial: true,
         });

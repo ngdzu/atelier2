@@ -122,8 +122,8 @@
             "relatedTasks": [
                 "TASK-DOC-001"
             ],
-            "file": "features.task",
-            "filePath": ".tasks/features.task",
+            "file": "features.task.md",
+            "filePath": ".tasks/features.task.md",
             "tags": [
                 "authentication",
                 "security"
@@ -155,8 +155,8 @@
                 "TASK-FEAT-001"
             ],
             "relatedTasks": [],
-            "file": "features.task",
-            "filePath": ".tasks/features.task",
+            "file": "features.task.md",
+            "filePath": ".tasks/features.task.md",
             "tags": [
                 "upload",
                 "storage"
@@ -186,8 +186,8 @@
             "estimatedTime": "4 hours",
             "dependencies": [],
             "relatedTasks": [],
-            "file": "bugs.task",
-            "filePath": ".tasks/bugs.task",
+            "file": "bugs.task.md",
+            "filePath": ".tasks/bugs.task.md",
             "tags": [
                 "websocket",
                 "memory",
@@ -222,8 +222,8 @@
             "relatedTasks": [
                 "TASK-FEAT-002"
             ],
-            "file": "documentation.task",
-            "filePath": ".tasks/documentation.task",
+            "file": "documentation.task.md",
+            "filePath": ".tasks/documentation.task.md",
             "tags": [
                 "docs",
                 "api"

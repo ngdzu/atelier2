@@ -41,8 +41,8 @@
          "priority": "Medium",
          "created": "2025-12-22",
          "updated": "2025-12-22",
-         "file": "sample.task",
-         "filePath": ".tasks/sample.task",
+         "file": "sample.task.md",
+         "filePath": ".tasks/sample.task.md",
          "description": "Demo task for the portal."
        }
      ]
@@ -67,13 +67,13 @@
 - The extension activates on startup; if your workspace lacks `.tasks/` content, create the folder and `TASK_REGISTRY.json` as above.
 # Task Portal Extension
 
-A VS Code extension that brings task management directly into your development environment. Track, filter, and manage tasks from your .task files without leaving the editor.
+A VS Code extension that brings task management directly into your development environment. Track, filter, and manage tasks from your .task.md files without leaving the editor.
 
 ## Features
 
-- **Task Sync**: Automatically sync .task files with a machine-readable JSON registry
+- **Task Sync**: Automatically sync .task.md files with a machine-readable JSON registry
 - **Manual Sync**: Run `Task Portal: Sync Tasks` command to update the task registry
-- **File Watching**: Auto-detect changes to .task files and prompt for sync
+- **File Watching**: Auto-detect changes to .task.md files and prompt for sync
 - **Task Quick Access**: Open task files directly from the portal
 - **Status Tracking**: Monitor task status (PENDING, IN_PROGRESS, BLOCKED, COMPLETED, CANCELLED)
 - **Category Management**: Organize tasks by category (FEAT, BUG, OPS, etc.)
@@ -84,7 +84,7 @@ Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) and type:
 
 | Command                       | Description                                               |
 | ----------------------------- | --------------------------------------------------------- |
-| `Task Portal: Sync Tasks`     | Manually sync .task files and generate TASK_REGISTRY.json |
+| `Task Portal: Sync Tasks`     | Manually sync .task.md files and generate TASK_REGISTRY.json |
 | `Task Portal: Refresh`        | Refresh the task provider cache                           |
 | `Task Portal: Open Portal`    | Open the task portal (UI coming soon)                     |
 | `Task Portal: Open Task File` | Open a specific task file in the editor                   |
@@ -100,7 +100,7 @@ Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) and type:
 ## Getting Started
 
 1. Ensure your workspace has a `.tasks` directory with `.task` files
-2. The extension activates automatically when it detects .task files
+2. The extension activates automatically when it detects .task.md files
 3. Run `Task Portal: Sync Tasks` to generate the initial TASK_REGISTRY.json
 4. Use the commands above to work with your tasks
 
@@ -123,7 +123,7 @@ Configure task sync behavior in VS Code settings:
 - The file should be created at `.tasks/TASK_REGISTRY.json`
 
 ### Tasks not showing
-- Check that your .task files follow the correct format
+- Check that your .task.md files follow the correct format
 - Run `Task Portal: Sync Tasks` to regenerate the registry
 - Check the "Task Portal" output channel for error messages
 
@@ -155,7 +155,7 @@ npm run publish     # Publish to VS Code Marketplace
 ```
 extension.ts         - Entry point, command handlers
 ├── taskProvider.ts  - Loads and caches TASK_REGISTRY.json
-├── fileWatcher.ts   - Watches .task files, triggers sync
+├── fileWatcher.ts   - Watches .task.md files, triggers sync
 └── (UI coming)      - Webview component (planned)
 ```
 

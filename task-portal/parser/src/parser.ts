@@ -33,7 +33,7 @@ export async function parseTaskFiles(tasksDir: string): Promise<TaskRegistry> {
             const f = t.file.toLowerCase();
             let s = 0;
             if (f.includes('portal-phase')) s += 3;
-            else if (f.endsWith('portal.task')) s += 1;
+            else if (f.endsWith('portal.task.md') || f.endsWith('portal.task')) s += 1;
             else s += 2;
 
             // Prefer newer updated date if available
@@ -67,17 +67,17 @@ export async function parseTaskFiles(tasksDir: string): Promise<TaskRegistry> {
 }
 
 /**
- * Find all .task files in directory
+ * Find all .task.md files in directory
  */
 async function findTaskFiles(dir: string): Promise<string[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     return entries
-        .filter(entry => entry.isFile() && entry.name.endsWith('.task'))
+        .filter(entry => entry.isFile() && (entry.name.endsWith('.task.md') || entry.name.endsWith('.task')))
         .map(entry => entry.name);
 }
 
 /**
- * Parse a single .task file and extract all tasks
+ * Parse a single .task.md file and extract all tasks
  */
 export async function parseTaskFile(
     content: string,
