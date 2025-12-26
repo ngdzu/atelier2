@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0.0",
     "lastUpdated": "2025-12-26T07:25:56.000Z",
-    "totalTasks": 88,
+    "totalTasks": 94,
     "lastSync": "2025-12-26T07:25:56.000Z"
   },
   "categories": {
@@ -10,8 +10,8 @@
       "name": "Feature",
       "code": "FEAT",
       "description": "New features or major functionality",
-      "lastNumber": 26,
-      "nextAvailable": 27
+      "lastNumber": 29,
+      "nextAvailable": 30
     },
     "BUG": {
       "name": "Bug Fix",
@@ -45,8 +45,8 @@
       "name": "API",
       "code": "API",
       "description": "Backend API development",
-      "lastNumber": 9,
-      "nextAvailable": 10
+      "lastNumber": 10,
+      "nextAvailable": 11
     },
     "DB": {
       "name": "Database",
@@ -59,15 +59,15 @@
       "name": "Testing",
       "code": "TEST",
       "description": "Unit, integration, or E2E tests",
-      "lastNumber": 8,
-      "nextAvailable": 9
+      "lastNumber": 9,
+      "nextAvailable": 10
     },
     "DOC": {
       "name": "Documentation",
       "code": "DOC",
       "description": "Documentation updates",
-      "lastNumber": 16,
-      "nextAvailable": 17
+      "lastNumber": 17,
+      "nextAvailable": 18
     },
     "OPS": {
       "name": "DevOps",
@@ -3145,6 +3145,217 @@
         "verificationSteps": "Documentation review, user testing",
         "acceptanceCriteria": "Complete documentation exists, all documentation is accurate and up-to-date, examples work correctly, documentation is well-organized",
         "technicalDetails": "Files to Create: doc/authorization/AUTHORIZATION_API.md, doc/authorization/AUTHORIZATION_DEVELOPER_GUIDE.md, doc/authorization/AUTHORIZATION_USER_GUIDE.md, doc/authorization/AUTHORIZATION_SECURITY.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-FEAT-028",
+      "category": "FEAT",
+      "number": 28,
+      "title": "Design AI Task Execution Architecture",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "6-8 hours",
+      "dependencies": [],
+      "relatedTasks": [
+        "TASK-FEAT-029",
+        "TASK-FEAT-027",
+        "TASK-API-010"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "Design the architecture for AI-powered task execution using GitHub Copilot integration with the Task Portal VS Code extension. Evaluate Copilot API options (Chat API vs Language Model API vs Chat Participants), design prompt construction from task context, and plan execution workflow.",
+      "sections": {
+        "description": "Design the architecture for AI-powered task execution using GitHub Copilot integration with the Task Portal VS Code extension. Evaluate Copilot API options (Chat API vs Language Model API vs Chat Participants), design prompt construction from task context, and plan execution workflow.",
+        "requirements": "Architecture diagram for both options (GitHub Copilot and Google Gemini), Copilot Chat API vs Language Model API comparison, Prompt engineering strategy, Context gathering specification, Safety mechanisms (git branches, user approval flow), Technical specification document",
+        "definitionOfDone": "Architecture decision documented (GitHub Copilot recommended), VS Code extension integration approach finalized, Prompt engineering strategy defined, Context gathering design complete, Safety mechanisms specified, Technical specification document created",
+        "verificationSteps": "Architecture review, technical specification review, feasibility validation",
+        "acceptanceCriteria": "Clear architecture diagrams exist, API integration approach selected and documented, Prompt strategy well-defined, Safety mechanisms comprehensive, Documentation complete and approved",
+        "technicalDetails": "Key Decisions: Approach - VS Code extension using GitHub Copilot Chat API [Recommended], AI Provider - GitHub Copilot (already paid) with Gemini as free fallback, Execution - Extension triggers Copilot chat with auto-generated prompt from task, Safety - Git feature branches, user approval before applying changes, VS Code native undo. VS Code Extension Integration: Use vscode.chat API or vscode.lm (Language Model API), Register chat participant @taskportal-executor, Auto-populate chat with task context, Parse Copilot responses for code/file changes, Apply changes through VS Code edit APIs"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-010",
+      "category": "API",
+      "number": 10,
+      "title": "Build Backend Service for AI Task Execution (OPTIONAL)",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "8-12 hours",
+      "dependencies": [
+        "TASK-FEAT-028"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-027",
+        "TASK-FEAT-029"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "(OPTIONAL - Only needed if using Gemini API instead of GitHub Copilot) Build lightweight Node.js/Express backend service for Gemini API integration. Handles task execution requests, manages API calls to Gemini, and provides progress updates to VS Code extension.",
+      "sections": {
+        "description": "(OPTIONAL - Only needed if using Gemini API instead of GitHub Copilot) Build lightweight Node.js/Express backend service for Gemini API integration. Handles task execution requests, manages API calls to Gemini, and provides progress updates to VS Code extension.",
+        "requirements": "REST API endpoints (execute, status, cancel, logs), Server-Sent Events (SSE) for progress streaming, Gemini API integration with free tier, Rate limiting for free tier, Lightweight backend service",
+        "definitionOfDone": "Backend service created with Express + TypeScript, Gemini API integration functional, SSE streaming implemented, Rate limiting configured, Service can run locally or deployed (optional)",
+        "verificationSteps": "API endpoint testing, Gemini integration testing, SSE streaming validation, Rate limit verification",
+        "acceptanceCriteria": "All endpoints functional, Gemini API calls working, Progress streaming real-time, Rate limits respected, Service deployable",
+        "technicalDetails": "Stack: Express + TypeScript, @google/generative-ai for Gemini, Simple queue (in-memory or BullMQ), Minimal infrastructure. Optional: Deploy to Vercel/Railway or run locally"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 5,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-FEAT-027",
+      "category": "FEAT",
+      "number": 27,
+      "title": "Implement AI Agent Coordinator in VS Code Extension",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "16-20 hours",
+      "dependencies": [
+        "TASK-FEAT-028",
+        "TASK-FEAT-029"
+      ],
+      "relatedTasks": [
+        "TASK-API-010",
+        "TASK-TEST-009"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "Implement AI agent coordinator within the Task Portal VS Code extension. Handles context gathering, prompt construction, GitHub Copilot interaction, response parsing, and action execution with user approval.",
+      "sections": {
+        "description": "Implement AI agent coordinator within the Task Portal VS Code extension. Handles context gathering, prompt construction, GitHub Copilot interaction, response parsing, and action execution with user approval.",
+        "requirements": "Context gatherer functional, Prompt constructor optimized for Copilot, Copilot API integration (Chat or Language Model), Response parser extracting actions, User approval flow with diff preview, Action executor using VS Code APIs, DoD validator, Git workflow with feature branches",
+        "definitionOfDone": "Context gathering collects all task details, Prompt construction generates comprehensive prompts, Copilot integration sends/receives responses, Response parsing extracts code changes accurately, User approval shows diffs and requires confirmation, Actions execute via VS Code workspace API, DoD validation checks completion criteria, Git creates feature branches and commits with task reference",
+        "verificationSteps": "Context gathering test, Prompt quality review, Copilot integration test, Response parsing validation, User approval flow test, Action execution test, DoD validation test, Git workflow test",
+        "acceptanceCriteria": "All components functional and integrated, User approval flow smooth, Copilot responses parsed correctly, Actions applied accurately, Git safety mechanisms working, Error handling comprehensive",
+        "technicalDetails": "GitHub Copilot Integration Options: Option A - Chat Participants API with vscode.chat.registerChatParticipant, Option B - Language Model API with vscode.lm.selectChatModels, Option C - Chat View API with workbench.action.chat.open. Context Gathering: Task details from TASK_REGISTRY.json, Related .task files for dependencies, Existing files mentioned in task, Project structure and conventions, Definition of Done criteria, Test requirements. Action Execution (with User Approval): createFile - Use VS Code workspace API, modifyFile - Show diff apply edit, deleteFile - Confirm and delete, runCommand - Execute in integrated terminal, runTests - Trigger test runner. Safety Layer: Git feature branch auto-created, All changes shown in diff view before apply, User approval required for each action, Command execution in terminal (user visible), VS Code native undo/redo, Rollback via git reset"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 8,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-FEAT-029",
+      "category": "FEAT",
+      "number": 29,
+      "title": "Add AI Execution Button to Task Portal Extension",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "10-14 hours",
+      "dependencies": [
+        "TASK-FEAT-028"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-027",
+        "TASK-API-010"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "Enhance Task Portal VS Code extension with 'Execute with AI' button in tree view and webview. Clicking button triggers AI execution workflow: gathers context, opens Copilot chat with pre-filled prompt, and coordinates action execution.",
+      "sections": {
+        "description": "Enhance Task Portal VS Code extension with 'Execute with AI' button in tree view and webview. Clicking button triggers AI execution workflow: gathers context, opens Copilot chat with pre-filled prompt, and coordinates action execution.",
+        "requirements": "Execute button in tree view and webview, Context gathering and prompt construction, Copilot chat integration, Progress tracking UI, User approval flow for changes, Diff preview before apply, Configuration settings, Git commit workflow",
+        "definitionOfDone": "Tree view has Execute with AI context menu and inline button, Webview has Execute button with provider selection, Execution flow implemented (context → prompt → Copilot → approval → apply), Progress tracking via notifications and output channel, Configuration settings functional, Copilot chat integration working, Git workflow automated",
+        "verificationSteps": "Button visibility test, Execution flow test, Progress tracking test, Copilot integration test, User approval test, Configuration test, Git workflow test",
+        "acceptanceCriteria": "Buttons appear correctly and are enabled/disabled appropriately, Execution flow works end-to-end, Progress updates are real-time, User can approve/reject changes, Configuration persists, Copilot chat opens with prompt, Git commits include task reference",
+        "technicalDetails": "Extension UI Components: Tree View Execute Button - Add context menu item Execute with AI for PENDING tasks, Add inline button (⚡ icon) next to each task, Disabled if dependencies incomplete, Show progress indicator during execution. Webview Enhancements - Add Execute with AI button to task detail view, Show AI provider selection (Copilot/Gemini), Display execution progress panel, Real-time status updates. Configuration Settings: taskPortal.aiExecution.provider (copilot or gemini), taskPortal.aiExecution.autoSendPrompt (true or false), taskPortal.aiExecution.requireApproval (true or false), taskPortal.aiExecution.autoCommit (true or false), taskPortal.aiExecution.geminiApiKey (optional). Copilot Chat Integration: Register chat participant @taskportal, Auto-populate chat with constructed prompt, Parse Copilot responses, Extract code blocks and file changes, Apply via workspace edit API"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 8,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-TEST-009",
+      "category": "TEST",
+      "number": 9,
+      "title": "Test AI Task Execution System",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "6-8 hours",
+      "dependencies": [
+        "TASK-FEAT-027",
+        "TASK-FEAT-029"
+      ],
+      "relatedTasks": [
+        "TASK-DOC-017"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "Comprehensively test GitHub Copilot integration with simple/medium/complex tasks. Document success rates, execution times, error scenarios. Test prompt engineering effectiveness, user approval flow, and git safety mechanisms.",
+      "sections": {
+        "description": "Comprehensively test GitHub Copilot integration with simple/medium/complex tasks. Document success rates, execution times, error scenarios. Test prompt engineering effectiveness, user approval flow, and git safety mechanisms.",
+        "requirements": "Test results documented, Success rate by complexity and provider (Copilot/Gemini), Prompt engineering recommendations, User approval flow validation, Error scenarios tested, Security verified, Comparison: Copilot vs Gemini (if both implemented), Improvement backlog created",
+        "definitionOfDone": "All test scenarios executed, Success rates documented for simple (>80%), medium (>60%), complex (>40%) tasks, Prompt engineering effectiveness evaluated, User experience validated, Error handling verified, Security mechanisms tested, Performance acceptable, Test report created with recommendations",
+        "verificationSteps": "Simple task tests, Medium task tests, Complex task tests, Copilot integration tests, User experience tests, Error handling tests, Security tests, Gemini comparison (if applicable)",
+        "acceptanceCriteria": "Test coverage complete, Success rates meet targets, User approval flow smooth, Error recovery functional, Security validated, Git rollback works, Performance acceptable, Recommendations documented",
+        "technicalDetails": "Test Task Suite - Simple (Target >80% success with Copilot): Create new TypeScript file, Modify existing function, Write README documentation, Add unit test for existing function. Medium (Target >60% success): Implement React component with props, Create Express API endpoint with validation, Refactor code to use new pattern, Add integration test. Complex (Target >40% success): Build feature with multiple files (component + API + tests), Database schema migration, Full dashboard widget with state management. Test Scenarios - Copilot Integration: Prompt construction quality, Context gathering completeness, Response parsing accuracy, Code suggestion quality. User Experience: Button click → chat opens with prompt, Diff preview shows changes correctly, Approval flow works smoothly, Commit message includes task ID. Error Handling: Missing dependencies detected, Invalid requirements → helpful error, Copilot API timeout → graceful fallback, User cancellation works, Git rollback functional. Security: No destructive commands executed without approval, Workspace path validation, Git branch isolation"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 8,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-017",
+      "category": "DOC",
+      "number": 17,
+      "title": "Document AI Task Execution Feature",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "assignee": "unassigned",
+      "created": "2025-12-26",
+      "updated": "2025-12-26",
+      "estimatedTime": "4-6 hours",
+      "dependencies": [
+        "TASK-TEST-009"
+      ],
+      "relatedTasks": [
+        "TASK-FEAT-028",
+        "TASK-FEAT-027",
+        "TASK-FEAT-029"
+      ],
+      "file": "portal.task.md",
+      "filePath": ".tasks/portal.task.md",
+      "description": "Create user guide, developer guide, extension API usage, troubleshooting guide, and best practices for AI task execution feature using GitHub Copilot and Task Portal extension.",
+      "sections": {
+        "description": "Create user guide, developer guide, extension API usage, troubleshooting guide, and best practices for AI task execution feature using GitHub Copilot and Task Portal extension.",
+        "requirements": "Complete user documentation, Developer guide for extending, VS Code API usage examples, Prompt engineering guide, Troubleshooting FAQ, Video walkthrough (optional), Example tasks optimized for AI execution",
+        "definitionOfDone": "User guide complete with prerequisites and usage instructions, Developer guide documents architecture and APIs, Extension configuration documented, Prompt engineering best practices written, When to use AI vs manual guidance provided, Troubleshooting FAQ created, Examples included, Documentation published",
+        "verificationSteps": "Documentation review, User testing with docs, Developer feedback, Example validation, FAQ completeness check",
+        "acceptanceCriteria": "Documentation comprehensive and accurate, Examples work correctly, Troubleshooting covers common issues, Prompt engineering guide actionable, Configuration well-documented, Published and accessible",
+        "technicalDetails": "Documentation Sections - User Guide: Prerequisites (GitHub Copilot subscription, VS Code, Task Portal extension), How to execute task with AI, Understanding the execution flow, Reviewing and approving changes, Using Gemini as alternative (if implemented), Troubleshooting common issues. Developer Guide: System architecture (Extension → Copilot Chat API), Context gathering implementation, Prompt engineering strategies, VS Code Chat API / Language Model API usage, Response parsing logic, Action execution via workspace API, Git integration patterns. Extension Configuration: Settings reference, AI provider selection (Copilot/Gemini), Auto-send vs manual review, Approval requirements, Auto-commit settings. Prompt Engineering Best Practices: Writing AI-friendly task descriptions, Optimal Definition of Done format, Including sufficient context, Specifying test requirements, Examples of good vs bad task specs. When to Use AI vs Manual: Best for - Simple file creation, boilerplate code, documentation; Use caution - Complex refactoring, architecture changes; Manual recommended - Security-critical code, production configs"
       },
       "progress": {
         "completed": 0,
