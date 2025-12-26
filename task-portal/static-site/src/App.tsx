@@ -31,16 +31,7 @@ function App() {
                 setTasks(loadedTasks);
             })
             .catch(err => {
-                console.error('Failed to load tasks:', err);
-                // Try alternative path for development
-                fetch('../../.tasks/TASK_REGISTRY.json')
-                    .then(res => res.json())
-                    .then(data => {
-                        const loadedTasks: Task[] = data.tasks || [];
-                        console.log('Loaded tasks from fallback:', loadedTasks.length);
-                        setTasks(loadedTasks);
-                    })
-                    .catch(err2 => console.error('Fallback also failed:', err2));
+                console.error('Failed to load tasks from TASK_REGISTRY.json:', err);
             });
     }, []);
 
