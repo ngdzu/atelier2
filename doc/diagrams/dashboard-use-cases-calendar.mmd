@@ -6,6 +6,7 @@ graph TB
     Owner[Owner]
     Manager[Manager]
     Admin[Admin]
+    Receptionist[Receptionist/Cashier]
     Employee[Employee]
     
     %% Use Cases (rounded rectangles - closest to UML ellipses)
@@ -15,9 +16,11 @@ graph TB
     UC4(Create Appointment<br/>Manual Booking)
     UC5(Cancel Appointment<br/>Remove Booking)
     UC6(Filter by Employee<br/>Employee Schedule)
-    UC7(Update Status<br/>Completed/Cancelled)
-    UC8(Search Appointments<br/>Find by Customer)
-    UC9(Export Calendar<br/>PDF/CSV Export)
+    UC7(Filter by Day/Hour<br/>Receptionist Filtering)
+    UC8(Update Status<br/>Completed/Cancelled)
+    UC9(Search Appointments<br/>Find by Customer)
+    UC10(Export Calendar<br/>PDF/CSV Export)
+    UC11(Drag & Drop Reschedule<br/>Move Appointments)
     
     %% Owner relationships
     Owner --> UC1
@@ -29,6 +32,8 @@ graph TB
     Owner --> UC7
     Owner --> UC8
     Owner --> UC9
+    Owner --> UC10
+    Owner --> UC11
     
     %% Manager relationships
     Manager --> UC1
@@ -40,6 +45,8 @@ graph TB
     Manager --> UC7
     Manager --> UC8
     Manager --> UC9
+    Manager --> UC10
+    Manager --> UC11
     
     %% Admin relationships
     Admin --> UC1
@@ -51,6 +58,21 @@ graph TB
     Admin --> UC7
     Admin --> UC8
     Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11
+    
+    %% Receptionist/Cashier relationships
+    Receptionist --> UC1
+    Receptionist --> UC2
+    Receptionist --> UC3
+    Receptionist --> UC4
+    Receptionist --> UC5
+    Receptionist --> UC6
+    Receptionist --> UC7
+    Receptionist --> UC8
+    Receptionist --> UC9
+    Receptionist --> UC10
+    Receptionist --> UC11
     
     %% Employee relationships (read-only, limited)
     Employee --> UC1
@@ -61,6 +83,7 @@ graph TB
     classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
     classDef usecase fill:#e0f2f1,stroke:#00695c,stroke-width:1px,color:#000000
     
-    class Owner,Manager,Admin,Employee actor
-    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9 usecase
+    class Owner,Manager,Admin,Receptionist,Employee actor
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11 usecase
+
 

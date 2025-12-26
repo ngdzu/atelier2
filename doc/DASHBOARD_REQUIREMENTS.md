@@ -1,6 +1,6 @@
 # Dashboard Requirements Analysis and Documentation
 
-**Document Version:** 1.1  
+**Document Version:** 1.2  
 **Date:** 2025-01-24  
 **Status:** Draft  
 **Last Updated:** 2025-01-24  
@@ -81,7 +81,7 @@ The following are explicitly out of scope for this phase:
 
 ### User Roles
 
-The dashboard system supports four primary user roles with distinct access levels:
+The dashboard system supports five primary user roles with distinct access levels:
 
 #### 1. Owner
 
@@ -160,38 +160,82 @@ The dashboard system supports four primary user roles with distinct access level
 - Configure system settings
 - Manage gallery content
 
-#### 4. Employee
+#### 4. Receptionist/Cashier
 
-**Description:** Staff member with read-only access to limited metrics.
+**Description:** Front desk staff responsible for customer service, appointment management, and payment processing.
 
-**Access Level:** View-only access to non-sensitive operational data.
+**Access Level:** Operational access focused on appointment management and customer interactions.
+
+**Permissions:**
+- View calendar and appointments (full access to view all appointments)
+- Create appointments manually (over the phone or in person)
+- Edit appointments (reschedule, change details, update status)
+- Cancel/delete appointments (with confirmation)
+- Filter appointments by:
+  - Employee name
+  - Day of week
+  - Specific hour of day
+  - Multiple criteria combinations
+- View customer information (name, phone, email, appointment history)
+- Search appointments by customer name, service, or appointment ID
+- Export calendar data (PDF, CSV) for operational use
+- View limited operational metrics (appointment counts, service popularity - no financial data)
+- View promotions (read-only) to communicate to customers
+- Process payments (if payment processing is integrated)
+- Cannot manage employees, promotions, website content, or gallery images
+- Cannot access user management or system settings
+- Cannot view detailed financial reports
+
+**Use Cases:**
+- View calendar to check availability and appointments
+- Create appointments for customers calling or visiting in person
+- Reschedule appointments using drag-and-drop or edit form
+- Filter calendar by employee, day of week, or hour to find available slots
+- Search for customer appointments quickly
+- Update appointment status (completed, cancelled, no-show)
+- Export calendar for scheduling reference
+- Process customer payments (cashier function)
+- Communicate current promotions to customers
+
+#### 5. Employee
+
+**Description:** Service provider (nail technician, esthetician, etc.) with read-only access to limited metrics and own schedule.
+
+**Access Level:** View-only access to non-sensitive operational data, limited to own appointments.
 
 **Permissions:**
 - View limited metrics (appointment counts, service popularity - no financial data)
 - View promotions (read-only)
-- Cannot create, edit, or delete content
+- View own appointments only (filtered by default)
+- View appointment details for own appointments
+- Cannot create, edit, cancel, or delete appointments
+- Cannot change appointment status
 - Cannot access user management or system settings
+- Cannot view other employees' appointments (unless permission granted)
 
 **Use Cases:**
+- View own appointment schedule
 - View appointment schedules and service popularity
 - Understand current promotions to communicate to customers
 
 ### Permission Matrix
 
-| Feature | Owner | Manager | Admin | Employee |
-|---------|-------|---------|-------|----------|
-| View Financial Metrics | ✅ | ✅ | ❌ | ❌ |
-| View Operational Metrics | ✅ | ✅ | ✅ | ✅ (Limited) |
-| Create/Edit Promotions | ✅ | ✅ | ✅ | ❌ |
-| Send Promotions | ✅ | ✅ | ✅ | ❌ |
-| Edit Website Content | ✅ | ✅ (Limited) | ✅ | ❌ |
-| Upload Gallery Images | ✅ | ✅ | ✅ | ❌ |
-| Manage Employees | ✅ | ✅ (Limited) | ✅ | ❌ |
-| View Calendar/Appointments | ✅ | ✅ | ✅ | ✅ (Limited) |
-| Manage Appointments | ✅ | ✅ | ✅ | ❌ |
-| Manage Users | ✅ | ❌ | ✅ | ❌ |
-| System Settings | ✅ | ❌ | ✅ | ❌ |
-| Export Data | ✅ | ✅ | ✅ | ❌ |
+| Feature | Owner | Manager | Admin | Receptionist/Cashier | Employee |
+|---------|-------|---------|-------|---------------------|----------|
+| View Financial Metrics | ✅ | ✅ | ❌ | ❌ | ❌ |
+| View Operational Metrics | ✅ | ✅ | ✅ | ✅ (Limited) | ✅ (Limited) |
+| Create/Edit Promotions | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Send Promotions | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Edit Website Content | ✅ | ✅ (Limited) | ✅ | ❌ | ❌ |
+| Upload Gallery Images | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Manage Employees | ✅ | ✅ (Limited) | ✅ | ❌ | ❌ |
+| View Calendar/Appointments | ✅ | ✅ | ✅ | ✅ (Full) | ✅ (Own only) |
+| Manage Appointments | ✅ | ✅ | ✅ | ✅ | ❌ |
+| View Customer Information | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Process Payments | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Manage Users | ✅ | ❌ | ✅ | ❌ | ❌ |
+| System Settings | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Export Data | ✅ | ✅ | ✅ | ✅ (Calendar only) | ❌ |
 
 ---
 
@@ -1438,6 +1482,44 @@ This diagram provides a high-level overview of the dashboard's core features and
 - Status change is saved immediately
 - Status is reflected in calendar view
 
+**US-CAL-007: Filter Calendar by Day of Week and Hour**
+- **As a** receptionist
+- **I want to** filter the calendar by day of week and specific hour of day
+- **So that** I can quickly find available time slots for scheduling
+
+**Acceptance Criteria:**
+- Can filter by day of week (Monday, Tuesday, etc.)
+- Can filter by hour of day (e.g., 2:00 PM - 3:00 PM)
+- Can combine multiple filters (employee + day + hour)
+- Filter results show available time slots clearly
+- Can clear filters easily
+
+**US-CAL-008: Create Appointment Over Phone**
+- **As a** receptionist
+- **I want to** create appointments manually when customers call
+- **So that** I can book appointments over the phone
+
+**Acceptance Criteria:**
+- Can access appointment creation form from calendar
+- Can search for existing customer or create new customer
+- Can select employee, service, date, and time
+- System validates availability in real-time
+- Appointment appears in calendar immediately
+- Customer receives confirmation (optional)
+
+**US-CAL-009: Reschedule Appointment via Drag and Drop**
+- **As a** receptionist
+- **I want to** drag appointments to reschedule them
+- **So that** I can quickly adjust schedules when customers request changes
+
+**Acceptance Criteria:**
+- Can drag appointment to different time slot
+- Can drag appointment to different day
+- Can drag appointment to different employee (reassign)
+- System checks for conflicts during drag
+- Confirmation dialog before saving changes
+- Changes reflected immediately in calendar
+
 ---
 
 ## Use Cases
@@ -1788,6 +1870,7 @@ This diagram provides a high-level overview of the dashboard's core features and
 |---------|------|--------|---------|
 | 1.0 | 2025-01-24 | AI Assistant | Initial requirements document creation |
 | 1.1 | 2025-01-24 | AI Assistant | Added Employee Management and Calendar/Appointment Viewing requirements |
+| 1.2 | 2025-01-24 | AI Assistant | Added Receptionist/Cashier role with appointment management permissions and filtering capabilities |
 
 ---
 

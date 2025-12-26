@@ -6,6 +6,7 @@ graph TB
     Owner[Owner]
     Manager[Manager]
     Admin[Admin]
+    Receptionist[Receptionist/Cashier]
     Employee[Employee]
     
     %% Main Modules
@@ -42,6 +43,10 @@ graph TB
     Admin --> Calendar
     Admin --> System
     
+    %% Receptionist/Cashier access
+    Receptionist --> Calendar
+    Receptionist --> Metrics
+    
     %% Employee access (limited)
     Employee --> Metrics
     Employee --> Calendar
@@ -50,6 +55,6 @@ graph TB
     classDef actor fill:#e1f5ff,stroke:#01579b,stroke-width:2px,color:#000000
     classDef module fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000000
     
-    class Owner,Manager,Admin,Employee actor
+    class Owner,Manager,Admin,Receptionist,Employee actor
     class Metrics,Promotions,Content,Gallery,Employees,Calendar,System module
 

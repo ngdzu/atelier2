@@ -61,11 +61,32 @@ Mermaid diagrams (`.mmd` files) are used to create visual representations of sys
 
 ### Updating an Existing Diagram
 
+**CRITICAL: When updating MMD files, you MUST regenerate ONLY the corresponding SVG files for files that were changed.**
+
 1. **Edit the `.mmd` file** with your changes
-2. **Regenerate the `.svg` file** (the script will overwrite the existing SVG)
-3. **Verify the SVG** renders correctly
+2. **Regenerate ONLY the `.svg` file for the modified MMD file**:
+   ```bash
+   # For a single modified file (recommended - only regenerate what changed)
+   node scripts/generateMermaidSvgs.js doc/diagrams/<filename>.mmd
+   
+   # Example:
+   node scripts/generateMermaidSvgs.js doc/diagrams/dashboard-user-roles.mmd
+   
+   # Or using npx directly:
+   cd doc/diagrams
+   npx @mermaid-js/mermaid-cli -i <filename>.mmd -o <filename>.svg
+   ```
+3. **Verify the SVG** renders correctly (open in browser or markdown viewer)
 4. **Update documentation** if the diagram structure changed significantly
-5. **Commit both files** together
+5. **Commit both `.mmd` and `.svg` files together**
+
+**Important Notes:**
+- **Only regenerate SVG files for MMD files that were actually modified**
+- **Do NOT regenerate all SVG files if only some MMD files changed**
+- **Never commit MMD file changes without regenerating the corresponding SVG**
+- **Always verify SVG files are up-to-date before committing**
+- **If SVG generation fails, document the issue and regenerate manually**
+- **SVG files must match their corresponding MMD files exactly**
 
 ### Best Practices
 
@@ -181,11 +202,52 @@ npx @mermaid-js/mermaid-cli --version
 When working with Mermaid diagrams:
 
 - [ ] Created/updated `.mmd` file
-- [ ] Generated corresponding `.svg` file
-- [ ] Verified SVG renders correctly
-- [ ] Updated Markdown files to reference the SVG
+- [ ] **IMMEDIATELY generated corresponding `.svg` file** (do not skip this step)
+- [ ] Verified SVG renders correctly (open in browser or markdown viewer)
+- [ ] Updated Markdown files to reference the SVG (if diagram structure changed)
 - [ ] Committed both `.mmd` and `.svg` files together
 - [ ] Verified SVG displays correctly in documentation
+
+## Mandatory Workflow for AI Agents
+
+**When modifying MMD files, AI agents MUST:**
+
+1. **Edit the MMD file(s)** with the required changes
+2. **Generate SVG files ONLY for modified MMD files** (do not regenerate all SVGs):
+   ```bash
+   # Method 1: Using the project script (RECOMMENDED)
+   # Generate SVG for a specific modified file
+   node scripts/generateMermaidSvgs.js doc/diagrams/<filename>.mmd
+   
+   # Example for multiple modified files:
+   node scripts/generateMermaidSvgs.js doc/diagrams/dashboard-user-roles.mmd
+   node scripts/generateMermaidSvgs.js doc/diagrams/dashboard-use-cases-calendar.mmd
+   
+   # Method 2: Using npx directly
+   cd doc/diagrams
+   npx @mermaid-js/mermaid-cli -i <filename>.mmd -o <filename>.svg
+   
+   # Method 3: If mermaid-cli is installed globally
+   mmdc -i <filename>.mmd -o <filename>.svg
+   ```
+3. **Verify SVG was generated** (check file exists and has recent timestamp)
+4. **Track which MMD files were modified** to ensure only those SVGs are regenerated
+5. **If SVG generation fails:**
+   - Document the error
+   - Note in commit message that SVG needs manual regeneration
+   - Provide clear instructions for manual regeneration
+6. **Never commit MMD changes without SVG updates**
+
+**Critical Rules:**
+- **ONLY regenerate SVG files for MMD files that were actually modified**
+- **Do NOT run the script without arguments (which regenerates all SVGs) unless all MMD files were changed**
+- **Track which specific MMD files you modified and regenerate only those SVGs**
+- **Failure to regenerate SVG files for modified MMD files is a critical error**
+
+**Example Workflow:**
+- Modified: `dashboard-user-roles.mmd`, `dashboard-use-cases-calendar.mmd`
+- Regenerate: Only those 2 SVG files
+- Do NOT regenerate: Other 9 SVG files that weren't changed
 
 ## Related Documentation
 
