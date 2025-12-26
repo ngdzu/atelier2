@@ -1,0 +1,70 @@
+erDiagram
+    APPOINTMENTS {
+        uuid id PK
+        uuid customer_id FK
+        uuid employee_id FK
+        uuid service_id FK
+        timestamp start_time
+        timestamp end_time
+        enum status
+        text notes
+        enum source
+        uuid created_by FK
+        text cancellation_reason
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    APPOINTMENT_SERVICES {
+        uuid id PK
+        uuid appointment_id FK
+        uuid service_id FK
+        boolean is_main_service
+        timestamp created_at
+    }
+
+    APPOINTMENT_STATUS_HISTORY {
+        uuid id PK
+        uuid appointment_id FK
+        enum previous_status
+        enum new_status
+        uuid changed_by FK
+        text change_reason
+        timestamp created_at
+    }
+
+    USERS {
+        uuid id PK
+        string name
+        string email
+        string phone
+        enum role
+    }
+
+    EMPLOYEES {
+        uuid id PK
+        uuid user_id FK
+        string name
+        string color
+        boolean active
+    }
+
+    SERVICES {
+        uuid id PK
+        string name
+        string category
+        enum type
+        number duration
+        number price
+    }
+
+    APPOINTMENTS ||--o{ APPOINTMENT_SERVICES : "has"
+    APPOINTMENTS ||--o{ APPOINTMENT_STATUS_HISTORY : "has"
+    APPOINTMENTS }o--|| USERS : "customer"
+    APPOINTMENTS }o--|| EMPLOYEES : "assigned to"
+    APPOINTMENTS }o--|| SERVICES : "main service"
+    APPOINTMENTS }o--o| USERS : "created by"
+    APPOINTMENT_SERVICES }o--|| SERVICES : "includes"
+    APPOINTMENT_STATUS_HISTORY }o--o| USERS : "changed by"
+    EMPLOYEES }o--|| USERS : "linked to"
+

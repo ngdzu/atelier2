@@ -1,0 +1,85 @@
+graph TB
+    subgraph "Presentation Layer"
+        CL[CalendarLayout<br/>Main Container]
+        CVS[CalendarViewSwitcher<br/>Day/Week/Month]
+        DV[DayView<br/>Hourly Time Slots]
+        WV[WeekView<br/>Daily Columns]
+        MV[MonthView<br/>Calendar Grid]
+        AC[AppointmentCard<br/>Appointment Display]
+        AM[AppointmentModal<br/>Details Modal]
+        AF[AppointmentForm<br/>Create/Edit Form]
+        CF[CalendarFilters<br/>Filter Controls]
+    end
+
+    subgraph "Application Layer"
+        CC[CalendarController<br/>API Routes]
+        AC2[AppointmentController<br/>CRUD Operations]
+        CS[CalendarService<br/>Business Logic]
+        AS[AppointmentService<br/>CRUD Logic]
+        ES[ExportService<br/>PDF/CSV Generation]
+    end
+
+    subgraph "Domain Layer"
+        AE[Appointment Entity<br/>Domain Model]
+        TS[TimeSlot<br/>Value Object]
+        AS2[AppointmentStatus<br/>Value Object]
+        CS2[ConflictService<br/>Domain Service]
+        AVS[AvailabilityService<br/>Domain Service]
+    end
+
+    subgraph "Infrastructure Layer"
+        AR[AppointmentRepository<br/>Data Access]
+        CR[CalendarRepository<br/>Query Methods]
+        DB[(PostgreSQL<br/>Database)]
+        BS[BookingSyncService<br/>Integration]
+    end
+
+    subgraph "External Systems"
+        BS2[Booking System<br/>Customer Facing]
+        EM[Employee Management<br/>System]
+        MS[Metrics Service<br/>Analytics]
+    end
+
+    CL --> CVS
+    CL --> DV
+    CL --> WV
+    CL --> MV
+    CL --> CF
+    DV --> AC
+    WV --> AC
+    MV --> AC
+    AC --> AM
+    AM --> AF
+
+    CL --> CC
+    AM --> AC2
+    AF --> AC2
+
+    CC --> CS
+    AC2 --> AS
+    CC --> ES
+
+    CS --> AR
+    AS --> AR
+    CS --> CR
+    AR --> AE
+    CR --> AE
+
+    CS --> CS2
+    AS --> CS2
+    CS --> AVS
+    AS --> AVS
+
+    AR --> DB
+    CR --> DB
+
+    BS --> BS2
+    BS --> DB
+    CS --> EM
+    AS --> MS
+
+    style CL fill:#e1f5ff
+    style CC fill:#fff4e1
+    style AE fill:#e8f5e9
+    style DB fill:#fce4ec
+

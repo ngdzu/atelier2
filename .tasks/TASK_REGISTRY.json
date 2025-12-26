@@ -1,9 +1,9 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-12-26T07:09:29.000Z",
-    "totalTasks": 76,
-    "lastSync": "2025-12-26T07:09:29.000Z"
+    "lastUpdated": "2025-12-26T07:25:56.000Z",
+    "totalTasks": 88,
+    "lastSync": "2025-12-26T07:25:56.000Z"
   },
   "categories": {
     "FEAT": {
@@ -45,29 +45,29 @@
       "name": "API",
       "code": "API",
       "description": "Backend API development",
-      "lastNumber": 6,
-      "nextAvailable": 7
+      "lastNumber": 9,
+      "nextAvailable": 10
     },
     "DB": {
       "name": "Database",
       "code": "DB",
       "description": "Database schema, migrations, queries",
-      "lastNumber": 7,
-      "nextAvailable": 8
+      "lastNumber": 8,
+      "nextAvailable": 9
     },
     "TEST": {
       "name": "Testing",
       "code": "TEST",
       "description": "Unit, integration, or E2E tests",
-      "lastNumber": 7,
-      "nextAvailable": 8
+      "lastNumber": 8,
+      "nextAvailable": 9
     },
     "DOC": {
       "name": "Documentation",
       "code": "DOC",
       "description": "Documentation updates",
-      "lastNumber": 13,
-      "nextAvailable": 14
+      "lastNumber": 16,
+      "nextAvailable": 17
     },
     "OPS": {
       "name": "DevOps",
@@ -80,8 +80,8 @@
       "name": "Security",
       "code": "SEC",
       "description": "Security-related tasks",
-      "lastNumber": 3,
-      "nextAvailable": 4
+      "lastNumber": 6,
+      "nextAvailable": 7
     },
     "PERF": {
       "name": "Performance",
@@ -108,8 +108,8 @@
       "name": "Architecture",
       "code": "ARCH",
       "description": "System architecture and design",
-      "lastNumber": 3,
-      "nextAvailable": 4
+      "lastNumber": 4,
+      "nextAvailable": 5
     },
     "MIG": {
       "name": "Migration",
@@ -2459,11 +2459,11 @@
       "category": "FEAT",
       "number": 25,
       "title": "Calendar and Appointment Viewing Architecture and Design",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "assignee": "unassigned",
       "created": "2025-01-24",
-      "updated": "2025-01-24",
+      "updated": "2025-12-26",
       "estimatedTime": "6 hours",
       "dependencies": [
         "TASK-DOC-011",
@@ -2486,9 +2486,9 @@
         "technicalDetails": "Files to Create: doc/CALENDAR_APPOINTMENT_ARCHITECTURE.md, doc/diagrams/calendar-architecture.mmd (and .svg), doc/diagrams/calendar-erd.mmd (and .svg), doc/diagrams/calendar-component-hierarchy.mmd (and .svg), doc/diagrams/calendar-data-flow.mmd (and .svg), doc/diagrams/calendar-sequence-diagrams.mmd (and .svg)"
       },
       "progress": {
-        "completed": 0,
+        "completed": 6,
         "total": 6,
-        "percentage": 0
+        "percentage": 100
       }
     },
     {
@@ -2728,6 +2728,427 @@
       "progress": {
         "completed": 0,
         "total": 5,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-014",
+      "category": "DOC",
+      "number": 14,
+      "title": "Authorization System Requirements Analysis",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "8 hours",
+      "dependencies": [
+        "TASK-DOC-002",
+        "TASK-DOC-007"
+      ],
+      "relatedTasks": [
+        "TASK-ARCH-004",
+        "TASK-DOC-015"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Conduct comprehensive requirements analysis for the authorization system including user roles, permissions, access control requirements, security requirements, integration points with calendar, dashboard, and other modules.",
+      "sections": {
+        "description": "Conduct comprehensive requirements analysis for the authorization system including user roles, permissions, access control requirements, security requirements, integration points with calendar, dashboard, and other modules.",
+        "requirements": "User roles and permissions analysis, access control requirements, integration requirements, security requirements, non-functional requirements, use cases and user stories",
+        "definitionOfDone": "All user roles documented with complete permission matrix, all integration points documented, security requirements documented, use cases created, requirements document reviewed and approved",
+        "verificationSteps": "Review requirements document, stakeholder review",
+        "acceptanceCriteria": "Complete requirements document exists, all user roles and permissions documented, integration requirements documented, security requirements comprehensive, use cases created",
+        "technicalDetails": "Files to Create: doc/authorization/AUTHORIZATION_REQUIREMENTS.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-ARCH-004",
+      "category": "ARCH",
+      "number": 4,
+      "title": "Authorization System Architecture and Design",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "10 hours",
+      "dependencies": [
+        "TASK-DOC-014",
+        "TASK-ARCH-003"
+      ],
+      "relatedTasks": [
+        "TASK-DOC-015",
+        "TASK-API-007"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Design the architecture for the authorization system following Domain-Driven Design (DDD) principles. This includes bounded context definition, domain model design, aggregate boundaries, repository interfaces, and integration architecture.",
+      "sections": {
+        "description": "Design the architecture for the authorization system following Domain-Driven Design (DDD) principles. This includes bounded context definition, domain model design, aggregate boundaries, repository interfaces, and integration architecture.",
+        "requirements": "Bounded context definition, domain model design, aggregate boundaries, domain services design, repository interfaces design, integration architecture design, security architecture design",
+        "definitionOfDone": "Bounded context defined, domain model designed, repository interfaces defined, domain services designed, integration architecture documented, security architecture designed, architecture diagrams created",
+        "verificationSteps": "Architecture review, team review",
+        "acceptanceCriteria": "Complete architecture document exists, domain model well-designed, integration points defined, security architecture comprehensive, architecture diagrams created",
+        "technicalDetails": "Files to Create: doc/authorization/AUTHORIZATION_ARCHITECTURE.md, doc/diagrams/authorization-architecture.mmd, doc/diagrams/authorization-architecture.svg"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-015",
+      "category": "DOC",
+      "number": 15,
+      "title": "Authorization System Detailed Design",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "12 hours",
+      "dependencies": [
+        "TASK-ARCH-004"
+      ],
+      "relatedTasks": [
+        "TASK-DB-008",
+        "TASK-API-007"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Create detailed design documentation for the authorization system including class/component design, interface definitions, data flow diagrams, API design, and integration design.",
+      "sections": {
+        "description": "Create detailed design documentation for the authorization system including class/component design, interface definitions, data flow diagrams, API design, and integration design.",
+        "requirements": "Domain layer detailed design, application layer detailed design, infrastructure layer detailed design, presentation layer detailed design, frontend integration design, integration design, data flow design",
+        "definitionOfDone": "All layers designed in detail, all classes and interfaces designed, integration points designed, data flow diagrams created, API design documented, frontend integration designed",
+        "verificationSteps": "Design review, implementation readiness check",
+        "acceptanceCriteria": "Complete detailed design document exists, all layers designed, integration points designed, data flow diagrams created, design ready for implementation",
+        "technicalDetails": "Files to Create: doc/authorization/AUTHORIZATION_DETAILED_DESIGN.md, doc/diagrams/authorization-authentication-flow.mmd, doc/diagrams/authorization-permission-check-flow.mmd"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DB-008",
+      "category": "DB",
+      "number": 8,
+      "title": "Authorization System Database Schema",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "6 hours",
+      "dependencies": [
+        "TASK-DOC-015",
+        "TASK-DB-002"
+      ],
+      "relatedTasks": [
+        "TASK-API-007",
+        "TASK-API-009"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Design and implement the database schema for the authorization system including users, roles, permissions, sessions, and audit logs.",
+      "sections": {
+        "description": "Design and implement the database schema for the authorization system including users, roles, permissions, sessions, and audit logs.",
+        "requirements": "Review existing schema, design authorization tables, design relationships, design indexes, design constraints, create migration files, create seed data",
+        "definitionOfDone": "All authorization tables designed, relationships and constraints defined, indexes designed, migration files created and tested, seed data scripts created, ERD diagram created",
+        "verificationSteps": "Schema review, migration testing",
+        "acceptanceCriteria": "Complete database schema designed, migration files created and tested, seed data scripts created, ERD diagram created, schema ready for implementation",
+        "technicalDetails": "Files to Create: server/src/database/migrations/XXXXXX-create-authorization-tables.ts, server/src/database/seeds/authorization-seed.ts, doc/authorization/AUTHORIZATION_DATABASE_SCHEMA.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-007",
+      "category": "API",
+      "number": 7,
+      "title": "Authorization System Domain Layer Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "16 hours",
+      "dependencies": [
+        "TASK-DOC-015",
+        "TASK-DB-008"
+      ],
+      "relatedTasks": [
+        "TASK-API-008",
+        "TASK-API-009"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Implement the domain layer for the authorization system following DDD principles. This includes value objects, domain entities, domain services, and repository interfaces.",
+      "sections": {
+        "description": "Implement the domain layer for the authorization system following DDD principles. This includes value objects, domain entities, domain services, and repository interfaces.",
+        "requirements": "Implement value objects, implement domain entities, implement domain services, implement repository interfaces, implement domain events, write unit tests",
+        "definitionOfDone": "All value objects implemented and tested, all domain entities implemented and tested, all domain services implemented and tested, all repository interfaces defined, domain events implemented, unit tests written with >80% coverage",
+        "verificationSteps": "Code review, unit testing, type checking",
+        "acceptanceCriteria": "All domain layer components implemented, unit tests passing with >80% coverage, no infrastructure dependencies, code follows DDD principles",
+        "technicalDetails": "Files to Create: server/src/domain/authorization/value-objects/*.ts, server/src/domain/authorization/entities/*.ts, server/src/domain/authorization/domain-services/*.ts, server/src/domain/authorization/repositories/*.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-008",
+      "category": "API",
+      "number": 8,
+      "title": "Authorization System Application Layer Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "12 hours",
+      "dependencies": [
+        "TASK-API-007"
+      ],
+      "relatedTasks": [
+        "TASK-API-009",
+        "TASK-SEC-004"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Implement the application layer for the authorization system including use cases, DTOs, commands, queries, and mappers.",
+      "sections": {
+        "description": "Implement the application layer for the authorization system including use cases, DTOs, commands, queries, and mappers.",
+        "requirements": "Implement use cases, implement DTOs, implement commands and queries, implement mappers, write unit tests",
+        "definitionOfDone": "All use cases implemented and tested, all DTOs implemented, all commands and queries implemented, all mappers implemented, unit tests written with >80% coverage",
+        "verificationSteps": "Code review, unit testing, type checking",
+        "acceptanceCriteria": "All application layer components implemented, unit tests passing with >80% coverage, application layer is thin, DTOs properly validated",
+        "technicalDetails": "Files to Create: server/src/application/authorization/use-cases/*.ts, server/src/application/authorization/dto/*.ts, server/src/application/authorization/commands/*.ts, server/src/application/authorization/queries/*.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 5,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-API-009",
+      "category": "API",
+      "number": 9,
+      "title": "Authorization System Infrastructure Layer Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "14 hours",
+      "dependencies": [
+        "TASK-API-008",
+        "TASK-DB-008"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-004"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Implement the infrastructure layer for the authorization system including repository implementations, database entities, external service integrations, and mappers.",
+      "sections": {
+        "description": "Implement the infrastructure layer for the authorization system including repository implementations, database entities, external service integrations, and mappers.",
+        "requirements": "Implement database entities, implement repository implementations, implement database mappers, implement external service integrations, implement caching, write integration tests",
+        "definitionOfDone": "All database entities implemented, all repository implementations completed, all mappers implemented, external service integrations implemented, integration tests written and passing",
+        "verificationSteps": "Code review, integration testing, database testing",
+        "acceptanceCriteria": "All infrastructure layer components implemented, integration tests passing, repository implementations work correctly, external services integrated",
+        "technicalDetails": "Files to Create: server/src/infrastructure/persistence/entities/*.ts, server/src/infrastructure/persistence/repositories/*.ts, server/src/infrastructure/external-services/**/*.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-SEC-004",
+      "category": "SEC",
+      "number": 4,
+      "title": "Authorization System Presentation Layer Implementation",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "10 hours",
+      "dependencies": [
+        "TASK-API-009"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-005",
+        "TASK-SEC-006"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Implement the presentation layer for the authorization system including API controllers, routes, middleware, request/response DTOs, and validation.",
+      "sections": {
+        "description": "Implement the presentation layer for the authorization system including API controllers, routes, middleware, request/response DTOs, and validation.",
+        "requirements": "Implement API controllers, implement API routes, implement middleware, implement request/response DTOs, implement validation, write API integration tests",
+        "definitionOfDone": "All API controllers implemented, all routes defined and protected, all middleware implemented, request/response DTOs implemented and validated, API integration tests written and passing",
+        "verificationSteps": "Code review, API testing, manual testing",
+        "acceptanceCriteria": "All API endpoints implemented, authentication middleware working, authorization middleware working, API integration tests passing",
+        "technicalDetails": "Files to Create: server/src/presentation/api/controllers/*.ts, server/src/presentation/api/routes/*.ts, server/src/presentation/api/middleware/*.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-SEC-005",
+      "category": "SEC",
+      "number": 5,
+      "title": "Authorization Integration with Calendar Module",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "8 hours",
+      "dependencies": [
+        "TASK-SEC-004",
+        "TASK-API-006"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-006"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Integrate the authorization system with the Calendar module to enforce role-based access control for calendar views, appointment management, and data filtering.",
+      "sections": {
+        "description": "Integrate the authorization system with the Calendar module to enforce role-based access control for calendar views, appointment management, and data filtering.",
+        "requirements": "API endpoint protection, data filtering by permissions, frontend route protection, frontend permission checks, appointment CRUD authorization, integration testing",
+        "definitionOfDone": "All calendar API endpoints protected, data filtering implemented by role, frontend routes protected, permission checks in frontend components, appointment CRUD authorization implemented, integration tests written and passing",
+        "verificationSteps": "Manual testing, automated testing, security testing",
+        "acceptanceCriteria": "Calendar module fully protected by authorization, data filtering works correctly, frontend permission checks work, integration tests passing, security requirements met",
+        "technicalDetails": "Files to Modify: server/src/presentation/api/routes/calendar.routes.ts, server/src/presentation/api/controllers/CalendarController.ts, client/src/components/AppointmentCalendar.tsx"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 6,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-SEC-006",
+      "category": "SEC",
+      "number": 6,
+      "title": "Authorization Integration with Dashboard Modules",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "12 hours",
+      "dependencies": [
+        "TASK-SEC-004",
+        "TASK-API-002"
+      ],
+      "relatedTasks": [
+        "TASK-SEC-005"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Integrate the authorization system with all Dashboard modules (Metrics, Promotions, Content Editor, Gallery, Employee Management) to enforce role-based access control.",
+      "sections": {
+        "description": "Integrate the authorization system with all Dashboard modules (Metrics, Promotions, Content Editor, Gallery, Employee Management) to enforce role-based access control.",
+        "requirements": "Metrics module integration, promotions module integration, content editor integration, gallery module integration, employee management integration, dashboard navigation integration, integration testing",
+        "definitionOfDone": "All dashboard API endpoints protected, all dashboard frontend routes protected, permission checks in all dashboard components, role-based data filtering implemented, navigation menu is permission-based, integration tests written and passing",
+        "verificationSteps": "Manual testing, automated testing, security testing",
+        "acceptanceCriteria": "All dashboard modules fully protected by authorization, permission-based UI rendering works, role-based data filtering works, navigation menu is permission-based, integration tests passing",
+        "technicalDetails": "Files to Modify: server/src/presentation/api/routes/*.routes.ts, client/src/components/PerformanceDashboard.tsx, client/src/components/MarketingCenter.tsx, client/src/components/Layout.tsx"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-TEST-008",
+      "category": "TEST",
+      "number": 8,
+      "title": "Authorization System Testing Suite",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "16 hours",
+      "dependencies": [
+        "TASK-SEC-005",
+        "TASK-SEC-006"
+      ],
+      "relatedTasks": [
+        "TASK-DOC-016"
+      ],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Create comprehensive testing suite for the authorization system including unit tests, integration tests, E2E tests, security tests, and performance tests.",
+      "sections": {
+        "description": "Create comprehensive testing suite for the authorization system including unit tests, integration tests, E2E tests, security tests, and performance tests.",
+        "requirements": "Unit tests (domain and application layers), integration tests (infrastructure and API layers), E2E tests, security tests, performance tests, test coverage and reporting",
+        "definitionOfDone": "Unit tests written for all domain and application layers, integration tests written, E2E tests written, security tests written, performance tests written, test coverage meets requirements, all tests passing",
+        "verificationSteps": "Run test suite, review test coverage, review test quality",
+        "acceptanceCriteria": "Comprehensive test suite exists, all tests passing, test coverage meets requirements, security tests passing, performance tests passing",
+        "technicalDetails": "Files to Create: server/tests/unit/domain/authorization/**/*.test.ts, server/tests/integration/api/authorization/**/*.test.ts, server/tests/e2e/authorization/**/*.test.ts"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 9,
+        "percentage": 0
+      }
+    },
+    {
+      "id": "TASK-DOC-016",
+      "category": "DOC",
+      "number": 16,
+      "title": "Authorization System Documentation",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "assignee": "unassigned",
+      "created": "2025-01-26",
+      "updated": "2025-01-26",
+      "estimatedTime": "8 hours",
+      "dependencies": [
+        "TASK-TEST-008"
+      ],
+      "relatedTasks": [],
+      "file": "authorization-system.task",
+      "filePath": ".tasks/authorization-system.task",
+      "description": "Create comprehensive documentation for the authorization system including API documentation, developer guides, user guides, security documentation, and integration guides.",
+      "sections": {
+        "description": "Create comprehensive documentation for the authorization system including API documentation, developer guides, user guides, security documentation, and integration guides.",
+        "requirements": "API documentation, developer documentation, user documentation, security documentation, integration documentation, testing documentation, deployment documentation",
+        "definitionOfDone": "API documentation complete, developer documentation complete, user documentation complete, security documentation complete, integration documentation complete, testing documentation complete, deployment documentation complete",
+        "verificationSteps": "Documentation review, user testing",
+        "acceptanceCriteria": "Complete documentation exists, all documentation is accurate and up-to-date, examples work correctly, documentation is well-organized",
+        "technicalDetails": "Files to Create: doc/authorization/AUTHORIZATION_API.md, doc/authorization/AUTHORIZATION_DEVELOPER_GUIDE.md, doc/authorization/AUTHORIZATION_USER_GUIDE.md, doc/authorization/AUTHORIZATION_SECURITY.md"
+      },
+      "progress": {
+        "completed": 0,
+        "total": 7,
         "percentage": 0
       }
     }

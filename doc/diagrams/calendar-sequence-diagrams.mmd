@@ -1,0 +1,143 @@
+sequenceDiagram
+    participant U as User
+    participant CL as CalendarLayout
+    participant CQ as React Query
+    participant CS as CalendarService
+    participant API as API Endpoint
+    participant AS as AppointmentService
+    participant AR as AppointmentRepository
+    participant DB as Database
+
+    Note over U,DB: View Calendar Flow
+    U->>CL: Opens Calendar
+    CL->>CQ: useQuery(['appointments', filters])
+    CQ->>CS: getAppointments(filters)
+    CS->>API: GET /api/calendar/appointments?filters...
+    API->>AS: getAppointments(filters)
+    AS->>AR: findByDateRange(filters)
+    AR->>DB: SELECT * FROM appointments WHERE...
+    DB-->>AR: Appointments Array
+    AR-->>AS: Appointments
+    AS-->>API: Appointments Response
+    API-->>CS: JSON Response
+    CS-->>CQ: Appointments Data
+    CQ-->>CL: Appointments State
+    CL->>U: Render Calendar View
+
+    Note over U,DB: Create Appointment Flow
+    U->>CL: Clicks Time Slot
+    CL->>CL: Opens AppointmentForm
+    U->>CL: Fills Form & Submits
+    CL->>CL: Form Validation
+    CL->>CQ: useMutation(createAppointment)
+    CQ->>CS: createAppointment(data)
+    CS->>API: POST /api/calendar/appointments
+    API->>AS: createAppointment(data)
+    AS->>AS: Check Availability
+    AS->>AR: checkConflicts(employeeId, startTime, endTime)
+    AR->>DB: SELECT * FROM appointments WHERE...
+    DB-->>AR: Existing Appointments
+    AR-->>AS: Conflicts Array
+    alt No Conflicts
+        AS->>AR: save(appointment)
+        AR->>DB: INSERT INTO appointments...
+        DB-->>AR: New Appointment
+        AR-->>AS: Appointment Entity
+        AS->>AR: saveStatusHistory(status)
+        AR->>DB: INSERT INTO appointment_status_history...
+        AS-->>API: Success Response
+        API-->>CS: 201 Created
+        CS-->>CQ: Appointment Data
+        CQ->>CQ: Invalidate ['appointments']
+        CQ-->>CL: Cache Updated
+        CL->>U: Show Success & Refresh Calendar
+    else Conflicts Found
+        AS-->>API: 409 Conflict
+        API-->>CS: Error Response
+        CS-->>CQ: Error
+        CQ-->>CL: Error State
+        CL->>U: Show Conflict Warning
+    end
+
+    Note over U,DB: Drag-and-Drop Reschedule Flow
+    U->>CL: Drags Appointment
+    CL->>CL: onDragStart(appointment)
+    U->>CL: Drops on New Time Slot
+    CL->>CL: Calculate New Time
+    CL->>CL: Show Confirmation Dialog
+    U->>CL: Confirms Reschedule
+    CL->>CQ: useMutation(updateAppointment)
+    CQ->>CS: updateAppointment(id, {startTime, endTime})
+    CS->>API: PUT /api/calendar/appointments/:id
+    API->>AS: updateAppointment(id, data)
+    AS->>AS: Check Availability (exclude current)
+    AS->>AR: checkConflicts(employeeId, startTime, endTime, excludeId)
+    AR->>DB: SELECT * FROM appointments WHERE...
+    DB-->>AR: Conflicts
+    alt No Conflicts
+        AS->>AR: update(id, data)
+        AR->>DB: UPDATE appointments SET...
+        DB-->>AR: Updated Appointment
+        AR-->>AS: Appointment Entity
+        AS-->>API: Success Response
+        API-->>CS: 200 OK
+        CS-->>CQ: Updated Appointment
+        CQ->>CQ: Invalidate ['appointments', id]
+        CQ-->>CL: Cache Updated
+        CL->>U: Appointment Moved to New Position
+    else Conflicts Found
+        AS-->>API: 409 Conflict
+        API-->>CS: Error Response
+        CS-->>CQ: Error
+        CQ-->>CL: Error State
+        CL->>U: Show Conflict Error
+    end
+
+    Note over U,DB: Change Status Flow
+    U->>CL: Opens Appointment Modal
+    U->>CL: Changes Status Dropdown
+    U->>CL: Confirms Status Change
+    CL->>CQ: useMutation(changeStatus)
+    CQ->>CS: changeAppointmentStatus(id, status)
+    CS->>API: PATCH /api/calendar/appointments/:id/status
+    API->>AS: changeStatus(id, status)
+    AS->>AS: Validate Status Transition
+    alt Valid Transition
+        AS->>AR: updateStatus(id, status)
+        AR->>DB: UPDATE appointments SET status=...
+        DB-->>AR: Updated Appointment
+        AS->>AR: saveStatusHistory(statusChange)
+        AR->>DB: INSERT INTO appointment_status_history...
+        DB-->>AR: Status History Entry
+        AR-->>AS: Success
+        AS-->>API: Success Response
+        API-->>CS: 200 OK
+        CS-->>CQ: Updated Appointment
+        CQ->>CQ: Invalidate ['appointments', id]
+        CQ-->>CL: Cache Updated
+        CL->>U: Status Updated in UI
+    else Invalid Transition
+        AS-->>API: 400 Bad Request
+        API-->>CS: Error Response
+        CS-->>CQ: Error
+        CQ-->>CL: Error State
+        CL->>U: Show Invalid Transition Error
+    end
+
+    Note over U,DB: Filter Calendar Flow
+    U->>CL: Applies Filters (Employee, Status, etc.)
+    CL->>CL: Update Filter State
+    CL->>CQ: Refetch with New Filters
+    CQ->>CS: getAppointments(newFilters)
+    CS->>API: GET /api/calendar/appointments?newFilters...
+    API->>AS: getAppointments(newFilters)
+    AS->>AR: findByDateRange(newFilters)
+    AR->>DB: SELECT * FROM appointments WHERE...<br/>(with filter conditions)
+    DB-->>AR: Filtered Appointments
+    AR-->>AS: Appointments
+    AS-->>API: Filtered Response
+    API-->>CS: JSON Response
+    CS-->>CQ: Filtered Appointments
+    CQ-->>CL: Updated Appointments
+    CL->>U: Calendar Shows Filtered Results
+

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-12-26T07:09:29.000Z",
+    "lastUpdated": "2025-12-26T07:25:56.000Z",
     "description": "Task execution order for AI agents and developers. Tasks are organized into phases. Within each phase, tasks can often be done in parallel unless dependencies are specified.",
     "usage": "Use this file to determine the next task to work on. Start with Phase 1, and work through phases sequentially. Within a phase, tasks can be parallelized if they have no dependencies on each other."
   },
@@ -96,6 +96,36 @@
           ],
           "estimatedTime": "3 hours",
           "notes": "Detailed requirements analysis for Calendar and Appointment Viewing functionality. Expands on existing requirements in DASHBOARD_REQUIREMENTS.md. Required before architecture design."
+        },
+        {
+          "taskId": "TASK-DOC-014",
+          "title": "Authorization System Requirements Analysis",
+          "priority": "CRITICAL",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-002",
+            "TASK-DOC-007"
+          ],
+          "blocking": [
+            "TASK-ARCH-004"
+          ],
+          "estimatedTime": "8 hours",
+          "notes": "Comprehensive requirements analysis for authorization system including user roles, permissions, access control, security requirements, and integration points with calendar and dashboard modules."
+        },
+        {
+          "taskId": "TASK-ARCH-004",
+          "title": "Authorization System Architecture and Design",
+          "priority": "CRITICAL",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-014",
+            "TASK-ARCH-003"
+          ],
+          "blocking": [
+            "TASK-DOC-015"
+          ],
+          "estimatedTime": "10 hours",
+          "notes": "Design the architecture for the authorization system following DDD principles. Includes bounded context definition, domain model design, aggregate boundaries, and integration architecture."
         }
       ]
     },
@@ -263,6 +293,35 @@
           ],
           "estimatedTime": "4 hours",
           "notes": "Database schema extensions for Calendar and Appointment Viewing. Extends Appointment entity and creates AppointmentStatusHistory entity. Required before API implementation."
+        },
+        {
+          "taskId": "TASK-DOC-015",
+          "title": "Authorization System Detailed Design",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-ARCH-004"
+          ],
+          "blocking": [
+            "TASK-DB-008"
+          ],
+          "estimatedTime": "12 hours",
+          "notes": "Create detailed design documentation for the authorization system including class/component design, interface definitions, data flow diagrams, API design, and integration design."
+        },
+        {
+          "taskId": "TASK-DB-008",
+          "title": "Authorization System Database Schema",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-015",
+            "TASK-DB-002"
+          ],
+          "blocking": [
+            "TASK-API-007"
+          ],
+          "estimatedTime": "6 hours",
+          "notes": "Design and implement the database schema for the authorization system including users, roles, permissions, sessions, and audit logs. Extends existing user authentication schema."
         }
       ]
     },
@@ -350,6 +409,65 @@
           ],
           "estimatedTime": "12 hours",
           "notes": "Backend API for Calendar and Appointment Viewing. Includes calendar endpoints, appointment management, availability checking, and export. Required before frontend implementation."
+        },
+        {
+          "taskId": "TASK-API-007",
+          "title": "Authorization System Domain Layer Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-DOC-015",
+            "TASK-DB-008"
+          ],
+          "blocking": [
+            "TASK-API-008"
+          ],
+          "estimatedTime": "16 hours",
+          "notes": "Implement the domain layer for the authorization system following DDD principles. Includes value objects, domain entities, domain services, and repository interfaces."
+        },
+        {
+          "taskId": "TASK-API-008",
+          "title": "Authorization System Application Layer Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-007"
+          ],
+          "blocking": [
+            "TASK-API-009"
+          ],
+          "estimatedTime": "12 hours",
+          "notes": "Implement the application layer for the authorization system including use cases, DTOs, commands, queries, and mappers."
+        },
+        {
+          "taskId": "TASK-API-009",
+          "title": "Authorization System Infrastructure Layer Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-008",
+            "TASK-DB-008"
+          ],
+          "blocking": [
+            "TASK-SEC-004"
+          ],
+          "estimatedTime": "14 hours",
+          "notes": "Implement the infrastructure layer for the authorization system including repository implementations, database entities, external service integrations, and mappers."
+        },
+        {
+          "taskId": "TASK-SEC-004",
+          "title": "Authorization System Presentation Layer Implementation",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-009"
+          ],
+          "blocking": [
+            "TASK-SEC-005",
+            "TASK-SEC-006"
+          ],
+          "estimatedTime": "10 hours",
+          "notes": "Implement the presentation layer for the authorization system including API controllers, routes, middleware, request/response DTOs, and validation."
         }
       ]
     },
@@ -437,6 +555,36 @@
           "blocking": [],
           "estimatedTime": "6 hours",
           "notes": "Additional security measures for authentication system including secure token handling, session management, security headers, and security monitoring."
+        },
+        {
+          "taskId": "TASK-SEC-005",
+          "title": "Authorization Integration with Calendar Module",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-SEC-004",
+            "TASK-API-006"
+          ],
+          "blocking": [
+            "TASK-TEST-008"
+          ],
+          "estimatedTime": "8 hours",
+          "notes": "Integrate the authorization system with the Calendar module to enforce role-based access control for calendar views, appointment management, and data filtering."
+        },
+        {
+          "taskId": "TASK-SEC-006",
+          "title": "Authorization Integration with Dashboard Modules",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-SEC-004",
+            "TASK-API-002"
+          ],
+          "blocking": [
+            "TASK-TEST-008"
+          ],
+          "estimatedTime": "12 hours",
+          "notes": "Integrate the authorization system with all Dashboard modules (Metrics, Promotions, Content Editor, Gallery, Employee Management) to enforce role-based access control."
         }
       ]
     },
@@ -701,6 +849,33 @@
           "blocking": [],
           "estimatedTime": "6 hours",
           "notes": "Create comprehensive user-facing documentation for dashboard system including role-specific guides, feature tutorials, FAQ, and troubleshooting. Should be done after all frontend implementation tasks are complete."
+        },
+        {
+          "taskId": "TASK-TEST-008",
+          "title": "Authorization System Testing Suite",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-SEC-005",
+            "TASK-SEC-006"
+          ],
+          "blocking": [
+            "TASK-DOC-016"
+          ],
+          "estimatedTime": "16 hours",
+          "notes": "Create comprehensive testing suite for the authorization system including unit tests, integration tests, E2E tests, security tests, and performance tests."
+        },
+        {
+          "taskId": "TASK-DOC-016",
+          "title": "Authorization System Documentation",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-TEST-008"
+          ],
+          "blocking": [],
+          "estimatedTime": "8 hours",
+          "notes": "Create comprehensive documentation for the authorization system including API documentation, developer guides, user guides, security documentation, and integration guides."
         }
       ]
     },
@@ -765,22 +940,27 @@
       "note": "TASK-DB-001 and TASK-DB-003 can be done in parallel as they depend on different parent tasks (DB-006 vs FEAT-014)."
     },
     "phase3": {
-      "description": "Some API tasks can be done in parallel, but TASK-API-005 (auth) should be completed before TASK-API-002 (dashboard API)",
+      "description": "Some API tasks can be done in parallel, but TASK-API-005 (auth) should be completed before TASK-API-002 (dashboard API). Authorization system tasks (API-007, API-008, API-009, SEC-004) form a sequential chain.",
       "tasks": [
         "TASK-API-001",
         "TASK-API-004",
-        "TASK-API-005"
+        "TASK-API-005",
+        "TASK-API-007",
+        "TASK-API-008",
+        "TASK-API-009"
       ],
-      "note": "TASK-API-001, API-004, and API-005 depend on different database schemas and can be worked on independently. TASK-API-002 depends on API-005 for authentication middleware, so complete API-005 first."
+      "note": "TASK-API-001, API-004, and API-005 depend on different database schemas and can be worked on independently. TASK-API-002 depends on API-005 for authentication middleware, so complete API-005 first. Authorization system tasks (API-007 → API-008 → API-009 → SEC-004) must be done sequentially following DDD layer order."
     },
     "phase4": {
-      "description": "Infrastructure and quality tasks in Phase 4 can be done in parallel",
+      "description": "Infrastructure and quality tasks in Phase 4 can be done in parallel. Authorization integration tasks (SEC-005, SEC-006) depend on SEC-004.",
       "tasks": [
         "TASK-OPS-004",
         "TASK-TEST-001",
-        "TASK-SEC-001"
+        "TASK-SEC-001",
+        "TASK-SEC-005",
+        "TASK-SEC-006"
       ],
-      "note": "These tasks all depend on their respective API tasks but not on each other, so they can be worked on simultaneously. TASK-SEC-002 depends on TASK-API-005 and blocks dashboard frontend tasks."
+      "note": "TASK-OPS-004, TEST-001, and SEC-001 all depend on their respective API tasks but not on each other, so they can be worked on simultaneously. TASK-SEC-002 depends on TASK-API-005 and blocks dashboard frontend tasks. TASK-SEC-005 and SEC-006 can be done in parallel after SEC-004 is complete."
     },
     "phase5": {
       "description": "Dashboard frontend tasks can be done in parallel",
@@ -808,6 +988,20 @@
     "TASK-DB-005",
     "TASK-API-005",
     "TASK-SEC-003"
+  ],
+  "authorizationCriticalPath": [
+    "TASK-DOC-014",
+    "TASK-ARCH-004",
+    "TASK-DOC-015",
+    "TASK-DB-008",
+    "TASK-API-007",
+    "TASK-API-008",
+    "TASK-API-009",
+    "TASK-SEC-004",
+    "TASK-SEC-005",
+    "TASK-SEC-006",
+    "TASK-TEST-008",
+    "TASK-DOC-016"
   ],
   "dashboardCriticalPath": [
     "TASK-DOC-002",
@@ -840,7 +1034,8 @@
     "blockingTasks": "Pay attention to 'blocking' field - these tasks cannot start until the current task is complete.",
     "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible.",
     "featureParallelism": "Dashboard system (TASK-DOC-002 → FEAT-014 → DB-003 → API-002) and Customer Promotions (TASK-DOC-004 → DB-004 → API-004) can be developed in parallel as they are independent feature sets.",
-    "criticalPaths": "There are four main critical paths: (1) Core backend infrastructure, (2) Dashboard system, (3) Customer Promotions system, and (4) Authentication system. These can progress independently after Phase 1, though dashboard requires authentication before frontend implementation.",
-    "authenticationNote": "Authentication system (DOC-006 → DB-005 → API-005 → SEC-003) provides system-wide auth that dashboard (SEC-002) and other features use. Dashboard frontend tasks require both API-002 and SEC-002 (which depends on API-005)."
+    "criticalPaths": "There are five main critical paths: (1) Core backend infrastructure, (2) Dashboard system, (3) Customer Promotions system, (4) Authentication system, and (5) Authorization system. These can progress independently after Phase 1, though dashboard requires authentication before frontend implementation.",
+    "authenticationNote": "Authentication system (DOC-006 → DB-005 → API-005 → SEC-003) provides system-wide auth that dashboard (SEC-002) and other features use. Dashboard frontend tasks require both API-002 and SEC-002 (which depends on API-005).",
+    "authorizationNote": "Authorization system (DOC-014 → ARCH-004 → DOC-015 → DB-008 → API-007 → API-008 → API-009 → SEC-004 → SEC-005 → SEC-006 → TEST-008 → DOC-016) provides comprehensive role-based access control. It integrates with calendar (SEC-005) and dashboard modules (SEC-006). The system follows DDD principles with sequential layer implementation (Domain → Application → Infrastructure → Presentation)."
   }
 }

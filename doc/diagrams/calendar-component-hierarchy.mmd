@@ -1,0 +1,157 @@
+graph TD
+    CL[CalendarLayout<br/>Main Container]
+    
+    subgraph "Header Section"
+        CH[CalendarHeader]
+        DN[DateNavigation<br/>Prev/Next/Today/DatePicker]
+        VS[ViewSwitcher<br/>Day/Week/Month Buttons]
+        CA[CalendarActions<br/>Export/Refresh]
+    end
+
+    subgraph "Filters Section"
+        CF[CalendarFilters<br/>Collapsible Sidebar]
+        EF[EmployeeFilter<br/>Multi-select]
+        SF[StatusFilter<br/>Checkboxes]
+        SVF[ServiceFilter<br/>Multi-select]
+        DRF[DateRangeFilter<br/>Start/End Date]
+        DOWF[DayOfWeekFilter<br/>Receptionist - Multi-select]
+        HOF[HourOfDayFilter<br/>Receptionist - Time Range]
+        CS[CustomerSearch<br/>Text Input]
+        CFB[ClearFiltersButton]
+    end
+
+    subgraph "View Area"
+        CVA[CalendarViewArea]
+        
+        subgraph "Day View"
+            DV[DayView]
+            TSC[TimeSlotColumn]
+            TS[TimeSlot<br/>Repeated]
+            EC[EmployeeColumns<br/>If Multi-Employee]
+            AC1[AppointmentCard<br/>Positioned by Time]
+        end
+
+        subgraph "Week View"
+            WV[WeekView]
+            DC[DayColumn<br/>Repeated 7x]
+            DH[DayHeader]
+            TSC2[TimeSlotColumn]
+            AC2[AppointmentCard<br/>Positioned by Day/Time]
+            EC2[EmployeeColumns<br/>If Multi-Employee]
+        end
+
+        subgraph "Month View"
+            MV[MonthView]
+            MH[MonthHeader]
+            WR[WeekRow<br/>Repeated]
+            DC2[DayCell<br/>Repeated]
+            DN2[DayNumber]
+            AI[AppointmentIndicators<br/>Dots]
+            AT[AppointmentTooltip<br/>On Hover]
+        end
+    end
+
+    subgraph "Modals"
+        AM[AppointmentModal<br/>Portal]
+        AMH[AppointmentHeader]
+        CI[CustomerInfo]
+        EI[EmployeeInfo]
+        SVI[ServiceInfo]
+        AMD[AppointmentDetails]
+        DTD[DateTimeDisplay]
+        SD[StatusDisplay]
+        ND[NotesDisplay]
+        AMA[AppointmentActions]
+        EB[EditButton]
+        SCD[StatusChangeDropdown]
+        CB[CancelButton]
+        DB[DeleteButton]
+
+        AF[AppointmentForm<br/>Modal]
+        FF[FormFields]
+        CS2[CustomerSelector<br/>With Search]
+        ES[EmployeeSelector]
+        SS[ServiceSelector<br/>Multi-select]
+        DTP[DateTimePicker]
+        NT[NotesTextarea]
+        CW[ConflictWarning<br/>Conditional]
+        FA[FormActions]
+        SB[SaveButton]
+        CB2[CancelButton]
+        VE[ValidationErrors]
+    end
+
+    CL --> CH
+    CL --> CF
+    CL --> CVA
+
+    CH --> DN
+    CH --> VS
+    CH --> CA
+
+    CF --> EF
+    CF --> SF
+    CF --> SVF
+    CF --> DRF
+    CF --> DOWF
+    CF --> HOF
+    CF --> CS
+    CF --> CFB
+
+    CVA --> DV
+    CVA --> WV
+    CVA --> MV
+
+    DV --> TSC
+    DV --> EC
+    TSC --> TS
+    TSC --> AC1
+
+    WV --> DC
+    DC --> DH
+    DC --> TSC2
+    DC --> AC2
+    WV --> EC2
+
+    MV --> MH
+    MV --> WR
+    WR --> DC2
+    DC2 --> DN2
+    DC2 --> AI
+    DC2 --> AT
+
+    AC1 --> AM
+    AC2 --> AM
+    AI --> AM
+
+    AM --> AMH
+    AM --> AMD
+    AM --> AMA
+    AMH --> CI
+    AMH --> EI
+    AMH --> SVI
+    AMD --> DTD
+    AMD --> SD
+    AMD --> ND
+    AMA --> EB
+    AMA --> SCD
+    AMA --> CB
+    AMA --> DB
+    EB --> AF
+
+    AF --> FF
+    AF --> CW
+    AF --> FA
+    AF --> VE
+    FF --> CS2
+    FF --> ES
+    FF --> SS
+    FF --> DTP
+    FF --> NT
+    FA --> SB
+    FA --> CB2
+
+    style CL fill:#e1f5ff
+    style AM fill:#fff4e1
+    style AF fill:#fff4e1
+
