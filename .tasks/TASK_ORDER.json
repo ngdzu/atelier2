@@ -911,6 +911,92 @@
           "notes": "Deploy Calendar and Appointment Viewing functionality to production. Includes staging deployment, production deployment, smoke tests, and integration verification. Should be done after testing is complete."
         }
       ]
+    },
+    {
+      "phase": 8,
+      "name": "AI Task Execution Enhancement",
+      "description": "Add AI-powered autonomous task execution capability to Task Portal. This feature allows users to trigger AI agents to automatically complete tasks.",
+      "tasks": [
+        {
+          "taskId": "TASK-FEAT-028",
+          "title": "Design AI Task Execution Architecture",
+          "priority": "HIGH",
+          "canStart": true,
+          "dependsOn": [],
+          "blocking": [
+            "TASK-API-010"
+          ],
+          "estimatedTime": "6-8 hours",
+          "notes": "Design architecture for AI-powered task execution. Evaluate implementation approaches (client-side vs backend service vs VS Code extension), select AI provider (Anthropic Claude 3.5 Sonnet recommended), design context gathering system, and plan execution environment with safety mechanisms."
+        },
+        {
+          "taskId": "TASK-API-010",
+          "title": "Build Backend Service for AI Task Execution",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-028"
+          ],
+          "blocking": [
+            "TASK-FEAT-027",
+            "TASK-FEAT-029"
+          ],
+          "estimatedTime": "12-16 hours",
+          "notes": "Build Node.js/Express backend service handling AI task execution requests. Implement REST API, WebSocket server, task queue (Bull + Redis), AI service integration (Anthropic SDK), file system operations, git operations, and authentication."
+        },
+        {
+          "taskId": "TASK-FEAT-027",
+          "title": "Implement AI Agent Task Execution Logic",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-010"
+          ],
+          "blocking": [
+            "TASK-TEST-009"
+          ],
+          "estimatedTime": "16-20 hours",
+          "notes": "Implement core AI agent logic: context gathering (task + project + dependencies), execution planning, action execution (code/docs/commands using tools: read_file, write_file, run_command, list_directory, search_files), Definition of Done validation, error recovery with self-healing, and git commit workflow with feature branches."
+        },
+        {
+          "taskId": "TASK-FEAT-029",
+          "title": "Add AI Execution Button to Task Portal UI",
+          "priority": "HIGH",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-API-010"
+          ],
+          "blocking": [],
+          "estimatedTime": "8-12 hours",
+          "notes": "Enhance Task Portal static site with 'Execute with AI' button, execution progress modal with real-time log viewer, WebSocket client for live updates (progress/fileChange/command/complete events), configuration panel for API settings, and result viewer. Includes mobile responsive design and browser notifications."
+        },
+        {
+          "taskId": "TASK-TEST-009",
+          "title": "Test AI Task Execution System",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-FEAT-027"
+          ],
+          "blocking": [
+            "TASK-DOC-017"
+          ],
+          "estimatedTime": "6-8 hours",
+          "notes": "Comprehensively test with simple (>80% success target), medium (>60% success), and complex (>40% success) tasks. Test scenarios include normal execution, missing dependencies, invalid requirements, network interruption, concurrent executions, timeout scenarios, and security attacks. Document success rates, execution times, error scenarios, performance benchmarks, and create improvement backlog."
+        },
+        {
+          "taskId": "TASK-DOC-017",
+          "title": "Document AI Task Execution Feature",
+          "priority": "MEDIUM",
+          "canStart": false,
+          "dependsOn": [
+            "TASK-TEST-009"
+          ],
+          "blocking": [],
+          "estimatedTime": "4-6 hours",
+          "notes": "Create comprehensive documentation: user guide (configuration, execution workflow, monitoring, troubleshooting), developer guide (architecture, extending tools, deployment), API reference (REST endpoints, WebSocket events, authentication), troubleshooting guide (common issues, error codes, debugging), and best practices (task structure, cost optimization, security)."
+        }
+      ]
     }
   ],
   "nextTaskRecommendation": {
@@ -971,6 +1057,16 @@
         "TASK-FEAT-018"
       ],
       "note": "All dashboard frontend tasks depend on TASK-API-002 but not on each other, so they can be worked on simultaneously."
+    },
+    "phase8": {
+      "description": "AI Task Execution enhancement can be developed independently of other features",
+      "tasks": [
+        "TASK-FEAT-028",
+        "TASK-API-010",
+        "TASK-FEAT-027",
+        "TASK-FEAT-029"
+      ],
+      "note": "TASK-FEAT-028 (architecture) has no dependencies and can start anytime. TASK-FEAT-027 (AI agent logic) and TASK-FEAT-029 (UI button) both depend on TASK-API-010 (backend service), so they can be developed in parallel after the backend is ready."
     }
   },
   "criticalPath": [
@@ -1028,14 +1124,22 @@
     "TASK-TEST-006",
     "TASK-DOC-005"
   ],
+  "aiTaskExecutionCriticalPath": [
+    "TASK-FEAT-028",
+    "TASK-API-010",
+    "TASK-FEAT-027",
+    "TASK-TEST-009",
+    "TASK-DOC-017"
+  ],
   "notes": {
     "executionStrategy": "Work through phases sequentially. Within each phase, check dependencies. If all dependencies are met, the task can start.",
-    "parallelWork": "Multiple task groups can be worked on in parallel. See 'parallelization' section for details. Dashboard and customer-promotions features can be developed in parallel after foundation tasks.",
+    "parallelWork": "Multiple task groups can be worked on in parallel. See 'parallelization' section for details. Dashboard, customer-promotions, and AI task execution features can be developed in parallel after foundation tasks.",
     "blockingTasks": "Pay attention to 'blocking' field - these tasks cannot start until the current task is complete.",
     "priority": "HIGH priority tasks should be completed before MEDIUM priority tasks in the same phase when possible.",
-    "featureParallelism": "Dashboard system (TASK-DOC-002 → FEAT-014 → DB-003 → API-002) and Customer Promotions (TASK-DOC-004 → DB-004 → API-004) can be developed in parallel as they are independent feature sets.",
-    "criticalPaths": "There are five main critical paths: (1) Core backend infrastructure, (2) Dashboard system, (3) Customer Promotions system, (4) Authentication system, and (5) Authorization system. These can progress independently after Phase 1, though dashboard requires authentication before frontend implementation.",
+    "featureParallelism": "Dashboard system (TASK-DOC-002 → FEAT-014 → DB-003 → API-002), Customer Promotions (TASK-DOC-004 → DB-004 → API-004), and AI Task Execution (TASK-FEAT-028 → API-010 → FEAT-027) can be developed in parallel as they are independent feature sets.",
+    "criticalPaths": "There are six main critical paths: (1) Core backend infrastructure, (2) Dashboard system, (3) Customer Promotions system, (4) Authentication system, (5) Authorization system, and (6) AI Task Execution. These can progress independently after Phase 1, though dashboard requires authentication before frontend implementation.",
     "authenticationNote": "Authentication system (DOC-006 → DB-005 → API-005 → SEC-003) provides system-wide auth that dashboard (SEC-002) and other features use. Dashboard frontend tasks require both API-002 and SEC-002 (which depends on API-005).",
-    "authorizationNote": "Authorization system (DOC-014 → ARCH-004 → DOC-015 → DB-008 → API-007 → API-008 → API-009 → SEC-004 → SEC-005 → SEC-006 → TEST-008 → DOC-016) provides comprehensive role-based access control. It integrates with calendar (SEC-005) and dashboard modules (SEC-006). The system follows DDD principles with sequential layer implementation (Domain → Application → Infrastructure → Presentation)."
+    "authorizationNote": "Authorization system (DOC-014 → ARCH-004 → DOC-015 → DB-008 → API-007 → API-008 → API-009 → SEC-004 → SEC-005 → SEC-006 → TEST-008 → DOC-016) provides comprehensive role-based access control. It integrates with calendar (SEC-005) and dashboard modules (SEC-006). The system follows DDD principles with sequential layer implementation (Domain → Application → Infrastructure → Presentation).",
+    "aiTaskExecutionNote": "AI Task Execution feature (FEAT-028 → API-010 → FEAT-027 → TEST-009 → DOC-017) adds autonomous task execution to Task Portal. It's a standalone feature that can be developed independently. Uses Anthropic Claude 3.5 Sonnet for AI, Node.js backend with WebSocket for real-time progress, and git-based safety mechanisms. Estimated cost: $30-100/month for moderate usage."
   }
 }
