@@ -63,7 +63,7 @@ The Calendar and Appointment Viewing system consists of four main layers:
 
 ### System Components
 
-![System Architecture Diagram](../../diagrams/calendar-system-architecture.svg)
+[![System Architecture Diagram](../../diagrams/calendar-system-architecture.svg)](../../diagrams/calendar-system-architecture.mmd)
 
 *Figure 1: Calendar and Appointment Viewing System Architecture*  
 *Source: [calendar-system-architecture.mmd](../../diagrams/calendar-system-architecture.mmd)*
@@ -86,7 +86,7 @@ The calendar system extends the existing appointment schema with additional enti
 
 ### Database Schema UML Diagram
 
-![Database ERD Diagram](../../diagrams/calendar-erd.svg)
+[![Database ERD Diagram](../../diagrams/calendar-erd.svg)](../../diagrams/calendar-erd.mmd)
 
 *Figure 1: Calendar and Appointment Viewing Database Schema (ERD)*  
 *Source: [calendar-erd.mmd](../../diagrams/calendar-erd.mmd)*
@@ -595,7 +595,7 @@ All error responses follow this format:
 
 ### Component Hierarchy
 
-![Component Hierarchy Diagram](../../diagrams/calendar-component-hierarchy.svg)
+[![Component Hierarchy Diagram](../../diagrams/calendar-component-hierarchy.svg)](../../diagrams/calendar-component-hierarchy.mmd)
 
 *Figure 3: Calendar Component Hierarchy*  
 *Source: [calendar-component-hierarchy.mmd](../../diagrams/calendar-component-hierarchy.mmd)*
@@ -1162,7 +1162,7 @@ Metrics Service (queries same table)
 
 ## Data Flow Diagrams
 
-![Data Flow Diagram](../../diagrams/calendar-data-flow.svg)
+[![Data Flow Diagram](../../diagrams/calendar-data-flow.svg)](../../diagrams/calendar-data-flow.mmd)
 
 *Figure 2: Calendar and Appointment Viewing Data Flow*  
 *Source: [calendar-data-flow.mmd](../../diagrams/calendar-data-flow.mmd)*
@@ -1191,7 +1191,7 @@ The diagram above illustrates the overall data flow through the system layers, s
 
 ## Sequence Diagrams
 
-![Sequence Diagrams](../../diagrams/calendar-sequence-diagrams.svg)
+[![Sequence Diagrams](../../diagrams/calendar-sequence-diagrams.svg)](../../diagrams/calendar-sequence-diagrams.mmd)
 
 *Figure 4: Calendar System Sequence Diagrams*  
 *Source: [calendar-sequence-diagrams.mmd](../../diagrams/calendar-sequence-diagrams.mmd)*
