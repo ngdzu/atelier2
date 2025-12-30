@@ -1,6 +1,6 @@
 # Calendar and Appointment Viewing - Architecture and Design
 
-**Document Version:** 1.2  
+**Document Version:** 1.4  
 **Date:** 2025-12-26  
 **Status:** Draft  
 **Last Updated:** 2025-01-24  
@@ -41,12 +41,30 @@ This document defines the complete architecture and design for the Calendar and 
 
 ### Technology Stack
 
-- **Backend**: Node.js, Express.js, TypeORM, PostgreSQL
+- **Backend**: Node.js, **NestJS**, **Prisma**, PostgreSQL
 - **Frontend**: React 19+, TypeScript, React Query, React Hook Form
-- **Database**: PostgreSQL with TypeORM entities
-- **Validation**: Zod or class-validator
+- **Database**: PostgreSQL with Prisma ORM
+- **Validation**: class-validator, class-transformer (NestJS built-in)
 - **Date Handling**: date-fns
 - **Export**: pdfkit (PDF), csv-writer (CSV)
+- **Dependency Injection**: NestJS built-in DI container
+
+**Note:** NestJS is recommended over Express.js for this project because:
+- Stable, production-ready framework
+- Excellent built-in dependency injection
+- Prisma integration via `@prisma/client` and `PrismaService`
+- Scalable architecture for enterprise applications
+- Better developer experience with decorators, guards, interceptors
+- Current Express codebase is minimal (easy migration)
+
+**Note:** Prisma is chosen as the ORM because:
+- Type-safe database client with excellent TypeScript support
+- Declarative schema definition in `schema.prisma`
+- Automatic migration generation
+- Excellent developer experience with Prisma Studio
+- Strong query builder with type safety
+- Better performance with optimized queries
+- Active Record pattern with Prisma Client
 
 ---
 
@@ -54,12 +72,108 @@ This document defines the complete architecture and design for the Calendar and 
 
 ### High-Level Architecture
 
-The Calendar and Appointment Viewing system consists of four main layers:
+The Calendar and Appointment Viewing system consists of four main layers following Domain-Driven Design (DDD) principles, organized within NestJS module structure:
 
-1. **Presentation Layer**: React components for calendar UI
-2. **Application Layer**: API endpoints and business logic
-3. **Domain Layer**: Business entities and domain logic
-4. **Infrastructure Layer**: Database access and external integrations
+1. **Presentation Layer**: React components for calendar UI (frontend) and NestJS controllers (backend)
+2. **Application Layer**: Application services and use cases (NestJS services)
+3. **Domain Layer**: Business entities, value objects, and domain services
+4. **Infrastructure Layer**: Database access (Prisma repositories) and external integrations
+
+### NestJS Module Structure
+
+NestJS organizes code into **modules**, where each feature has its own module. The Calendar feature follows this structure while maintaining DDD layer separation:
+
+```
+server/src/
+├── calendar/                          # Calendar feature module
+│   ├── calendar.module.ts             # NestJS module definition
+│   ├── calendar.controller.ts         # API controllers (Presentation Layer)
+│   ├── dto/                           # Data Transfer Objects
+│   │   ├── requests/                  # Request DTOs
+│   │   └── responses/                 # Response DTOs
+│   ├── services/                      # Application services (Application Layer)
+│   │   ├── get-appointments.service.ts
+│   │   ├── create-appointment.service.ts
+│   │   ├── update-appointment.service.ts
+│   │   ├── change-appointment-status.service.ts
+│   │   ├── bulk-change-status.service.ts
+│   │   └── check-availability.service.ts
+│   ├── domain/                        # Domain layer (shared across features)
+│   │   ├── entities/                  # Domain entities
+│   │   │   ├── appointment.entity.ts
+│   │   │   └── appointment-status-history.entity.ts
+│   │   ├── value-objects/             # Value objects
+│   │   │   ├── time-slot.vo.ts
+│   │   │   ├── appointment-status.vo.ts
+│   │   │   ├── appointment-source.vo.ts
+│   │   │   └── service-id-code.vo.ts
+│   │   ├── services/                  # Domain services
+│   │   │   ├── conflict-detection.service.ts
+│   │   │   ├── availability.service.ts
+│   │   │   └── service-duration-calculator.service.ts
+│   │   ├── repositories/              # Repository interfaces
+│   │   │   ├── appointment.repository.interface.ts
+│   │   │   └── appointment-status-history.repository.interface.ts
+│   │   └── errors/                    # Domain errors
+│   │       └── appointment-errors.ts
+│   └── infrastructure/                # Infrastructure layer
+│       ├── repositories/              # Repository implementations
+│       │   ├── appointment.repository.ts
+│       │   └── appointment-status-history.repository.ts
+│       └── mappers/                   # Entity mappers
+│           └── appointment.mapper.ts
+├── prisma/                             # Prisma schema and migrations
+│   ├── schema.prisma                  # Database schema definition
+│   └── migrations/                    # Prisma migrations
+├── common/                            # Shared code across features
+│   ├── guards/                        # Authentication/authorization guards
+│   │   ├── jwt-auth.guard.ts
+│   │   └── roles.guard.ts
+│   ├── decorators/                    # Custom decorators
+│   │   └── roles.decorator.ts
+│   ├── filters/                       # Exception filters
+│   │   └── http-exception.filter.ts
+│   ├── interceptors/                  # Interceptors
+│   │   └── logging.interceptor.ts
+│   └── pipes/                         # Validation pipes
+│       └── validation.pipe.ts
+├── config/                            # Configuration
+│   └── database.config.ts
+└── main.ts                            # Application entry point
+```
+
+**Key NestJS Structure Principles:**
+
+1. **Feature Module**: `calendar/` folder contains all calendar-related code
+2. **Module File**: `calendar.module.ts` defines the module with providers, controllers, imports, exports
+3. **Layer Organization**: Within the feature module, code is organized by DDD layers (domain, application, infrastructure, presentation)
+4. **Shared Code**: Common guards, decorators, filters go in `common/` folder
+5. **Prisma Schema**: Database schema defined in `prisma/schema.prisma` at project root
+6. **Prisma Migrations**: Database migrations in `prisma/migrations/` folder
+7. **Domain Layer**: Shared domain code (entities, value objects, domain services) can be in feature module or shared `domain/` folder
+
+**Alternative Structure (Domain-First Approach):**
+
+For larger applications, domain layer can be shared across features:
+
+```
+server/src/
+├── domain/                            # Shared domain layer
+│   ├── appointment/                   # Appointment domain
+│   │   ├── entities/
+│   │   ├── value-objects/
+│   │   ├── services/
+│   │   └── repositories/
+│   └── shared/                        # Shared domain concepts
+├── calendar/                          # Calendar feature module
+│   ├── calendar.module.ts
+│   ├── calendar.controller.ts
+│   ├── services/                      # Application services
+│   └── dto/
+└── common/                            # Shared infrastructure
+```
+
+**Recommendation:** Use the first structure (feature-module with internal layers) for this project as it keeps calendar code self-contained while maintaining DDD principles.
 
 ### System Components
 
@@ -68,11 +182,20 @@ The Calendar and Appointment Viewing system consists of four main layers:
 *Figure 1: Calendar and Appointment Viewing System Architecture*  
 *Source: [calendar-system-architecture.mmd](../../diagrams/calendar-system-architecture.mmd)*
 
-The diagram above illustrates the four-layer architecture:
-- **Presentation Layer**: React components for calendar UI (CalendarView, Appointment components, Filters)
-- **Application Layer**: API controllers and services (Calendar, Appointment, Export services)
-- **Domain Layer**: Business entities and domain services (Appointment Entity, TimeSlot, Status, Conflict/Availability services)
-- **Infrastructure Layer**: Data access and external integrations (Repositories, Database, Booking Sync)
+The diagram above illustrates the four-layer architecture organized within NestJS modules:
+- **Presentation Layer**: 
+  - **Backend**: NestJS controllers (`CalendarController`) handling HTTP requests
+  - **Frontend**: React components for calendar UI (CalendarView, Appointment components, Filters)
+- **Application Layer**: NestJS services (Application services) orchestrating domain logic
+- **Domain Layer**: Business entities, value objects, and domain services (Appointment Entity, TimeSlot, Status, Conflict/Availability services)
+- **Infrastructure Layer**: Prisma repositories using Prisma Client (Repositories, Database, Booking Sync)
+
+**NestJS Module Organization:**
+- Each feature (Calendar) has its own module (`CalendarModule`)
+- Module defines providers (services, repositories), controllers, and imports
+- Dependency injection handled automatically by NestJS
+- Prisma Client injected via `PrismaService` (shared service)
+- Shared code (guards, decorators, filters) in `common/` folder
 
 See [System Architecture Diagram](#system-architecture-diagram) section for detailed component descriptions.
 
@@ -93,11 +216,12 @@ The calendar system extends the existing appointment schema with additional enti
 
 The Entity Relationship Diagram above illustrates the database schema for the calendar system, showing the relationships between appointments, services, employees, users, and audit history tables.
 
-### Core Entities
+### Prisma Schema Models
 
-#### Appointment Entity
+#### Appointment Model
 
-**Table:** `appointments`
+**Prisma Model:** `Appointment`  
+**Database Table:** `appointments`
 
 **Fields:**
 - `id` (UUID, Primary Key)
@@ -132,9 +256,10 @@ The Entity Relationship Diagram above illustrates the database schema for the ca
 - `end_time > start_time` (check constraint)
 - `start_time >= created_at` (check constraint, allows future appointments)
 
-#### Appointment Service Junction Table
+#### Appointment Service Junction Model
 
-**Table:** `appointment_services`
+**Prisma Model:** `AppointmentService`  
+**Database Table:** `appointment_services`
 
 **Purpose:** Many-to-many relationship for appointments with multiple services (main service + add-ons)
 
@@ -151,9 +276,10 @@ The Entity Relationship Diagram above illustrates the database schema for the ca
 - Index: `service_id`
 - Unique: `(appointment_id, service_id)` - Prevent duplicate service assignments
 
-#### Appointment Status History Entity (Audit Log)
+#### Appointment Status History Model (Audit Log)
 
-**Table:** `appointment_status_history`
+**Prisma Model:** `AppointmentStatusHistory`  
+**Database Table:** `appointment_status_history`
 
 **Purpose:** Track all status changes for audit and history purposes
 
@@ -186,7 +312,15 @@ The diagram above shows the complete database schema. Key relationships include:
 
 See [Database ERD Diagram](#database-erd-diagram) in the Diagrams section for the full visual representation.
 
-### Database Migrations
+### Prisma Migrations
+
+Prisma migrations are automatically generated from schema changes and stored in `prisma/migrations/`. Migration workflow:
+
+1. **Update `prisma/schema.prisma`** with model changes
+2. **Generate migration**: `npx prisma migrate dev --name migration_name`
+3. **Apply migration**: Automatically applied in development, manually in production
+
+**Initial Migrations:**
 
 **Migration 1: Create Appointment Extensions**
 - Add `source` field to appointments table
@@ -201,6 +335,12 @@ See [Database ERD Diagram](#database-erd-diagram) in the Diagrams section for th
 **Migration 3: Create Appointment Status History Table**
 - Create `appointment_status_history` table
 - Add foreign keys and indexes
+
+**Prisma Migration Commands:**
+- `npx prisma migrate dev`: Create and apply migration in development
+- `npx prisma migrate deploy`: Apply pending migrations in production
+- `npx prisma migrate reset`: Reset database and apply all migrations
+- `npx prisma studio`: Open Prisma Studio to view/edit data
 
 ---
 
@@ -1629,4 +1769,18 @@ The sequence diagrams above illustrate detailed step-by-step workflows for key o
   - Added Design Decision #16: Service ID Quick Filter with Polished UI
   - Documented service selection methods (type number or click service)
   - Documented filtering behavior (single letter or letter+number)
+- **v1.3** (2025-01-24): Updated file structure to reflect NestJS module conventions:
+  - Added "NestJS Module Structure" section with detailed file organization
+  - Updated system architecture description to include NestJS module organization
+  - Documented feature-module approach with DDD layer separation
+  - Added file structure diagram showing calendar module organization
+  - Updated component descriptions to reflect NestJS controllers and services
+- **v1.4** (2025-01-24): Updated to use Prisma instead of TypeORM:
+  - Changed technology stack from TypeORM to Prisma
+  - Updated file structure to include `prisma/` folder with `schema.prisma`
+  - Updated database schema section to reflect Prisma models instead of TypeORM entities
+  - Updated migrations section to use Prisma migration workflow
+  - Updated infrastructure layer description to use Prisma Client
+  - Added Prisma rationale and benefits
+  - Updated module organization to mention PrismaService
 
