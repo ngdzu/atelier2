@@ -1,6 +1,6 @@
 # Calendar and Appointment Viewing - Architecture and Design
 
-**Document Version:** 1.1  
+**Document Version:** 1.2  
 **Date:** 2025-12-26  
 **Status:** Draft  
 **Last Updated:** 2025-01-24  
@@ -237,6 +237,7 @@ Authorization: Bearer <token>
 - `statuses` (ENUM[], optional): Filter by multiple statuses (comma-separated)
 - `customerId` (UUID, optional): Filter by customer ID
 - `serviceId` (UUID, optional): Filter by service ID
+- `serviceIdCode` (string, optional): Filter by service ID code (e.g., "M1", "P5", "E3") - supports partial matching (e.g., "M" for all Manicure services)
 - `dayOfWeek` (number[], optional): Filter by day of week (0=Sunday, 1=Monday, etc.) - comma-separated
 - `hourOfDay` (number, optional): Filter by hour of day (0-23)
 - `hourRangeStart` (number, optional): Start hour for time range filter (0-23)
@@ -826,7 +827,25 @@ interface AppointmentFormProps {
 - Customer search/select with autocomplete
 - Option to create new customer (if user has permission)
 - Employee selector
-- Service multi-select (main + add-ons)
+- **Service Selection (Polished, Fashionable Design - MUST HAVE):**
+  - Modern, professional service dropdown interface
+  - Clean, organized service list with clear visual hierarchy
+  - Visually appealing service items/cards
+  - Smooth animations and transitions
+  - Professional typography and spacing
+  - Service ID displayed in format: "M1 - Classic Manicure" or "M1: Classic Manicure"
+  - **Service ID Quick Filter Support:**
+    - Type service ID code (e.g., "M1", "P5") to filter to specific service
+    - Type single letter (e.g., "M") to filter to all services in category
+    - Real-time filtering as user types
+    - Case-insensitive matching
+  - **Service Selection Methods:**
+    - Type number (e.g., "1" for M1, "5" for P5) to select service
+    - Click service name/item in dropdown to add to appointment
+    - Visual feedback on selection (highlight, checkmark, animation)
+  - Service multi-select (main + add-ons)
+  - Shows service duration and price
+  - Service category/type indicator
 - Date/time picker
 - Conflict detection
 - Form validation
@@ -858,11 +877,25 @@ interface CalendarFiltersProps {
 **Filter Types:**
 - Employee (multi-select)
 - Status (multi-select checkboxes)
-- Service (multi-select)
+- **Service Filter with Service ID Quick Filter (MUST HAVE):**
+  - Multi-select service dropdown
+  - **Service ID Quick Filter:**
+    - Type service ID code format (e.g., "M1", "P5", "E3") to filter
+    - Single letter (e.g., "M") filters all services in that category
+    - Letter + number (e.g., "M1") filters specific service
+    - Real-time filtering as user types
+    - Case-insensitive matching
+    - Service IDs displayed in dropdown: "M1 - Classic Manicure" or "M1: Classic Manicure"
+  - Polished, fashionable dropdown design (see AppointmentForm for details)
+  - Service selection by typing number or clicking service name
 - Date range
 - Day of week (receptionist - multi-select)
 - Hour of day (receptionist - time range)
 - Customer search
+- **Search by Service ID Code:**
+  - Search field accepts service ID format
+  - Supports partial matching (single letter or letter+number)
+  - Real-time search results
 - Quick filter presets (e.g., "Monday Mornings", "Friday Afternoons")
 - Filter persistence (URL parameters or localStorage)
 
@@ -1525,6 +1558,43 @@ The sequence diagrams above illustrate detailed step-by-step workflows for key o
 - URL length limitations
 - Better UX
 
+### 16. Service ID Quick Filter with Polished UI
+
+**Decision:** Implement Service ID Quick Filter (REQ-CAL-012) with polished, fashionable service dropdown design
+
+**Rationale:**
+- Required feature from requirements (MUST HAVE)
+- Critical for fast service filtering in busy environments
+- Significantly improves workflow efficiency for receptionists and staff
+- Reduces time spent scrolling through long service lists
+- Professional, modern UI enhances user experience
+
+**Implementation:**
+- Service ID format: Letter prefix (category) + number suffix (e.g., "M1", "P5", "E3")
+- Service dropdown with polished, fashionable design:
+  - Modern, professional interface
+  - Clean, organized service list with clear visual hierarchy
+  - Visually appealing service items/cards
+  - Smooth animations and transitions
+  - Professional typography and spacing
+- Service selection methods:
+  - Type number (e.g., "1" for M1) to select service
+  - Click service name/item in dropdown
+  - Visual feedback on selection (highlight, checkmark, animation)
+- Filtering behavior:
+  - Type single letter (e.g., "M") to filter all services in category
+  - Type letter + number (e.g., "M1") to filter specific service
+  - Real-time filtering as user types
+  - Case-insensitive matching
+- Service ID display: "M1 - Classic Manicure" or "M1: Classic Manicure"
+- Integration with appointment form and calendar filters
+- API support: `serviceIdCode` query parameter
+
+**Trade-offs:**
+- Requires service ID assignment and management
+- Additional UI complexity for polished design
+- Significant UX improvement and workflow efficiency
+
 ---
 
 ## Next Steps
@@ -1551,4 +1621,12 @@ The sequence diagrams above illustrate detailed step-by-step workflows for key o
   - Customer creation option in appointment form
   - Appointment source visual indicator
   - Additional design decisions (11-15)
+- **v1.2** (2025-01-24): Updated to reflect Service ID Quick Filter (REQ-CAL-012) requirements:
+  - Added `serviceIdCode` query parameter to GET /api/calendar/appointments endpoint
+  - Updated AppointmentForm component description with polished, fashionable service dropdown design
+  - Added Service ID Quick Filter support to CalendarFilters component
+  - Added search by Service ID Code to filter types
+  - Added Design Decision #16: Service ID Quick Filter with Polished UI
+  - Documented service selection methods (type number or click service)
+  - Documented filtering behavior (single letter or letter+number)
 

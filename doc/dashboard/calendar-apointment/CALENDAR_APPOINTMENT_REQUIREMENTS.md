@@ -1,6 +1,6 @@
 # Calendar and Appointment Viewing - Detailed Requirements
 
-**Document Version:** 1.2  
+**Document Version:** 1.6  
 **Date:** 2025-01-24  
 **Status:** Draft  
 **Last Updated:** 2025-01-24  
@@ -16,9 +16,10 @@
 5. [Integration Requirements](#integration-requirements)
 6. [Filtering and Search Requirements](#filtering-and-search-requirements)
 7. [Export and Printing Requirements](#export-and-printing-requirements)
-8. [User Workflows](#user-workflows)
-9. [Technical Constraints](#technical-constraints)
-10. [Glossary](#glossary)
+8. [Suggested Additional Features](#suggested-additional-features)
+9. [User Workflows](#user-workflows)
+10. [Technical Constraints](#technical-constraints)
+11. [Glossary](#glossary)
 
 ---
 
@@ -65,7 +66,16 @@ The following are explicitly out of scope for this phase:
 ### Related Requirements
 
 This document expands on the high-level requirements defined in `DASHBOARD_REQUIREMENTS.md`:
-- **REQ-CAL-001** through **REQ-CAL-015**: Calendar Interface, Appointment Management, Filtering, Integration, Export
+- **REQ-CAL-001** through **REQ-CAL-011**: Calendar Interface, Appointment Management, Filtering, Integration
+- **REQ-CAL-012**: Service ID Quick Filter (MUST HAVE)
+- **REQ-CAL-013**: Appointment Audit Trail Viewing
+- **REQ-CAL-014**: Appointment Duplicate/Copy
+- **REQ-CAL-015**: Appointment Templates
+- **REQ-CAL-016**: Appointment Time Rounding
+- **REQ-CAL-017**: Appointment Statistics Dashboard
+- **REQ-CAL-018**: Holiday/Closed Day Management
+- **REQ-CAL-019**: Appointment Search by Phone Number
+- **REQ-CAL-020**: Export and Printing (PDF, CSV, Print)
 
 ---
 
@@ -331,6 +341,13 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - Customer name (primary identifier)
   - Service name (or first service if multiple)
   - Time (start time, or start-end if space allows)
+  - **Appointment Service Duration Display:**
+    - Show duration in appointment card (e.g., "60 min", "1.5h")
+    - Display in tooltip/hover
+    - Visual height proportional to duration
+    - Show in appointment details modal
+    - Duration calculation: Sum of main service + all add-on services
+    - Visual indicators: Appointment height in calendar reflects duration
   - Status indicator (color or icon)
   - Employee name (if multi-employee view)
 - **Color Coding:**
@@ -341,6 +358,17 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - NO_SHOW: Orange
   - By Service Type (alternative): Color by service category
   - Configurable preference
+- **Appointment Color Customization:**
+  - User-configurable color schemes
+  - Color by status (customizable)
+  - Color by service type (customizable)
+  - Color by employee (customizable)
+  - Per-user preferences (stored in user settings)
+  - Default color scheme
+  - Color picker for customization
+  - Ensure sufficient color contrast for accessibility
+  - Support colorblind-friendly palettes
+  - Alternative indicators (icons, patterns)
 - **Hover Tooltips:**
   - Show full appointment details on hover:
     - Customer name and contact
@@ -353,6 +381,50 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
 - **Click Behavior:**
   - Click appointment: Open appointment details modal
   - Double-click (optional): Open edit form directly
+- **Appointment Quick Actions Menu:**
+  - Right-click context menu on appointments
+  - Quick action buttons in appointment card
+  - Keyboard shortcuts for actions
+  - Action options: Mark as Completed, Mark as No-Show, Reschedule, Cancel, Duplicate, View Customer History, Send Reminder (if integrated)
+  - Role-based actions: Show only actions user has permission for, disable actions for past appointments (where applicable)
+
+### Appointment Statistics Dashboard (REQ-CAL-017)
+
+**Purpose:** Quick statistics view within calendar interface
+
+**Specifications:**
+- **Statistics Display:**
+  - Today's appointments count
+  - Upcoming appointments (next 7 days)
+  - Pending status changes
+  - No-shows today/week
+  - Revenue summary (if pricing available)
+- **Statistics Location:**
+  - Sidebar or header widget
+  - Collapsible panel
+  - Click to view detailed metrics
+- **Real-Time Updates:**
+  - Statistics update as appointments change
+  - Refresh automatically
+
+### Holiday/Closed Day Management (REQ-CAL-018)
+
+**Purpose:** Block out days when salon is closed (holidays, special events)
+
+**Specifications:**
+- **Closed Day Configuration:**
+  - Mark specific dates as closed
+  - Recurring holidays (e.g., Christmas, New Year)
+  - One-time closures
+  - Partial day closures (morning/afternoon)
+- **Visual Display:**
+  - Grayed out or marked days in calendar
+  - Clear indication of closed days
+  - Prevent appointment creation on closed days
+- **Management:**
+  - Admin/Manager can configure closed days
+  - Calendar view shows closed days
+  - Export/import closed day calendar
 
 ### Navigation Requirements
 
@@ -416,6 +488,37 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - Show status change history (if available)
   - Who changed status and when
   - Reason for status change (if provided)
+- **Customer History Quick View:**
+  - Click customer name in appointment to view history
+  - Show customer's past appointments in sidebar or modal
+  - Display appointment count, last visit date, total spending
+  - Link to full customer profile
+  - List of past appointments (date, service, employee, status)
+  - Visit frequency, preferred services, preferred employee
+  - Quick actions: Create new appointment for same customer, view customer details
+
+### Appointment Audit Trail Viewing (REQ-CAL-013)
+
+**Purpose:** View detailed history of appointment changes
+
+**Specifications:**
+- **Audit Trail Display:**
+  - Timeline view of all changes
+  - Who made changes and when
+  - What was changed (before/after values)
+  - Reason for changes (if provided)
+- **Audit Trail Access:**
+  - "View History" button in appointment details
+  - Expandable history section
+  - Filter by change type
+  - Export audit trail (optional)
+- **Change Types:**
+  - Status changes
+  - Time/date changes
+  - Employee reassignment
+  - Service changes
+  - Notes updates
+  - Cancellation/deletion
 
 ### Edit Appointment (REQ-CAL-006)
 
@@ -448,6 +551,14 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - Date cannot be in the past (for new appointments)
     - Time must be within business hours
     - End time must be after start time
+  - **Past Appointment Restrictions:**
+    - Cannot create appointments with start time in the past
+    - Cannot edit past appointments (except status changes)
+    - Cannot drag appointments to past time slots
+    - Clear error messages when attempting past operations
+    - Exceptions: Allow status changes for past appointments, allow viewing past appointments, allow adding notes to past appointments
+    - Configurable cutoff time (e.g., cannot create appointments less than 1 hour before start time)
+    - Role-based overrides (OWNER/MANAGER may have more flexibility)
 - **Conflict Detection:**
   - Real-time conflict checking as user edits
   - Display conflict warnings:
@@ -455,6 +566,15 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - "Time slot overlaps with existing appointment"
   - Show conflicting appointment details
   - Allow user to proceed with override (role-based)
+- **Appointment Conflict Resolution UI:**
+  - Highlight conflicting appointments in calendar
+  - Show conflict details in modal/dialog
+  - Display overlapping appointments side-by-side
+  - Visual indicators (red border, warning icon)
+  - Conflict resolution options: reschedule one appointment, override conflict (with confirmation), cancel one appointment
+  - Real-time conflict checking during drag-and-drop
+  - Disable drop zones that would create conflicts
+  - Show available alternative time slots
 - **Change Notification:**
   - Option to notify customer of changes (checkbox)
   - Email notification sent if checked
@@ -485,9 +605,30 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - Show employee availability indicator
     - Required field
   - **Service Selection:**
-    - Multi-select dropdown
+    - **Polished, Fashionable Dropdown Design:**
+      - Well-designed, modern service selection interface
+      - Professional, polished UI with clean styling
+      - Organized service list with clear visual hierarchy
+      - Visually appealing service items/cards
+      - Smooth animations and transitions
+      - Professional typography and spacing
     - Show main services and add-ons
-    - Display service duration and price
+    - Display service information:
+      - Service name clearly displayed
+      - Service ID in format: "M1 - Classic Manicure" or "M1: Classic Manicure"
+      - Service duration and price
+      - Service category/type indicator
+      - Visual indicators for selected services
+    - **Service Selection Methods:**
+      - **Type Number:** Type the number (e.g., "1" for M1, "5" for P5) to select service
+      - **Click Service:** Click on service name/item in dropdown to add to appointment
+      - Visual feedback on selection (highlight, checkmark, animation)
+    - **Service ID Quick Filter Support:**
+      - Type service ID (e.g., "M1", "P5") to filter dropdown to specific service
+      - Type single letter (e.g., "M") to filter dropdown to show all services in category
+      - Real-time filtering as user types
+      - Polished dropdown shows filtered services with smooth animations
+      - See [Service ID Quick Filter](#service-id-quick-filter-req-cal-012---must-have) for detailed specifications
     - Calculate total duration automatically
     - Required field (at least one service)
   - **Date and Time:**
@@ -497,6 +638,13 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - Required fields
   - **Notes:**
     - Text area for appointment notes
+    - **Appointment Notes Visibility Control:**
+      - Internal notes (staff-only, not visible to customers)
+      - Customer notes (visible in booking confirmation, reminders)
+      - Appointment notes (general)
+      - Clear labeling of note types
+      - Role-based visibility (internal notes for staff only)
+      - Separate fields in appointment form
     - Optional field
   - **Form Actions:**
     - "Save" button (creates appointment)
@@ -510,6 +658,62 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - Check conflicts before saving
   - Show conflict warnings
   - Prevent saving if critical conflict (unless override allowed)
+
+### Appointment Duplicate/Copy (REQ-CAL-014)
+
+**Purpose:** Quickly create similar appointments for repeat customers
+
+**Specifications:**
+- **Duplicate Action:**
+  - "Duplicate" or "Copy" button in appointment details
+  - Creates new appointment with same customer, employee, and services
+  - Pre-fills form with original appointment data
+  - Allows user to modify date/time before saving
+- **Use Cases:**
+  - Rebooking same customer for next visit
+  - Creating follow-up appointments
+  - Rescheduling with same details
+- **Smart Defaults:**
+  - Suggest next available time slot
+  - Suggest same day/time next week (if applicable)
+  - Maintain service selections
+
+### Appointment Templates (REQ-CAL-015)
+
+**Purpose:** Save common service combinations as templates for quick booking
+
+**Specifications:**
+- **Template Creation:**
+  - Save appointment as template (customer, services, duration)
+  - Name templates (e.g., "Regular Manicure + Pedicure")
+  - Store service combinations and default duration
+- **Template Usage:**
+  - Quick select from template dropdown
+  - Pre-fill appointment form with template data
+  - Allow modification before saving
+- **Template Management:**
+  - Create, edit, delete templates
+  - Share templates across users (optional)
+  - Most used templates shown first
+
+### Appointment Time Rounding (REQ-CAL-016)
+
+**Purpose:** Automatically round appointment times to nearest time slot
+
+**Specifications:**
+- **Rounding Rules:**
+  - Round to nearest 15-minute increment (default)
+  - Configurable rounding interval
+  - Round start time and end time
+  - Apply when creating/editing appointments
+- **User Control:**
+  - Option to disable rounding
+  - Manual override for exact times
+  - Show rounded time in preview before saving
+- **Use Cases:**
+  - Quick appointment creation
+  - Consistent time slot alignment
+  - Prevents odd appointment times (e.g., 2:07 PM)
 
 ### Cancel/Delete Appointment (REQ-CAL-008)
 
@@ -605,7 +809,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
 
 ## Integration Requirements
 
-### Integration with Booking System (REQ-CAL-012)
+### Integration with Booking System (REQ-CAL-010)
 
 **Purpose:** Display and sync appointments from customer booking system
 
@@ -638,7 +842,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - "Manual" icon
   - Display in appointment details
 
-### Integration with Employee Management (REQ-CAL-013)
+### Integration with Employee Management
 
 **Purpose:** Display employee information and availability in calendar
 
@@ -672,7 +876,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - "All Employees" option
   - Filter persists across view changes
 
-### Integration with Metrics (REQ-CAL-014)
+### Integration with Metrics
 
 **Purpose:** Provide appointment data for metrics calculations
 
@@ -701,7 +905,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
 
 ## Filtering and Search Requirements
 
-### Filter Appointments (REQ-CAL-010)
+### Filter Appointments
 
 **Purpose:** Filter calendar view by various criteria
 
@@ -718,6 +922,13 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - Show all service categories
     - Filter by main service or add-on
     - "All Services" option (default)
+    - **Service ID Quick Filter (MUST HAVE):**
+      - Type service ID format (e.g., "M1", "P5", "E3")
+      - Single letter (e.g., "M") filters all services in that category
+      - Letter + number (e.g., "M1") filters specific service
+      - Real-time filtering as user types
+      - Service IDs displayed in dropdown (e.g., "M1 - Classic Manicure")
+      - See [Service ID Quick Filter](#service-id-quick-filter-req-cal-012---must-have) for detailed specifications
   - **Status Filter:**
     - Checkboxes for each status:
       - Scheduled
@@ -786,7 +997,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - Filters persist across page refresh (stored in URL or localStorage)
   - Reset filters button
 
-### Search Appointments (REQ-CAL-011)
+### Search Appointments
 
 **Purpose:** Search for specific appointments
 
@@ -803,6 +1014,21 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
     - Real-time search
     - Fuzzy matching
     - Case-insensitive
+  - **Search by Service ID (MUST HAVE):**
+    - Type service ID format (e.g., "M1", "P5", "E3")
+    - Single letter shows all services in category
+    - Letter + number shows specific service
+    - Real-time filtering
+    - See [Service ID Quick Filter](#service-id-quick-filter-req-cal-012---must-have) for detailed specifications
+  - **Search by Phone Number (REQ-CAL-019):**
+    - Search field accepts phone numbers
+    - Partial phone number matching
+    - Format-agnostic (accepts with/without dashes, spaces, parentheses)
+    - Real-time search results
+    - Show matching appointments
+    - Highlight matching customer
+    - Display customer name and phone number
+    - Link to customer profile
   - **Search by Appointment ID:**
     - Text input field
     - Exact match or partial match
@@ -820,14 +1046,94 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
 - **Search UI:**
   - Search bar in calendar header
   - Search icon
-  - Placeholder text: "Search by customer, service, or ID..."
+  - Placeholder text: "Search by customer, service, service ID (M1, P5), or appointment ID..."
   - Active search indicator
+
+### Service ID Quick Filter (REQ-CAL-012) - MUST HAVE
+
+**Purpose:** Quickly filter services by typing service ID codes (e.g., M1, P5, E3)
+
+**Specifications:**
+- **Service ID Format:**
+  - Letter prefix: Category code (M = Manicure, P = Pedicure, E = Eyelash, etc.)
+  - Number suffix: Ordering number within category (1, 2, 3, etc.)
+  - Examples:
+    - "M1" = First service in Manicure category
+    - "P5" = Fifth service in Pedicure category
+    - "E3" = Third service in Eyelash category
+- **Filtering Behavior:**
+  - **Single Letter Input (e.g., "M"):**
+    - Filters to show all services in that category
+    - Displays services with their ordering numbers
+    - Shows service list: "M1: Classic Manicure", "M2: French Manicure", etc.
+  - **Letter + Number Input (e.g., "M1"):**
+    - Filters to show exactly that service
+    - Highlights the specific service
+    - Shows appointments with that service only
+- **Service ID Assignment:**
+  - Each service category has a unique letter code
+  - Services within category are numbered sequentially (1, 2, 3, ...)
+  - Ordering numbers based on service creation order or manual ordering
+  - Service IDs displayed in service list and filter dropdown
+- **Service Filter Dropdown:**
+  - **Polished, Fashionable Design:**
+    - Well-designed, modern dropdown interface
+    - Polished UI with professional styling
+    - Clean, organized service list presentation
+    - Visually appealing service cards or list items
+    - Smooth animations and transitions
+    - Professional typography and spacing
+    - Clear visual hierarchy
+  - **Service Selection Methods:**
+    - **Type Number:** User types the number (e.g., type "1" to select M1, type "5" to select P5)
+    - **Click Service:** User clicks on service name/item in dropdown to add to appointment
+    - Both methods add the service to the appointment
+    - Visual feedback on selection (highlight, checkmark, etc.)
+  - **Filter Input Behavior:**
+    - Service filter field accepts service ID format
+    - Real-time filtering as user types
+    - Case-insensitive (accepts "m1" or "M1")
+    - Supports partial matching (typing "M" shows all Manicure services in dropdown)
+    - Typing letter filters dropdown to show services in that category
+    - Typing letter + number filters to specific service
+    - Smooth filtering animations
+- **Visual Display:**
+  - **Service Dropdown Format:**
+    - Service ID prominently displayed next to service name
+    - Format: "M1 - Classic Manicure" or "M1: Classic Manicure"
+    - Polished list showing filtered services with:
+      - Service name clearly displayed
+      - Service ID (e.g., M1, P5) as visual identifier
+      - Service duration and price (if applicable)
+      - Service category/type indicator
+      - Hover states and active selection states
+      - Professional styling and spacing
+  - **Other Display Locations:**
+    - Service ID displayed in appointment cards (optional)
+    - Service ID shown in appointment details
+- **Category Code Management:**
+  - Category codes configurable in service management
+  - Default codes: M (Manicure), P (Pedicure), E (Eyelash), W (Waxing), etc.
+  - Admin can assign custom category codes
+  - Prevent duplicate category codes
+- **Use Cases:**
+  - Receptionist quickly filters to "M1" appointments
+  - Manager searches for all "P" (Pedicure) services
+  - Quick appointment creation by typing service ID
+  - Fast filtering during busy periods
+- **Integration:**
+  - Works with existing service filter
+  - Can be combined with other filters (employee, date, status)
+  - Service ID search works in appointment creation form
+  - Service ID search works in calendar filter panel
+
+**Rationale:** Critical for fast service filtering in busy environments. Receptionists and staff need quick access to specific services without scrolling through long lists. Significantly improves workflow efficiency and reduces time spent on filtering.
 
 ---
 
 ## Export and Printing Requirements
 
-### Export Calendar to PDF (REQ-CAL-015)
+### Export Calendar to PDF (REQ-CAL-020)
 
 **Purpose:** Export calendar view to PDF format
 
@@ -863,7 +1169,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - PDF downloads automatically
   - File name format: "Calendar_YYYY-MM-DD_to_YYYY-MM-DD.pdf"
 
-### Export Appointments to CSV (REQ-CAL-015)
+### Export Appointments to CSV (REQ-CAL-020)
 
 **Purpose:** Export appointment data to CSV format
 
@@ -909,7 +1215,7 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - CSV downloads automatically
   - File name format: "Appointments_YYYY-MM-DD_to_YYYY-MM-DD.csv"
 
-### Print Calendar View (REQ-CAL-015)
+### Print Calendar View (REQ-CAL-020)
 
 **Purpose:** Print calendar view directly from browser
 
@@ -930,6 +1236,151 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
   - Hide non-essential elements
   - Optimize layout for paper size
   - Ensure appointments are visible
+
+---
+
+## Suggested Additional Features
+
+This section identifies potential features that may enhance the calendar system. These are recommendations based on industry best practices and common requirements for appointment management systems.
+
+### MUST HAVE Features (Recommended)
+
+#### ~~1. Appointment Check-In (REQ-CAL-016)~~ (REMOVED)
+
+**Purpose:** Track when customers arrive for their appointments
+
+**Specifications:**
+- **Check-In Button:**
+  - Visible in appointment details modal
+  - Available when appointment status is SCHEDULED
+  - Records check-in timestamp
+  - Updates appointment status or adds check-in flag
+- **Check-In Display:**
+  - Show check-in time in appointment details
+  - Visual indicator in calendar (e.g., checkmark icon)
+  - Calculate wait time (check-in time vs appointment time)
+- **Use Cases:**
+  - Track customer punctuality
+  - Monitor wait times
+  - Identify no-shows more accurately
+  - Improve customer service
+
+**Rationale:** Essential for service businesses to track actual customer arrival times and manage wait times effectively.
+
+*(Moved to main requirements: Customer History Quick View integrated into View Appointment Details, Appointment Duplicate/Copy as REQ-CAL-014, Past Appointment Restrictions integrated into Edit Appointment)*
+
+#### ~~5. Appointment Duration Buffer/Setup Time (REQ-CAL-020)~~ (REMOVED)
+
+**Purpose:** Account for time needed between appointments (cleanup, setup)
+
+**Specifications:**
+- **Buffer Configuration:**
+  - Configurable buffer time between appointments (default: 5-15 minutes)
+  - Can be set per service type or globally
+  - Applied automatically when checking availability
+- **Visual Display:**
+  - Show buffer time in calendar (grayed out or different color)
+  - Indicate unavailable time slots due to buffers
+  - Display in appointment details (actual duration + buffer)
+- **Availability Calculation:**
+  - Consider buffer time when checking conflicts
+  - Show available slots accounting for buffers
+  - Prevent booking appointments too close together
+
+**Rationale:** Critical for service businesses where setup/cleanup time is required between appointments. Prevents overbooking and ensures quality service.
+
+*(Moved to main requirements: Appointment Service Duration Display integrated into Appointment Display, Appointment Conflict Resolution UI integrated into Edit Appointment, Appointment Search by Phone Number as REQ-CAL-019)*
+
+### NICE TO HAVE Features (Recommended)
+
+*(Moved to main requirements: Appointment Templates as REQ-CAL-015)*
+
+#### ~~10. Appointment Tags/Labels (REQ-CAL-025)~~ (REMOVED)
+
+**Purpose:** Categorize appointments with custom tags for better organization
+
+**Specifications:**
+- **Tag System:**
+  - Create custom tags (e.g., "VIP", "First Time", "Special Request", "Rush")
+  - Assign multiple tags to appointments
+  - Color-coded tags
+  - Filter by tags
+- **Tag Display:**
+  - Show tags in appointment card
+  - Visual indicators (badges, icons)
+  - Filter appointments by tags
+- **Tag Management:**
+  - Create, edit, delete tags
+  - Tag colors configurable
+  - Tag usage statistics
+
+**Rationale:** Helps staff identify special appointments and organize calendar view. Useful for managing VIP customers or special requests.
+
+*(Moved to main requirements: Appointment Notes Visibility Control integrated into Create Appointment form)*
+
+#### ~~12. Walk-In Appointment Support (REQ-CAL-027)~~ (REMOVED)
+
+**Purpose:** Mark appointments as walk-ins for reporting and analysis
+
+**Specifications:**
+- **Walk-In Flag:**
+  - Checkbox or toggle in appointment form
+  - Visual indicator in calendar (different icon/color)
+  - Filter appointments by walk-in status
+- **Walk-In Workflow:**
+  - Create appointment with walk-in flag
+  - May have different validation rules (can be in past)
+  - Track walk-in statistics
+- **Reporting:**
+  - Count walk-ins vs scheduled appointments
+  - Walk-in patterns (time of day, day of week)
+  - Employee walk-in handling
+
+**Rationale:** Many service businesses have walk-in customers. Tracking helps with capacity planning and employee scheduling.
+
+#### ~~13. Appointment Restore (REQ-CAL-028)~~ (REMOVED)
+
+**Purpose:** Restore cancelled appointments if customer rebooks
+
+**Specifications:**
+- **Restore Action:**
+  - "Restore" button for cancelled appointments
+  - Restores appointment to SCHEDULED status
+  - Maintains original appointment data
+  - Logs restore action in audit trail
+- **Restore Workflow:**
+  - Available for cancelled appointments only
+  - Check for conflicts before restoring
+  - Option to modify date/time during restore
+  - Notify customer (optional)
+- **Use Cases:**
+  - Customer cancels then rebooks same appointment
+  - Accidental cancellation
+  - Change of mind
+
+**Rationale:** Common scenario in service businesses. Saves time compared to creating new appointment.
+
+*(Moved to main requirements: Appointment Statistics Dashboard as REQ-CAL-017, Holiday/Closed Day Management as REQ-CAL-018, Appointment Color Customization integrated into Appointment Display, Appointment Audit Trail Viewing as REQ-CAL-013, Appointment Quick Actions Menu integrated into Appointment Display, Appointment Time Rounding as REQ-CAL-016)*
+
+#### ~~20. Appointment Customer Photo Display (REQ-CAL-035)~~ (REMOVED)
+
+**Purpose:** Show customer photos in calendar for quick identification
+
+**Specifications:**
+- **Photo Display:**
+  - Small thumbnail in appointment card
+  - Full photo in appointment details
+  - Fallback to initials/avatar if no photo
+- **Photo Management:**
+  - Upload photo when creating customer
+  - Update photo in customer profile
+  - Privacy controls (optional)
+- **Use Cases:**
+  - Quick customer identification
+  - Personal touch
+  - Helps staff remember customers
+
+**Rationale:** Improves customer recognition and service quality. Common in modern appointment systems.
 
 ---
 
@@ -1220,6 +1671,10 @@ This document expands on the high-level requirements defined in `DASHBOARD_REQUI
 | 1.0 | 2025-01-24 | System | Initial requirements document created |
 | 1.1 | 2025-01-24 | System | Updated with MUST HAVE features: drag-and-drop rescheduling, month view improvements, receptionist filtering (day of week, hour of day), employee-based calendar with columns and drag-drop, time slot default changed to 15 minutes. Added booking system note. |
 | 1.2 | 2025-01-24 | System | Added Receptionist/Cashier role definition with full appointment management permissions and filtering capabilities. |
+| 1.3 | 2025-01-24 | System | Added "Suggested Additional Features" section with 20 recommended features (8 MUST HAVE, 12 NICE TO HAVE) including appointment check-in, customer history, duplicate/copy, past appointment restrictions, duration buffers, conflict resolution UI, and more. |
+| 1.4 | 2025-01-24 | System | Added Service ID Quick Filter (REQ-CAL-036) as MUST HAVE feature. Allows quick filtering by typing service ID codes (e.g., M1, P5, E3). Single letter shows all services in category, letter+number shows specific service. Updated filtering and search sections to reference this feature. |
+| 1.5 | 2025-01-24 | System | Moved Service ID Quick Filter from Suggested Additional Features to main Filtering and Search Requirements section as REQ-CAL-012. Updated all references to point to new location. |
+| 1.6 | 2025-01-24 | System | Removed 6 features from Suggested Additional Features (crossed out): Appointment Check-In, Appointment Duration Buffer, Appointment Tags, Walk-In Appointment Support, Appointment Restore, Appointment Customer Photo Display. Moved all remaining suggested features to main requirements sections: Customer History Quick View, Appointment Duplicate/Copy (REQ-CAL-014), Past Appointment Restrictions, Appointment Service Duration Display, Appointment Conflict Resolution UI, Appointment Search by Phone Number (REQ-CAL-019), Appointment Templates (REQ-CAL-015), Appointment Notes Visibility Control, Appointment Statistics Dashboard (REQ-CAL-017), Holiday/Closed Day Management (REQ-CAL-018), Appointment Color Customization, Appointment Audit Trail Viewing (REQ-CAL-013), Appointment Quick Actions Menu, Appointment Time Rounding (REQ-CAL-016). Updated requirement numbering. |
 
 ---
 
