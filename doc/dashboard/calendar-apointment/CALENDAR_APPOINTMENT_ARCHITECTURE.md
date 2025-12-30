@@ -1,9 +1,9 @@
 # Calendar and Appointment Viewing - Architecture and Design
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Date:** 2025-12-26  
 **Status:** Draft  
-**Last Updated:** 2025-12-26  
+**Last Updated:** 2025-01-24  
 **Related Tasks:** TASK-FEAT-025  
 **Related Documents:** 
 - [Calendar and Appointment Viewing Requirements](./CALENDAR_APPOINTMENT_REQUIREMENTS.md)
@@ -405,7 +405,8 @@ Authorization: Bearer <token>
   "startTime": "2025-01-15T10:00:00Z",
   "endTime": "2025-01-15T11:00:00Z",
   "notes": "Customer prefers natural colors",
-  "source": "MANUAL"
+  "source": "MANUAL",
+  "notifyCustomer": false
 }
 ```
 
@@ -440,7 +441,8 @@ Authorization: Bearer <token>
   "addonServiceIds": ["uuid1", "uuid2"],
   "startTime": "2025-01-15T10:00:00Z",
   "endTime": "2025-01-15T11:00:00Z",
-  "notes": "Updated notes"
+  "notes": "Updated notes",
+  "notifyCustomer": false
 }
 ```
 
@@ -471,7 +473,8 @@ Authorization: Bearer <token>
 ```json
 {
   "status": "COMPLETED",
-  "reason": "Appointment completed successfully"
+  "reason": "Appointment completed successfully",
+  "notifyCustomer": false
 }
 ```
 
@@ -489,6 +492,36 @@ Authorization: Bearer <token>
 - `401 Unauthorized`: Missing or invalid token
 - `403 Forbidden`: Insufficient permissions
 - `404 Not Found`: Appointment not found
+
+#### PATCH /api/calendar/appointments/bulk-status
+
+**Purpose:** Update status for multiple appointments (bulk update)
+
+**Request Body:**
+```json
+{
+  "appointmentIds": ["uuid1", "uuid2", "uuid3"],
+  "status": "COMPLETED",
+  "reason": "Bulk status update",
+  "notifyCustomer": false
+}
+```
+
+**Response:**
+```json
+{
+  "updated": 3,
+  "appointments": [ /* array of updated appointment objects */ ],
+  "statusHistory": [ /* array of status history entries for all updates */ ]
+}
+```
+
+**Status Codes:**
+- `200 OK`: Status updated successfully for all appointments
+- `400 Bad Request`: Invalid status transition or empty appointmentIds
+- `401 Unauthorized`: Missing or invalid token
+- `403 Forbidden`: Insufficient permissions
+- `207 Multi-Status`: Partial success (some appointments failed) - includes `errors` array
 
 #### DELETE /api/calendar/appointments/:id
 
@@ -564,6 +597,8 @@ Authorization: Bearer <token>
 - `401 Unauthorized`: Missing or invalid token
 - `403 Forbidden`: Insufficient permissions
 
+**Note:** Print functionality is client-side only (browser print dialog). No API endpoint required. See Frontend Component Architecture section for print implementation details.
+
 ### Error Response Format
 
 All error responses follow this format:
@@ -629,6 +664,8 @@ interface CalendarLayoutProps {
 - Coordinate between header, filters, and view components
 - Handle data fetching via React Query
 - Manage appointment modal state
+- Handle keyboard shortcuts (T: Today, D/W/M: View switch, Esc: Close modals)
+- Manage filter persistence (URL parameters or localStorage)
 
 #### CalendarViewSwitcher
 
@@ -641,6 +678,14 @@ interface CalendarViewSwitcherProps {
   onViewChange: (view: 'day' | 'week' | 'month') => void;
 }
 ```
+
+**Keyboard Shortcuts:**
+- `D`: Switch to day view
+- `W`: Switch to week view
+- `M`: Switch to month view
+- `T`: Jump to today
+- `Left/Right Arrow`: Previous/Next period
+- `Esc`: Close modals
 
 #### DayView
 
@@ -712,8 +757,9 @@ interface MonthViewProps {
 - Calendar grid (weeks × days)
 - Appointment indicators as dots
 - Visual density indicators (no/low/high booking)
-- Click day to switch to day view
+- Click day to switch to day view (MUST HAVE)
 - Current date highlighted
+- Appointment count per day display
 
 #### AppointmentCard
 
@@ -735,8 +781,11 @@ interface AppointmentCardProps {
 - Service name
 - Time display
 - Status indicator
+- Appointment source indicator (icon: "Booked online" vs "Manual")
 - Hover tooltip with full details
 - Drag handle for rescheduling
+- Double-click: Open edit form directly (optional)
+- Right-click: Context menu with quick actions (optional)
 
 #### AppointmentModal
 
@@ -774,12 +823,16 @@ interface AppointmentFormProps {
 ```
 
 **Features:**
-- Customer search/select
+- Customer search/select with autocomplete
+- Option to create new customer (if user has permission)
 - Employee selector
 - Service multi-select (main + add-ons)
 - Date/time picker
 - Conflict detection
 - Form validation
+- "Save" button (creates/updates appointment)
+- "Save and Notify Customer" button (creates/updates and sends notification)
+- Notification checkbox for customer notifications
 
 #### CalendarFilters
 
@@ -793,8 +846,14 @@ interface CalendarFiltersProps {
   employees: Employee[];
   services: Service[];
   userRole: UserRole; // For receptionist-specific filters
+  onPresetSelect?: (preset: FilterPreset) => void; // Quick filter presets
 }
 ```
+
+**Filter Presets:**
+- "Monday Mornings" (Monday, 9 AM - 12 PM)
+- "Friday Afternoons" (Friday, 2 PM - 5 PM)
+- Custom presets (future enhancement)
 
 **Filter Types:**
 - Employee (multi-select)
@@ -804,6 +863,8 @@ interface CalendarFiltersProps {
 - Day of week (receptionist - multi-select)
 - Hour of day (receptionist - time range)
 - Customer search
+- Quick filter presets (e.g., "Monday Mornings", "Friday Afternoons")
+- Filter persistence (URL parameters or localStorage)
 
 ---
 
@@ -923,6 +984,8 @@ useMutation({
 - Invalidate cache on mutations
 - Poll for updates every 30 seconds
 - Optimistic updates for better UX
+- Filter state persisted in URL parameters or localStorage
+- Filter state restored on page load
 
 #### 4. Form State (React Hook Form)
 
@@ -1357,6 +1420,111 @@ The sequence diagrams above illustrate detailed step-by-step workflows for key o
 - Storage overhead
 - Worth it for data preservation
 
+### 11. Customer Notifications
+
+**Decision:** Support optional customer notifications for appointment changes
+
+**Rationale:**
+- Required feature from requirements
+- Better customer communication
+- Reduces no-shows
+- Professional service
+
+**Implementation:**
+- "Save and Notify Customer" button in appointment forms
+- Notification checkbox in status change forms
+- Email notifications sent when checked
+- SMS notifications (future enhancement)
+
+**Trade-offs:**
+- Requires email service integration
+- Additional API complexity
+- Better user experience
+
+### 12. Bulk Status Updates
+
+**Decision:** Support bulk status updates for multiple appointments
+
+**Rationale:**
+- Required feature from requirements
+- Efficiency for managers
+- Common use case (mark multiple as completed)
+- Reduces repetitive actions
+
+**Implementation:**
+- Select multiple appointments in calendar
+- Bulk status update endpoint
+- Individual audit log entries for each change
+- Confirmation dialog with count
+
+**Trade-offs:**
+- Additional API endpoint
+- More complex UI (multi-select)
+- Better workflow efficiency
+
+### 13. Print Functionality
+
+**Decision:** Client-side print functionality using browser print dialog
+
+**Rationale:**
+- Required feature from requirements
+- No server-side rendering needed
+- Uses browser's native print capabilities
+- Simpler implementation
+
+**Implementation:**
+- Print button in calendar header
+- Print-friendly CSS (`@media print`)
+- Hide interactive elements
+- Optimize layout for paper size
+
+**Trade-offs:**
+- Limited control over print output
+- Browser-dependent
+- Sufficient for requirements
+
+### 14. Keyboard Shortcuts
+
+**Decision:** Implement keyboard shortcuts for common actions
+
+**Rationale:**
+- Required feature from requirements
+- Power user efficiency
+- Industry standard
+- Better accessibility
+
+**Shortcuts:**
+- `T`: Jump to today
+- `D/W/M`: Switch views
+- `Left/Right Arrow`: Navigate periods
+- `Esc`: Close modals
+
+**Trade-offs:**
+- Additional event handling
+- Potential conflicts with browser shortcuts
+- Better user experience
+
+### 15. Filter Persistence
+
+**Decision:** Persist filters in URL parameters or localStorage
+
+**Rationale:**
+- Required feature from requirements
+- Better user experience
+- Shareable filter states (URL)
+- Restore state on page load
+
+**Implementation:**
+- URL parameters for shareable states
+- localStorage for user preferences
+- Restore on component mount
+- Sync between URL and state
+
+**Trade-offs:**
+- Additional state management
+- URL length limitations
+- Better UX
+
 ---
 
 ## Next Steps
@@ -1372,4 +1540,15 @@ The sequence diagrams above illustrate detailed step-by-step workflows for key o
 **Document History:**
 
 - **v1.0** (2025-12-26): Initial architecture document created
+- **v1.1** (2025-01-24): Added missing requirements from requirements document:
+  - Bulk status update API endpoint
+  - Customer notification support in create/update/status endpoints
+  - Print functionality documentation (client-side)
+  - Keyboard shortcuts (T, D, W, M, Esc, Arrow keys)
+  - Quick filter presets for receptionist role
+  - Double-click and right-click interactions for appointments
+  - Filter persistence (URL parameters or localStorage)
+  - Customer creation option in appointment form
+  - Appointment source visual indicator
+  - Additional design decisions (11-15)
 
